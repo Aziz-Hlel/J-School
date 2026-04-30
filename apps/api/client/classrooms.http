@@ -1,0 +1,80 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@ManagerEmail = manager1@restclient.com
+@ManagerPassword = 12345678
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{ManagerEmail}}",
+  "password": "{{ManagerPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+
+########################################
+# CLASSES FLOW: MANAGER
+########################################
+
+###
+# @name createClass
+POST {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/classrooms
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "name": "B",
+    "description": null,
+    "grade": "SIX"
+}
+
+
+###
+# @name updateClass
+PUT {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/classrooms/{{createClass.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "name": "A",
+    "description": "Class 1 Description Updated"
+}
+
+
+###
+# @name findById
+GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/classrooms/{{createClass.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name findAll
+GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/classrooms?page=1&size=10&sortBy=grade&order=desc&grade=SIX,ONE
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}

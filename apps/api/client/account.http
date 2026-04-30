@@ -1,0 +1,155 @@
+
+
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+@email = tigana138@gmail.com
+@password = 12345678
+
+### 
+# @name firebase_signup
+POST {{firebaseUrl}}/accounts:signUp?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "returnSecureToken": true
+}
+
+
+### 
+# @name createAccount
+POST {{baseUrl}}/accounts/admin
+Content-Type: application/json
+
+{
+    "token": "{{firebase_signup.response.body.idToken}}"
+}
+
+
+### 
+# @name firebase_token_refresh
+POST {{firebaseUrl}}/token?key={{apiKey}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token={{firebase_signup.response.body.refreshToken}}
+
+
+### 
+# @name me
+GET {{baseUrl}}/accounts/me
+Content-Type: application/json
+Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
+
+
+###
+# @name createOwner
+POST {{baseUrl}}/owners
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+212612345678"
+}
+
+
+###
+# @name createSchool
+POST {{baseUrl}}/schools
+Content-Type: application/json
+Authorization: Bearer {{firebase_token_refresh.response.body.id_token}}
+
+{
+    "nameEn": "RestClient School",
+    "nameFr": "RestClient School",
+    "nameAr": "RestClient School",
+    "description": "RestClient School description",
+    "address": "RestClient School address",
+    "phone": "+212612345678",
+    "email": "restclientschool@test.com",
+    "logoId": null,
+    "website": "https://www.google.com"
+    
+}
+
+
+
+
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name login
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+###
+# @name getMySchool
+GET {{baseUrl}}/schools/me
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+
+###
+# @name updateSchool
+PUT {{baseUrl}}/schools/{{getMySchool.response.body.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "nameEn": "Updated RestClient School",
+    "nameFr": "Updated RestClient School",
+    "nameAr": "Updated RestClient School",
+    "description": "Updated RestClient School description",
+    "address": "Updated RestClient School address",
+    "phone": "+212612345678",
+    "email": "restclientschool@test.com",
+    "logoId": null,
+    "website": "https://www.google.com"
+    
+}
+
+
+
+###
+# @name createUserWithSimpleRole
+POST {{baseUrl}}/schools/{{getMySchool.response.body.id}}/users
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "john.doe01@example.com",
+  "role": "DIRECTOR",
+  "password": "12345678"
+}
+

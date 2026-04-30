@@ -1,0 +1,428 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+@AdminEmail = admin1@restclient.com
+@AdminPassword = 12345678
+
+@DirectorEmail = director1@restclient.com
+@DirectorPassword = 12345678
+
+@ManagerEmail = manager1@restclient.com
+@ManagerPassword = 12345678
+
+@TeacherEmail = teacher1@restclient.com
+@TeacherPassword = 12345678
+
+###
+# @name health
+GET {{baseUrl}}/root/health
+Content-Type: application/json
+
+###
+# @name healthz
+GET {{baseUrl}}/root/healthz
+Content-Type: application/json
+
+###
+# @name hardReset
+DELETE {{baseUrl}}/root/hard-reset
+Content-Type: application/json
+
+
+
+########################################
+# ADMIN POV: CREATE : ACCOUNT, OWNER, SCHOOL, USER 
+########################################
+
+### 
+# @name firebaseSignup
+POST {{firebaseUrl}}/accounts:signUp?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{AdminEmail}}",
+  "password": "{{AdminPassword}}",
+  "returnSecureToken": true
+}
+
+
+### 
+# @name createAccount
+POST {{baseUrl}}/accounts/admin
+Content-Type: application/json
+
+{
+    "token": "{{firebaseSignup.response.body.idToken}}"
+}
+
+
+### 
+# @name firebaseTokenRefresh
+POST {{firebaseUrl}}/token?key={{apiKey}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token={{firebaseSignup.response.body.refreshToken}}
+
+
+###
+# @name createOwner
+POST {{baseUrl}}/owners
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "firstName": "owner",
+    "lastName": "restclient",
+    "phone": "+212612345678"
+}
+
+
+###
+# @name createSchool
+POST {{baseUrl}}/schools
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "nameEn": "RestClient School",
+    "nameFr": "RestClient School",
+    "nameAr": "RestClient School",
+    "description": "RestClient School description",
+    "address": "RestClient School address",
+    "phone": "+212612345678",
+    "email": "restclientschool@test.com",
+    "logoId": null,
+    "website": "https://www.google.com"
+    
+}
+
+
+###
+# @name createDirector
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staff
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": "director",
+  "lastName": "restclient",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "{{DirectorEmail}}",
+  "role": "MANAGER",
+  "password": "{{DirectorPassword}}"
+}
+
+
+###
+# @name grantUserRole
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createDirector.response.body.staff.id}}/roles
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "role": "DIRECTOR"
+}
+
+
+###
+# @name revokeUserRole
+DELETE {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createDirector.response.body.staff.id}}/roles
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+    "role": "MANAGER"
+}
+
+
+###
+# @name getUserById
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/users/{{createDirector.response.body.staff.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+
+###
+# @name createManager
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staff
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": "manager",
+  "lastName": "restclient",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "{{ManagerEmail}}",
+  "role": "MANAGER",
+  "password": "{{ManagerPassword}}"
+}
+
+
+###
+# @name createTeacher
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/teachers
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": "teacher",
+  "lastName": "restclient",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234567",
+  "cin": "12345678",
+  "address": "123 Main Street, Springfield",
+  "email": "{{TeacherEmail}}",
+  "password": "{{TeacherPassword}}"
+}
+
+
+###
+# @name updateTeacher
+PUT {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/teachers/{{createTeacher.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": "teacher updated",
+  "lastName": "restclient updated",
+  "gender": "FEMALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234568",
+  "cin": "12345679",
+  "address": "123 Main Street, Springfield"
+}
+
+
+###
+# @name getTeacherById
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/teachers/{{updateTeacher.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+
+###
+# @name createStudent
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "uid": "1234567890",
+  "firstName": {
+    "en": "student",
+    "ar": "طالب"
+  },
+  "lastName": {
+    "en": "restclient",
+    "ar": "ريست كلاينت"
+  },
+  "gender": "MALE",
+  "dateOfBirth": "2010-05-15",
+  "avatarId": null,
+  "status": "ACTIVE"
+}
+
+
+###
+# @name updateStudent
+PUT {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students/{{createStudent.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "uid": "1234567890",
+  "firstName": {
+    "en": "student updated",
+    "ar": "طالب محدث"
+  },
+  "lastName": {
+    "en": "restclient updated",
+    "ar": "ريست كلاينت محدث"
+  },
+  "gender": "FEMALE",
+  "dateOfBirth": "1995-05-15",
+  "avatarId": null,
+  "status": "ACTIVE"
+}
+
+
+###
+# @name createStudentProfile
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students/{{createStudent.response.body.data.id}}/profiles
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "allergies": "nuts ayoo",
+  "healthInfo": "none",
+  "vaccine": "4 doses of phizer, basically a retard",
+  "cpr": "no mouth to mouth though, he's just a minor",
+  "emergencyContacts": [
+    {
+      "name": "rest client auntie",
+      "phone": "+212612345678",
+      "relation": "auntie"
+    }
+  ],
+  "notes": "none"
+}
+
+###
+# @name getStudentById
+GET {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students/{{updateStudent.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+
+###
+@ParentEmail = parent1@restclient.com
+@ParentPassword = 12345678
+
+
+###
+# @name createStudentWithParent
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/students/with-parent
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "firstName": {
+    "en": "student",
+    "ar": "طالب"
+  },
+  "lastName": {
+    "en": "restclient",
+    "ar": "ريست كلاينت"
+  },
+  "uid": "rest-client-student-with-parent",
+  "gender": "MALE",
+  "dateOfBirth": "2010-05-15",
+  "avatarId": null,
+  "status": "ACTIVE",
+  "profile": {
+    "allergies": "nuts ayoo",
+    "healthInfo": "none",
+    "vaccine": "4 doses of phizer, basically a retard",
+    "cpr": "no mouth to mouth though, he's just a minor",
+    "emergencyContacts": [
+      {
+        "name": "rest client auntie",
+        "phone": "+212612345678",
+        "relation": "auntie"
+      }
+    ],
+    "notes": "none"
+  },
+  "parent": {
+    "type": "NEW",
+    "email": "{{ParentEmail}}",
+    "password": "{{ParentPassword}}",
+    "dateOfBirth": null,
+    "cin": null,
+    "firstName": "parent",
+    "lastName": "restclient",
+    "address": "123 Main Street, Springfield",
+    "gender": "MALE",
+    "phone": "+212612345678",
+    "emergencyPhone": null
+  }
+}
+
+### createSubject
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/subjects
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "name": {
+    "en": "Math",
+    "fr": "Math",
+    "ar": "الرياضيات"
+  },
+  "hoursPerWeek": 3,
+  "domain": "SCIENCE_TECHNOLOGY",
+  "grade": "ONE"
+}
+
+
+###
+# @name createManySubjects
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/subjects/bulk
+Content-Type: application/json
+Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
+
+{
+  "grade": "TWO",
+  "subjects": [
+    {
+      "name": {
+        "en": "Math",
+        "fr": "Math",
+        "ar": "الرياضيات"
+      },
+      "hoursPerWeek": 3,
+      "domain": "SCIENCE_TECHNOLOGY"
+    },
+    {   
+      "name": {
+        "en": "Physics",
+        "fr": "Physique",
+        "ar": "الفيزياء"
+      },
+      "hoursPerWeek": 3,
+      "domain": "SCIENCE_TECHNOLOGY"
+    },
+    {
+      "name": {
+        "en": "Chemistry",
+        "fr": "Chimie",
+        "ar": "الكيمياء"
+      },
+      "hoursPerWeek": 3,
+      "domain": "SCIENCE_TECHNOLOGY"
+    }
+  ]
+}
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{AdminEmail}}",
+  "password": "{{AdminPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+
+

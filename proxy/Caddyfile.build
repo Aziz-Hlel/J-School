@@ -1,0 +1,40 @@
+# -----------------------
+# Admin Panel
+# -----------------------
+https://admin.localhost {
+    tls internal # for local development only
+
+    root * /srv/admin
+    encode gzip
+    file_server
+    try_files {path} /index.html
+
+    log {
+        level INFO
+        format console
+    }
+}
+
+https://web.localhost {
+    tls internal
+
+    # -----------------------
+    # API proxy
+    # -----------------------
+    handle /api/* {
+        reverse_proxy api:3000
+    }
+
+    # -----------------------
+    # Default page for all other requests
+    # -----------------------
+    handle /* {
+        root * /usr/share/caddy
+        file_server
+    }
+
+    log {
+        level INFO
+        format console
+    }
+}

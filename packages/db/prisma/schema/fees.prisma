@@ -1,0 +1,43 @@
+// ! fck this shit
+
+
+model FeeItem{
+  id String @id @default(uuid()) @db.Uuid
+
+
+  title String @db.VarChar(255)
+  description String? @db.Text
+  amount Float
+
+  feeId String @db.Uuid
+  fee Fees @relation(fields: [feeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("feeItems")
+}
+
+
+
+model Fees {
+  id String @id @default(uuid()) @db.Uuid
+
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  studentId String @db.Uuid
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  feeItems FeeItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId,studentId])
+
+  @@map("fees")
+}
+
+
+

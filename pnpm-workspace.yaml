@@ -1,0 +1,21 @@
+packages:
+  - apps/*
+  - packages/*
+allowBuilds:
+  '@firebase/util': true
+  '@prisma/engines': true
+  '@swc/core': true
+  esbuild: true
+  msgpackr-extract: true
+  msw: true
+  prisma: true
+  protobufjs: true
+catalog:
+  "@prisma/client": ^7.7.0
+  "@types/react-dom": ^19.2.3
+  bullmq: 5.71.0
+  dotenv: ^17.2.2
+  ioredis: 5.9.3
+  next-themes: ^0.4.6
+  typescript: ^6
+  zod: ^4.1.13

@@ -1,0 +1,49 @@
+{
+  "name": "repo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "format": "pnpm -r exec prettier --write .",
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
+    "check-types": "pnpm -r check-types",
+    "db:push": "pnpm --filter @repo/db db:push",
+    "db:build": "pnpm --filter @repo/db db:build",
+    "db:studio": "pnpm --filter @repo/db db:studio",
+    "db:generate": "pnpm --filter @repo/db db:generate",
+    "db:migrate": "pnpm --filter @repo/db db:migrate",
+    "db:start": "pnpm --filter @repo/db db:start",
+    "db:watch": "pnpm --filter @repo/db db:watch",
+    "db:stop": "pnpm --filter @repo/db db:stop",
+    "db:down": "pnpm --filter @repo/db db:down",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "docker:local": "node scripts/docker/index.js local",
+    "docker:dev": "node scripts/docker/index.js dev",
+    "docker:stage": "node scripts/docker/index.js stage",
+    "docker:prod": "node scripts/docker/index.js prod",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@repo/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/config": "workspace:*",
+    "@types/node": "^22.13.14",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.8.3",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "typescript": "catalog:"
+  },
+  "lint-staged": {
+    "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}": "prettier --write --ignore-unknown"
+  },
+  "packageManager": "pnpm@10.33.0"
+}

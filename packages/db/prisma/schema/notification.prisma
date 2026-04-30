@@ -1,0 +1,127 @@
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum NotificationRecipientType {
+  ALL
+  COUNTRY
+  ROLE
+  USER
+}
+
+// ! Add IMMEDIATE type
+enum NotificationScheduleType {
+  SCHEDULED
+  DELAYED
+}
+
+enum NotificationLanguage {
+  en
+  ar
+  fr
+}
+
+
+// ─── Core Notification ────────────────────────────────────────────────────────
+model Notification {
+  id          String   @id @default(uuid()) @db.Uuid
+  description String?  @db.Text // internal label/note for admins, not user-facing
+
+  recipientType NotificationRecipientType
+  scheduleType  NotificationScheduleType
+
+  delaySeconds Int?       
+  scheduledAt  DateTime?  
+
+  translations NotificationTranslation[]
+  targeting    NotificationTargeting?
+  notificationDeliveries NotificationDelivery[]
+
+  // Who created this notification
+  createdById String @db.Uuid
+  createdBy   Account   @relation("NotificationCreatedBy", fields: [createdById], references: [id])
+
+  sentAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+}
+
+
+
+// ─── Translations (multilingual payload) ─────────────────────────────────────
+
+model NotificationTranslation {
+  id       String               @id @default(uuid()) @db.Uuid
+  language NotificationLanguage
+
+  title   String
+  content String
+  data    Json?   
+
+  notificationId String @db.Uuid
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, language])
+}
+
+// ─── Targeting (one-to-one with Notification) ────────────────────────────────
+// Separates "who receives this" from "what is sent"
+
+model NotificationTargeting {
+  id             String @id @default(uuid()) @db.Uuid
+  notificationId String @unique @db.Uuid
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  // Populated when recipientType = COUNTRY
+  countries String[] // e.g. ["TN", "FR", "US"]
+
+  // Populated when recipientType = ROLE
+  roles AccountRole[]
+
+  // Populated when recipientType = USER or ROLE (explicit user list)
+  users NotificationTargetUser[]
+
+}
+
+// ─── Explicit User Targets (join table) ───────────────────────────────────────
+// Used when recipientType = USER, or optionally ROLE with explicit override
+
+model NotificationTargetUser {
+  id         String @id @default(uuid()) @db.Uuid
+  targetingId String @db.Uuid
+  targeting  NotificationTargeting @relation(fields: [targetingId], references: [id], onDelete: Cascade)
+
+  userId String @db.Uuid
+  user   Account   @relation(fields: [userId], references: [id])
+
+  @@unique([targetingId, userId]) // prevent duplicates
+}
+
+// ─── Delivery Log (track per-user delivery status) ───────────────────────────
+// Separate from targeting — this is the audit trail of actual sends
+
+model NotificationDelivery {
+  id             String   @id @default(uuid()) @db.Uuid
+  notificationId String @db.Uuid
+  notification   Notification @relation(fields: [notificationId], references: [id])
+
+
+  status    DeliveryStatus @default(PENDING)
+  sentAt    DateTime?
+  readAt    DateTime?
+  failedAt  DateTime?
+  errorMessage String?
+
+  createdAt DateTime @default(now())
+
+}
+
+enum DeliveryStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+
+

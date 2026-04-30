@@ -1,0 +1,37 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+
+
+### 
+# @name firebase_signup
+POST {{firebaseUrl}}/accounts:signUp?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "tigana110@gmail.com",
+  "password": "12345678",
+  "returnSecureToken": true
+}
+
+
+### 
+# @name server_signup
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "tokenId": "sqdsqdqd"
+}
+
+
+
+
+############################
+# @name test-connection
+GET {{baseUrl}}/health
+Content-Type: application/json

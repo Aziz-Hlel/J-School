@@ -1,0 +1,1 @@
+- First order of buisness, Once a school created , the owner needs to add the subjects of each grade, if not he coulsnt create a class in that grade, and he cannot add nor delete a subject, only edit it name, same goes for the exams. (he could probably delete since it s an eazy task with the ondelete Cascade not 100% sure though)

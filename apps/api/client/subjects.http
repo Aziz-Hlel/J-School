@@ -1,0 +1,323 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@ManagerEmail = manager1@restclient.com
+@ManagerPassword = 12345678
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{ManagerEmail}}",
+  "password": "{{ManagerPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+
+########################################
+# SUBJECTS FLOW : CREATE, FINDALL, FINDById, UPDATE, DELETE
+########################################
+
+### 
+# @name createSubject
+POST {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/subjects/bulk
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+  "grade": "SIX",
+  "subjects": [
+    {
+      "name": {
+        "en": "Arabic",
+        "fr": "Arabe",
+        "ar": "العربية"
+      },
+      "hoursPerWeek": 1,
+      "domain": "ARABIC_LANGUAGE",
+      "exams": [
+        {
+          "name": {
+            "en": "Communication et Mémorisation",
+            "fr": "Communication et Mémorisation",
+            "ar": "التواصل الشفوي والمحفوظات"
+          },
+          "durationInMin": 30
+        },
+        {
+          "name": {
+            "en": "Comprehension de l’écrit",
+            "fr": "Comprehension de l’écrit",
+            "ar": "القراءة"
+          },
+          "durationInMin": 90
+        },
+        {
+          "name": {
+            "en": "Grammaire et Lexique",
+            "fr": "Grammaire et Lexique",
+            "ar": "قواعد اللغة"
+          },
+          "durationInMin": 30
+        },
+        {
+          "name": {
+            "en": "Production Écrite",
+            "fr": "Production Écrite",
+            "ar": "الإنتاج الكتابي"
+          },
+          "durationInMin": 90
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "French",
+        "fr": "Français",
+        "ar": "الفرنسية"
+      },
+      "hoursPerWeek": 1,
+      "domain": "FRENCH_LANGUAGE",
+      "exams": [
+        {
+          "name": {
+            "en": "Expression Orale et Écrite",
+            "fr": "Exp.or. et réc.",
+            "ar": "التعبير الشفوي والكتابي"
+          },
+          "durationInMin": 60
+        },
+        {
+          "name": {
+            "en": "Comprehension de l’écrit",
+            "fr": "lecture",
+            "ar": "القراءة"
+          },
+          "durationInMin": 90
+        },
+        {
+          "name": {
+            "en": "Comprehension et Production Écrite,Grammaire et Lexique,Dictée",
+            "fr": "Prod . écrite,langue et dict.",
+            "ar": "فهم المنطوق والإنتاج الكتابي، قواعد اللغة، الإملاء"
+          },
+          "durationInMin": 120
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Math",
+        "fr": "Mathématiques",
+        "ar": "الرياضيات"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SCIENCE_TECHNOLOGY",
+      "exams": [
+        {
+          "name": {
+            "en": "Math",
+            "fr": "Mathématiques",
+            "ar": "الرّياضيّات"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Science",
+        "fr": "Sciences",
+        "ar": "العلوم"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SCIENCE_TECHNOLOGY",
+      "exams": [
+        {
+          "name": {
+            "en": "Sciences",
+            "fr": "Sciences",
+            "ar": "الايقاظ العلمي"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Technology",
+        "fr": "Technologie",
+        "ar": "ت . التكنولوجيّة"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SCIENCE_TECHNOLOGY",
+      "exams": [
+        {
+          "name": {
+            "en": "Technology",
+            "fr": "Technologie",
+            "ar": "ت . التكنولوجيّة"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Islamic Education",
+        "fr": "Éducation Islamique",
+        "ar": "ت . الإسلاميّة"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SOCIAL_EDUCATION",
+      "exams": [
+        {
+          "name": {
+            "en": "Islam",
+            "fr": "Islam",
+            "ar": "التربية الإسلاميّة"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "History",
+        "fr": "Histoire",
+        "ar": "التاريخ"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SOCIAL_EDUCATION",
+      "exams": [
+        {
+          "name": {
+            "en": "History",
+            "fr": "Histoire",
+            "ar": "التّاريخ"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Geography",
+        "fr": "Géographie",
+        "ar": "الجغرافيا"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SOCIAL_EDUCATION",
+      "exams": [
+        {
+          "name": {
+            "en": "Geography",
+            "fr": "Géographie",
+            "ar": "الجغرافيا"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Civic Education",
+        "fr": "Éducation Civique",
+        "ar": "ت . المدنية"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SOCIAL_EDUCATION",
+      "exams": [
+        {
+          "name": {
+            "en": "Civic",
+            "fr": "Éducation Civique",
+            "ar": "التّربية المدنيّة"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Drawing",
+        "fr": "Dessin",
+        "ar": "الرسم"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SOCIAL_EDUCATION",
+      "exams": [
+        {
+          "name": {
+            "en": "Drawing",
+            "fr": "Éducation Plastique",
+            "ar": "التّربية التّشكيليّة"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Music",
+        "fr": "Musique",
+        "ar": "الموسيقى"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SOCIAL_EDUCATION",
+      "exams": [
+        {
+          "name": {
+            "en": "Music",
+            "fr": "Éducation Musicale",
+            "ar": "التّربية الموسيقيّة"
+          },
+          "durationInMin": 60
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Sport",
+        "fr": "Sport",
+        "ar": "تربية بدنيّة"
+      },
+      "hoursPerWeek": 1,
+      "domain": "SOCIAL_EDUCATION",
+      "exams": [
+        {
+          "name": {
+            "en": "Sport",
+            "fr": "Éducation Physique et Sportive",
+            "ar": "التّربية البدنيّة"
+          },
+          "durationInMin": 60
+        }
+      ]
+    }
+  ]
+}
+

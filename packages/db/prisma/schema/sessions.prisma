@@ -1,0 +1,186 @@
+ 
+
+enum Semester {
+  FIRST
+  SECOND
+  THIRD
+}
+
+enum SubjectDomain {
+  ARABIC_LANGUAGE
+  SCIENCE_TECHNOLOGY
+  SOCIAL_EDUCATION
+  ART_EDUCATION
+  PHYSICAL_EDUCATION
+  FRENCH_LANGUAGE
+  ENGLISH_LANGUAGE
+}
+
+model Subject{
+  id String @id @default(uuid()) @db.Uuid
+
+  name_en String @db.VarChar(255)
+  name_fr String @db.VarChar(255)
+  name_ar String @db.VarChar(255) 
+
+  hoursPerWeek Int @db.SmallInt
+  domain SubjectDomain
+  grade ClassGrade
+  
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  assignments Assignment[]
+  exams       Exam[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([schoolId,grade, name_en])
+  @@unique([schoolId,grade, name_fr])
+  @@unique([schoolId,grade, name_ar])
+
+  @@map("subjects")
+}
+
+
+model Assignment{
+  id String @id @default(uuid()) @db.Uuid
+
+  subjectId String @db.Uuid
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  classroomId String @db.Uuid
+  classroom Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+
+  teacherId String? @db.Uuid
+  teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+  
+  timetable Timetable[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, classroomId, subjectId])
+
+  @@map("assignments")
+}
+
+
+model Timetable{
+  id String @id @default(uuid()) @db.Uuid
+
+  assignmentId String @db.Uuid
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  day DayOfWeek
+  startTime DateTime @db.Time
+  endTime DateTime @db.Time
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, assignmentId])
+  @@map("timetable")
+}
+
+
+model Exam{
+  id String @id @default(uuid()) @db.Uuid
+
+  name_en String @db.VarChar(255)
+  name_fr String @db.VarChar(255)
+  name_ar String @db.VarChar(255)
+
+  durationInMin Int @db.SmallInt
+ 
+  subjectId String @db.Uuid
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, subjectId, name_en])
+  @@unique([schoolId, subjectId, name_fr])
+  @@unique([schoolId, subjectId, name_ar])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("exams")
+}
+
+// model ExamTime {
+//   id String @id @default(uuid()) @db.Uuid
+
+//   examId String @db.Uuid
+//   exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+//   classId String @db.Uuid
+//   class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+//   semester Semester
+//   day DateTime @db.Date
+//   startTime DateTime @db.Time
+//   endTime DateTime @db.Time
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   @@map("examTimes")
+// }
+
+
+
+
+// model ExamSessions{
+//   id String @id @default(uuid()) @db.Uuid
+
+//   classId String @db.Uuid
+//   class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+
+//   title String @db.VarChar(255)
+//   description String? @db.Text
+//   day DayOfWeek
+//   startTime DateTime @db.Time
+//   endTime DateTime @db.Time
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   teacherId String @db.Uuid
+//   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+
+//   @@map("examSessions")
+// }
+
+
+
+// model ExtraCurricularSessions{
+//   id String @id @default(uuid()) @db.Uuid
+
+//   title String @db.VarChar(255)
+//   description String? @db.Text
+//   day DayOfWeek
+//   startTime DateTime @db.Time
+//   endTime DateTime @db.Time
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   teacherId String @db.Uuid
+//   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+
+//   @@map("extraCurricularSessions")
+// }
+
+

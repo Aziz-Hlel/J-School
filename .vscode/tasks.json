@@ -1,0 +1,84 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // LOCAL
+    {
+      "label": "local:docker",
+      "type": "shell",
+      "command": "pnpm docker:local",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "dev:api",
+      "type": "shell",
+      "command": "pnpm dev:api",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "dev:admin",
+      "type": "shell",
+      "command": "pnpm dev:admin",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "dev:worker",
+      "type": "shell",
+      "command": "pnpm dev:worker",
+      "presentation": { "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": " LOCAL — All Services",
+      "detail": "Run all services locally",
+      "dependsOn": ["local:docker", "dev:api", "dev:admin", "dev:worker"],
+      "icon": {
+        "color": "terminal.ansiGreen",
+        "id": "debug-alt"
+      },
+      "dependsOrder": "parallel"
+    },
+
+    // DOCKER:DEV
+    {
+      "label": " DOCKER DEV",
+      "detail": "Run all services in docker in dev mode",
+      "type": "shell",
+      "command": "pnpm docker:dev",
+      "presentation": { "panel": "new" },
+      "icon": {
+        "color": "terminal.ansiYellow",
+        "id": "debug-alt"
+      }
+    },
+
+    // BUILD
+    {
+      "label": "DOCKER BUILD",
+      "detail": "Run docker build",
+      "type": "shell",
+      "command": "pnpm docker:build",
+      "icon": {
+        "color": "terminal.ansiMagenta",
+        "id": "debug-alt"
+      },
+      "dependsOrder": "parallel"
+    },
+
+    // STAGE
+    {
+      "label": "DOCKER STAGE",
+      "detail": "Run docker stage",
+      "type": "shell",
+      "command": "pnpm docker:stage",
+      "icon": {
+        "color": "terminal.ansiRed",
+        "id": "debug-alt"
+      },
+      "dependsOrder": "parallel"
+    }
+  ],
+  "problemMatcher": [] // Without this, sometimes VS Code behaves weirdly depending on config.
+}

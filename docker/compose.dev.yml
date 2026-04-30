@@ -1,0 +1,126 @@
+services:
+  admin:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile: docker/dev/Dockerfile.dev.admin
+    ports:
+      - ${VITE_ADMIN_PORT:?VITE_ADMIN_PORT is required}:${VITE_ADMIN_PORT}
+    volumes:
+      - ${PROJECT_ROOT}/apps/admin/src:/app/apps/admin/src
+      - ${PROJECT_ROOT}/apps/admin/public:/app/apps/admin/public
+      - ${PROJECT_ROOT}/packages/contracts/src:/app/packages/contracts/src
+    env_file:
+      - ${PROJECT_ROOT}/config/.env.dev
+      - ${PROJECT_ROOT}/.env.local
+      - ${PROJECT_ROOT}/.env
+    command: sh -c "pnpm dev:admin"
+
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      WATCHPACK_POLLING: true
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile: docker/dev/Dockerfile.dev.api
+    ports:
+      - ${API_PORT:?API_PORT is required}:${API_PORT}
+    volumes:
+      - ${PROJECT_ROOT}/apps/api/src:/app/apps/api/src
+      - ${PROJECT_ROOT}/apps/api/prisma:/app/apps/api/prisma
+      - ${PROJECT_ROOT}/packages/contracts/src:/app/packages/contracts/src
+
+    command: sh -c "pnpm prisma:generate && pnpm dev:api"
+
+    env_file:
+      - ${PROJECT_ROOT}/config/.env.dev
+      - ${PROJECT_ROOT}/.env.local
+      - ${PROJECT_ROOT}/.env
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      WATCHPACK_POLLING: true
+
+      REDIS_PORT: 6379
+      DB_PORT: 5432
+      MINIO_PORT: 9000
+      SMTP_PORT: 1025
+
+    depends_on:
+      - db
+      - redis
+      - minio
+      - mailpit
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${DB_USER:?DB_USER is required}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
+    ports:
+      - ${DB_PORT:?DB_PORT is required}:5432
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+
+    ports:
+      - ${REDIS_PORT:?REDIS_PORT is required}:6379
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-password}
+    volumes:
+      - redis_volume:/data
+
+    command: ['redis-server', '--requirepass', '${REDIS_PASSWORD:-password}', '--appendonly', 'yes'] # enables persistence
+
+  minio:
+    image: quay.io/minio/minio:latest
+
+    ports:
+      - ${MINIO_PORT:?MINIO_PORT is required}:9000
+      - ${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001 # Web UI
+
+    env_file:
+      - ${PROJECT_ROOT}/config/.env.dev
+      - ${PROJECT_ROOT}/.env.local
+      - ${PROJECT_ROOT}/.env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+
+    volumes:
+      - minio_volume:/data
+
+    command: server /data --console-address ":9001"
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_started
+
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+
+    volumes:
+      - ${PROJECT_ROOT}/scripts/init_minio.sh:/init_minio.sh:ro
+      - ${PROJECT_ROOT}/seed/minio:/seed:ro
+
+    entrypoint: ['/bin/sh', '/init_minio.sh']
+
+  mailpit:
+    image: axllent/mailpit
+    restart: no
+    ports:
+      - ${SMTP_UI_PORT:?SMTP_UI_PORT is required}:8025 # Web UI
+      - ${SMTP_PORT:?SMTP_PORT is required}:1025
+
+volumes:
+  db_volume:
+  redis_volume:
+  minio_volume:

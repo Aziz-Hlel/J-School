@@ -1,0 +1,19 @@
+{
+  "name": "@repo/contracts",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --noEmit && tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  }
+}

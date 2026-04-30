@@ -1,0 +1,66 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+@AdminEmail = admin1@restclient.com
+@AdminPassword = 12345678
+
+@DirectorEmail = director1@restclient.com
+@DirectorPassword = 12345678
+
+@ManagerEmail = manager1@restclient.com
+@ManagerPassword = 12345678
+
+@TeacherEmail = teacher1@restclient.com
+@TeacherPassword = 12345678
+
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{ManagerEmail}}",
+  "password": "{{ManagerPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+###
+# @name getTeachers
+GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/teachers?page=1&size=2&gender=MALE
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name getClassrooms
+GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/classrooms
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name getStaffs
+GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/staffs
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}

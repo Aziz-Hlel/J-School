@@ -1,0 +1,57 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@TeacherEmail = teacher1@gmail.com
+@TeacherPassword = 12345678
+
+
+
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{TeacherEmail}}",
+  "password": "{{TeacherPassword}}",
+  "returnSecureToken": true
+}
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+###
+# @name getMe
+GET {{baseUrl}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name updateTeacher
+PUT {{baseUrl}}/schools/{{getMe.response.body.teacher[0].school.id}}/teachers/{{getMe.response.body.teacher[0].id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+  "firstName": "John Updated from teacher himself",
+  "lastName": "Doe Updated from teacher himself",
+  "gender": "FEMALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "5551234568",
+  "cin": "12345679",
+  "address": "123 Main Street, Springfield"
+}

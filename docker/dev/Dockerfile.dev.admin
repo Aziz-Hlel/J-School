@@ -1,0 +1,17 @@
+FROM node:22.14.0-alpine
+# WARN: StageNameCasing: Stage name 'Admin_build' should be lowercase
+# Install pnpm globally
+RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
+
+WORKDIR /app
+
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+
+COPY packages/contracts/package.json packages/contracts/package.json
+
+COPY apps/admin/package.json apps/admin/package.json
+
+RUN pnpm install
+
+COPY packages/contracts ./packages/contracts
+COPY apps/admin ./apps/admin 
