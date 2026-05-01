@@ -10,9 +10,9 @@ build
 **/generated
 
 # Environment variables
-.env
-.env*.local
-config/
+**/.env
+**/.env.*
+!.env.example
 !config/.env.local
 
 # IDEs and editors
