@@ -73,7 +73,7 @@ model Student {
 model Parent{
   id String @id @default(uuid()) @db.Uuid
 
-  emergencyPhone String? @db.VarChar(20)
+  emergencyPhone String? @db.VarChar(50)
  
   userId String @db.Uuid
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

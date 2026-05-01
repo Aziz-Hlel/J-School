@@ -20,6 +20,7 @@
     "db:watch": "pnpm --filter @repo/db db:watch",
     "db:stop": "pnpm --filter @repo/db db:stop",
     "db:down": "pnpm --filter @repo/db db:down",
+    "db:reset": "pnpm --filter @repo/db db:reset",
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api dev",
     "docker:local": "node scripts/docker/index.js local",
