@@ -102,7 +102,7 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 ###
 # @name createDirector
-POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staff
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staffs
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
@@ -151,7 +151,7 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
 ###
 # @name createManager
-POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staff
+POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/staffs
 Content-Type: application/json
 Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
 
@@ -338,22 +338,6 @@ Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
     "phone": "+212612345678",
     "emergencyPhone": null
   }
-}
-
-### createSubject
-POST {{baseUrl}}/schools/{{createSchool.response.body.school.id}}/subjects
-Content-Type: application/json
-Authorization: Bearer {{firebaseTokenRefresh.response.body.id_token}}
-
-{
-  "name": {
-    "en": "Math",
-    "fr": "Math",
-    "ar": "الرياضيات"
-  },
-  "hoursPerWeek": 3,
-  "domain": "SCIENCE_TECHNOLOGY",
-  "grade": "ONE"
 }
 
 

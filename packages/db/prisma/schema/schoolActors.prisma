@@ -52,8 +52,8 @@ model Student {
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  classId String? @db.Uuid
-  class Classroom? @relation(fields: [classId], references: [id], onDelete: Restrict)
+  classroomId String? @db.Uuid
+  classroom Classroom? @relation(fields: [classroomId], references: [id], onDelete: Restrict)
 
   avatarId String? @db.Uuid
   avatar Media? @relation(fields: [avatarId], references: [id], onDelete: SetNull)
@@ -112,6 +112,8 @@ model Teacher {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   assignments Assignment[]
+  extraCurricular ExtraCurricular[]
+  
   // sessions ClassSessions[] // * not so sure of
   // examSessions ExamSessions[] // * not so sure of
   // extraCurricularSessions ExtraCurricularSessions[] // * not so sure of

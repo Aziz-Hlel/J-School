@@ -112,10 +112,13 @@ model School {
   studentFees Fees[]
   exams Exam[]
   subjects Subject[]
+  extraCurriculars ExtraCurricular[]
 
   // RLS Related Models
   assignments Assignment[]
   timetable Timetable[]
+  examSchedules ExamSchedule[]
+  names Name[]
 
   status SchoolStatus @default(PENDING)
   createdAt DateTime @default(now())

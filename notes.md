@@ -5,3 +5,5 @@
 - the whole subject classroom assignment is a mess, if a classroom added you need to sync the assignment and create based on all subject off that grade, if a subject added you need to add assignment for all classroom off that grade,
 
 - make the env variables central, even for local dev, when you clone the project in a new machine, you ll have to make an env file for almost each package which is frustrating (api+web+admin+db+woker, at least), so make a central one so that you can just copy paste one file 
+
+- make sure every unique key starts with schoolId , i think that s probably the move

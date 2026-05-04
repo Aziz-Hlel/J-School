@@ -1,8 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
 import { RepoError_V2 } from '@/err/repo/DbError.v2';
-import { ClassGrade, SubjectDomain } from '@repo/db/prisma/enums';
 import { TX } from '@/types/prisma/PrismaTransaction';
-import { CreateManySubjectRequest } from '@repo/contracts/schemas/subject/createManySubjectRequest';
+import { ClassGrade, SubjectDomain } from '@repo/db/prisma/enums';
 
 export class SubjectSeed {
   constructor() {}

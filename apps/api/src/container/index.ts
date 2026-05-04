@@ -1,10 +1,13 @@
 import { createMediaModule as mediaModule } from '@/media';
+import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
 import { createUserModule as userModule } from '@/modules/User';
 import { AccountModule } from '@/modules/accounts/account.module';
 import { AssignmentModule } from '@/modules/assignment/assignment.module';
 import { authModule } from '@/modules/auth/auth.module';
+import { ClassroomManagementModule } from '@/modules/classroom/ClassroomManagement/ClassroomManagement.module';
 import { ClassroomModule } from '@/modules/classroom/classroom.module';
+import { ClassroomTimetableModule } from '@/modules/classroom/timetable/ClassroomTimetable.module';
 import { createOwnerModule as ownerModule } from '@/modules/owner/owner.module';
 import { ParentModule } from '@/modules/parent/parent.module';
 import { createRootModule as rootModule } from '@/modules/root/root.module';
@@ -14,19 +17,21 @@ import { StudentModule } from '@/modules/student/student.module';
 import { StudentProfileModule } from '@/modules/studentProfile/studentProfile.module';
 import { SubjectModule } from '@/modules/subject/subject.module';
 import { TeacherModule } from '@/modules/teacher/teacher.module';
+import { TimeTableModule } from '@/modules/timetable/timetable.module';
 import { createUserRoleModule } from '@/modules/userRoles/userRole.module';
 // import { createNotificationModule as notificationModule } from '@/notification';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { AccountSeed } from '@/seeds/fakes/account.seed';
 import { ActorSeed } from '@/seeds/fakes/actor.seed';
-import { ClassroomSeed } from '@/seeds/fakes/classroom.seed';
+import { AssignmentSeed } from '@/seeds/fakes/assignment.seed';
+import { ClassroomSeed2 } from '@/seeds/fakes/classroom.seed2';
 import { MediaSeed } from '@/seeds/fakes/media.seed';
 import { OwnerSeed } from '@/seeds/fakes/owner.seed';
 import { ParentSeed } from '@/seeds/fakes/parent.seed';
 import { ParentStudentSeed } from '@/seeds/fakes/parentStudent.seed';
 import { SchoolSeed } from '@/seeds/fakes/school.seed';
 import { StudentSeed } from '@/seeds/fakes/student.seed';
-import { SubjectSeed } from '@/seeds/fakes/subject.seed';
+import { SubjectAndExamsSeed2 } from '@/seeds/fakes/subject.seed2';
 import { TeacherSeed } from '@/seeds/fakes/teacher.seed';
 import { UserRolesSeed } from '@/seeds/fakes/userRoles.seed';
 import { UserSeed } from '@/seeds/fakes/users.fake';
@@ -45,7 +50,7 @@ const { accountRouter, accountService } = AccountModule();
 const { ownerRouter, ownerService } = ownerModule();
 
 // * SCHOOL
-const { schoolRouter, schoolService } = schoolModule({ ownerService });
+const { schoolRouter } = schoolModule({ ownerService });
 
 // * USER
 const { userRouter, userRepo, createSimpleUserUseCase, userService } = userModule({ accountService });
@@ -85,7 +90,19 @@ const { subjectRouter, subjectInternal } = SubjectModule();
 const { assignmentInternal, assignmentRouter } = AssignmentModule();
 
 // * CLASSROOM
-const { classroomRouter } = ClassroomModule({ assignmentInternal, subjectInternal });
+const { classroomRouter, createClassroomUseCase } = ClassroomModule({ assignmentInternal, subjectInternal });
+
+// * CLASSROOM TIMETABLE
+const { classroomTimetableRouter } = ClassroomTimetableModule();
+
+// * TimeTable
+const { timetableRouter } = TimeTableModule();
+
+// * CLASSROOM MANAGEMENT
+const { classroomManagementRouter } = ClassroomManagementModule();
+
+// * EXAM SCHEDULE
+const { examScheduleRouter } = ExamScheduleModule();
 
 // *
 // * AUTH
@@ -105,8 +122,12 @@ const parentSeed = new ParentSeed();
 const actorSeed = new ActorSeed(userRolesSeed, teacherSeed, parentSeed);
 const studentSeed = new StudentSeed(mediaSeed);
 const parentStudentSeed = new ParentStudentSeed();
-const classroomSeed = new ClassroomSeed();
-const subjectSeed = new SubjectSeed();
+// const classroomSeed = new ClassroomSeed();
+// const subjectSeed = new SubjectSeed();
+const classroomSeed2 = new ClassroomSeed2(createClassroomUseCase);
+const subjectSeed2 = new SubjectAndExamsSeed2();
+const assignmentSeed = new AssignmentSeed();
+
 const seedDevService = new SeedDevService(
   accountSeed,
   ownerSeed,
@@ -115,9 +136,11 @@ const seedDevService = new SeedDevService(
   actorSeed,
   studentSeed,
   parentStudentSeed,
-  classroomSeed,
-  subjectSeed,
+  classroomSeed2,
+  subjectSeed2,
+  assignmentSeed,
 );
+
 seedDevService.run();
 
 export const container: { router: Router; resource: string }[] = [
@@ -136,6 +159,10 @@ export const container: { router: Router; resource: string }[] = [
   { router: subjectRouter, resource: 'schools/:schoolId/subjects' },
   { router: assignmentRouter, resource: 'schools/:schoolId/classrooms/:classroomId/assignments' },
   { router: classroomRouter, resource: 'schools/:schoolId/classrooms' },
+  { router: classroomManagementRouter, resource: 'schools/:schoolId/classrooms/:classroomId' },
+  { router: classroomTimetableRouter, resource: 'schools/:schoolId/classrooms/:classroomId/timetable' },
+  { router: timetableRouter, resource: 'schools/:schoolId/assignments/:assignmentId/timetable' },
+  { router: examScheduleRouter, resource: 'schools/:schoolId/examSchedules' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

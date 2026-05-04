@@ -4,18 +4,10 @@
 
 @baseUrl = http://localhost:10000/api
 
-@AdminEmail = admin1@restclient.com
-@AdminPassword = 12345678
-
-@DirectorEmail = director1@restclient.com
-@DirectorPassword = 12345678
-
 @ManagerEmail = manager1@fake.com
 @ManagerPassword = 12345678
 
-@TeacherEmail = teacher1@restclient.com
-@TeacherPassword = 12345678
-
+@classroomId = 6d13a568-d7ed-48ce-9637-0c2def72e037
 
 
 ########################################
@@ -44,23 +36,29 @@ Content-Type: application/json
     "token": "{{firebase_login.response.body.idToken}}"
 }
 
+###
+@schoolId = {{serverLogin.response.body.administration[0].school.id}}
+
 
 ###
-# @name getTeachers
-GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/teachers?page=1&size=2&gender=MALE
+# @name findAll
+GET {{baseUrl}}/schools/{{schoolId}}/classrooms?page=1&size=10&sortBy=grade&order=desc&grade=SIX,ONE
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 
 ###
-# @name getClassrooms
-GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/classrooms
-Content-Type: application/json
-Authorization: Bearer {{firebase_login.response.body.idToken}}
-
+@classroomId = {{findAll.response.body.data[0].id}}
 
 ###
-# @name getStaffs
-GET {{baseUrl}}/schools/{{serverLogin.response.body.administration[0].school.id}}/staffs
+# @name create
+POST {{baseUrl}}/schools/{{schoolId}}/classrooms/{{classroomId}}/timetable
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+  "subjectId": "{{findAll.response.body.data[0].timetable[0].subject.id}}",
+  "day": "MONDAY",
+  "startTime": "08:00",
+  "endTime": "09:00"
+}

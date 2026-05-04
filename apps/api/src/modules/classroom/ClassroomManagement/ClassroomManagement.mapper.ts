@@ -1,0 +1,57 @@
+import { Prisma } from '@repo/db/prisma/client';
+import { getSubjectsWithTeachersSelect } from './ClassroomManagement.service';
+import type { ClassroomSubjectsWithTeachersResponse } from '@repo/contracts/schemas/classroom/management/ClassroomSubjectsWithTeachers';
+import type { ClassroomExamScheduleResponse } from '@repo/contracts/schemas/classroom/management/ClassroomExamSchedulesResponse';
+
+export class ClassroomManagementMapper {
+  static toClassroomSubjectsWithTeachersResponse(
+    assignments: Prisma.AssignmentGetPayload<{ select: typeof getSubjectsWithTeachersSelect }>[],
+  ): ClassroomSubjectsWithTeachersResponse[] {
+    return assignments.map((assignment) => {
+      return {
+        id: assignment.id,
+        name: {
+          en: assignment.subject.name_en,
+          fr: assignment.subject.name_fr,
+          ar: assignment.subject.name_ar,
+        },
+        grade: assignment.subject.grade,
+        hoursPerWeek: assignment.subject.hoursPerWeek,
+        domain: assignment.subject.domain,
+        teacher: assignment.teacher
+          ? {
+              id: assignment.teacher?.user.id,
+              firstName: assignment.teacher?.user.firstName,
+              lastName: assignment.teacher?.user.lastName,
+              gender: assignment.teacher?.user.gender,
+            }
+          : null,
+      };
+    });
+  }
+
+  static toExamScheduleResponse(
+    examSchedule: Prisma.ExamScheduleGetPayload<{ include: { exam: { include: { subject: true } } } }>,
+  ): ClassroomExamScheduleResponse {
+    return {
+      id: examSchedule.exam.id,
+      day: examSchedule.day?.toISOString() ?? null,
+      startTime: examSchedule.startTime?.toISOString() ?? null,
+      endTime: examSchedule.endTime?.toISOString() ?? null,
+      name: {
+        en: examSchedule.exam.subject.name_en,
+        fr: examSchedule.exam.subject.name_fr,
+        ar: examSchedule.exam.subject.name_ar,
+      },
+      subject: {
+        id: examSchedule.exam.subject.id,
+        domain: examSchedule.exam.subject.domain,
+        name: {
+          en: examSchedule.exam.subject.name_en,
+          fr: examSchedule.exam.subject.name_fr,
+          ar: examSchedule.exam.subject.name_ar,
+        },
+      },
+    };
+  }
+}

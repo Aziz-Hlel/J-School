@@ -1,7 +1,7 @@
 import { updateTimetableRequest } from '@repo/contracts/schemas/timeTable/updateTimetableRequest';
-import { TimetableRepo } from './timetable.repo';
 import { CreateTimetableRequest } from '@repo/contracts/schemas/timeTable/createTimetableRequest';
 import { TimetableMapper } from './timetable.mapper';
+import { TimetableRepo } from './timetable.repo';
 
 export class TimetableService {
   constructor(private readonly repo: TimetableRepo) {}

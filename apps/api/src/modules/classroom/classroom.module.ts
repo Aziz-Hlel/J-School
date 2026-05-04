@@ -16,5 +16,5 @@ export const ClassroomModule = (services: {
   const createClassroomUseCase = new CreateClassroomUseCase(classesRepo, subjectInternal, assignmentInternal);
   const classController = new ClassroomController(classService, createClassroomUseCase);
   const classroomRouter = createRouter(classController);
-  return { classroomRouter };
+  return { classroomRouter, createClassroomUseCase };
 };

@@ -1,5 +1,7 @@
 import { AccountRole, ClassGrade, SubjectDomain, UserRole } from '@repo/db/prisma/enums';
 import { UserRoleSimple } from '@repo/contracts/types/enums/meta/userRoleMeta';
+import type { InitSubjectWithExamsType } from '@repo/contracts/const/subjectAndExams/type';
+import { subjectsGradeSix } from '@repo/contracts/const/subjectAndExams/grade.six';
 
 type SeedSimpleUser = {
   email: string;
@@ -25,6 +27,7 @@ type SeedTenantData = {
     name: string;
   };
   users: (SeedSimpleUser | SeedParentUser)[];
+
   subjects: {
     name: {
       en: string;
@@ -35,6 +38,22 @@ type SeedTenantData = {
     domain: SubjectDomain;
     hoursPerWeek: number;
   }[];
+  classrooms: {
+    name: string;
+    grade: ClassGrade;
+    description?: string;
+  }[];
+  subjects_with_exams: Partial<Record<ClassGrade, Record<string, InitSubjectWithExamsType>>>;
+  data: Partial<
+    Record<
+      ClassGrade,
+      {
+        grade: ClassGrade;
+        classrooms: string[];
+        subjects_with_exams: Record<string, InitSubjectWithExamsType>;
+      }
+    >
+  >;
 };
 
 const tenant1: SeedTenantData = {
@@ -48,61 +67,61 @@ const tenant1: SeedTenantData = {
   },
   users: [
     {
-      email: 'fake-director-1@gmail.com',
+      email: 'director1@fake.com',
       role: UserRole.DIRECTOR,
     },
     {
-      email: 'fake-director-2@gmail.com',
+      email: 'director2@fake.com',
       role: UserRole.DIRECTOR,
     },
     {
-      email: 'fake-manager-1@gmail.com',
+      email: 'manager1@fake.com',
       role: UserRole.MANAGER,
     },
     {
-      email: 'fake-manager-2@gmail.com',
+      email: 'manager2@fake.com',
       role: UserRole.MANAGER,
     },
     {
-      email: 'fake-nurse-1@gmail.com',
+      email: 'nurse1@fake.com',
       role: UserRole.NURSE,
     },
     {
-      email: 'fake-nurse-2@gmail.com',
+      email: 'nurse2@fake.com',
       role: UserRole.NURSE,
     },
     {
-      email: 'fake-driver-1@gmail.com',
+      email: 'driver1@fake.com',
       role: UserRole.DRIVER,
     },
     {
-      email: 'fake-driver-2@gmail.com',
+      email: 'driver2@fake.com',
       role: UserRole.DRIVER,
     },
     {
-      email: 'fake-parent-1@gmail.com',
+      email: 'parent1@fake.com',
       role: UserRole.PARENT,
       students: [
         {
-          uid: 'student-1',
+          uid: 'student1',
           grade: ClassGrade.ONE,
         },
         {
-          uid: 'student-2',
+          uid: 'student2',
           grade: ClassGrade.TWO,
         },
       ],
     },
     {
-      email: 'fake-parent-2@gmail.com',
+      email: 'parent2@fake.com',
       role: UserRole.PARENT,
       students: [
         {
-          uid: 'student-3',
+          uid: 'student3',
           grade: ClassGrade.ONE,
         },
         {
-          uid: 'student-4',
+          uid: 'student4',
           grade: ClassGrade.TWO,
         },
       ],
@@ -170,6 +189,27 @@ const tenant1: SeedTenantData = {
       hoursPerWeek: 3,
     },
   ],
+  classrooms: [
+    {
+      name: 'A',
+      grade: ClassGrade.SIX,
+    },
+    {
+      name: 'B',
+      grade: ClassGrade.SIX,
+    },
+  ],
+  subjects_with_exams: {
+    [ClassGrade.SIX]: subjectsGradeSix,
+  },
+
+  data: {
+    [ClassGrade.SIX]: {
+      grade: ClassGrade.SIX,
+      classrooms: ['A', 'B'],
+      subjects_with_exams: subjectsGradeSix,
+    },
+  },
 } as const;
 
 export const data = [tenant1];

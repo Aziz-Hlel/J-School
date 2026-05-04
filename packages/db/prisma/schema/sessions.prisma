@@ -57,6 +57,7 @@ model Assignment{
   teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
   
   timetable Timetable[]
+  examSchedules ExamSchedule[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -106,6 +107,8 @@ model Exam{
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
+  schedules ExamSchedule[]
+
   @@unique([schoolId, subjectId, name_en])
   @@unique([schoolId, subjectId, name_fr])
   @@unique([schoolId, subjectId, name_ar])
@@ -116,71 +119,91 @@ model Exam{
   @@map("exams")
 }
 
-// model ExamTime {
-//   id String @id @default(uuid()) @db.Uuid
 
-//   examId String @db.Uuid
-//   exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+model ExamSchedule {
+  id String @id @default(uuid()) @db.Uuid
 
-//   classId String @db.Uuid
-//   class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
+  examId String @db.Uuid
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
 
-//   semester Semester
-//   day DateTime @db.Date
-//   startTime DateTime @db.Time
-//   endTime DateTime @db.Time
+  assignementId String @db.Uuid
+  assignement Assignment @relation(fields: [assignementId], references: [id], onDelete: Cascade)
 
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-//   @@map("examTimes")
-// }
+  day DateTime? @db.Date
+  startTime DateTime? @db.Time
+  endTime DateTime? @db.Time
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  @@unique([schoolId, examId, assignementId])
 
+  @@map("examSchedules")
+}
 
-// model ExamSessions{
-//   id String @id @default(uuid()) @db.Uuid
+model Name {
+  id String @id @default(uuid()) @db.Uuid
+  en String @db.VarChar(255)
+  fr String @db.VarChar(255)
+  ar String @db.VarChar(255)
 
-//   classId String @db.Uuid
-//   class Classroom @relation(fields: [classId], references: [id], onDelete: Cascade)
+  
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
+  extraCurricular ExtraCurricular?
 
-//   title String @db.VarChar(255)
-//   description String? @db.Text
-//   day DayOfWeek
-//   startTime DateTime @db.Time
-//   endTime DateTime @db.Time
+  // @@unique([en, schoolId]) // idk if necessary
+  // @@unique([fr, schoolId]) // idk if necessary
+  // @@unique([ar, schoolId]) // idk if necessary
+  
+  @@map("names")
+}
 
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
+model ExtraCurricular{
+  id String @id @default(uuid()) @db.Uuid
 
-//   teacherId String @db.Uuid
-//   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  titleId String @db.Uuid @unique
+  title Name @relation(fields: [titleId], references: [id], onDelete: Restrict)
 
+  sessionId String @db.Uuid @unique
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Restrict)
 
-//   @@map("examSessions")
-// }
+  teacherId String? @db.Uuid
+  teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
 
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-// model ExtraCurricularSessions{
-//   id String @id @default(uuid()) @db.Uuid
-
-//   title String @db.VarChar(255)
-//   description String? @db.Text
-//   day DayOfWeek
-//   startTime DateTime @db.Time
-//   endTime DateTime @db.Time
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-
-//   teacherId String @db.Uuid
-//   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-
-
-//   @@map("extraCurricularSessions")
-// }
+  @@map("extraCurriculars")
+}
 
 
+enum SessionType {
+  WEEKLY
+  SPECIAL
+}
+
+model Session {
+  id String @id @default(uuid()) @db.Uuid
+
+  type SessionType
+
+  day DayOfWeek
+  date DateTime? @db.Date
+  startTime DateTime @db.Time
+  endTime DateTime? @db.Time
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  extraCurricular ExtraCurricular?
+
+  @@map("sessions")
+}
