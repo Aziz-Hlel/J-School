@@ -27,6 +27,7 @@
     "docker:dev": "node scripts/docker/index.js dev",
     "docker:stage": "node scripts/docker/index.js stage",
     "docker:prod": "node scripts/docker/index.js prod",
+    "gen:module": "node scripts/gen-module/index.js",
     "prepare": "husky"
   },
   "dependencies": {

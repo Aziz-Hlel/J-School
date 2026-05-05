@@ -1,6 +1,6 @@
 import { createStudentRequestSchema } from '@repo/contracts/schemas/student/createStudentRequest';
 import { StudentService } from './student.service';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import getUrlParam from '@/utils/getUrlParam';
 import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudentRequest';
 import { CreateStudentWithParentUseCase } from './use-case/createStudentWithParent';

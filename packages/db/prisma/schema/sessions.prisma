@@ -150,11 +150,12 @@ model Name {
   fr String @db.VarChar(255)
   ar String @db.VarChar(255)
 
+  extraCurricularId String? @db.Uuid @unique
+  extraCurricular ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
+
   
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
-  extraCurricular ExtraCurricular?
 
   // @@unique([en, schoolId]) // idk if necessary
   // @@unique([fr, schoolId]) // idk if necessary
@@ -166,11 +167,9 @@ model Name {
 model ExtraCurricular{
   id String @id @default(uuid()) @db.Uuid
 
-  titleId String @db.Uuid @unique
-  title Name @relation(fields: [titleId], references: [id], onDelete: Restrict)
+  title Name? 
 
-  sessionId String @db.Uuid @unique
-  session Session @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  session Session?
 
   teacherId String? @db.Uuid
   teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
@@ -203,7 +202,8 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  extraCurricular ExtraCurricular?
+  extraCurricularId String? @db.Uuid @unique
+  extraCurricular ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
