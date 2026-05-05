@@ -1,5 +1,6 @@
 import { createMediaModule as mediaModule } from '@/media';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
+import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
 import { createUserModule as userModule } from '@/modules/User';
 import { AccountModule } from '@/modules/accounts/account.module';
@@ -104,6 +105,9 @@ const { classroomManagementRouter } = ClassroomManagementModule();
 // * EXAM SCHEDULE
 const { examScheduleRouter } = ExamScheduleModule();
 
+// * EXTRA CURRICULAR
+const { extraCurricularRouter } = ExtraCurricularModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -163,6 +167,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: classroomTimetableRouter, resource: 'schools/:schoolId/classrooms/:classroomId/timetable' },
   { router: timetableRouter, resource: 'schools/:schoolId/assignments/:assignmentId/timetable' },
   { router: examScheduleRouter, resource: 'schools/:schoolId/examSchedules' },
+  { router: extraCurricularRouter, resource: 'schools/:schoolId/extraCurriculars' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

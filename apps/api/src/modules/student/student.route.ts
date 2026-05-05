@@ -8,26 +8,36 @@ import requireUserPermission from '@/middleware/requirePermission.middleware';
 
 export const createRouter = (studentController: StudentController) => {
   const router = Router({ mergeParams: true });
+  router.use(requireAuth);
 
-  router.post('/', requireAuth, asyncHandler(studentController.create));
+  router.post('/', asyncHandler(studentController.create));
 
   router.post(
     '/with-parent',
-    requireAuth,
     requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(studentController.createWithParent),
   );
 
   router.put(
     '/:studentId',
-    requireAuth,
     requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(studentController.update),
   );
 
   router.get(
+    '/',
+    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(studentController.findAll),
+  );
+
+  router.get(
+    '/:studentId/extra-curriculars',
+    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
+    asyncHandler(studentController.getExtraCurricular),
+  );
+
+  router.get(
     '/:studentId',
-    requireAuth,
     requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(studentController.findById),
   );

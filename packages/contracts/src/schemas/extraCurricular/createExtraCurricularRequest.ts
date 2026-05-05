@@ -7,6 +7,7 @@ export const createExtraCurricularRequestSchema = z.object({
     fr: globalExtraCurricular.title.fr,
     ar: globalExtraCurricular.title.ar,
   }),
+  grade: globalExtraCurricular.grade,
   dayOfWeek: globalExtraCurricular.dayOfWeek,
   startTime: globalExtraCurricular.startTime,
   endTime: globalExtraCurricular.endTime,

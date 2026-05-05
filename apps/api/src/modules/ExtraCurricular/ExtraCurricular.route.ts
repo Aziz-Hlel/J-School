@@ -6,24 +6,25 @@ import requireUserPermission from '@/middleware/requirePermission.middleware';
 import { UserRole } from '@repo/db/prisma/enums';
 
 export const createRouter = (controller: ExtraCurricularController) => {
-  const router = Router();
-  router.post(
-    '/',
-    requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(controller.create),
-  );
-  router.put(
-    '/:extraCurricularId',
-    requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(controller.update),
-  );
-  router.delete(
-    '/:extraCurricularId',
-    requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(controller.delete),
-  );
+  const router = Router({ mergeParams: true });
+  router.use(requireAuth);
+  router.use(requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]));
+
+  router.post('/', asyncHandler(controller.create));
+
+  router.post('/:extraCurricularId/students/:studentId', asyncHandler(controller.assignToStudent));
+
+  router.put('/:extraCurricularId', asyncHandler(controller.update));
+
+  router.get('/', asyncHandler(controller.findAll));
+
+  router.get('/:extraCurricularId/students', asyncHandler(controller.getStudents));
+
+  router.get('/:extraCurricularId', asyncHandler(controller.findOne));
+
+  router.delete('/:extraCurricularId/students/:studentId', asyncHandler(controller.unassignFromStudent));
+
+  router.delete('/:extraCurricularId', asyncHandler(controller.delete));
+
   return router;
 };

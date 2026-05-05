@@ -29,9 +29,4 @@ enum DayOfWeek {
   SUNDAY
 }
 
-enum AttendanceStatus {
-  PRESENT
-  ABSENT
-  LATE
-  EXCUSED
-}
+ 

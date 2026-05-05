@@ -118,7 +118,8 @@ model School {
   assignments Assignment[]
   timetable Timetable[]
   examSchedules ExamSchedule[]
-  names Name[]
+  studentExtraCurriculars StudentExtraCurricular[]
+  attendances Attendance[]
 
   status SchoolStatus @default(PENDING)
   createdAt DateTime @default(now())
