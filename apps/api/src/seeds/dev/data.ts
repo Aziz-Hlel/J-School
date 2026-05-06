@@ -1,7 +1,7 @@
-import { AccountRole, ClassGrade, SubjectDomain, UserRole } from '@repo/db/prisma/enums';
-import { UserRoleSimple } from '@repo/contracts/types/enums/meta/userRoleMeta';
-import type { InitSubjectWithExamsType } from '@repo/contracts/const/subjectAndExams/type';
 import { subjectsGradeSix } from '@repo/contracts/const/subjectAndExams/grade.six';
+import type { BaseSubjectsKeys, InitSubjectWithExamsType } from '@repo/contracts/const/subjectAndExams/type';
+import { UserRoleSimple } from '@repo/contracts/types/enums/meta/userRoleMeta';
+import { AccountRole, ClassGrade, DayOfWeek, UserRole } from '@repo/db/prisma/enums';
 
 type SeedSimpleUser = {
   email: string;
@@ -26,23 +26,14 @@ type SeedTenantData = {
   school: {
     name: string;
   };
-  users: (SeedSimpleUser | SeedParentUser)[];
+  users: SeedSimpleUser[];
+  parentsWithStudents: SeedParentUser[];
 
-  subjects: {
-    name: {
-      en: string;
-      fr: string;
-      ar: string;
-    };
+  students: {
+    uid: string;
     grade: ClassGrade;
-    domain: SubjectDomain;
-    hoursPerWeek: number;
   }[];
-  classrooms: {
-    name: string;
-    grade: ClassGrade;
-    description?: string;
-  }[];
+
   subjects_with_exams: Partial<Record<ClassGrade, Record<string, InitSubjectWithExamsType>>>;
   data: Partial<
     Record<
@@ -50,7 +41,12 @@ type SeedTenantData = {
       {
         grade: ClassGrade;
         classrooms: string[];
-        subjects_with_exams: Record<string, InitSubjectWithExamsType>;
+        subjects_with_exams: Partial<
+          Record<
+            BaseSubjectsKeys,
+            InitSubjectWithExamsType & { timetable?: { day: DayOfWeek; startTime: string; endTime: string }[] }
+          >
+        >;
       }
     >
   >;
@@ -98,17 +94,20 @@ const tenant1: SeedTenantData = {
       email: 'driver2@fake.com',
       role: UserRole.DRIVER,
     },
+  ],
+
+  parentsWithStudents: [
     {
       email: 'parent1@fake.com',
       role: UserRole.PARENT,
       students: [
         {
           uid: 'student1',
-          grade: ClassGrade.ONE,
+          grade: ClassGrade.SIX,
         },
         {
           uid: 'student2',
-          grade: ClassGrade.TWO,
+          grade: ClassGrade.SIX,
         },
       ],
     },
@@ -118,96 +117,82 @@ const tenant1: SeedTenantData = {
       students: [
         {
           uid: 'student3',
-          grade: ClassGrade.ONE,
+          grade: ClassGrade.SIX,
         },
         {
           uid: 'student4',
-          grade: ClassGrade.TWO,
+          grade: ClassGrade.SIX,
+        },
+        {
+          uid: 'student5',
+          grade: ClassGrade.SIX,
         },
       ],
     },
   ],
-  subjects: [
-    {
-      name: {
-        en: 'Mathematics',
-        fr: 'Mathématiques',
-        ar: 'الرياضيات',
-      },
-      grade: ClassGrade.ONE,
-      domain: SubjectDomain.SCIENCE_TECHNOLOGY,
-      hoursPerWeek: 3,
-    },
-    {
-      name: {
-        en: 'Physics',
-        fr: 'Physique',
-        ar: 'الفيزياء',
-      },
-      grade: ClassGrade.ONE,
-      domain: SubjectDomain.SCIENCE_TECHNOLOGY,
-      hoursPerWeek: 3,
-    },
-    {
-      name: {
-        en: 'Chemistry',
-        fr: 'Chimie',
-        ar: 'الكيمياء',
-      },
-      grade: ClassGrade.ONE,
-      domain: SubjectDomain.SCIENCE_TECHNOLOGY,
-      hoursPerWeek: 3,
-    },
-    {
-      name: {
-        en: 'Arabic',
-        fr: 'Arabe',
-        ar: 'العربية',
-      },
-      grade: ClassGrade.ONE,
-      domain: SubjectDomain.ARABIC_LANGUAGE,
-      hoursPerWeek: 3,
-    },
-    {
-      name: {
-        en: 'French',
-        fr: 'Français',
-        ar: 'الفرنسية',
-      },
-      grade: ClassGrade.ONE,
-      domain: SubjectDomain.FRENCH_LANGUAGE,
-      hoursPerWeek: 3,
-    },
-    {
-      name: {
-        en: 'English',
-        fr: 'Anglais',
-        ar: 'الإنجليزية',
-      },
-      grade: ClassGrade.ONE,
-      domain: SubjectDomain.ENGLISH_LANGUAGE,
-      hoursPerWeek: 3,
-    },
-  ],
-  classrooms: [
-    {
-      name: 'A',
-      grade: ClassGrade.SIX,
-    },
-    {
-      name: 'B',
-      grade: ClassGrade.SIX,
-    },
-  ],
+
   subjects_with_exams: {
     [ClassGrade.SIX]: subjectsGradeSix,
   },
+
+  students: [
+    {
+      uid: 'student1',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student2',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student3',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student4',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student5',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student6',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student7',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student8',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student9',
+      grade: ClassGrade.SIX,
+    },
+    {
+      uid: 'student10',
+      grade: ClassGrade.SIX,
+    },
+  ],
 
   data: {
     [ClassGrade.SIX]: {
       grade: ClassGrade.SIX,
       classrooms: ['A', 'B'],
-      subjects_with_exams: subjectsGradeSix,
+      subjects_with_exams: {
+        ...subjectsGradeSix,
+        arabic: {
+          ...subjectsGradeSix.arabic,
+          timetable: [
+            { day: DayOfWeek.MONDAY, startTime: '08:00', endTime: '10:00' },
+            { day: DayOfWeek.WEDNESDAY, startTime: '08:00', endTime: '10:00' },
+            { day: DayOfWeek.FRIDAY, startTime: '08:00', endTime: '10:00' },
+          ],
+        },
+      },
     },
   },
 } as const;

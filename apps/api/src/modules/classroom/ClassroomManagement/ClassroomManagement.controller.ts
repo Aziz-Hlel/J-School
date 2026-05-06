@@ -2,6 +2,7 @@ import type { ClassroomManagementService } from './ClassroomManagement.service';
 import getUrlParam from '@/utils/getUrlParam';
 import { assignTeacherRequestSchema } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
 import { AssignStudentRequestSchema } from '@repo/contracts/schemas/classroom/management/assignStudentRequest';
+import { getClassroomAttendancesQuerySchema } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
 import { Request, Response } from 'express';
 
 export class ClassroomManagementController {
@@ -46,6 +47,17 @@ export class ClassroomManagementController {
     res.status(200).json({
       message: 'Student assigned successfully',
       data,
+    });
+  };
+
+  getAttendances = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId');
+    const classroomId = getUrlParam(req, 'classroomId');
+    const query = getClassroomAttendancesQuerySchema.parse(req.query);
+    const attendances = await this.classroomManagementService.getAttendances({ schoolId, classroomId, query });
+    res.status(200).json({
+      message: 'Attendances fetched successfully',
+      data: attendances,
     });
   };
 }

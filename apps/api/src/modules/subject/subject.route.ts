@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { SubjectController } from './subject.controller';
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
-import requireUserPermission from '@/middleware/requirePermission.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 import { UserRole } from '@repo/db/prisma/enums';
 
 export const createRouter = (subjectController: SubjectController) => {
@@ -24,14 +24,14 @@ export const createRouter = (subjectController: SubjectController) => {
   router.post(
     '/bulk',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(subjectController.createWithExams),
   );
 
   router.put(
     '/:subjectId',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(subjectController.update),
   );
 

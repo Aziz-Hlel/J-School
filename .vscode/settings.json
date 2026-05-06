@@ -2,5 +2,6 @@
   "terminal.integrated.env.windows": {
     "LANG": "en_US.UTF-8"
   },
+  "js/ts.experimental.useTsgo": true,
   "files.eol": "\n"
 }

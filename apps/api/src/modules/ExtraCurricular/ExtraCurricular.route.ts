@@ -2,13 +2,13 @@ import { Router } from 'express';
 import { ExtraCurricularController } from './ExtraCurricular.controller';
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
-import requireUserPermission from '@/middleware/requirePermission.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 import { UserRole } from '@repo/db/prisma/enums';
 
 export const createRouter = (controller: ExtraCurricularController) => {
   const router = Router({ mergeParams: true });
   router.use(requireAuth);
-  router.use(requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]));
+  router.use(requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]));
 
   router.post('/', asyncHandler(controller.create));
 

@@ -1,4 +1,5 @@
 import { createMediaModule as mediaModule } from '@/media';
+import { AttendanceModule } from '@/modules/Attendance/attendance.module';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
 import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
@@ -34,6 +35,7 @@ import { SchoolSeed } from '@/seeds/fakes/school.seed';
 import { StudentSeed } from '@/seeds/fakes/student.seed';
 import { SubjectAndExamsSeed2 } from '@/seeds/fakes/subject.seed2';
 import { TeacherSeed } from '@/seeds/fakes/teacher.seed';
+import { TimetableSeed } from '@/seeds/fakes/timtable.seed';
 import { UserRolesSeed } from '@/seeds/fakes/userRoles.seed';
 import { UserSeed } from '@/seeds/fakes/users.fake';
 import { Router } from 'express';
@@ -108,6 +110,9 @@ const { examScheduleRouter } = ExamScheduleModule();
 // * EXTRA CURRICULAR
 const { extraCurricularRouter } = ExtraCurricularModule();
 
+// * ATTENDANCE
+const { attendanceRouter } = AttendanceModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -131,6 +136,7 @@ const parentStudentSeed = new ParentStudentSeed();
 const classroomSeed2 = new ClassroomSeed2(createClassroomUseCase);
 const subjectSeed2 = new SubjectAndExamsSeed2();
 const assignmentSeed = new AssignmentSeed();
+const timetableSeed = new TimetableSeed();
 
 const seedDevService = new SeedDevService(
   accountSeed,
@@ -143,6 +149,7 @@ const seedDevService = new SeedDevService(
   classroomSeed2,
   subjectSeed2,
   assignmentSeed,
+  timetableSeed,
 );
 
 seedDevService.run();
@@ -168,6 +175,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: timetableRouter, resource: 'schools/:schoolId/assignments/:assignmentId/timetable' },
   { router: examScheduleRouter, resource: 'schools/:schoolId/examSchedules' },
   { router: extraCurricularRouter, resource: 'schools/:schoolId/extraCurriculars' },
+  { router: attendanceRouter, resource: 'schools/:schoolId/attendances' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

@@ -19,3 +19,4 @@ catalog:
   next-themes: ^0.4.6
   typescript: ^6
   zod: ^4.1.13
+  dayjs: ^1.11.14

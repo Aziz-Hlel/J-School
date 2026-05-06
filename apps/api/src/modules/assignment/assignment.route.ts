@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { AssignmentController } from './assignment.controller';
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
-import requireUserPermission from '@/middleware/requirePermission.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 import { UserRole } from '@repo/db/prisma/enums';
 
 export const createRouter = (assignmentController: AssignmentController) => {
@@ -18,7 +18,7 @@ export const createRouter = (assignmentController: AssignmentController) => {
   router.patch(
     '/:assignmentId/teacher',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(assignmentController.assignTeacher),
   );
 

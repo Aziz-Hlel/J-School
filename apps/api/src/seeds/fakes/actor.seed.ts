@@ -1,8 +1,8 @@
+import { TX } from '@/types/prisma/PrismaTransaction';
 import { UserRole } from '@repo/db/prisma/enums';
+import { ParentSeed } from './parent.seed';
 import { TeacherSeed } from './teacher.seed';
 import { UserRolesSeed } from './userRoles.seed';
-import { TX } from '@/types/prisma/PrismaTransaction';
-import { ParentSeed } from './parent.seed';
 
 export class ActorSeed {
   constructor(
@@ -27,7 +27,7 @@ export class ActorSeed {
         return { type: UserRole.PARENT, data: await this.parentSeed.run({ userId }, tx) } as const;
 
       default:
-        break;
+        throw new Error(`Role ${role} not supported in ActorSeed`);
     }
   };
 }

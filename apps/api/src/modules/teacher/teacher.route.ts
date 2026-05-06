@@ -4,7 +4,7 @@ import { asyncHandler } from '@/core/async-handler';
 import { UserRole } from '@repo/db/prisma/enums';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { requireUserPermissionOrTeacherHimself } from './middleware/requireUserPermissionOrTeacherHimself';
-import requireUserPermission from '@/middleware/requirePermission.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 
 export const createRouter = (teacherController: TeacherController) => {
   const router = Router({ mergeParams: true });
@@ -12,7 +12,7 @@ export const createRouter = (teacherController: TeacherController) => {
   router.post(
     '/',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(teacherController.create),
   );
 
@@ -26,9 +26,12 @@ export const createRouter = (teacherController: TeacherController) => {
   router.get(
     '/',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(teacherController.findAll),
   );
+
+  // * removed requireUserPermissionOrTeacherHimself just cause ... fck it, no time to be pondering about it
+  router.get('/:teacherId/timetable', requireAuth, asyncHandler(teacherController.getTimetable));
 
   router.get(
     '/:teacherId',

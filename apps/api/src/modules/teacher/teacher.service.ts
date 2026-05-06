@@ -6,9 +6,12 @@ import { TeacherMapper } from './teacher.mapper';
 import { TeacherRepo } from './teacher.repo';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
 import { Page } from '@repo/contracts/schemas/page/Page';
-import { Prisma } from '@repo/db/prisma/client';
+import { DayOfWeek, Prisma } from '@repo/db/prisma/client';
 import { PageMapper } from '@/helper/page.mapper';
 import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
+import prisma from '@repo/db';
+import { teacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
+import { toTime } from '@/utils/dayjs';
 
 export class TeacherService {
   constructor(
@@ -148,5 +151,64 @@ export class TeacherService {
     });
 
     return pageResponse;
+  };
+
+  getTimetable = async (params: {
+    schoolId: string;
+    teacherId: string;
+    query: { day?: DayOfWeek };
+  }): Promise<teacherTimetableRes[]> => {
+    const { schoolId, teacherId } = params;
+
+    const timetable = await prisma.timetable.findMany({
+      where: {
+        assignment: {
+          schoolId,
+          teacherId,
+        },
+        day: params.query.day,
+      },
+      select: {
+        id: true,
+        day: true,
+        startTime: true,
+        endTime: true,
+        assignment: {
+          select: {
+            subject: {
+              select: {
+                name_en: true,
+                name_fr: true,
+                name_ar: true,
+              },
+            },
+            classroom: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const response: teacherTimetableRes[] = timetable.map((entry) => ({
+      id: entry.id,
+      day: entry.day,
+      startTime: toTime(entry.startTime),
+      endTime: toTime(entry.endTime),
+      subject: {
+        name: {
+          en: entry.assignment.subject.name_en,
+          fr: entry.assignment.subject.name_fr,
+          ar: entry.assignment.subject.name_ar,
+        },
+      },
+      classroom: {
+        name: entry.assignment.classroom.name,
+      },
+    }));
+
+    return response;
   };
 }

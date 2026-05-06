@@ -7,6 +7,7 @@ import { CreateStudentRequest } from '@repo/contracts/schemas/student/createStud
 import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student/createStudentWithProfile';
 import { UpdateStudentRequest } from '@repo/contracts/schemas/student/updateStudentRequest';
 import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
+import { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
 
 export class StudentRepo {
   create = async (params: { input: CreateStudentRequest & { status: StudentStatus }; schoolId: string }, tx?: TX) => {
@@ -185,6 +186,40 @@ export class StudentRepo {
         include: { avatar: true, profile: true },
       });
       return student;
+    } catch (error) {
+      RepoError.throwRepoError(error);
+    }
+  };
+
+  findStudentAttendance = async (params: {
+    schoolId: string;
+    studentId: string;
+    query: StudentAttendancesQueryParam;
+  }) => {
+    try {
+      const { schoolId, studentId, query } = params;
+      const studentAttendance = await prisma.attendance.findMany({
+        where: {
+          schoolId,
+          studentId,
+          week: query.week,
+          timetable: query.day ? { day: query.day } : undefined,
+        },
+        select: {
+          id: true,
+          status: true,
+          week: true,
+          timetable: {
+            select: {
+              day: true,
+              startTime: true,
+              endTime: true,
+              assignment: { select: { subject: { select: { name_en: true, name_ar: true, name_fr: true } } } },
+            },
+          },
+        },
+      });
+      return studentAttendance;
     } catch (error) {
       RepoError.throwRepoError(error);
     }

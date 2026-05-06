@@ -5,7 +5,7 @@ import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { NextFunction, Request, Response } from 'express';
 
-const requireUserPermission = (requiredRoles: UserRole[]) => {
+const requireUserRoles = (requiredRoles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const token = (req as AuthenticatedRequest).token;
     if (token.claims.accountRole === AccountRole.SUPER_ADMIN) {
@@ -45,4 +45,4 @@ const requireUserPermission = (requiredRoles: UserRole[]) => {
   };
 };
 
-export default requireUserPermission;
+export default requireUserRoles;

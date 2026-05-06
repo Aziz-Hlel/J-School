@@ -3,7 +3,7 @@ import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { Router } from 'express';
 import { UserController } from './user.controller';
 import { UserRole } from '@repo/db/prisma/enums';
-import requireUserPermission from '@/middleware/requirePermission.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 
 const createUserRouter = (controller: UserController) => {
   const router = Router({ mergeParams: true });
@@ -11,13 +11,13 @@ const createUserRouter = (controller: UserController) => {
   router.post(
     '/',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(controller.create),
   );
   router.get(
     '/:userId',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
     asyncHandler(controller.getById),
   );
 

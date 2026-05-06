@@ -4,7 +4,7 @@ import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { Router } from 'express';
 import { requireUserPermissionOrIsParentChild } from './middleware/requireUserPermissionOrIsParentChild';
 import { StudentController } from './student.controller';
-import requireUserPermission from '@/middleware/requirePermission.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 
 export const createRouter = (studentController: StudentController) => {
   const router = Router({ mergeParams: true });
@@ -14,7 +14,7 @@ export const createRouter = (studentController: StudentController) => {
 
   router.post(
     '/with-parent',
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(studentController.createWithParent),
   );
 
@@ -28,6 +28,12 @@ export const createRouter = (studentController: StudentController) => {
     '/',
     requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(studentController.findAll),
+  );
+
+  router.get(
+    '/:studentId/attendances',
+    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
+    asyncHandler(studentController.getAttendances),
   );
 
   router.get(

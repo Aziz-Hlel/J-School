@@ -6,6 +6,7 @@ import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/upda
 import { CreateStudentWithParentUseCase } from './use-case/createStudentWithParent';
 import { createStudentWithParentSchema } from '@repo/contracts/schemas/student/withParent/createWithParent';
 import { studentsQueryParams } from '@repo/contracts/schemas/student/getStudentsQueryParams';
+import { studentAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getAttendances';
 
 export class StudentController {
   constructor(
@@ -71,6 +72,17 @@ export class StudentController {
     res.status(200).json({
       message: 'Students found successfully',
       ...pageResponse,
+    });
+  };
+
+  getAttendances = async (req: Request, res: Response) => {
+    const query = studentAttendanceQueryParamSchema.parse(req.query);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const studentId = getUrlParam(req, 'studentId', { uuid: true });
+    const response = await this.studentService.findAttendances({ query, schoolId, studentId });
+    res.status(200).json({
+      message: 'Student attendances found successfully',
+      data: response,
     });
   };
 }

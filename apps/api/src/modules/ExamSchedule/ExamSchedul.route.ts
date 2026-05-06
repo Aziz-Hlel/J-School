@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { ExamScheduleController } from './ExamSchedule.controller';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
 import { asyncHandler } from '@/core/async-handler';
-import requireUserPermission from '@/middleware/requirePermission.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 import { UserRole } from '@repo/db/prisma/enums';
 
 export const createExamScheduleRouter = (examScheduleController: ExamScheduleController) => {
@@ -10,7 +10,7 @@ export const createExamScheduleRouter = (examScheduleController: ExamScheduleCon
   router.put(
     '/',
     requireAuth,
-    requireUserPermission([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(examScheduleController.update),
   );
   return router;

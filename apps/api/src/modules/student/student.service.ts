@@ -15,6 +15,9 @@ import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse
 import { StudentsQueryParamsTypes } from '@repo/contracts/schemas/student/getStudentsQueryParams';
 import { Prisma } from '@repo/db/prisma/client';
 import { PageMapper } from '@/helper/page.mapper';
+import type { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
+import { toTime } from '@/utils/dayjs';
+import type { StudentAttendanceResponse } from '@repo/contracts/schemas/student/getAttendancesResponse';
 
 export class StudentService {
   constructor(private readonly studentRepo: StudentRepo) {}
@@ -181,5 +184,34 @@ export class StudentService {
       data: studentResponses,
     });
     return pageResponse;
+  };
+
+  findAttendances = async (params: {
+    schoolId: string;
+    studentId: string;
+    query: StudentAttendancesQueryParam;
+  }): Promise<StudentAttendanceResponse[]> => {
+    const { schoolId, studentId, query } = params;
+
+    const queryResult = await this.studentRepo.findStudentAttendance({ schoolId, studentId, query });
+
+    const response: StudentAttendanceResponse[] = queryResult.map((item) => {
+      return {
+        id: item.id,
+        status: item.status,
+        subject: {
+          name: {
+            en: item.timetable.assignment.subject.name_en,
+            ar: item.timetable.assignment.subject.name_ar,
+            fr: item.timetable.assignment.subject.name_fr,
+          },
+          day: item.timetable.day,
+          startTime: toTime(item.timetable.startTime),
+          endTime: toTime(item.timetable.endTime),
+        },
+      };
+    });
+
+    return response;
   };
 }

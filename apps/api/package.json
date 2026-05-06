@@ -23,7 +23,7 @@
     "@faker-js/faker": "^10.1.0",
     "@swc/core": "^1.15.18",
     "compression": "^1.8.1",
-    "dayjs": "^1.11.19",
+    "dayjs": "catalog:",
     "express-rate-limit": "^8.2.1",
     "firebase-admin": "^13.6.0",
     "helmet": "^8.1.0",

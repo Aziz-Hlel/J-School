@@ -5,6 +5,7 @@ import { createTeacherRequestSchema } from '@repo/contracts/schemas/teacher/crea
 import { TeacherService } from './teacher.service';
 import { updateTeacherRequestSchema } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
 import { teacherQueryParams } from '@repo/contracts/schemas/teacher/teacherQueryParams';
+import { getTeacherTimetableQuery } from '@repo/contracts/schemas/teacher/getTimetableQuery';
 
 export class TeacherController {
   constructor(
@@ -53,6 +54,17 @@ export class TeacherController {
     res.status(200).json({
       message: 'Teachers fetched successfully',
       ...response,
+    });
+  };
+
+  getTimetable = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const query = getTeacherTimetableQuery.parse(req.query);
+    const timetable = await this.teacherService.getTimetable({ teacherId, schoolId, query });
+    res.status(200).json({
+      message: 'Teacher timetable fetched successfully',
+      data: timetable,
     });
   };
 }

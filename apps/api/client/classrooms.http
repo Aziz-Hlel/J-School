@@ -111,6 +111,7 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
 @examId = {{getExams.response.body.data[0].id}}
 
 ###
+# @name scheduleExam
 PUT {{baseUrl}}/schools/{{schoolId}}/examSchedules
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}

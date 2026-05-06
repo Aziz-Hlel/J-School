@@ -40,4 +40,16 @@ export class StudentSeed {
     });
     return createdStudent;
   };
+
+  assignStudentToClassroom = async (studentId: string, classroomId: string, tx?: TX) => {
+    const client = tx ?? prisma;
+    await client.classroom.update({
+      where: { id: classroomId },
+      data: {
+        students: {
+          connect: { id: studentId },
+        },
+      },
+    });
+  };
 }

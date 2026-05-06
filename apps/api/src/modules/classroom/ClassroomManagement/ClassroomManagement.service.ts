@@ -2,6 +2,9 @@ import prisma from '@repo/db';
 import { ClassroomManagementMapper } from './ClassroomManagement.mapper';
 import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
 import type { AssignStudentRequestInput } from '@repo/contracts/schemas/classroom/management/assignStudentRequest';
+import type { GetClassroomAttendancesQuery } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
+import { BadRequestError } from '@/err/service/customErrors';
+import type { ClassroomAttendancesResponse } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesResponse';
 
 export const getSubjectsWithTeachersSelect = {
   id: true,
@@ -85,5 +88,51 @@ export class ClassroomManagementService {
         classroomId,
       },
     });
+  };
+
+  getAttendances = async (params: {
+    schoolId: string;
+    classroomId: string;
+    query: GetClassroomAttendancesQuery;
+  }): Promise<ClassroomAttendancesResponse[]> => {
+    const { schoolId, classroomId, query } = params;
+    if (query.timetableId === undefined) throw new BadRequestError('Subject ID is required');
+
+    const students = await prisma.student.findMany({
+      where: {
+        classroomId,
+        schoolId,
+      },
+      select: {
+        id: true,
+        firstName_en: true,
+        lastName_en: true,
+        firstName_ar: true,
+        lastName_ar: true,
+        attendances: {
+          where: {
+            timetableId: query.timetableId,
+            week: query.week,
+          },
+          select: {
+            status: true,
+            id: true,
+          },
+        },
+      },
+    });
+
+    const response: ClassroomAttendancesResponse[] = students.map((student) => {
+      return {
+        id: student.id,
+        firstName_en: student.firstName_en,
+        lastName_en: student.lastName_en,
+        firstName_ar: student.firstName_ar,
+        lastName_ar: student.lastName_ar,
+        attendance: student.attendances[0] ?? null,
+      };
+    });
+
+    return response;
   };
 }
