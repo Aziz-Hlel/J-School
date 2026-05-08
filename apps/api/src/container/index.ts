@@ -1,4 +1,5 @@
 import { createMediaModule as mediaModule } from '@/media';
+import { AnnouncementModule } from '@/modules/Announcement/announcement.module';
 import { AttendanceModule } from '@/modules/Attendance/attendance.module';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
 import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular.module';
@@ -25,12 +26,15 @@ import { createUserRoleModule } from '@/modules/userRoles/userRole.module';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { AccountSeed } from '@/seeds/fakes/account.seed';
 import { ActorSeed } from '@/seeds/fakes/actor.seed';
+import { AnnouncementSeed } from '@/seeds/fakes/announcement.seed';
 import { AssignmentSeed } from '@/seeds/fakes/assignment.seed';
 import { ClassroomSeed2 } from '@/seeds/fakes/classroom.seed2';
 import { MediaSeed } from '@/seeds/fakes/media.seed';
+import { MediaSeedV2 } from '@/seeds/fakes/media.seed2';
 import { OwnerSeed } from '@/seeds/fakes/owner.seed';
 import { ParentSeed } from '@/seeds/fakes/parent.seed';
 import { ParentStudentSeed } from '@/seeds/fakes/parentStudent.seed';
+import { ReactionSeed } from '@/seeds/fakes/reaction.seed';
 import { SchoolSeed } from '@/seeds/fakes/school.seed';
 import { StudentSeed } from '@/seeds/fakes/student.seed';
 import { SubjectAndExamsSeed2 } from '@/seeds/fakes/subject.seed2';
@@ -113,6 +117,9 @@ const { extraCurricularRouter } = ExtraCurricularModule();
 // * ATTENDANCE
 const { attendanceRouter } = AttendanceModule();
 
+// * ANNOUNCEMENT
+const { announcementRouter } = AnnouncementModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -137,6 +144,10 @@ const classroomSeed2 = new ClassroomSeed2(createClassroomUseCase);
 const subjectSeed2 = new SubjectAndExamsSeed2();
 const assignmentSeed = new AssignmentSeed();
 const timetableSeed = new TimetableSeed();
+const announcementSeed = new AnnouncementSeed();
+const reactionSeed = new ReactionSeed();
+
+const mediaSeed2 = new MediaSeedV2();
 
 const seedDevService = new SeedDevService(
   accountSeed,
@@ -144,12 +155,16 @@ const seedDevService = new SeedDevService(
   schoolSeed,
   userSeed,
   actorSeed,
+  teacherSeed,
   studentSeed,
   parentStudentSeed,
   classroomSeed2,
   subjectSeed2,
   assignmentSeed,
   timetableSeed,
+  mediaSeed2,
+  announcementSeed,
+  reactionSeed,
 );
 
 seedDevService.run();
@@ -176,6 +191,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: examScheduleRouter, resource: 'schools/:schoolId/examSchedules' },
   { router: extraCurricularRouter, resource: 'schools/:schoolId/extraCurriculars' },
   { router: attendanceRouter, resource: 'schools/:schoolId/attendances' },
+  { router: announcementRouter, resource: 'schools/:schoolId/announcements' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

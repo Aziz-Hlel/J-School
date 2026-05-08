@@ -5,7 +5,7 @@
 @baseUrl = http://localhost:10000/api
 
 
-@TeacherEmail = teacher1@gmail.com
+@TeacherEmail = teacher1@fake.com
 @TeacherPassword = 12345678
 
 
@@ -32,6 +32,11 @@ Content-Type: application/json
     "token": "{{firebase_login.response.body.idToken}}"
 }
 
+###
+@TeacherId = {{serverLogin.response.body.teacher[0].id}}
+@SchoolId = {{serverLogin.response.body.teacher[0].school.id}}
+
+
 
 ###
 # @name getMe
@@ -55,3 +60,10 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
   "cin": "12345679",
   "address": "123 Main Street, Springfield"
 }
+
+
+###
+# @name getTimetable
+GET {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/timetable
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}

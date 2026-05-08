@@ -113,6 +113,7 @@ model School {
   exams Exam[]
   subjects Subject[]
   extraCurriculars ExtraCurricular[]
+  annoucements Announcement[]
 
   // RLS Related Models
   assignments Assignment[]
@@ -190,7 +191,8 @@ model User {
 
   teacher Teacher?
   parent Parent?
-  
+
+  reactions Reaction[]
 
   status UserStatus @default(ACTIVE)
   createdAt DateTime @default(now())

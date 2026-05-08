@@ -38,8 +38,6 @@ export class MinioService implements IStorageProvider {
   }
 
   async generatePresignedUrl({ mediaKey: fileKey, mimeType, expiresIn }: PresignedUrlGenerator): Promise<string> {
-    if (this.isFakerMedia(fileKey)) return fileKey;
-
     const command = new PutObjectCommand({
       Bucket: this.MINIO_BUCKET,
       Key: fileKey,
@@ -53,6 +51,8 @@ export class MinioService implements IStorageProvider {
   }
 
   getObjectUrl(fileKey: string): string {
+    if (this.isFakerMedia(fileKey)) return fileKey;
+
     const objectUrl = `http://localhost:${this.MINIO_PORT}/${this.MINIO_BUCKET}/${fileKey}`;
     return objectUrl;
   }

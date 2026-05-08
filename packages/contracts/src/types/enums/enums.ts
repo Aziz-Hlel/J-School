@@ -8,6 +8,13 @@
  * 🟢 You can import this file directly.
  */
 
+export const ReactionType = {
+  LIKE: 'LIKE',
+  HEART: 'HEART',
+} as const;
+
+export type ReactionType = (typeof ReactionType)[keyof typeof ReactionType];
+
 export const AccountRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
@@ -74,34 +81,6 @@ export const ClassGrade = {
 
 export type ClassGrade = (typeof ClassGrade)[keyof typeof ClassGrade];
 
-export const Gender = {
-  MALE: 'MALE',
-  FEMALE: 'FEMALE',
-} as const;
-
-export type Gender = (typeof Gender)[keyof typeof Gender];
-
-export const DayOfWeek = {
-  MONDAY: 'MONDAY',
-  TUESDAY: 'TUESDAY',
-  WEDNESDAY: 'WEDNESDAY',
-  THURSDAY: 'THURSDAY',
-  FRIDAY: 'FRIDAY',
-  SATURDAY: 'SATURDAY',
-  SUNDAY: 'SUNDAY',
-} as const;
-
-export type DayOfWeek = (typeof DayOfWeek)[keyof typeof DayOfWeek];
-
-export const AttendanceStatus = {
-  PRESENT: 'PRESENT',
-  ABSENT: 'ABSENT',
-  LATE: 'LATE',
-  EXCUSED: 'EXCUSED',
-} as const;
-
-export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus];
-
 export const MediaStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
@@ -153,6 +132,25 @@ export const DeliveryStatus = {
 
 export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus];
 
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+} as const;
+
+export type Gender = (typeof Gender)[keyof typeof Gender];
+
+export const DayOfWeek = {
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
+} as const;
+
+export type DayOfWeek = (typeof DayOfWeek)[keyof typeof DayOfWeek];
+
 export const StudentStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
@@ -181,3 +179,19 @@ export const SubjectDomain = {
 } as const;
 
 export type SubjectDomain = (typeof SubjectDomain)[keyof typeof SubjectDomain];
+
+export const SessionType = {
+  WEEKLY: 'WEEKLY',
+  SPECIAL: 'SPECIAL',
+} as const;
+
+export type SessionType = (typeof SessionType)[keyof typeof SessionType];
+
+export const AttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  EXCUSED: 'EXCUSED',
+} as const;
+
+export type AttendanceStatus = (typeof AttendanceStatus)[keyof typeof AttendanceStatus];

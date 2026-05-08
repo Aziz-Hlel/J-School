@@ -1,0 +1,55 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@ManagerEmail = manager1@fake.com
+@ManagerPassword = 12345678
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{ManagerEmail}}",
+  "password": "{{ManagerPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+###
+@schoolId = {{serverLogin.response.body.administration[0].school.id}}
+
+
+
+#####################################
+#####################################
+#####################################
+
+
+
+
+
+###
+# @name getAttendance
+GET {{baseUrl}}/schools/{{schoolId}}/attendance
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}

@@ -1,6 +1,6 @@
 import type { DayOfWeek } from '../../types/enums/enums';
 
-export type teacherTimetableRes = {
+export type TeacherTimetableRes = {
   id: string;
   day: DayOfWeek;
   endTime: string;
@@ -13,6 +13,7 @@ export type teacherTimetableRes = {
     };
   };
   classroom: {
+    id: string;
     name: string;
   };
 };

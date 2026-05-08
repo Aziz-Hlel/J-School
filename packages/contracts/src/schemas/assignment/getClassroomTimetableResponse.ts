@@ -3,6 +3,7 @@ import { DayOfWeek, Gender } from '../../types/enums/enums';
 export type GetClassroomTimetableResponse = Record<
   DayOfWeek,
   {
+    timetableId: string;
     subjectId: string;
     subjectName: {
       en: string;

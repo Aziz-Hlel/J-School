@@ -88,15 +88,34 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
 ###
 @classroomId = {{findAll.response.body.data[0].id}}
 
+
 ###
 # @name getTimeTables
 GET {{baseUrl}}/schools/{{schoolId}}/classrooms/{{classroomId}}/timetable
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
+
 ###
 # @name getClassSubjects
 GET {{baseUrl}}/schools/{{schoolId}}/classrooms/{{classroomId}}/subjects
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+###
+@timetableId = {{getTimeTables.response.body.data.MONDAY[0].timetableId}}
+
+
+###
+# @name getAttendances
+GET {{baseUrl}}/schools/{{schoolId}}/classrooms/{{classroomId}}/attendances?week=1&timetableId={{timetableId}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name getStudents
+GET {{baseUrl}}/schools/{{schoolId}}/classrooms/{{classroomId}}/students
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
@@ -107,8 +126,10 @@ GET {{baseUrl}}/schools/{{schoolId}}/classrooms/{{classroomId}}/exams
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
+
 ###
 @examId = {{getExams.response.body.data[0].id}}
+
 
 ###
 # @name scheduleExam
@@ -125,3 +146,4 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
         "endTime": "23:59:59"
     }
 }
+

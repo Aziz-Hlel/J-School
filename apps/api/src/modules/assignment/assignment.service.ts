@@ -97,7 +97,7 @@ export class AssignmentService {
         subject: { select: { id: true, name_en: true, name_fr: true, name_ar: true } },
         teacher: { select: { id: true, user: { select: { firstName: true, lastName: true, gender: true } } } },
         timetable: {
-          select: { day: true, startTime: true, endTime: true },
+          select: { id: true, day: true, startTime: true, endTime: true },
           orderBy: { startTime: 'asc' },
         },
       },

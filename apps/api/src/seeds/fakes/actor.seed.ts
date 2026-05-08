@@ -21,10 +21,12 @@ export class ActorSeed {
         break;
       case UserRole.TEACHER:
         await this.userRolesSeed.run({ role, userId }, tx);
-        return { type: UserRole.TEACHER, data: await this.teacherSeed.run({ userId }, tx) } as const;
+        const teacher = await this.teacherSeed.run({ userId }, tx);
+        return { type: UserRole.TEACHER, data: teacher } as const;
       case UserRole.PARENT:
         await this.userRolesSeed.run({ role, userId }, tx);
-        return { type: UserRole.PARENT, data: await this.parentSeed.run({ userId }, tx) } as const;
+        const parent = await this.parentSeed.run({ userId }, tx);
+        return { type: UserRole.PARENT, data: parent } as const;
 
       default:
         throw new Error(`Role ${role} not supported in ActorSeed`);

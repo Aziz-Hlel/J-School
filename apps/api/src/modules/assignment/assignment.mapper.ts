@@ -10,7 +10,7 @@ export class AssignemntMapper {
         subject: { select: { id: true; name_en: true; name_fr: true; name_ar: true } };
         teacher: { select: { id: true; user: { select: { firstName: true; lastName: true; gender: true } } } };
         timetable: {
-          select: { day: true; startTime: true; endTime: true };
+          select: { id: true; day: true; startTime: true; endTime: true };
           orderBy: { startTime: 'asc' };
         };
       };
@@ -28,6 +28,7 @@ export class AssignemntMapper {
     assignments.forEach((assignment) => {
       assignment.timetable.forEach((session) => {
         const sessionDetail: GetClassroomTimetableResponse['FRIDAY'][number] = {
+          timetableId: session.id,
           subjectId: assignment.subject.id,
           subjectName: {
             en: assignment.subject.name_en,

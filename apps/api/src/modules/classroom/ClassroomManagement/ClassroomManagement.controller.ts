@@ -60,4 +60,14 @@ export class ClassroomManagementController {
       data: attendances,
     });
   };
+
+  getStudents = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId');
+    const classroomId = getUrlParam(req, 'classroomId');
+    const students = await this.classroomManagementService.getStudents({ schoolId, classroomId });
+    res.status(200).json({
+      message: 'Students fetched successfully',
+      data: students,
+    });
+  };
 }

@@ -6,12 +6,12 @@ import { MediaStatus } from '@repo/db/prisma/enums';
 import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
 import { Media } from '@repo/db/prisma/client';
 import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
-import { MediaDelegate } from '@repo/db/prisma/models';
-import { DefaultArgs } from '@prisma/client/runtime/client';
+import { TX } from '@/types/prisma/PrismaTransaction';
+import { MediaResponseV2 } from '@repo/contracts/schemas/media/MediaResponseV2';
 
 export interface IMediaService {
   getPresignedUrl(schema: PresignedUrlRequest): Promise<PresignedUrlResponse>;
-  deleteMediaById(props: { mediaId: string; tx?: MediaDelegate<DefaultArgs, { omit: undefined }> }): Promise<void>;
+  deleteMediaById(props: { mediaId: string; tx?: TX }): Promise<void>;
   confirmMediaUploadByKey(mediaKey: string): Promise<void>;
   confirmMediaUploadById(mediaId: string): Promise<void>;
   switchMediaIds({
@@ -47,7 +47,7 @@ export class MediaService implements IMediaService {
     };
   }
 
-  async deleteMediaById(props: { mediaId: string; tx?: MediaDelegate<DefaultArgs, { omit: undefined }> }) {
+  async deleteMediaById(props: { mediaId: string; tx?: TX }) {
     const media = await this.mediaRepo.findMediaById({ mediaId: props.mediaId, tx: props.tx });
     if (!media) return;
 
@@ -101,6 +101,21 @@ export class MediaService implements IMediaService {
       id: media.id,
       key: media.key,
       url,
+    };
+  }
+
+  public generateMediaResponse_V2(media: Media): MediaResponseV2;
+  public generateMediaResponse_V2(media: null): null;
+  public generateMediaResponse_V2(media: Media | null): MediaResponseV2 | null;
+  public generateMediaResponse_V2(media: Media | null) {
+    if (!media) return null;
+
+    const url = storageService.getObjectUrl(media.key);
+    return {
+      id: media.id,
+      url,
+      order: media.order,
+      type: media.type,
     };
   }
 }

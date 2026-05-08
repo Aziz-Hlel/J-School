@@ -17,23 +17,9 @@
       "problemMatcher": []
     },
     {
-      "label": "dev:admin",
-      "type": "shell",
-      "command": "pnpm dev:admin",
-      "presentation": { "panel": "new" },
-      "problemMatcher": []
-    },
-    {
-      "label": "dev:worker",
-      "type": "shell",
-      "command": "pnpm dev:worker",
-      "presentation": { "panel": "new" },
-      "problemMatcher": []
-    },
-    {
       "label": " LOCAL — All Services",
       "detail": "Run all services locally",
-      "dependsOn": ["local:docker", "dev:api", "dev:admin", "dev:worker"],
+      "dependsOn": ["local:docker", "dev:api"],
       "icon": {
         "color": "terminal.ansiGreen",
         "id": "debug-alt"

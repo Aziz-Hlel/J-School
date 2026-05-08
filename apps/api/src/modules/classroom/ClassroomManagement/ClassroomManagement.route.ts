@@ -13,6 +13,8 @@ export const createClassroomManagementRouter = (controller: ClassroomManagementC
 
   router.get('/attendances', requireAuth, requireUserInSchool, asyncHandler(controller.getAttendances));
 
+  router.get('/students', requireAuth, requireUserInSchool, asyncHandler(controller.getStudents));
+
   // ? Bullshit
   router.post('/assign-teacher', requireAuth, requireUserInSchool, asyncHandler(controller.assignTeacher));
   router.post('/assign-student', requireAuth, requireUserInSchool, asyncHandler(controller.assignStudent));

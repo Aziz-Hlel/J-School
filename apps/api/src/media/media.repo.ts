@@ -1,8 +1,8 @@
 import { prisma } from '@/bootstrap/db.init';
 import { logger } from '@/bootstrap/logger.init';
 import { MediaStatus, MediaType } from '@repo/db/prisma/enums';
-import { MediaTransaction } from '@/types/transactions';
 import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
+import { TX } from '@/types/prisma/PrismaTransaction';
 
 export class MediaRepo {
   async createPendingMedia(preSignedUrlDto: PresignedUrlRequest, mediaKey: string) {
@@ -21,9 +21,9 @@ export class MediaRepo {
     return createdMedia;
   }
 
-  async findMediaById(props: { mediaId: string; tx?: MediaTransaction }) {
-    const orm = props.tx ?? prisma.media;
-    const media = await orm.findUnique({
+  async findMediaById(props: { mediaId: string; tx?: TX }) {
+    const orm = props.tx ?? prisma;
+    const media = await orm.media.findUnique({
       where: {
         id: props.mediaId,
       },
@@ -64,9 +64,9 @@ export class MediaRepo {
     });
   }
 
-  async deleteMediaById(props: { mediaId: string; tx?: MediaTransaction }) {
-    const orm = props.tx ?? prisma.media;
-    await orm.update({
+  async deleteMediaById(props: { mediaId: string; tx?: TX }) {
+    const orm = props.tx ?? prisma;
+    await orm.media.update({
       where: {
         id: props.mediaId,
       },

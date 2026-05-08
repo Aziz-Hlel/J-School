@@ -1,0 +1,93 @@
+
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@ManagerEmail = manager1@fake.com
+@ManagerPassword = 12345678
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{ManagerEmail}}",
+  "password": "{{ManagerPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+###
+@schoolId = {{serverLogin.response.body.administration[0].school.id}}
+
+
+
+#####################################
+#####################################
+#####################################
+
+
+###
+# @name createAnnouncement
+POST {{baseUrl}}/schools/{{schoolId}}/announcements
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "description": "Content 8"
+}
+
+
+###
+# @name updateAnnouncement
+PUT {{baseUrl}}/schools/{{schoolId}}/announcements/{{createAnnouncement.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "description": "Content 1 updated"
+}
+
+
+###
+# @name deleteAnnouncement
+DELETE {{baseUrl}}/schools/{{schoolId}}/announcements/{{updateAnnouncement.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name findAnnouncements
+GET {{baseUrl}}/schools/{{schoolId}}/announcements?limit=5
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name syncReaction
+POST {{baseUrl}}/schools/{{schoolId}}/announcements/{{findAnnouncements.response.body.data[0].id}}/reactions
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "reaction": "HEART"
+}

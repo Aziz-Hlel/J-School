@@ -10,7 +10,7 @@ import { DayOfWeek, Prisma } from '@repo/db/prisma/client';
 import { PageMapper } from '@/helper/page.mapper';
 import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
 import prisma from '@repo/db';
-import { teacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
+import { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
 import { toTime } from '@/utils/dayjs';
 
 export class TeacherService {
@@ -157,7 +157,7 @@ export class TeacherService {
     schoolId: string;
     teacherId: string;
     query: { day?: DayOfWeek };
-  }): Promise<teacherTimetableRes[]> => {
+  }): Promise<TeacherTimetableRes[]> => {
     const { schoolId, teacherId } = params;
 
     const timetable = await prisma.timetable.findMany({
@@ -184,6 +184,7 @@ export class TeacherService {
             },
             classroom: {
               select: {
+                id: true,
                 name: true,
               },
             },
@@ -192,7 +193,7 @@ export class TeacherService {
       },
     });
 
-    const response: teacherTimetableRes[] = timetable.map((entry) => ({
+    const response: TeacherTimetableRes[] = timetable.map((entry) => ({
       id: entry.id,
       day: entry.day,
       startTime: toTime(entry.startTime),
@@ -205,6 +206,7 @@ export class TeacherService {
         },
       },
       classroom: {
+        id: entry.assignment.classroom.id,
         name: entry.assignment.classroom.name,
       },
     }));

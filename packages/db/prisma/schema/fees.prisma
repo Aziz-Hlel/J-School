@@ -1,9 +1,8 @@
 // ! fck this shit
 
 
-model FeeItem{
+model FeeItem {
   id String @id @default(uuid()) @db.Uuid
-
 
   title String @db.VarChar(255)
   description String? @db.Text
@@ -17,7 +16,6 @@ model FeeItem{
 
   @@map("feeItems")
 }
-
 
 
 model Fees {

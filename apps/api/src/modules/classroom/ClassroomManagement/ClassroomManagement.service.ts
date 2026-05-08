@@ -5,6 +5,7 @@ import type { AssignStudentRequestInput } from '@repo/contracts/schemas/classroo
 import type { GetClassroomAttendancesQuery } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
 import { BadRequestError } from '@/err/service/customErrors';
 import type { ClassroomAttendancesResponse } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesResponse';
+import { StudentMapper } from '@/modules/student/student.mapper';
 
 export const getSubjectsWithTeachersSelect = {
   id: true,
@@ -134,5 +135,18 @@ export class ClassroomManagementService {
     });
 
     return response;
+  };
+
+  getStudents = async (params: { schoolId: string; classroomId: string }) => {
+    const students = await prisma.student.findMany({
+      where: {
+        schoolId: params.schoolId,
+        classroomId: params.classroomId,
+      },
+      include: { avatar: true },
+    });
+    const studentsResponse = students.map(StudentMapper.toResponse);
+
+    return studentsResponse;
   };
 }

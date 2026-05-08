@@ -1,4 +1,4 @@
-import { Gender, StudentStatus } from '@repo/db/prisma/enums';
+import { ClassGrade, Gender, StudentStatus } from '@repo/db/prisma/enums';
 import { faker } from '@faker-js/faker';
 import { MediaSeed } from './media.seed';
 import { StudentCreateInput, StudentUncheckedCreateInput } from '@repo/db/prisma/models';
@@ -41,14 +41,35 @@ export class StudentSeed {
     return createdStudent;
   };
 
-  assignStudentToClassroom = async (studentId: string, classroomId: string, tx?: TX) => {
+  assignStudentToClassroom = async (
+    params: { schoolId: string; studentUids: string[]; classroom: { name: string; grade: ClassGrade } },
+    tx?: TX,
+  ) => {
     const client = tx ?? prisma;
-    await client.classroom.update({
-      where: { id: classroomId },
-      data: {
-        students: {
-          connect: { id: studentId },
+    const { schoolId, studentUids, classroom } = params;
+    const clasroom = await client.classroom.findUnique({
+      where: {
+        schoolId_name_grade: {
+          schoolId,
+          name: classroom.name,
+          grade: classroom.grade,
         },
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (!clasroom) throw new Error('Sedd Error: classroom not found');
+
+    await client.student.updateMany({
+      where: {
+        uid: {
+          in: studentUids,
+        },
+        schoolId,
+      },
+      data: {
+        classroomId: clasroom.id,
       },
     });
   };

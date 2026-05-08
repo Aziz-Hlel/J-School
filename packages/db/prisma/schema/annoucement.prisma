@@ -1,0 +1,47 @@
+
+
+enum ReactionType {
+  LIKE
+  HEART
+}
+
+
+model Reaction {
+  id String @id @default(uuid()) @db.Uuid
+
+  type ReactionType @default(LIKE)
+
+  userId String @db.Uuid
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  annoucementId String @db.Uuid
+  annoucement Announcement @relation(fields: [annoucementId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([annoucementId,userId])
+  @@map("reactions")
+
+}
+
+model Announcement {
+  id String @id @default(uuid()) @db.Uuid
+
+  description String? @db.Text
+
+  
+  media Media[]
+  reactions Reaction[]
+
+  schoolId String @db.Uuid
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId])
+
+  @@map("annoucements")
+}
+
