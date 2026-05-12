@@ -1,10 +1,9 @@
 import { asyncHandler } from '@/core/async-handler';
-import { UserRole } from '@repo/db/prisma/enums';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
-import { Router } from 'express';
-import { requireUserPermissionOrIsParentChild } from './middleware/requireUserPermissionOrIsParentChild';
-import { StudentController } from './student.controller';
 import requireUserRoles from '@/middleware/requirePermission.middleware';
+import { UserRole } from '@repo/db/prisma/enums';
+import { Router } from 'express';
+import { StudentController } from './student.controller';
 
 export const createRouter = (studentController: StudentController) => {
   const router = Router({ mergeParams: true });
@@ -14,39 +13,22 @@ export const createRouter = (studentController: StudentController) => {
 
   router.post(
     '/with-parent',
+    requireAuth,
     requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(studentController.createWithParent),
   );
 
-  router.put(
-    '/:studentId',
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(studentController.update),
-  );
+  router.put('/:studentId', requireAuth, asyncHandler(studentController.update));
 
-  router.get(
-    '/',
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(studentController.findAll),
-  );
+  router.get('/', requireAuth, asyncHandler(studentController.findAll));
 
-  router.get(
-    '/:studentId/attendances',
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
-    asyncHandler(studentController.getAttendances),
-  );
+  router.get('/:studentId/attendances', requireAuth, asyncHandler(studentController.getAttendances));
 
-  router.get(
-    '/:studentId/extra-curriculars',
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
-    asyncHandler(studentController.getExtraCurricular),
-  );
+  router.get('/:studentId/fees', requireAuth, asyncHandler(studentController.findFees));
 
-  router.get(
-    '/:studentId',
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
-    asyncHandler(studentController.findById),
-  );
+  router.get('/:studentId/extra-curriculars', requireAuth, asyncHandler(studentController.getExtraCurricular));
+
+  router.get('/:studentId', requireAuth, asyncHandler(studentController.findById));
 
   return router;
 };

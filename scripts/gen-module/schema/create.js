@@ -1,10 +1,10 @@
 export const createSchema = ({ moduleName }) => {
   return `import z from 'zod';
-export const ${moduleName.lower}CreateDto = z.object({
+export const create${moduleName.upper}ReqSchema = z.object({
     //TODO: define schema
 });
 
-export type ${moduleName.upper}CreateInput = z.infer<typeof ${moduleName.lower}CreateDto>;
+export type Create${moduleName.upper}Req = z.infer<typeof create${moduleName.upper}ReqSchema>;
 
 `;
 };

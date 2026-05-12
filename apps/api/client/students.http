@@ -45,11 +45,15 @@ Content-Type: application/json
 #####################################
 
 
-
-
-
 ###
 # @name getAttendance
 GET {{baseUrl}}/schools/{{schoolId}}/attendance
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name getFees
+GET {{baseUrl}}/schools/{{schoolId}}/students/ba58d373-55f8-4c53-a8ab-b77b2ee45be3/fees
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}

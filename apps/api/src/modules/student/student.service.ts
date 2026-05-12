@@ -18,6 +18,8 @@ import { PageMapper } from '@/helper/page.mapper';
 import type { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
 import { toTime } from '@/utils/dayjs';
 import type { StudentAttendanceResponse } from '@repo/contracts/schemas/student/getAttendancesResponse';
+import { FeesQueryParamsTypes } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
+import { FeesMapper } from '../Fees/fees.mapper';
 
 export class StudentService {
   constructor(private readonly studentRepo: StudentRepo) {}
@@ -214,5 +216,61 @@ export class StudentService {
     });
 
     return response;
+  };
+
+  findFees = async (params: { schoolId: string; query: FeesQueryParamsTypes['Query']; studentId: string }) => {
+    const { query, schoolId, studentId } = params;
+
+    const skip = (query.page - 1) * query.size;
+    const take = query.size;
+
+    const where: Prisma.FeesWhereInput = {
+      schoolId,
+      studentId,
+    };
+
+    if (query.status.length !== 0) {
+      where.feeItems = {
+        every: {
+          status: {
+            in: query.status,
+          },
+        },
+      };
+    }
+
+    const orderBy: Prisma.FeesOrderByWithRelationInput = {};
+
+    if (query.sortBy) {
+      orderBy[query.sortBy] = query.order;
+    }
+
+    const queryResponse = prisma.fees.findMany({
+      skip,
+      take,
+      where: { ...where, schoolId },
+      orderBy,
+      include: {
+        feeItems: {
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+      },
+    });
+
+    const conut = prisma.fees.count({ where: { ...where, schoolId } });
+
+    const [content, totalElements] = await Promise.all([queryResponse, conut]);
+
+    const dataResponse = content.map(FeesMapper.toResponse);
+
+    const pageResponse = PageMapper.toPage({
+      data: dataResponse,
+      pagination: query,
+      totalElements: totalElements,
+    });
+
+    return pageResponse;
   };
 }

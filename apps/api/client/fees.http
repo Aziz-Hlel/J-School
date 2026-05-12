@@ -1,0 +1,133 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@ManagerEmail = manager1@fake.com
+@ManagerPassword = 12345678
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{ManagerEmail}}",
+  "password": "{{ManagerPassword}}",
+  "returnSecureToken": true
+}
+
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+###
+@schoolId = {{serverLogin.response.body.administration[0].school.id}}
+
+
+###
+# @name findStudents
+GET {{baseUrl}}/schools/{{schoolId}}/students
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+@studentId = {{findStudents.response.body.data[0].id}}
+
+
+###
+# @name createFee
+POST {{baseUrl}}/schools/{{schoolId}}/fees
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "name": "Fee 1",
+    "description": "Fee 1 Description",
+    "studentId": "{{studentId}}",
+    "startDate": "2025-09-15",
+    "endDate": "2026-12-15"
+}
+
+
+###
+@feeId = {{createFee.response.body.data.id}}
+
+
+###
+# @name updateFee
+PUT {{baseUrl}}/schools/{{schoolId}}/fees/{{feeId}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "name": "Fee 1 Update",
+    "description": "Fee 1 Description",
+    "startDate": "2025-09-15",
+    "endDate": "2026-12-15"
+}
+
+
+###
+# @name getFee
+GET {{baseUrl}}/schools/{{schoolId}}/fees/{{feeId}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+
+###
+# @name deleteFee
+DELETE {{baseUrl}}/schools/{{schoolId}}/fees/{{feeId}}
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+########################
+# FEE ITEMS
+########################
+
+###
+# @name createFeeItem
+POST {{baseUrl}}/schools/{{schoolId}}/fees/{{feeId}}/items
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "title": "Fee Item 1",
+    "description": "Fee Item 1 Description",
+    "status":"UNPAID",
+    "amount": 1000
+}
+
+###
+# @name updateFeeItem
+PUT {{baseUrl}}/schools/{{schoolId}}/fees/{{feeId}}/items/{{createFeeItem.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "title": "Fee Item 1 Update",
+    "status":"PAID",
+    "description": "Fee Item 1 Description",
+    "amount": 1000
+}
+
+###
+# @name deleteFeeItem
+DELETE {{baseUrl}}/schools/{{schoolId}}/fees/{{feeId}}/items/{{createFeeItem.response.body.data.id}}
+Authorization: Bearer {{firebase_login.response.body.idToken}}

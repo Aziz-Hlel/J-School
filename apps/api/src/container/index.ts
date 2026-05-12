@@ -4,6 +4,8 @@ import { AttendanceModule } from '@/modules/Attendance/attendance.module';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
 import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular.module';
 import { ExtraCurricularPostsModule } from '@/modules/ExtraCurricular/posts/ExtraCurricularPosts.module';
+import { FeeItemsModule } from '@/modules/FeeItems/feeItems.module';
+import { FeesModule } from '@/modules/Fees/fees.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
 import { createUserModule as userModule } from '@/modules/User';
 import { AccountModule } from '@/modules/accounts/account.module';
@@ -127,6 +129,12 @@ const { attendanceRouter } = AttendanceModule();
 // * ANNOUNCEMENT
 const { announcementRouter } = AnnouncementModule();
 
+// * FEES
+const { feesRouter } = FeesModule();
+
+// * FEE ITEMS
+const { feeItemsRouter } = FeeItemsModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -206,6 +214,8 @@ export const container: { router: Router; resource: string }[] = [
   { router: extraCurricularPostsRouter, resource: 'schools/:schoolId/extraCurriculars/:extraCurricularId/posts' },
   { router: attendanceRouter, resource: 'schools/:schoolId/attendances' },
   { router: announcementRouter, resource: 'schools/:schoolId/announcements' },
+  { router: feesRouter, resource: 'schools/:schoolId/fees' },
+  { router: feeItemsRouter, resource: 'schools/:schoolId/fees/:feeId/items' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

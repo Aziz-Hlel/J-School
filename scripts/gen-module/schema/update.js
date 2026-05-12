@@ -1,9 +1,9 @@
 export const updateSchema = ({ moduleName }) => {
   return `import z from 'zod';
-export const ${moduleName.lower}UpdateDto = z.object({
+export const update${moduleName.upper}ReqSchema = z.object({
     //TODO: define schema
 });
 
-export type ${moduleName.upper}UpdateInput = z.infer<typeof ${moduleName.lower}UpdateDto>;
+export type Update${moduleName.upper}Req = z.infer<typeof update${moduleName.upper}ReqSchema>;
 `;
 };

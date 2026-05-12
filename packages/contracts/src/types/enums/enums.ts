@@ -8,6 +8,13 @@
  * 🟢 You can import this file directly.
  */
 
+export const SessionType = {
+  WEEKLY: 'WEEKLY',
+  SPECIAL: 'SPECIAL',
+} as const;
+
+export type SessionType = (typeof SessionType)[keyof typeof SessionType];
+
 export const ReactionType = {
   LIKE: 'LIKE',
   HEART: 'HEART',
@@ -80,6 +87,14 @@ export const ClassGrade = {
 } as const;
 
 export type ClassGrade = (typeof ClassGrade)[keyof typeof ClassGrade];
+
+export const FeeItemStatus = {
+  PAID: 'PAID',
+  UNPAID: 'UNPAID',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+} as const;
+
+export type FeeItemStatus = (typeof FeeItemStatus)[keyof typeof FeeItemStatus];
 
 export const MediaStatus = {
   PENDING: 'PENDING',
@@ -179,13 +194,6 @@ export const SubjectDomain = {
 } as const;
 
 export type SubjectDomain = (typeof SubjectDomain)[keyof typeof SubjectDomain];
-
-export const SessionType = {
-  WEEKLY: 'WEEKLY',
-  SPECIAL: 'SPECIAL',
-} as const;
-
-export type SessionType = (typeof SessionType)[keyof typeof SessionType];
 
 export const AttendanceStatus = {
   PRESENT: 'PRESENT',

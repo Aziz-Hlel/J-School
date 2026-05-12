@@ -1,6 +1,11 @@
 import dayjs from 'dayjs';
 
-export const parseCalendarDate = (dateStr: string | null) => (dateStr ? dayjs(dateStr, 'YYYY-MM-DD').toDate() : null);
+export function parseCalendarDate(dateStr: string): Date;
+export function parseCalendarDate(dateStr: null): null;
+export function parseCalendarDate(dateStr: string | null): Date | null;
+export function parseCalendarDate(dateStr: string | null): Date | null {
+  return dateStr ? dayjs(dateStr, 'YYYY-MM-DD').toDate() : null;
+}
 
 export function parseTime(timeStr: string): Date;
 export function parseTime(timeStr: null): null;
