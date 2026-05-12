@@ -160,6 +160,8 @@ export class TeacherService {
   }): Promise<TeacherTimetableRes[]> => {
     const { schoolId, teacherId } = params;
 
+    //* maybe add extra-curricular to the timetable
+
     const timetable = await prisma.timetable.findMany({
       where: {
         assignment: {
@@ -209,6 +211,42 @@ export class TeacherService {
         id: entry.assignment.classroom.id,
         name: entry.assignment.classroom.name,
       },
+    }));
+
+    return response;
+  };
+
+  getExtracurricular = async (params: { schoolId: string; teacherId: string; query: { day?: DayOfWeek } }) => {
+    const { schoolId, teacherId } = params;
+
+    const extracurriculars = await prisma.extraCurricular.findMany({
+      where: {
+        teacherId,
+        schoolId,
+        session: {
+          day: params.query.day,
+        },
+      },
+      include: {
+        title: true,
+        session: true,
+      },
+      orderBy: [{ session: { day: 'asc' } }, { session: { startTime: 'asc' } }],
+    });
+
+    const response = extracurriculars.map((entry) => ({
+      id: entry.id,
+      title: {
+        en: entry.title?.en ?? '', // *
+        fr: entry.title?.fr ?? '',
+        ar: entry.title?.ar ?? '',
+      },
+      session: {
+        day: entry.session?.day ?? null,
+        startTime: entry.session?.startTime ? toTime(entry.session.startTime) : null,
+        endTime: entry.session?.endTime ? toTime(entry.session.endTime) : null,
+      },
+      createdAt: entry.createdAt.toISOString(),
     }));
 
     return response;

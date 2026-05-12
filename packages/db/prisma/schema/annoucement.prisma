@@ -25,12 +25,12 @@ model Reaction {
 
 }
 
+
 model Announcement {
   id String @id @default(uuid()) @db.Uuid
 
   description String? @db.Text
 
-  
   media Media[]
   reactions Reaction[]
 

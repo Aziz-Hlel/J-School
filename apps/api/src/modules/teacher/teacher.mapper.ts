@@ -6,7 +6,7 @@ export class TeacherMapper {
   static toResponse(
     teacher: TeacherGetPayload<{ include: { user: { include: { account: { include: { avatar: true } } } } } }>,
   ): TeacherResponse {
-    const avatar = globalMediaService.generateMediaResponse(teacher.user.account.avatar);
+    const avatar = globalMediaService.toMediaResponse(teacher.user.account.avatar);
     return {
       id: teacher.id,
       firstName: teacher.user.firstName,

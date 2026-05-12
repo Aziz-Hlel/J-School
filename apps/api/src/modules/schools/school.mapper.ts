@@ -22,7 +22,7 @@ export class SchoolMapper {
   };
 
   static toGetMySchoolResponse = (school: SchoolGetPayload<{ include: { logo: true } }>): GetMySchoolResponse => {
-    const logoResponse = globalMediaService.generateMediaResponse(school.logo);
+    const logoResponse = globalMediaService.toMediaResponse(school.logo);
     return {
       id: school.id,
       nameEn: school.nameEn,

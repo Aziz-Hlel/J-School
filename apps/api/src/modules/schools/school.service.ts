@@ -1,8 +1,8 @@
-import { OwnerService } from '@/modules/owner/owner.service';
-import { SchoolRepo } from './school.repo';
 import { prisma } from '@/bootstrap/db.init';
+import { OwnerService } from '@/modules/owner/owner.service';
 import { CreateSchoolRequest } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { SchoolMapper } from './school.mapper';
+import { SchoolRepo } from './school.repo';
 
 export class SchoolService {
   constructor(

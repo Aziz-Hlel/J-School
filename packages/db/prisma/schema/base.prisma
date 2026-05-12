@@ -121,6 +121,7 @@ model School {
   examSchedules ExamSchedule[]
   studentExtraCurriculars StudentExtraCurricular[]
   attendances Attendance[]
+  posts Post[]
 
   status SchoolStatus @default(PENDING)
   createdAt DateTime @default(now())

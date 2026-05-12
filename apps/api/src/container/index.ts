@@ -3,6 +3,7 @@ import { AnnouncementModule } from '@/modules/Announcement/announcement.module';
 import { AttendanceModule } from '@/modules/Attendance/attendance.module';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
 import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular.module';
+import { ExtraCurricularPostsModule } from '@/modules/ExtraCurricular/posts/ExtraCurricularPosts.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
 import { createUserModule as userModule } from '@/modules/User';
 import { AccountModule } from '@/modules/accounts/account.module';
@@ -29,11 +30,14 @@ import { ActorSeed } from '@/seeds/fakes/actor.seed';
 import { AnnouncementSeed } from '@/seeds/fakes/announcement.seed';
 import { AssignmentSeed } from '@/seeds/fakes/assignment.seed';
 import { ClassroomSeed2 } from '@/seeds/fakes/classroom.seed2';
+import { ExtracurricularSeed } from '@/seeds/fakes/extraCurricular.seed';
+import { ExtraCurricularSessionsSeed } from '@/seeds/fakes/extraCurricularSessions.seed';
 import { MediaSeed } from '@/seeds/fakes/media.seed';
 import { MediaSeedV2 } from '@/seeds/fakes/media.seed2';
 import { OwnerSeed } from '@/seeds/fakes/owner.seed';
 import { ParentSeed } from '@/seeds/fakes/parent.seed';
 import { ParentStudentSeed } from '@/seeds/fakes/parentStudent.seed';
+import { PostSeed } from '@/seeds/fakes/post.seed';
 import { ReactionSeed } from '@/seeds/fakes/reaction.seed';
 import { SchoolSeed } from '@/seeds/fakes/school.seed';
 import { StudentSeed } from '@/seeds/fakes/student.seed';
@@ -114,6 +118,9 @@ const { examScheduleRouter } = ExamScheduleModule();
 // * EXTRA CURRICULAR
 const { extraCurricularRouter } = ExtraCurricularModule();
 
+// * EXTRA CURRICULAR POSTS
+const { extraCurricularPostsRouter } = ExtraCurricularPostsModule();
+
 // * ATTENDANCE
 const { attendanceRouter } = AttendanceModule();
 
@@ -146,6 +153,9 @@ const assignmentSeed = new AssignmentSeed();
 const timetableSeed = new TimetableSeed();
 const announcementSeed = new AnnouncementSeed();
 const reactionSeed = new ReactionSeed();
+const extraCurricularSeed = new ExtracurricularSeed();
+const extraCurricularSessionsSeed = new ExtraCurricularSessionsSeed();
+const postSeed = new PostSeed();
 
 const mediaSeed2 = new MediaSeedV2();
 
@@ -165,6 +175,9 @@ const seedDevService = new SeedDevService(
   mediaSeed2,
   announcementSeed,
   reactionSeed,
+  extraCurricularSeed,
+  extraCurricularSessionsSeed,
+  postSeed,
 );
 
 seedDevService.run();
@@ -190,6 +203,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: timetableRouter, resource: 'schools/:schoolId/assignments/:assignmentId/timetable' },
   { router: examScheduleRouter, resource: 'schools/:schoolId/examSchedules' },
   { router: extraCurricularRouter, resource: 'schools/:schoolId/extraCurriculars' },
+  { router: extraCurricularPostsRouter, resource: 'schools/:schoolId/extraCurriculars/:extraCurricularId/posts' },
   { router: attendanceRouter, resource: 'schools/:schoolId/attendances' },
   { router: announcementRouter, resource: 'schools/:schoolId/announcements' },
 

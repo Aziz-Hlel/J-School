@@ -116,6 +116,7 @@ export class StudentService {
   getExtraCurricular = async (params: { schoolId: string; studentId: string }) => {
     const { schoolId, studentId } = params;
 
+    // * prob need to add a orderBy the last post
     const queryResult = await prisma.studentExtraCurricular.findMany({
       where: {
         studentId,

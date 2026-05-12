@@ -1,8 +1,8 @@
-import { faker } from '@faker-js/faker';
 import { subjectsGradeSix } from '@repo/contracts/const/subjectAndExams/grade.six';
 import { BaseSubjectsKeys, InitSubjectWithExamsType } from '@repo/contracts/const/subjectAndExams/type';
 import { ClassGrade, DayOfWeek, MediaType, ReactionType } from '@repo/db/prisma/browser';
 import { MediaTypeSeed } from '../fakes/media.seed2';
+import { genUuid } from '../helper/generateUuid';
 
 export const subjectsWithExamsSeedData = {
   [ClassGrade.SIX]: {
@@ -133,6 +133,120 @@ export const teacherAssignmentSeedData = [
   },
 ];
 
+export const extraCurricularSeedData = {
+  mat_6eme: {
+    id: genUuid('mat_6eme'),
+    name: 'Etud Mat',
+    grade: ClassGrade.SIX,
+  },
+  english_6eme: {
+    id: genUuid('english_6eme'),
+    name: 'Etud English',
+    grade: ClassGrade.SIX,
+  },
+};
+
+export const extraCurricularSessionSeedData = {
+  mat_6emeSession: {
+    id: genUuid('mat_6emeSession'),
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+    day: DayOfWeek.MONDAY,
+    startTime: '16:00',
+    endTime: '17:30',
+  },
+  english_6emeSession: {
+    id: genUuid('english_6emeSession'),
+    extraCurricular: extraCurricularSeedData.english_6eme,
+    day: DayOfWeek.WEDNESDAY,
+    startTime: '16:00',
+    endTime: '17:30',
+  },
+};
+
+export const postsSeedData = {
+  post1: {
+    id: genUuid('post1'),
+    title: 'post1',
+    content: 'Content 1',
+    medias: [MediaType.IMAGE, MediaType.IMAGE],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post2: {
+    id: genUuid('post2'),
+    title: 'post2',
+    content: 'Content 2',
+    medias: [MediaType.IMAGE, MediaType.IMAGE],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post3: {
+    id: genUuid('post3'),
+    title: 'post3',
+    content: 'Content 3',
+    medias: [],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post4: {
+    id: genUuid('post4'),
+    title: 'post4',
+    content: 'Content 4',
+    medias: [],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post5: {
+    id: genUuid('post5'),
+    title: 'post5',
+    content: 'Content 5',
+    medias: [],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post6: {
+    id: genUuid('post6'),
+    title: 'post6',
+    content: 'Content 6',
+    medias: [MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post7: {
+    id: genUuid('post7'),
+    title: 'post7',
+    content: 'Content 7',
+    medias: [MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post8: {
+    id: genUuid('post8'),
+    title: 'post8',
+    content: 'Content 8',
+    medias: [MediaType.IMAGE],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post9: {
+    id: genUuid('post9'),
+    title: 'post9',
+    content: 'Content 9',
+    medias: [MediaType.IMAGE],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+  post10: {
+    id: genUuid('post10'),
+    title: 'post10',
+    content: 'Content 10',
+    medias: [MediaType.IMAGE, MediaType.IMAGE],
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+  },
+} as const;
+
+export const extraCurricularAssignmentSeedData = [
+  {
+    extraCurricular: extraCurricularSeedData.mat_6eme,
+    teacher: teacherSeedData.teacher1,
+  },
+  {
+    extraCurricular: extraCurricularSeedData.english_6eme,
+    teacher: teacherSeedData.teacher2,
+  },
+];
+
 export const studentSeedData = {
   student1: {
     uid: 'student1',
@@ -166,6 +280,7 @@ export const studentClassroomAssignmentSeedData = [
 
 type AnnouncementSeedDataType = {
   [key: string]: {
+    id: string;
     name: string;
     description: string;
     content: MediaTypeSeed[];
@@ -175,18 +290,23 @@ type AnnouncementSeedDataType = {
 
 export const announcementSeedData = {
   Rentree: {
+    id: genUuid('Rentree'),
     name: 'Rentree',
     description: 'Rentree scolaire 2025-2026, \n bienvenue a tous les eleves et personnels de notre ecole',
     content: [MediaType.VIDEO, MediaType.IMAGE],
     createdAt: new Date('2025-09-01'),
   },
+
   Ramdhan: {
+    id: genUuid('Ramdhan'),
     name: 'Ramdhan',
     description: 'Ramdhan kareem, \n nous vous souhaitons un excellent mois de ramdhan',
     content: [MediaType.IMAGE],
     createdAt: new Date('2025-03-23'),
   },
+
   AidFitr: {
+    id: genUuid('AidFitr'),
     name: 'AidFitr',
     description: 'Aid el fitr, \n nous vous souhaitons un excellent aid el fitr',
     content: [MediaType.IMAGE],

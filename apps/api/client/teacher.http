@@ -67,3 +67,12 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
 GET {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/timetable
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name getExtraCurricularWithSession
+GET {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/extraCurriculars
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+ 

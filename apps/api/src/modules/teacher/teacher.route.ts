@@ -34,6 +34,12 @@ export const createRouter = (teacherController: TeacherController) => {
   router.get('/:teacherId/timetable', requireAuth, asyncHandler(teacherController.getTimetable));
 
   router.get(
+    '/:teacherId/extraCurriculars',
+    requireAuth,
+    asyncHandler(teacherController.getExtraCurricularWithSession),
+  );
+
+  router.get(
     '/:teacherId',
     requireAuth,
     requireUserPermissionOrTeacherHimself([UserRole.DIRECTOR, UserRole.MANAGER]),

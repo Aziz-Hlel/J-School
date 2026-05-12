@@ -92,7 +92,7 @@ export class AnnouncementService {
       .delete({
         where: { id: announcementId, schoolId },
       })
-      .catch(null);
+      .catch(() => null);
 
     return;
   };

@@ -15,6 +15,10 @@ import { data } from './data';
 import {
   announcementSeedData,
   classroomsSeedData,
+  extraCurricularAssignmentSeedData,
+  extraCurricularSeedData,
+  extraCurricularSessionSeedData,
+  postsSeedData,
   reactionSeedData,
   studentClassroomAssignmentSeedData,
   subjectsWithExamsSeedData,
@@ -27,6 +31,9 @@ import { TeacherSeed } from '../fakes/teacher.seed';
 import { MediaSeedV2 } from '../fakes/media.seed2';
 import { AnnouncementSeed } from '../fakes/announcement.seed';
 import { ReactionSeed } from '../fakes/reaction.seed';
+import { ExtracurricularSeed } from '../fakes/extraCurricular.seed';
+import { ExtraCurricularSessionsSeed } from '../fakes/extraCurricularSessions.seed';
+import { PostSeed } from '../fakes/post.seed';
 
 faker.seed(1); // Ensure consistent fake data across runs
 
@@ -47,6 +54,9 @@ export class SeedDevService implements ISeed {
     private readonly mediaSeed: MediaSeedV2,
     private readonly announcementSeed: AnnouncementSeed,
     private readonly reactionSeed: ReactionSeed,
+    private readonly extraCurricularSeed: ExtracurricularSeed,
+    private readonly extraCurricularSessionsSeed: ExtraCurricularSessionsSeed,
+    private readonly postSeed: PostSeed,
   ) {}
 
   private seedClassroom = async ({ schoolId }: { schoolId: string }) => {
@@ -133,6 +143,7 @@ export class SeedDevService implements ISeed {
         const medias = await Promise.all(accouncementSeed.content.map((type) => this.mediaSeed.run({ type })));
         const mediaIds = medias.map((media) => media.id);
         await this.announcementSeed.run({
+          id: accouncementSeed.id,
           schoolId,
           description: accouncementSeed.description,
           mediaIds,
@@ -175,10 +186,64 @@ export class SeedDevService implements ISeed {
         reactionSeed.reactions.map(async (reaction) => {
           await this.reactionSeed.run({
             schoolId,
-            announcementCreation: reactionSeed.announcement.createdAt,
+            announcementId: reactionSeed.announcement.id,
             accountEmail: reaction.accountEmail,
             reactionType: reaction.type,
           });
+        });
+      }),
+    );
+  };
+
+  private seedExtraCurricular = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      Object.values(extraCurricularSeedData).map(async (extraCurricularSeed) => {
+        await this.extraCurricularSeed.run({
+          schoolId,
+          id: extraCurricularSeed.id,
+          name: extraCurricularSeed.name,
+          grade: extraCurricularSeed.grade,
+        });
+      }),
+    );
+  };
+
+  private assignTeacherToExtraCurricular = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      Object.values(extraCurricularAssignmentSeedData).map(async (extraCurricularAssignment) => {
+        await this.extraCurricularSeed.assignTeacher({
+          schoolId,
+          teacherEmail: extraCurricularAssignment.teacher.email,
+          extraCurricularId: extraCurricularAssignment.extraCurricular.id,
+        });
+      }),
+    );
+  };
+
+  private seedExtraCurricularSessions = async () => {
+    await Promise.all(
+      Object.values(extraCurricularSessionSeedData).map(async (extraCurricularSession) => {
+        await this.extraCurricularSessionsSeed.run({
+          id: extraCurricularSession.id,
+          day: extraCurricularSession.day,
+          startTime: extraCurricularSession.startTime,
+          endTime: extraCurricularSession.endTime,
+          extraCurricularId: extraCurricularSession.extraCurricular.id,
+        });
+      }),
+    );
+  };
+
+  seedExtraCurricularPosts = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      Object.values(postsSeedData).map(async (post) => {
+        const medias = await Promise.all(post.medias.map((type) => this.mediaSeed.run({ type })));
+        await this.postSeed.run({
+          schoolId,
+          id: post.id,
+          content: post.content,
+          mediaIds: medias.map((m) => m.id),
+          extraCurricularId: post.extraCurricular.id,
         });
       }),
     );
@@ -207,6 +272,14 @@ export class SeedDevService implements ISeed {
       await this.seedAnnouncements({ schoolId: school.id });
 
       await this.seedReactions({ schoolId: school.id });
+
+      await this.seedExtraCurricular({ schoolId: school.id });
+
+      await this.assignTeacherToExtraCurricular({ schoolId: school.id });
+
+      await this.seedExtraCurricularSessions();
+
+      await this.seedExtraCurricularPosts({ schoolId: school.id });
 
       tenant.users.forEach(async (userInfo) => {
         const { account } = await this.accountSeed.run({

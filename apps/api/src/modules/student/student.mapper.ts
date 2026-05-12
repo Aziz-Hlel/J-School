@@ -5,7 +5,7 @@ import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse
 
 export const StudentMapper = {
   toResponse: (student: StudentGetPayload<{ include: { avatar: true } }>): StudentResponse => {
-    const avatarResponse = globalMediaService.generateMediaResponse(student.avatar);
+    const avatarResponse = globalMediaService.toMediaResponse(student.avatar);
     return {
       id: student.id,
       uid: student.uid,

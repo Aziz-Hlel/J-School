@@ -14,7 +14,7 @@ import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
 
 export class AccountMapper {
   static toResponseWithAvatar(account: AccountGetPayload<{ include: { avatar: true } }>): AccountResponse {
-    const avatar = globalMediaService.generateMediaResponse(account.avatar);
+    const avatar = globalMediaService.toMediaResponse(account.avatar);
     return {
       id: account.id,
       authId: account.authId,

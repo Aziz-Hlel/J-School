@@ -67,4 +67,15 @@ export class TeacherController {
       data: timetable,
     });
   };
+
+  getExtraCurricularWithSession = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const query = getTeacherTimetableQuery.parse(req.query);
+    const extracurriculars = await this.teacherService.getExtracurricular({ teacherId, schoolId, query });
+    res.status(200).json({
+      message: 'Teacher extra curricular fetched successfully',
+      data: extracurriculars,
+    });
+  };
 }

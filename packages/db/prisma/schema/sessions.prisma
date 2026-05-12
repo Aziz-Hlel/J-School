@@ -148,97 +148,6 @@ model ExamSchedule {
 }
 
 
-model Name {
-  id String @id @default(uuid()) @db.Uuid
-  en String @db.VarChar(255)
-  fr String @db.VarChar(255)
-  ar String @db.VarChar(255)
-
-  extraCurricularId String? @db.Uuid @unique
-  extraCurricular ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
-
-  
-  // @@unique([en, schoolId]) // idk if necessary
-  // @@unique([fr, schoolId]) // idk if necessary
-  // @@unique([ar, schoolId]) // idk if necessary
-  @@index([en])
-  @@index([fr])
-  @@index([ar])
-  @@map("names")
-}
-
-
-model ExtraCurricular{
-  id String @id @default(uuid()) @db.Uuid
-
-  title Name? 
-
-  grade ClassGrade
-
-  session Session?
-
-  teacherId String? @db.Uuid
-  teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
-
-  schoolId String @db.Uuid
-  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
-  studentExtraCurricular StudentExtraCurricular[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("extraCurriculars")
-}
-
-
-model StudentExtraCurricular {
-  id String @id @default(uuid()) @db.Uuid
-
-  studentId String @db.Uuid
-  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  extraCurricularId String @db.Uuid
-  extraCurricular ExtraCurricular @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
-
-  schoolId String @db.Uuid
-  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([studentId, extraCurricularId])
-
-  @@map("studentExtraCurriculars")
-}
-
-
-enum SessionType {
-  WEEKLY
-  SPECIAL
-}
-
-
-model Session {
-  id String @id @default(uuid()) @db.Uuid
-
-  type SessionType
-
-  day DayOfWeek
-  date DateTime? @db.Date
-  startTime DateTime @db.Time
-  endTime DateTime? @db.Time
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  extraCurricularId String? @db.Uuid @unique
-  extraCurricular ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
-}
-
-
 
 enum AttendanceStatus {
   PRESENT
@@ -246,6 +155,8 @@ enum AttendanceStatus {
   LATE
   EXCUSED
 }
+
+
 
 
 model Attendance {

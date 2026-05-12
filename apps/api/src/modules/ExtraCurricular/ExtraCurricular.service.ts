@@ -1,16 +1,16 @@
+import { NotFoundError } from '@/err/service/customErrors';
+import { PageMapper } from '@/helper/page.mapper';
 import { parseTime } from '@/utils/dayjs';
 import type { CreateExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/createExtraCurricularRequest';
 import { ExtraCurricularResponse } from '@repo/contracts/schemas/extraCurricular/extraCurricularResponse';
+import { ExtraCurricularQueryParamsTypes } from '@repo/contracts/schemas/extraCurricular/findAllQueryParams';
 import type { UpdateExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/updateExtraCurricularReq';
 import { Page } from '@repo/contracts/schemas/page/Page';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/client';
 import { SessionType } from '@repo/db/prisma/enums';
-import { ExtraCurricularQueryParamsTypes } from '@repo/contracts/schemas/extraCurricular/findAllQueryParams';
-import { ExtraCurricularMapper } from './ExtraCurricular.mapper';
-import { PageMapper } from '@/helper/page.mapper';
-import { NotFoundError } from '@/err/service/customErrors';
 import { StudentMapper } from '../student/student.mapper';
+import { ExtraCurricularMapper } from './ExtraCurricular.mapper';
 
 export class ExtraCurricularService {
   create = async (params: { input: CreateExtraCurricularReq; schoolId: string }) => {

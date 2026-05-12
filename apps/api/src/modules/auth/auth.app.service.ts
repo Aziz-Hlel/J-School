@@ -41,7 +41,7 @@ export class AuthAppService {
         internalLog: 'Account exists but send 404 since it has no users',
       });
     }
-    const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -80,7 +80,7 @@ export class AuthAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -114,7 +114,7 @@ export class AuthAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
     return accountResponse;
   };

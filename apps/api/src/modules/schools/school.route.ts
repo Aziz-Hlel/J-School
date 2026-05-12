@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { SchoolController } from './school.controller';
-import requireRole from '@/middleware/requireRole.middleware';
-import { AccountRole } from '@repo/db/prisma/enums';
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
+import requireRole from '@/middleware/requireRole.middleware';
+import { AccountRole } from '@repo/db/prisma/enums';
+import { Router } from 'express';
+import { SchoolController } from './school.controller';
 
 export const createSchoolRoute = (controller: SchoolController) => {
   const router = Router();

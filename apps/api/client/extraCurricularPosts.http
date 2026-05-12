@@ -1,0 +1,91 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+@TeacherEmail = teacher1@fake.com
+@TeacherPassword = 12345678
+
+
+
+########################################
+# AUTH FLOW: ADMIN LOGIN
+########################################
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{TeacherEmail}}",
+  "password": "{{TeacherPassword}}",
+  "returnSecureToken": true
+}
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+
+###
+@schoolId = {{serverLogin.response.body.teacher[0].school.id}}
+@teacherId = {{serverLogin.response.body.teacher[0].id}}
+
+
+###
+# @name getExtraCurriculars
+GET {{baseUrl}}/schools/{{schoolId}}/teachers/{{teacherId}}/extraCurriculars
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+Content-Type: application/json
+
+
+###
+@extraCurricularId = {{getExtraCurriculars.response.body.data[0].id}}
+
+
+###
+# @name getExtraCurricularPosts
+GET {{baseUrl}}/schools/{{schoolId}}/extraCurriculars/{{extraCurricularId}}/posts
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+Content-Type: application/json
+
+
+###
+# @name createExtraCurricularPost
+POST {{baseUrl}}/schools/{{schoolId}}/extraCurriculars/{{extraCurricularId}}/posts
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+Content-Type: application/json
+
+{
+    "content": "This is a new post for the extra curricular activity.",
+    "mediaIds": []
+}
+
+
+###
+# @name updateExtraCurricularPost
+PUT {{baseUrl}}/schools/{{schoolId}}/extraCurriculars/{{extraCurricularId}}/posts/{{getExtraCurricularPosts.response.body.data[0].id}}
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+Content-Type: application/json
+
+{
+    "content": "This is an updated post for the extra curricular activity.",
+    "mediaIds": []
+}
+
+
+###
+# @name deleteExtraCurricularPost
+DELETE {{baseUrl}}/schools/{{schoolId}}/extraCurriculars/{{extraCurricularId}}/posts/{{getExtraCurricularPosts.response.body.data[0].id}}
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+Content-Type: application/json
+
+

@@ -65,7 +65,7 @@ export class AccountAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -97,7 +97,7 @@ export class AccountAppService {
       throw new NotFoundError(`Account Not found`);
     }
 
-    const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -126,7 +126,7 @@ export class AccountAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.generateMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 

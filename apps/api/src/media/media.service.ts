@@ -22,7 +22,7 @@ export interface IMediaService {
     newMediaKey: string;
   }): Promise<string | null>;
   getMediaKeyAndUrl(media: Media | null): MediaResponse | null;
-  generateMediaResponse(media: Media | null): MediaResponse | null;
+  toMediaResponse(media: Media | null): MediaResponse | null;
 }
 
 export class MediaService implements IMediaService {
@@ -90,16 +90,21 @@ export class MediaService implements IMediaService {
     return {
       id: media.id,
       key: media.key,
+      type: media.type,
       url,
     };
   }
 
-  generateMediaResponse(media: Media | null): MediaResponse | null {
+  toMediaResponse(media: Media): MediaResponse;
+  toMediaResponse(media: null): null;
+  toMediaResponse(media: Media | null): MediaResponse | null;
+  toMediaResponse(media: Media | null): MediaResponse | null {
     if (!media) return null;
     const url = storageService.getObjectUrl(media.key);
     return {
       id: media.id,
       key: media.key,
+      type: media.type,
       url,
     };
   }
