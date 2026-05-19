@@ -58,6 +58,7 @@ model Assignment{
   
   timetable Timetable[]
   examSchedules ExamSchedule[]
+  homeworks Homework[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -182,3 +183,6 @@ model Attendance {
 
   @@map("attendances")
 }
+
+
+

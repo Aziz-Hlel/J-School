@@ -2,9 +2,11 @@ import { StudentGetPayload } from '@repo/db/prisma/models';
 import { globalMediaService } from '@/media/media.service';
 import { toCalendarDateOrNull } from '@/utils/dayjs';
 import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
+import { StudentResponse2 } from '@repo/contracts/schemas/student/studentResponse2';
+import { ClassroomMapper } from '../classroom/classroom.mapper';
 
-export const StudentMapper = {
-  toResponse: (student: StudentGetPayload<{ include: { avatar: true } }>): StudentResponse => {
+export class StudentMapper {
+  static toResponse(student: StudentGetPayload<{ include: { avatar: true } }>): StudentResponse {
     const avatarResponse = globalMediaService.toMediaResponse(student.avatar);
     return {
       id: student.id,
@@ -24,5 +26,28 @@ export const StudentMapper = {
       createdAt: student.createdAt.toISOString(),
       updatedAt: student.updatedAt.toISOString(),
     };
-  },
-};
+  }
+
+  static toResponse2(student: StudentGetPayload<{ include: { avatar: true; classroom: true } }>): StudentResponse2 {
+    const avatarResponse = globalMediaService.toMediaResponse(student.avatar);
+    return {
+      id: student.id,
+      uid: student.uid,
+      firstName: {
+        en: student.firstName_en,
+        ar: student.firstName_ar,
+      },
+      lastName: {
+        en: student.lastName_en,
+        ar: student.lastName_ar,
+      },
+      gender: student.gender,
+      dateOfBirth: toCalendarDateOrNull(student.dateOfBirth),
+      avatar: avatarResponse,
+      status: student.status,
+      classroom: student.classroom ? ClassroomMapper.toResponse(student.classroom) : null,
+      createdAt: student.createdAt.toISOString(),
+      updatedAt: student.updatedAt.toISOString(),
+    };
+  }
+}

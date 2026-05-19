@@ -1,4 +1,5 @@
 import { createMediaModule as mediaModule } from '@/media';
+import { AftercareModule } from '@/modules/Aftercare/aftercare.module';
 import { AnnouncementModule } from '@/modules/Announcement/announcement.module';
 import { AttendanceModule } from '@/modules/Attendance/attendance.module';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
@@ -141,6 +142,9 @@ const { feeItemsRouter } = FeeItemsModule();
 // * TEACHER COMMENTS
 const { teacherCommentsRouter } = TeacherCommentsModule();
 
+// * AFTERCARE
+const { aftercareRouter } = AftercareModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -228,6 +232,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: feesRouter, resource: 'schools/:schoolId/fees' },
   { router: feeItemsRouter, resource: 'schools/:schoolId/fees/:feeId/items' },
   { router: teacherCommentsRouter, resource: 'schools/:schoolId/teachers/:teacherId/comments' },
+  { router: aftercareRouter, resource: 'schools/:schoolId/aftercares' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

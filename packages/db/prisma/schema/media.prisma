@@ -37,6 +37,9 @@ model Media {
   postId String? @db.Uuid
   post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
 
+  homeworkId String? @db.Uuid
+  homework Homework? @relation(fields: [homeworkId], references: [id], onDelete: Cascade)
+
   school     School?  @relation
   user        Account?  @relation
   student     Student?  @relation

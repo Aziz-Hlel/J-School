@@ -51,7 +51,7 @@ model Student {
   attendances Attendance[]
   comments TeacherComment[]
   aftercare Aftercare[]
-
+  homeworks Homework[]
 
   schoolId String @db.Uuid
   school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)

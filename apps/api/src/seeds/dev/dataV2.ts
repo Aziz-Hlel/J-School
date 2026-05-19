@@ -335,9 +335,6 @@ export const reactionSeedData = [
 export const teacherCommentsSeedData = [
   {
     id: genUuid('teacherComment1'),
-    title: '',
-    avatar: ' ',
-
     content: 'Excellent work on this assignment!',
     parentReply: 'Thank you for your feedback!',
     teacher: teacherSeedData.teacher1,
@@ -346,7 +343,7 @@ export const teacherCommentsSeedData = [
   {
     id: genUuid('teacherComment2'),
     content: 'Keep up the great effort!',
-    parentReply: 'Thank you for your feedback! ',
+    parentReply: 'Thank you for your feedback!',
     teacher: teacherSeedData.teacher2,
     student: studentSeedData.student1,
   },
