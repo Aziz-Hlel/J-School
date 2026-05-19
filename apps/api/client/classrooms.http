@@ -142,7 +142,7 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
     "classroomId": "{{classroomId}}",
     "date": {
         "day": "2025-12-31",
-        "startTime": "05:59:59",
+        "startTime": "05:xsss:",
         "endTime": "23:59:59"
     }
 }

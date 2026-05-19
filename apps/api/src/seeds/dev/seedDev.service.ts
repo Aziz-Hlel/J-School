@@ -1,16 +1,28 @@
 import { faker } from '@faker-js/faker';
-import { AccountRole, UserRole } from '@repo/db/prisma/enums';
+import { AccountRole } from '@repo/db/prisma/enums';
 import { AccountSeed } from '../fakes/account.seed';
 import { ActorSeed } from '../fakes/actor.seed';
+import { AnnouncementSeed } from '../fakes/announcement.seed';
 import { AssignmentSeed } from '../fakes/assignment.seed';
 import { ClassroomSeed2 } from '../fakes/classroom.seed2';
+import { ExtracurricularSeed } from '../fakes/extraCurricular.seed';
+import { ExtraCurricularSessionsSeed } from '../fakes/extraCurricularSessions.seed';
+import { FeeSeed } from '../fakes/fee.seed';
+import { FeeItemSeed } from '../fakes/feeItem.seed';
+import { MediaSeedV2 } from '../fakes/media.seed2';
 import { OwnerSeed } from '../fakes/owner.seed';
+import { ParentSeed } from '../fakes/parent.seed';
 import { ParentStudentSeed } from '../fakes/parentStudent.seed';
+import { PostSeed } from '../fakes/post.seed';
+import { ReactionSeed } from '../fakes/reaction.seed';
 import { SchoolSeed } from '../fakes/school.seed';
 import { StudentSeed } from '../fakes/student.seed';
 import { SubjectAndExamsSeed2 } from '../fakes/subject.seed2';
+import { TeacherSeed } from '../fakes/teacher.seed';
+import { TimetableSeed } from '../fakes/timtable.seed';
 import { UserSeed } from '../fakes/users.fake';
 import ISeed from '../ISeed';
+import { parentSeedData, parentStudentSeedData, studentSeedData, teacherSeedData, userSeedData } from './actors';
 import { data } from './data';
 import {
   announcementSeedData,
@@ -23,17 +35,10 @@ import {
   studentClassroomAssignmentSeedData,
   subjectsWithExamsSeedData,
   teacherAssignmentSeedData,
-  teacherSeedData,
+  teacherCommentsSeedData,
   timeTableSeedData,
 } from './dataV2';
-import { TimetableSeed } from '../fakes/timtable.seed';
-import { TeacherSeed } from '../fakes/teacher.seed';
-import { MediaSeedV2 } from '../fakes/media.seed2';
-import { AnnouncementSeed } from '../fakes/announcement.seed';
-import { ReactionSeed } from '../fakes/reaction.seed';
-import { ExtracurricularSeed } from '../fakes/extraCurricular.seed';
-import { ExtraCurricularSessionsSeed } from '../fakes/extraCurricularSessions.seed';
-import { PostSeed } from '../fakes/post.seed';
+import { feeItemsSeedData, feesSeedData } from './feeItems.seed.data';
 
 faker.seed(1); // Ensure consistent fake data across runs
 
@@ -45,6 +50,7 @@ export class SeedDevService implements ISeed {
     private readonly userSeed: UserSeed,
     private readonly actorSeed: ActorSeed,
     private readonly teacherSeed: TeacherSeed,
+    private readonly parentSeed: ParentSeed,
     private readonly studentSeed: StudentSeed,
     private readonly parentStudentSeed: ParentStudentSeed,
     private readonly classroomSeed: ClassroomSeed2,
@@ -57,7 +63,78 @@ export class SeedDevService implements ISeed {
     private readonly extraCurricularSeed: ExtracurricularSeed,
     private readonly extraCurricularSessionsSeed: ExtraCurricularSessionsSeed,
     private readonly postSeed: PostSeed,
+    private readonly feeSeed: FeeSeed,
+    private readonly feeItemSeed: FeeItemSeed,
   ) {}
+
+  private seedAccounts = async () => {
+    const actorsList = [
+      ...Object.values(userSeedData),
+      ...Object.values(parentSeedData),
+      ...Object.values(teacherSeedData),
+    ];
+    await Promise.all(
+      actorsList.map(async (actor) => {
+        await this.accountSeed.run({
+          email: actor.email,
+          accountRole: AccountRole.USER,
+        });
+      }),
+    );
+  };
+
+  private seedUsers = async ({ schoolId }: { schoolId: string }) => {
+    const usersList = [
+      ...Object.values(userSeedData),
+      ...Object.values(parentSeedData),
+      ...Object.values(teacherSeedData),
+    ];
+    await Promise.all(
+      usersList.map(async (user) => {
+        await this.userSeed.runV2({ accountEmail: user.email, schoolId, userId: user.id });
+      }),
+    );
+  };
+
+  private seedUserRoles = async () => {
+    await Promise.all(
+      Object.values(userSeedData).map(async (user) => {
+        await this.actorSeed.runV2({ role: user.role, userId: user.id });
+      }),
+    );
+  };
+
+  private seedTeachers = async () => {
+    await Promise.all(
+      Object.values(teacherSeedData).map(async (teacher) => {
+        await this.actorSeed.runV2({ role: teacher.role, teacherId: teacher.id, userId: teacher.userId });
+      }),
+    );
+  };
+
+  private seedParents = async () => {
+    await Promise.all(
+      Object.values(parentSeedData).map(async (parent) => {
+        await this.actorSeed.runV2({ role: parent.role, userId: parent.userId, parentId: parent.id });
+      }),
+    );
+  };
+
+  private seedParentStudentsAssignment = async () => {
+    await Promise.all(
+      Object.values(parentStudentSeedData).map(async (assignment) => {
+        await this.parentStudentSeed.runV2({ parentId: assignment.parentId, studentId: assignment.studentId });
+      }),
+    );
+  };
+
+  private seedStudents = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      Object.values(studentSeedData).map(async (student) => {
+        await this.studentSeed.runV2({ student, schoolId });
+      }),
+    );
+  };
 
   private seedClassroom = async ({ schoolId }: { schoolId: string }) => {
     const classrooms = await Promise.all(
@@ -115,24 +192,6 @@ export class SeedDevService implements ISeed {
             timetable: time,
           });
         });
-      }),
-    );
-  };
-
-  private seedTeachers = async ({ schoolId }: { schoolId: string }) => {
-    await Promise.all(
-      Object.values(teacherSeedData).map(async (teacher) => {
-        const { account } = await this.accountSeed.run({
-          email: teacher.email,
-          accountRole: AccountRole.USER,
-        });
-
-        const user = await this.userSeed.run({
-          accountId: account.id,
-          schoolId,
-        });
-
-        await this.actorSeed.run({ role: UserRole.TEACHER, userId: user.id });
       }),
     );
   };
@@ -234,7 +293,7 @@ export class SeedDevService implements ISeed {
     );
   };
 
-  seedExtraCurricularPosts = async ({ schoolId }: { schoolId: string }) => {
+  private seedExtraCurricularPosts = async ({ schoolId }: { schoolId: string }) => {
     await Promise.all(
       Object.values(postsSeedData).map(async (post) => {
         const medias = await Promise.all(post.medias.map((type) => this.mediaSeed.run({ type })));
@@ -249,11 +308,72 @@ export class SeedDevService implements ISeed {
     );
   };
 
+  private seedFees = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      Object.values(feesSeedData).map(async (fee) => {
+        await this.feeSeed.run({
+          schoolId,
+          id: fee.id,
+          studentId: fee.studentId,
+          name: fee.name,
+          startDate: fee.startDate,
+          endDate: fee.endDate,
+        });
+      }),
+    );
+  };
+
+  private seedFeeItems = async ({ schoolId }: { schoolId: string }) => {
+    const allFeeItems = Object.values(feeItemsSeedData).flat();
+    await Promise.all(
+      allFeeItems.map((feeItem) =>
+        this.feeItemSeed.run({
+          schoolId,
+          id: feeItem.id,
+          feeId: feeItem.feeId,
+          title: feeItem.title,
+          description: feeItem.description,
+          amount: feeItem.amount,
+        }),
+      ),
+    );
+  };
+
+  // private seedTeacherComments = async ({ schoolId }: { schoolId: string }) => {
+  //   await Promise.all(
+  //     teacherCommentsSeedData.map(async (teacherComment) => {
+  //       await this.teacherCommentSeed.run({
+  //         schoolId,
+  //         id: teacherComment.id,
+  //         studentId: teacherComment.student.id,
+  //         teacherId: teacherComment.teacher.id,
+  //         title: teacherComment.title,
+  //         content: teacherComment.content,
+  //         parentReply: teacherComment.parentReply,
+  //       });
+  //     }),
+  //   );
+  // };
+
   run = async () => {
     data.forEach(async (tenant) => {
       const { account } = await this.accountSeed.run({ email: tenant.account.email, accountRole: AccountRole.ADMIN });
       const { owner } = await this.ownerSeed.run({ accountId: account.id });
       const school = await this.schoolSeed.run({ ownerId: owner.id });
+
+      await this.seedAccounts();
+
+      await this.seedUsers({ schoolId: school.id });
+
+      await this.seedUserRoles();
+
+      await this.seedTeachers();
+
+      await this.seedParents();
+
+      await this.seedStudents({ schoolId: school.id });
+
+      await this.seedParentStudentsAssignment();
 
       await this.seedSubjectAndExams({ schoolId: school.id });
 
@@ -262,8 +382,6 @@ export class SeedDevService implements ISeed {
       await this.seedAssignment({ schoolId: school.id });
 
       await this.seedTimetable({ schoolId: school.id });
-
-      await this.seedTeachers({ schoolId: school.id });
 
       await this.addTeacherToAssignment({ schoolId: school.id });
 
@@ -281,40 +399,44 @@ export class SeedDevService implements ISeed {
 
       await this.seedExtraCurricularPosts({ schoolId: school.id });
 
-      tenant.users.forEach(async (userInfo) => {
-        const { account } = await this.accountSeed.run({
-          email: userInfo.email,
-          accountRole: AccountRole.USER,
-        });
+      await this.seedFees({ schoolId: school.id });
 
-        const user = await this.userSeed.run({
-          accountId: account.id,
-          schoolId: school.id,
-        });
+      await this.seedFeeItems({ schoolId: school.id });
 
-        await this.actorSeed.run({ role: userInfo.role, userId: user.id });
-      });
+      // tenant.users.forEach(async (userInfo) => {
+      //   const { account } = await this.accountSeed.run({
+      //     email: userInfo.email,
+      //     accountRole: AccountRole.USER,
+      //   });
 
-      tenant.parentsWithStudents.forEach(async (parentInfo) => {
-        const { account } = await this.accountSeed.run({
-          email: parentInfo.email,
-          accountRole: AccountRole.USER,
-        });
+      //   const user = await this.userSeed.run({
+      //     accountId: account.id,
+      //     schoolId: school.id,
+      //   });
 
-        const user = await this.userSeed.run({
-          accountId: account.id,
-          schoolId: school.id,
-        });
+      //   await this.actorSeed.run({ role: userInfo.role, userId: user.id });
+      // });
 
-        const response = await this.actorSeed.run({ role: parentInfo.role, userId: user.id });
-        if (response?.type === UserRole.PARENT && parentInfo.role === UserRole.PARENT) {
-          const parent = response.data;
-          parentInfo.students.forEach(async (studentInfo) => {
-            const student = await this.studentSeed.run({ schoolId: school.id, student: studentInfo });
-            await this.parentStudentSeed.run({ parentId: parent.id, studentId: student.id });
-          });
-        }
-      });
+      // tenant.parentsWithStudents.forEach(async (parentInfo) => {
+      //   const { account } = await this.accountSeed.run({
+      //     email: parentInfo.email,
+      //     accountRole: AccountRole.USER,
+      //   });
+
+      //   const user = await this.userSeed.run({
+      //     accountId: account.id,
+      //     schoolId: school.id,
+      //   });
+
+      //   const response = await this.actorSeed.run({ role: parentInfo.role, userId: user.id });
+      //   if (response?.type === UserRole.PARENT && parentInfo.role === UserRole.PARENT) {
+      //     const parent = response.data;
+      //     parentInfo.students.forEach(async (studentInfo) => {
+      //       const student = await this.studentSeed.run({ schoolId: school.id, student: studentInfo });
+      //       await this.parentStudentSeed.run({ parentId: parent.id, studentId: student.id });
+      //     });
+      //   }
+      // });
     });
   };
 }

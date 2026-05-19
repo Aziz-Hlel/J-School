@@ -1,0 +1,128 @@
+@apiKey = AIzaSyBoFeoCUvczJXVp2FhWYm26UiSGjmYLqOo
+@firebaseUrl = https://identitytoolkit.googleapis.com/v1
+
+
+@baseUrl = http://localhost:10000/api
+
+
+@TeacherEmail = teacher1@fake.com
+@TeacherPassword = 12345678
+
+
+
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{TeacherEmail}}",
+  "password": "{{TeacherPassword}}",
+  "returnSecureToken": true
+}
+
+
+###
+# @name serverLogin
+POST {{baseUrl}}/auth/password
+Content-Type: application/json
+
+{
+    "token": "{{firebase_login.response.body.idToken}}"
+}
+
+###
+@TeacherId = {{serverLogin.response.body.teacher[0].id}}
+@SchoolId = {{serverLogin.response.body.teacher[0].school.id}}
+
+
+###
+# @name getClassrooms
+GET {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/classrooms
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+ 
+###
+@StudentId = 296f6611-1d36-54ad-adab-fec236540239
+
+
+###
+# @name createComment
+POST {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "studentId": "{{StudentId}}",
+    "title": "Esde3a2 weliy",
+    "content": "Weldk mouch motrobi",
+    "canParentReply": true
+}
+
+###
+# @name updateComment
+PUT {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/comments/{{createComment.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "studentId": "{{StudentId}}",
+    "title": "Esde3a2 weliy",
+    "content": "Weldk mouch motrobi jemla ...",
+    "canParentReply": true
+}
+
+
+
+###
+# @name getComments
+GET {{baseUrl}}/schools/{{SchoolId}}/students/296f6611-1d36-54ad-adab-fec236540239/teacher-comments
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+###
+# @name deleteComment
+DELETE {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/comments/{{createComment.response.body.data.id}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+########################################
+# AUTH FLOW: PARENT LOGIN
+########################################
+
+@parentEmail = parent1@fake.com
+@parentPassword = 12345678
+
+
+
+### 
+# @name firebase_login
+POST {{firebaseUrl}}/accounts:signInWithPassword?key={{apiKey}}
+Content-Type: application/json
+
+{
+  "email": "{{parentEmail}}",
+  "password": "{{parentPassword}}",
+  "returnSecureToken": true
+}
+
+
+###
+@teacherId = {{getComments.response.body.data[0].teacher.id}}
+@commentId = {{getComments.response.body.data[0].id}}
+
+
+###
+# @name replyComment
+PUT {{baseUrl}}/schools/{{SchoolId}}/teachers/{{teacherId}}/comments/{{commentId}}/reply
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "reply": "Ezebi etfol mrabih bidi nayek"
+}
+
+

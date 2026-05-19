@@ -75,4 +75,11 @@ GET {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/extraCurriculars
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
+
+###
+# @name getClassrooms
+GET {{baseUrl}}/schools/{{SchoolId}}/teachers/{{TeacherId}}/classrooms
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
  

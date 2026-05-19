@@ -3,6 +3,7 @@ import { BaseSubjectsKeys, InitSubjectWithExamsType } from '@repo/contracts/cons
 import { ClassGrade, DayOfWeek, MediaType, ReactionType } from '@repo/db/prisma/browser';
 import { MediaTypeSeed } from '../fakes/media.seed2';
 import { genUuid } from '../helper/generateUuid';
+import { studentSeedData, teacherSeedData } from './actors';
 
 export const subjectsWithExamsSeedData = {
   [ClassGrade.SIX]: {
@@ -99,24 +100,6 @@ export const timeTableSeedData: TimeTableSeedData = {
     ],
   },
 } as const satisfies TimeTableSeedData;
-
-export const teacherSeedData = {
-  teacher1: {
-    email: 'teacher1@fake.com',
-  },
-  teacher2: {
-    email: 'teacher2@fake.com',
-  },
-  teacher3: {
-    email: 'teacher3@fake.com',
-  },
-  teacher4: {
-    email: 'teacher4@fake.com',
-  },
-  teacher5: {
-    email: 'teacher5@fake.com',
-  },
-};
 
 export const teacherAssignmentSeedData = [
   {
@@ -247,24 +230,6 @@ export const extraCurricularAssignmentSeedData = [
   },
 ];
 
-export const studentSeedData = {
-  student1: {
-    uid: 'student1',
-  },
-  student2: {
-    uid: 'student2',
-  },
-  student3: {
-    uid: 'student3',
-  },
-  student4: {
-    uid: 'student4',
-  },
-  student5: {
-    uid: 'student5',
-  },
-};
-
 export const studentClassroomAssignmentSeedData = [
   {
     classroom: classroomsSeedData.A,
@@ -364,5 +329,46 @@ export const reactionSeedData = [
         type: ReactionType.HEART,
       },
     ],
+  },
+];
+
+export const teacherCommentsSeedData = [
+  {
+    id: genUuid('teacherComment1'),
+    title: '',
+    avatar: ' ',
+
+    content: 'Excellent work on this assignment!',
+    parentReply: 'Thank you for your feedback!',
+    teacher: teacherSeedData.teacher1,
+    student: studentSeedData.student1,
+  },
+  {
+    id: genUuid('teacherComment2'),
+    content: 'Keep up the great effort!',
+    parentReply: 'Thank you for your feedback! ',
+    teacher: teacherSeedData.teacher2,
+    student: studentSeedData.student1,
+  },
+  {
+    id: genUuid('teacherComment3'),
+    content: 'Good understanding of the material.',
+    parentReply: 'Thank you for your feedback!',
+    teacher: teacherSeedData.teacher3,
+    student: studentSeedData.student1,
+  },
+  {
+    id: genUuid('teacherComment4'),
+    content: 'Needs improvement in the calculation part.',
+    parentReply: 'Thank you for your feedback!',
+    teacher: teacherSeedData.teacher4,
+    student: studentSeedData.student1,
+  },
+  {
+    id: genUuid('teacherComment5'),
+    content: 'Excellent analysis!',
+    parentReply: 'Thank you for your feedback!',
+    teacher: teacherSeedData.teacher5,
+    student: studentSeedData.student1,
   },
 ];

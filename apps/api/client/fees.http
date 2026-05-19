@@ -41,7 +41,7 @@ Content-Type: application/json
 
 ###
 # @name findStudents
-GET {{baseUrl}}/schools/{{schoolId}}/students
+GET {{baseUrl}}/schools/{{schoolId}}/students?search=Veronica
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 

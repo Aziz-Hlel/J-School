@@ -10,6 +10,7 @@ export class StudentSeed {
 
   generateFakeStudent = async (student: Partial<StudentCreateInput> = {}, schoolId: string, avatarId?: string) => {
     return {
+      id: student.id,
       uid: student.uid ?? faker.string.uuid(),
       firstName_ar: student.firstName_ar ?? faker.person.firstName(),
       lastName_ar: student.lastName_ar ?? faker.person.lastName(),
@@ -35,6 +36,19 @@ export class StudentSeed {
           uid: studentPayload.uid,
         },
       },
+      create: studentPayload,
+      update: {},
+    });
+    return createdStudent;
+  };
+
+  runV2 = async (params: { student: Partial<StudentCreateInput> & { id: string }; schoolId: string }, tx?: TX) => {
+    const { student, schoolId } = params;
+    const client = tx ?? prisma;
+    const fakeAvatar = await this.mediaSeed.run({}, tx);
+    const studentPayload = await this.generateFakeStudent(student, schoolId, fakeAvatar.id);
+    const createdStudent = await client.student.upsert({
+      where: { id: student.id },
       create: studentPayload,
       update: {},
     });

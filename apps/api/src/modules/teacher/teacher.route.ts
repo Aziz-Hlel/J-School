@@ -39,6 +39,8 @@ export const createRouter = (teacherController: TeacherController) => {
     asyncHandler(teacherController.getExtraCurricularWithSession),
   );
 
+  router.get('/:teacherId/classrooms', requireAuth, asyncHandler(teacherController.getClassrooms));
+
   router.get(
     '/:teacherId',
     requireAuth,

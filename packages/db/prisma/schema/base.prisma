@@ -114,6 +114,7 @@ model School {
   subjects Subject[]
   extraCurriculars ExtraCurricular[]
   annoucements Announcement[]
+  aftercare Aftercare[]
 
   // RLS Related Models
   assignments Assignment[]
@@ -122,6 +123,7 @@ model School {
   studentExtraCurriculars StudentExtraCurricular[]
   attendances Attendance[]
   posts Post[]
+  teacherComments TeacherComment[]
 
   status SchoolStatus @default(PENDING)
   createdAt DateTime @default(now())

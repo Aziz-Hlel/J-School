@@ -28,6 +28,8 @@ export const createRouter = (studentController: StudentController) => {
 
   router.get('/:studentId/extra-curriculars', requireAuth, asyncHandler(studentController.getExtraCurricular));
 
+  router.get('/:studentId/teacher-comments', requireAuth, asyncHandler(studentController.findTeacherComments));
+
   router.get('/:studentId', requireAuth, asyncHandler(studentController.findById));
 
   return router;

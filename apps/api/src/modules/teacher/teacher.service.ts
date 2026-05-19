@@ -12,6 +12,7 @@ import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/te
 import prisma from '@repo/db';
 import { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
 import { toTime } from '@/utils/dayjs';
+import { ClassroomMapper } from '../classroom/classroom.mapper';
 
 export class TeacherService {
   constructor(
@@ -249,6 +250,24 @@ export class TeacherService {
       createdAt: entry.createdAt.toISOString(),
     }));
 
+    return response;
+  };
+
+  getClassrooms = async (params: { schoolId: string; teacherId: string }) => {
+    const { schoolId, teacherId } = params;
+    const result = await prisma.assignment.findMany({
+      where: {
+        teacherId,
+        schoolId,
+      },
+      distinct: ['classroomId'],
+      select: {
+        classroom: true,
+      },
+    });
+
+    const classrooms = result.map((entry) => entry.classroom);
+    const response = classrooms.map(ClassroomMapper.toResponse);
     return response;
   };
 }

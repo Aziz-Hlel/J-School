@@ -3,6 +3,21 @@ import { TX } from '@/types/prisma/PrismaTransaction';
 import { ClassGrade } from '@repo/db/prisma/enums';
 
 export class TeacherSeed {
+  runV2 = async (params: { teacherId: string; userId: string }, tx?: TX) => {
+    const { teacherId, userId } = params;
+    const client = tx ?? prisma;
+    const teacher = await client.teacher.upsert({
+      where: { id: teacherId },
+      update: {},
+      create: {
+        id: teacherId,
+        userId,
+      },
+    });
+
+    return teacher;
+  };
+
   run = async (params: { userId: string }, tx?: TX) => {
     const { userId } = params;
     const client = tx ?? prisma;

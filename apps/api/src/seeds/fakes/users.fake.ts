@@ -39,12 +39,26 @@ export class UserSeed {
     const client = tx ?? prisma;
     const user = this.generateFakeSimpleUser({ accountId, schoolId });
     const createdUser = await client.user.upsert({
-      where: {
-        accountId_schoolId: {
-          accountId,
-          schoolId,
-        },
-      },
+      where: { accountId_schoolId: { accountId, schoolId } },
+      create: user,
+      update: {},
+    });
+    return createdUser;
+  };
+
+  runV2 = async (params: { accountEmail: string; schoolId: string; userId: string }, tx?: TX) => {
+    const client = tx ?? prisma;
+    const { accountEmail, schoolId, userId } = params;
+
+    const account = await prisma.account.findUniqueOrThrow({
+      where: { email: accountEmail },
+      select: { id: true },
+    });
+
+    const user = this.generateFakeSimpleUser({ accountId: account.id, schoolId });
+    user.id = userId;
+    const createdUser = await client.user.upsert({
+      where: { id: userId },
       create: user,
       update: {},
     });

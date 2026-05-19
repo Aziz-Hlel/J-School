@@ -78,4 +78,14 @@ export class TeacherController {
       data: extracurriculars,
     });
   };
+
+  getClassrooms = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const classrooms = await this.teacherService.getClassrooms({ teacherId, schoolId });
+    res.status(200).json({
+      message: 'Teacher classrooms fetched successfully',
+      data: classrooms,
+    });
+  };
 }

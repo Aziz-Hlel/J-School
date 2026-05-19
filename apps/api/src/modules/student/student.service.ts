@@ -20,6 +20,10 @@ import { toTime } from '@/utils/dayjs';
 import type { StudentAttendanceResponse } from '@repo/contracts/schemas/student/getAttendancesResponse';
 import { FeesQueryParamsTypes } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
 import { FeesMapper } from '../Fees/fees.mapper';
+import { CursorQueryParams } from '@repo/contracts/schemas/const/cursorQueryParams';
+import { TeacherCommentsResponse } from '@repo/contracts/schemas/TeacherComments/response';
+import { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
+import { TeacherCommentsMapper } from '../TeacherComments/teacherComments.mapper';
 
 export class StudentService {
   constructor(private readonly studentRepo: StudentRepo) {}
@@ -259,11 +263,62 @@ export class StudentService {
       },
     });
 
-    const conut = prisma.fees.count({ where: { ...where, schoolId } });
+    const count = prisma.fees.count({ where: { ...where, schoolId } });
 
-    const [content, totalElements] = await Promise.all([queryResponse, conut]);
+    const [content, totalElements] = await Promise.all([queryResponse, count]);
 
     const dataResponse = content.map(FeesMapper.toResponse);
+
+    const pageResponse = PageMapper.toPage({
+      data: dataResponse,
+      pagination: query,
+      totalElements: totalElements,
+    });
+
+    return pageResponse;
+  };
+
+  findAllComments = async (params: {
+    query: TeacherCommentsQueryParamsTypes['Query'];
+    schoolId: string;
+    studentId?: string;
+  }) => {
+    const { query, schoolId, studentId } = params;
+
+    const skip = (query.page - 1) * query.size;
+    const take = query.size;
+
+    const where: Prisma.TeacherCommentWhereInput = {
+      schoolId,
+      studentId,
+    };
+
+    const orderBy: Prisma.TeacherCommentOrderByWithRelationInput = {};
+
+    if (query.sortBy) {
+      orderBy[query.sortBy] = query.order;
+    }
+
+    const queryResponse = prisma.teacherComment.findMany({
+      skip,
+      take,
+      where,
+      orderBy,
+      include: {
+        student: true,
+        teacher: {
+          include: {
+            user: { select: { account: { select: { avatar: true } }, firstName: true, lastName: true, id: true } },
+          },
+        },
+      },
+    });
+
+    const count = prisma.teacherComment.count({ where });
+
+    const [content, totalElements] = await Promise.all([queryResponse, count]);
+
+    const dataResponse = content.map(TeacherCommentsMapper.toResponse);
 
     const pageResponse = PageMapper.toPage({
       data: dataResponse,

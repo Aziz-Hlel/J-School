@@ -8,6 +8,7 @@ import { createStudentWithParentSchema } from '@repo/contracts/schemas/student/w
 import { studentsQueryParams } from '@repo/contracts/schemas/student/getStudentsQueryParams';
 import { studentAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getAttendances';
 import { feesQueryParams } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
+import { teacherCommentsQueryParams } from '@repo/contracts/schemas/TeacherComments/queryParams';
 
 export class StudentController {
   constructor(
@@ -94,6 +95,17 @@ export class StudentController {
     const response = await this.studentService.findFees({ query, schoolId, studentId });
     res.status(200).json({
       message: 'Student fees found successfully',
+      ...response,
+    });
+  };
+
+  findTeacherComments = async (req: Request, res: Response) => {
+    const query = teacherCommentsQueryParams.schema.parse(req.query);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const studentId = getUrlParam(req, 'studentId', { uuid: true });
+    const response = await this.studentService.findAllComments({ query, schoolId, studentId });
+    res.status(200).json({
+      message: 'Student comments found successfully',
       ...response,
     });
   };

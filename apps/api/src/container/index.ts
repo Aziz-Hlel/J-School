@@ -7,6 +7,7 @@ import { ExtraCurricularPostsModule } from '@/modules/ExtraCurricular/posts/Extr
 import { FeeItemsModule } from '@/modules/FeeItems/feeItems.module';
 import { FeesModule } from '@/modules/Fees/fees.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
+import { TeacherCommentsModule } from '@/modules/TeacherComments/teacherComments.module';
 import { createUserModule as userModule } from '@/modules/User';
 import { AccountModule } from '@/modules/accounts/account.module';
 import { AssignmentModule } from '@/modules/assignment/assignment.module';
@@ -34,6 +35,8 @@ import { AssignmentSeed } from '@/seeds/fakes/assignment.seed';
 import { ClassroomSeed2 } from '@/seeds/fakes/classroom.seed2';
 import { ExtracurricularSeed } from '@/seeds/fakes/extraCurricular.seed';
 import { ExtraCurricularSessionsSeed } from '@/seeds/fakes/extraCurricularSessions.seed';
+import { FeeSeed } from '@/seeds/fakes/fee.seed';
+import { FeeItemSeed } from '@/seeds/fakes/feeItem.seed';
 import { MediaSeed } from '@/seeds/fakes/media.seed';
 import { MediaSeedV2 } from '@/seeds/fakes/media.seed2';
 import { OwnerSeed } from '@/seeds/fakes/owner.seed';
@@ -135,6 +138,9 @@ const { feesRouter } = FeesModule();
 // * FEE ITEMS
 const { feeItemsRouter } = FeeItemsModule();
 
+// * TEACHER COMMENTS
+const { teacherCommentsRouter } = TeacherCommentsModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -164,6 +170,8 @@ const reactionSeed = new ReactionSeed();
 const extraCurricularSeed = new ExtracurricularSeed();
 const extraCurricularSessionsSeed = new ExtraCurricularSessionsSeed();
 const postSeed = new PostSeed();
+const feeSeed = new FeeSeed();
+const feeItemSeed = new FeeItemSeed();
 
 const mediaSeed2 = new MediaSeedV2();
 
@@ -174,6 +182,7 @@ const seedDevService = new SeedDevService(
   userSeed,
   actorSeed,
   teacherSeed,
+  parentSeed,
   studentSeed,
   parentStudentSeed,
   classroomSeed2,
@@ -186,6 +195,8 @@ const seedDevService = new SeedDevService(
   extraCurricularSeed,
   extraCurricularSessionsSeed,
   postSeed,
+  feeSeed,
+  feeItemSeed,
 );
 
 seedDevService.run();
@@ -216,6 +227,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: announcementRouter, resource: 'schools/:schoolId/announcements' },
   { router: feesRouter, resource: 'schools/:schoolId/fees' },
   { router: feeItemsRouter, resource: 'schools/:schoolId/fees/:feeId/items' },
+  { router: teacherCommentsRouter, resource: 'schools/:schoolId/teachers/:teacherId/comments' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },

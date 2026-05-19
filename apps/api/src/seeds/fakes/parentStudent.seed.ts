@@ -19,4 +19,8 @@ export class ParentStudentSeed {
       update: {},
     });
   };
+
+  runV2 = async (params: { parentId: string; studentId: string }, tx?: TX) => {
+    return await this.run(params, tx);
+  };
 }

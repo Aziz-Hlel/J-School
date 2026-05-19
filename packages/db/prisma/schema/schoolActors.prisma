@@ -49,6 +49,8 @@ model Student {
   parents StudentParents[]
 
   attendances Attendance[]
+  comments TeacherComment[]
+  aftercare Aftercare[]
 
 
   schoolId String @db.Uuid
@@ -116,11 +118,12 @@ model Teacher {
 
   assignments Assignment[]
   extraCurricular ExtraCurricular[]
+  comments TeacherComment[]
+  aftercare Aftercare[]
   
   // sessions ClassSessions[] // * not so sure of
   // examSessions ExamSessions[] // * not so sure of
   // extraCurricularSessions ExtraCurricularSessions[] // * not so sure of
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

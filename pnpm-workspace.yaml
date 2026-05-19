@@ -20,3 +20,5 @@ catalog:
   typescript: ^6
   zod: ^4.1.13
   dayjs: ^1.11.14
+
+minimumReleaseAge: 1440
