@@ -1,5 +1,5 @@
 import { ClassGrade, Gender, StudentStatus } from '@repo/db/prisma/enums';
-import { faker } from '@faker-js/faker';
+import { faker, fakerAR } from '@faker-js/faker';
 import { MediaSeed } from './media.seed';
 import { StudentCreateInput, StudentUncheckedCreateInput } from '@repo/db/prisma/models';
 import { TX } from '@/types/prisma/PrismaTransaction';
@@ -12,8 +12,8 @@ export class StudentSeed {
     return {
       id: student.id,
       uid: student.uid ?? faker.string.uuid(),
-      firstName_ar: student.firstName_ar ?? faker.person.firstName(),
-      lastName_ar: student.lastName_ar ?? faker.person.lastName(),
+      firstName_ar: student.firstName_ar ?? fakerAR.person.firstName(),
+      lastName_ar: student.lastName_ar ?? fakerAR.person.lastName(),
       firstName_en: student.firstName_en ?? faker.person.firstName(),
       lastName_en: student.lastName_en ?? faker.person.lastName(),
       dateOfBirth: student.dateOfBirth ?? faker.date.past(),
@@ -37,7 +37,10 @@ export class StudentSeed {
         },
       },
       create: studentPayload,
-      update: {},
+      update: {
+        firstName_ar: studentPayload.firstName_ar,
+        lastName_ar: studentPayload.lastName_ar,
+      },
     });
     return createdStudent;
   };
@@ -50,7 +53,10 @@ export class StudentSeed {
     const createdStudent = await client.student.upsert({
       where: { id: student.id },
       create: studentPayload,
-      update: {},
+      update: {
+        firstName_ar: studentPayload.firstName_ar,
+        lastName_ar: studentPayload.lastName_ar,
+      },
     });
     return createdStudent;
   };
