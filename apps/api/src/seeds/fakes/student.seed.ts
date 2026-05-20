@@ -9,18 +9,18 @@ export class StudentSeed {
   constructor(private readonly mediaSeed: MediaSeed) {}
 
   generateFakeStudent = async (student: Partial<StudentCreateInput> = {}, schoolId: string, avatarId?: string) => {
-    const gender = faker.helpers.arrayElement(Object.values(Gender));
+    const gender = student.gender ?? faker.helpers.arrayElement(Object.values(Gender));
     return {
       id: student.id,
       uid: student.uid ?? faker.string.uuid(),
       firstName_ar: student.firstName_ar ?? fakerAR.person.firstName(gender === Gender.FEMALE ? 'female' : 'male'),
       lastName_ar: student.lastName_ar ?? fakerAR.person.lastName(gender === Gender.FEMALE ? 'female' : 'male'),
-      firstName_en: student.firstName_en ?? faker.person.firstName(),
-      lastName_en: student.lastName_en ?? faker.person.lastName(),
+      firstName_en: student.firstName_en ?? faker.person.firstName(gender === Gender.FEMALE ? 'female' : 'male'),
+      lastName_en: student.lastName_en ?? faker.person.lastName(gender === Gender.FEMALE ? 'female' : 'male'),
       dateOfBirth: student.dateOfBirth ?? faker.date.past(),
       avatarId: avatarId,
       schoolId: schoolId,
-      gender: student.gender ?? gender,
+      gender: gender,
       status: student.status ?? faker.helpers.arrayElement(Object.values(StudentStatus)),
     } satisfies StudentUncheckedCreateInput;
   };
@@ -55,6 +55,8 @@ export class StudentSeed {
       where: { id: student.id },
       create: studentPayload,
       update: {
+        firstName_en: studentPayload.firstName_en,
+        lastName_en: studentPayload.lastName_en,
         firstName_ar: studentPayload.firstName_ar,
         lastName_ar: studentPayload.lastName_ar,
       },
