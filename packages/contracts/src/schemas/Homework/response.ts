@@ -5,11 +5,11 @@ import type { TeacherResponse } from '../teacher/teacherResponse';
 
 export type HomeworkResponse = {
   id: string;
-  title: string;
-  content: string;
+  title: string | null;
+  content: string | null;
   files: MediaResponseV2[];
   due: string;
   subject: SubjectResponse;
   classroom: ClassroomResponse;
-  teacher: TeacherResponse;
+  teacher: TeacherResponse | null;
 };

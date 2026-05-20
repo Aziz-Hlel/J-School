@@ -1,6 +1,8 @@
 import { CreateHomeworkReq } from '@repo/contracts/schemas/Homework/create';
 import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
+import { HomeworkMapper } from './homework.mapper';
+import { NotFoundError } from '@/err/service/customErrors';
 
 export class HomeworkService {
   constructor() {}
@@ -74,12 +76,13 @@ export class HomeworkService {
           include: {
             classroom: true,
             subject: true,
-            teacher: true,
+            teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
           },
         },
       },
     });
-    return homeworks;
+    const result = homeworks.map((homework) => HomeworkMapper.toResponse(homework));
+    return result;
   };
 
   findById = async (params: { schoolId: string; id: string }) => {
@@ -95,11 +98,13 @@ export class HomeworkService {
           include: {
             classroom: true,
             subject: true,
-            teacher: true,
+            teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
           },
         },
       },
     });
-    return homework;
+    if (!homework) throw new NotFoundError('Homework not found');
+    const result = HomeworkMapper.toResponse(homework);
+    return result;
   };
 }

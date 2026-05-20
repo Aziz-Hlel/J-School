@@ -39,6 +39,7 @@ export class StudentSeed {
       },
       create: studentPayload,
       update: {
+        gender: studentPayload.gender,
         firstName_ar: studentPayload.firstName_ar,
         lastName_ar: studentPayload.lastName_ar,
       },
@@ -55,6 +56,7 @@ export class StudentSeed {
       where: { id: student.id },
       create: studentPayload,
       update: {
+        gender: studentPayload.gender,
         firstName_en: studentPayload.firstName_en,
         lastName_en: studentPayload.lastName_en,
         firstName_ar: studentPayload.firstName_ar,
