@@ -3,6 +3,9 @@ import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
 import { HomeworkMapper } from './homework.mapper';
 import { NotFoundError } from '@/err/service/customErrors';
+import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
+import { Prisma } from '@repo/db/prisma/browser';
+import { PageMapper } from '@/helper/page.mapper';
 
 export class HomeworkService {
   constructor() {}
@@ -33,24 +36,45 @@ export class HomeworkService {
 
   update = async (params: { schoolId: string; id: string; input: UpdateHomeworkReq }) => {
     const { schoolId, id, input } = params;
-    const homework = await prisma.homework.update({
-      where: {
-        id: id,
-        schoolId: schoolId,
-      },
-      data: {
-        title: input.title,
-        content: input.content,
-        files: {
-          set: input.files.map((id) => ({
-            id,
-          })),
+    await prisma.$transaction(async (tx) => {
+      await tx.studentHomework.deleteMany({
+        where: {
+          homeworkId: id,
+          studentId: {
+            notIn: input.studentIds,
+          },
         },
-        due: input.due,
-        assignmentId: input.assignmentId,
-      },
+      });
+
+      const homework = await tx.homework.update({
+        where: {
+          id: id,
+          schoolId: schoolId,
+        },
+        data: {
+          title: input.title,
+          content: input.content,
+          files: {
+            set: input.files.map((id) => ({
+              id,
+            })),
+          },
+          due: input.due,
+          assignmentId: input.assignmentId,
+          studentHomeworks: {
+            createMany: {
+              data: input.studentIds.map((studentId) => {
+                return {
+                  studentId: studentId,
+                };
+              }),
+              skipDuplicates: true,
+            },
+          },
+        },
+      });
+      return homework;
     });
-    return homework;
   };
 
   delete = async (params: { schoolId: string; id: string }) => {
@@ -64,12 +88,25 @@ export class HomeworkService {
     return homework;
   };
 
-  find = async (params: { schoolId: string }) => {
-    const { schoolId } = params;
-    const homeworks = await prisma.homework.findMany({
-      where: {
-        schoolId: schoolId,
-      },
+  find = async (params: { schoolId: string; query: HomeworkQueryParamsTypes['Query'] }) => {
+    const { schoolId, query } = params;
+
+    const skip = (query.page - 1) * query.size;
+    const take = query.size;
+
+    const where: Prisma.HomeworkWhereInput = {
+      schoolId: schoolId,
+    };
+
+    const orderBy: Prisma.HomeworkOrderByWithRelationInput = {
+      due: 'desc',
+    };
+
+    const queryResponse = prisma.homework.findMany({
+      skip,
+      take,
+      where,
+      orderBy,
       include: {
         files: true,
         assignment: {
@@ -81,8 +118,22 @@ export class HomeworkService {
         },
       },
     });
-    const result = homeworks.map((homework) => HomeworkMapper.toResponse(homework));
-    return result;
+
+    const count = prisma.homework.count({
+      where,
+    });
+
+    const [content, totalElements] = await Promise.all([queryResponse, count]);
+
+    const dataResponse = content.map((homework) => HomeworkMapper.toResponse(homework));
+
+    const pageResponse = PageMapper.toPage({
+      data: dataResponse,
+      pagination: query,
+      totalElements: totalElements,
+    });
+
+    return pageResponse;
   };
 
   findById = async (params: { schoolId: string; id: string }) => {

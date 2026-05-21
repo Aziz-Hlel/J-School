@@ -9,6 +9,7 @@ import { ExtracurricularSeed } from '../fakes/extraCurricular.seed';
 import { ExtraCurricularSessionsSeed } from '../fakes/extraCurricularSessions.seed';
 import { FeeSeed } from '../fakes/fee.seed';
 import { FeeItemSeed } from '../fakes/feeItem.seed';
+import { HomeworkSeed } from '../fakes/homework.seed';
 import { MediaSeedV2 } from '../fakes/media.seed2';
 import { OwnerSeed } from '../fakes/owner.seed';
 import { ParentSeed } from '../fakes/parent.seed';
@@ -30,12 +31,12 @@ import {
   extraCurricularAssignmentSeedData,
   extraCurricularSeedData,
   extraCurricularSessionSeedData,
+  homeworkSeedData,
   postsSeedData,
   reactionSeedData,
   studentClassroomAssignmentSeedData,
   subjectsWithExamsSeedData,
   teacherAssignmentSeedData,
-  teacherCommentsSeedData,
   timeTableSeedData,
 } from './dataV2';
 import { feeItemsSeedData, feesSeedData } from './feeItems.seed.data';
@@ -65,6 +66,7 @@ export class SeedDevService implements ISeed {
     private readonly postSeed: PostSeed,
     private readonly feeSeed: FeeSeed,
     private readonly feeItemSeed: FeeItemSeed,
+    private readonly homeworkSeed: HomeworkSeed,
   ) {}
 
   private seedAccounts = async () => {
@@ -339,6 +341,26 @@ export class SeedDevService implements ISeed {
     );
   };
 
+  private seedHomework = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      homeworkSeedData.map(async (homeworkData) => {
+        const fileIds = await Promise.all(homeworkData.files.map((type) => this.mediaSeed.run({ type })));
+        await this.homeworkSeed.run({
+          id: homeworkData.id,
+          schoolId,
+          classroomName: homeworkData.assignment.classroomName,
+          grade: homeworkData.assignment.grade,
+          subjectNameEn: homeworkData.assignment.subjectNameEn,
+          title: homeworkData.title,
+          content: homeworkData.content,
+          fileIds: fileIds.map((file) => file.id),
+          due: homeworkData.due,
+          studentIds: homeworkData.students.map((student) => student.id),
+        });
+      }),
+    );
+  };
+
   // private seedTeacherComments = async ({ schoolId }: { schoolId: string }) => {
   //   await Promise.all(
   //     teacherCommentsSeedData.map(async (teacherComment) => {
@@ -402,6 +424,8 @@ export class SeedDevService implements ISeed {
       await this.seedFees({ schoolId: school.id });
 
       await this.seedFeeItems({ schoolId: school.id });
+
+      await this.seedHomework({ schoolId: school.id });
 
       // tenant.users.forEach(async (userInfo) => {
       //   const { account } = await this.accountSeed.run({

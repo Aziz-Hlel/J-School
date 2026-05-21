@@ -12,7 +12,7 @@ export class HomeworkController {
     const input = createHomeworkReqSchema.parse(req.body);
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const result = await this.service.create({ schoolId, input });
-    return res.status(201).json(result);
+    res.status(201).json(result);
   };
 
   update = async (req: Request, res: Response) => {
@@ -20,27 +20,27 @@ export class HomeworkController {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const id = getUrlParam(req, 'homeworkId', { uuid: true });
     const result = await this.service.update({ schoolId, id, input });
-    return res.status(200).json(result);
+    res.status(200).json(result);
   };
 
   delete = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const id = getUrlParam(req, 'homeworkId', { uuid: true });
     const result = await this.service.delete({ schoolId, id });
-    return res.status(204).json(result);
+    res.status(204).json(result);
   };
 
   findById = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const id = getUrlParam(req, 'homeworkId', { uuid: true });
     const result = await this.service.findById({ schoolId, id });
-    return res.status(200).json(result);
+    res.status(200).json(result);
   };
 
   find = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const query = homeworkQueryParams.schema.parse(req.query);
     const result = await this.service.find({ schoolId, query });
-    return res.status(200).json(result);
+    res.status(200).json(result);
   };
 }

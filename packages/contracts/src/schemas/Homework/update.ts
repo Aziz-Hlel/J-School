@@ -6,6 +6,7 @@ export const updateHomeworkReqSchema = z.object({
   files: z.array(z.uuid()),
   due: homeworkSchema.due,
   assignmentId: homeworkSchema.assignmentId,
+  studentIds: z.array(z.uuid()),
 });
 
 export type UpdateHomeworkReq = z.infer<typeof updateHomeworkReqSchema>;

@@ -1,29 +1,29 @@
-import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { RepoKnownErrors } from '@/err/repo/DbError';
-import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student/createStudentWithProfile';
-import { StudentRepo } from './student.repo';
-import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
-import { TX } from '@/types/prisma/PrismaTransaction';
-import { CreateStudentRequest } from '@repo/contracts/schemas/student/createStudentRequest';
-import { UpdateStudentRequest } from '@repo/contracts/schemas/student/updateStudentRequest';
-import { StudentStatus } from '@repo/db/prisma/enums';
-import { StudentMapper } from './student.mapper';
-import prisma from '@repo/db';
-import { ExtraCurricularMapper } from '../ExtraCurricular/ExtraCurricular.mapper';
-import { Page } from '@repo/contracts/schemas/page/Page';
-import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
-import { StudentsQueryParamsTypes } from '@repo/contracts/schemas/student/getStudentsQueryParams';
-import { Prisma } from '@repo/db/prisma/client';
+import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
-import type { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
+import { TX } from '@/types/prisma/PrismaTransaction';
 import { toTime } from '@/utils/dayjs';
-import type { StudentAttendanceResponse } from '@repo/contracts/schemas/student/getAttendancesResponse';
 import { FeesQueryParamsTypes } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
-import { FeesMapper } from '../Fees/fees.mapper';
-import { CursorQueryParams } from '@repo/contracts/schemas/const/cursorQueryParams';
-import { TeacherCommentsResponse } from '@repo/contracts/schemas/TeacherComments/response';
+import { Page } from '@repo/contracts/schemas/page/Page';
+import { CreateStudentRequest } from '@repo/contracts/schemas/student/createStudentRequest';
+import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student/createStudentWithProfile';
+import type { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
+import type { StudentAttendanceResponse } from '@repo/contracts/schemas/student/getAttendancesResponse';
+import { StudentsQueryParamsTypes } from '@repo/contracts/schemas/student/getStudentsQueryParams';
+import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
+import { UpdateStudentRequest } from '@repo/contracts/schemas/student/updateStudentRequest';
+import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
 import { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
+import prisma from '@repo/db';
+import { Prisma } from '@repo/db/prisma/client';
+import { StudentStatus } from '@repo/db/prisma/enums';
+import { ExtraCurricularMapper } from '../ExtraCurricular/ExtraCurricular.mapper';
+import { FeesMapper } from '../Fees/fees.mapper';
 import { TeacherCommentsMapper } from '../TeacherComments/teacherComments.mapper';
+import { StudentMapper } from './student.mapper';
+import { StudentRepo } from './student.repo';
+import { HomeworkMapper } from '../Homework/homework.mapper';
+import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 
 export class StudentService {
   constructor(private readonly studentRepo: StudentRepo) {}
@@ -319,6 +319,63 @@ export class StudentService {
     const [content, totalElements] = await Promise.all([queryResponse, count]);
 
     const dataResponse = content.map(TeacherCommentsMapper.toResponse);
+
+    const pageResponse = PageMapper.toPage({
+      data: dataResponse,
+      pagination: query,
+      totalElements: totalElements,
+    });
+
+    return pageResponse;
+  };
+
+  findAllHomework = async (params: {
+    schoolId: string;
+    studentId: string;
+    query: HomeworkQueryParamsTypes['Query'];
+  }) => {
+    const { schoolId, studentId, query } = params;
+
+    const skip = (query.page - 1) * query.size;
+    const take = query.size;
+
+    const where: Prisma.HomeworkWhereInput = {
+      schoolId,
+      studentHomeworks: {
+        some: {
+          studentId,
+        },
+      },
+    };
+
+    const orderBy: Prisma.HomeworkOrderByWithRelationInput = {
+      due: 'desc',
+    };
+
+    const queryResponse = prisma.homework.findMany({
+      skip,
+      take,
+      where,
+      orderBy,
+      include: {
+        files: true,
+        assignment: {
+          include: {
+            classroom: true,
+            subject: true,
+            teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
+          },
+        },
+      },
+    });
+
+    const count = prisma.homework.count({
+      where,
+    });
+
+    const [content, totalElements] = await Promise.all([queryResponse, count]);
+
+    const dataResponse = content.map((homework) => HomeworkMapper.toResponse(homework));
 
     const pageResponse = PageMapper.toPage({
       data: dataResponse,

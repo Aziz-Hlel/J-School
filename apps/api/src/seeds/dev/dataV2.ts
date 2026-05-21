@@ -1,9 +1,11 @@
 import { subjectsGradeSix } from '@repo/contracts/const/subjectAndExams/grade.six';
 import { BaseSubjectsKeys, InitSubjectWithExamsType } from '@repo/contracts/const/subjectAndExams/type';
 import { ClassGrade, DayOfWeek, MediaType, ReactionType } from '@repo/db/prisma/browser';
-import { MediaTypeSeed } from '../fakes/media.seed2';
+import { mediaTypeSeed, MediaTypeSeed } from '../fakes/media.seed2';
 import { genUuid } from '../helper/generateUuid';
 import { studentSeedData, teacherSeedData } from './actors';
+import dayjs from 'dayjs';
+import { toCalendarDate } from '@/utils/dayjs';
 
 export const subjectsWithExamsSeedData = {
   [ClassGrade.SIX]: {
@@ -367,5 +369,35 @@ export const teacherCommentsSeedData = [
     parentReply: 'Thank you for your feedback!',
     teacher: teacherSeedData.teacher5,
     student: studentSeedData.student1,
+  },
+];
+
+export const homeworkSeedData = [
+  {
+    id: genUuid('homework1'),
+    assignment: teacherAssignmentSeedData[0]!,
+    title: 'Calculus Assignment',
+    content: 'Calculus Assignment',
+    files: [mediaTypeSeed.IMAGE],
+    due: toCalendarDate(dayjs().add(3, 'day').toDate()),
+    students: studentClassroomAssignmentSeedData[0]!.students,
+  },
+  {
+    id: genUuid('homework2'),
+    assignment: teacherAssignmentSeedData[0]!,
+    title: 'Algebra homework',
+    content: 'Algebra homework',
+    files: [mediaTypeSeed.IMAGE, mediaTypeSeed.IMAGE],
+    due: toCalendarDate(dayjs().add(5, 'day').toDate()),
+    students: studentClassroomAssignmentSeedData[0]!.students,
+  },
+  {
+    id: genUuid('homework3'),
+    assignment: teacherAssignmentSeedData[0]!,
+    title: 'Geometry homework',
+    content: 'Calculus Assignment 3',
+    files: [],
+    due: toCalendarDate(dayjs().subtract(8, 'day').toDate()),
+    students: studentClassroomAssignmentSeedData[0]!.students,
   },
 ];

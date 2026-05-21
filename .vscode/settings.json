@@ -1,8 +1,14 @@
 {
-  "editor.inlineSuggest.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
   "terminal.integrated.env.windows": {
     "LANG": "en_US.UTF-8"
   },
+  "git.autofetch": true,
   "js/ts.experimental.useTsgo": true,
   "files.eol": "\n"
 }

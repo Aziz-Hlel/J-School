@@ -38,6 +38,7 @@ import { ExtracurricularSeed } from '@/seeds/fakes/extraCurricular.seed';
 import { ExtraCurricularSessionsSeed } from '@/seeds/fakes/extraCurricularSessions.seed';
 import { FeeSeed } from '@/seeds/fakes/fee.seed';
 import { FeeItemSeed } from '@/seeds/fakes/feeItem.seed';
+import { HomeworkSeed } from '@/seeds/fakes/homework.seed';
 import { MediaSeed } from '@/seeds/fakes/media.seed';
 import { MediaSeedV2 } from '@/seeds/fakes/media.seed2';
 import { OwnerSeed } from '@/seeds/fakes/owner.seed';
@@ -176,6 +177,7 @@ const extraCurricularSessionsSeed = new ExtraCurricularSessionsSeed();
 const postSeed = new PostSeed();
 const feeSeed = new FeeSeed();
 const feeItemSeed = new FeeItemSeed();
+const homeworkSeed = new HomeworkSeed();
 
 const mediaSeed2 = new MediaSeedV2();
 
@@ -201,6 +203,7 @@ const seedDevService = new SeedDevService(
   postSeed,
   feeSeed,
   feeItemSeed,
+  homeworkSeed,
 );
 
 seedDevService.run();
