@@ -19,4 +19,18 @@ export class ExamScheduleController {
       data: updatedExamSchedule,
     });
   };
+
+  findByClassroom = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const classroomId = getUrlParam(req, 'classroomId', { uuid: true });
+    const examSchedules = await this.examScheduleService.findByClassroom({
+      schoolId,
+      classroomId,
+    });
+
+    res.status(200).json({
+      message: 'Exam schedules fetched successfully',
+      data: examSchedules,
+    });
+  };
 }

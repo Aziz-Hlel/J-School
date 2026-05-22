@@ -11,8 +11,9 @@ enum NotificationLanguage {
 }
 
 enum NotificationType {
-  MANUAL
-  SYSTEM
+  GLOBAL
+  GROUP
+  PRIVATE
 }
 
 enum NotificationContentType {
@@ -20,29 +21,25 @@ enum NotificationContentType {
   FEED
 }
 
-
 model Notification {
-  id          String  @id @default(uuid()) @db.Uuid
-  description String? @db.Text
+  id      String @id @default(uuid()) @db.Uuid
+  title   Name?  @relation("NotificationTitle")
+  content Name?  @relation("NotificationContent")
 
-  sourceId     String?
-  scheduleType NotificationScheduleType
   type         NotificationType
+  scheduleType NotificationScheduleType
+  sourceId     String?
 
-  delaySeconds Int?
-  scheduledAt  DateTime?
+  schoolId String @db.Uuid
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  translations           NotificationTranslation[]
-  userNotifications       UserNotification[]
-
-  createdById String  @db.Uuid
-  createdBy   Account @relation("NotificationCreatedBy", fields: [createdById], references: [id])
+  translations      NotificationTranslation[]
+  userNotifications UserNotification[]
 
   sentAt    DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
-
 
 model NotificationTranslation {
   id       String               @id @default(uuid()) @db.Uuid
@@ -58,19 +55,16 @@ model NotificationTranslation {
   @@unique([notificationId, language])
 }
 
-
 model UserNotification {
   id String @id @default(uuid()) @db.Uuid
 
-  notificationId String  @db.Uuid
+  notificationId String       @db.Uuid
   notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
 
-  userId String  @db.Uuid
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   isRead Boolean @default(false)
 
-
   @@unique([userId, notificationId])
 }
-

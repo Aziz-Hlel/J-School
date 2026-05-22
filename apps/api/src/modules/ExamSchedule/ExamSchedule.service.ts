@@ -2,6 +2,7 @@ import { NotFoundError } from '@/err/service/customErrors';
 import { parseCalendarDate, parseTime } from '@/utils/dayjs';
 import type { UpdateExamScheduleRequest } from '@repo/contracts/schemas/examSchedule/updateExamScheduleRequest';
 import prisma from '@repo/db';
+import { ExamScheduleMapper } from './ExamSchedule.mapper';
 
 export class ExamScheduleService {
   constructor() {}
@@ -32,5 +33,34 @@ export class ExamScheduleService {
     });
 
     return updatedExamSchedule;
+  };
+
+  findByClassroom = async (params: { schoolId: string; classroomId: string }) => {
+    const examSchedules = await prisma.examSchedule.findMany({
+      where: {
+        assignement: {
+          schoolId: params.schoolId,
+          classroomId: params.classroomId,
+        },
+      },
+      include: {
+        exam: true,
+      },
+      orderBy: [
+        {
+          day: {
+            sort: 'asc',
+            nulls: 'last',
+          },
+        },
+        {
+          startTime: 'asc',
+        },
+      ],
+    });
+
+    const response = examSchedules.map(ExamScheduleMapper.examScheduleResponse);
+
+    return response;
   };
 }

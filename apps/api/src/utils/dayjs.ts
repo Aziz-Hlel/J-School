@@ -15,8 +15,17 @@ export function parseTime(timeStr: string | null): Date | null {
   return dayjs(`1970-01-01 ${timeStr}`, 'YYYY-MM-DD HH:mm').toDate();
 }
 
-export const toCalendarDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');
-export const toCalendarDateOrNull = (date: Date | null) => (date ? toCalendarDate(date) : null);
+export function toCalendarDate(date: Date): string;
+export function toCalendarDate(date: null): null;
+export function toCalendarDate(date: Date | null): string | null;
+export function toCalendarDate(date: Date | null): string | null {
+  if (!date) return null;
+  return dayjs(date).format('YYYY-MM-DD');
+}
+
+export function toCalendarDateOrNull(date: Date | null): string | null {
+  return date ? toCalendarDate(date) : null;
+}
 
 export function toTime(date: Date): string;
 export function toTime(date: null): null;

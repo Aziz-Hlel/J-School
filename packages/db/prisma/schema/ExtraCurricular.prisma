@@ -8,6 +8,12 @@ model Name {
   extraCurricularId String? @db.Uuid @unique
   extraCurricular ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
 
+  notificationTitleId String? @db.Uuid @unique
+  notificationTitle Notification? @relation("NotificationTitle", fields: [notificationTitleId], references: [id])
+
+  notificationContentId String? @db.Uuid @unique
+  notificationContent Notification? @relation("NotificationContent", fields: [notificationContentId], references: [id])
+
   
   // @@unique([en, schoolId]) // idk if necessary
   // @@unique([fr, schoolId]) // idk if necessary
