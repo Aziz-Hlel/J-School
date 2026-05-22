@@ -1,5 +1,5 @@
 import z from 'zod';
-import { API_PORT, FIREBASE_CERT, smtpSchema, dbSchema, redisSchema, mobileVersionsSchema } from './envs.fields';
+import { API_PORT, dbSchema, FIREBASE_CERT, mobileVersionsSchema, redisSchema, smtpSchema } from './envs.fields';
 
 const baseSchema = z.object({
   // APP

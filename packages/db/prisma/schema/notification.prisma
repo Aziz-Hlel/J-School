@@ -33,7 +33,7 @@ model Notification {
   schoolId String @db.Uuid
   school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  translations      NotificationTranslation[]
+  // translations      NotificationTranslation[]
   userNotifications UserNotification[]
 
   sentAt    DateTime?
@@ -49,10 +49,10 @@ model NotificationTranslation {
   content String
   data    Json?
 
-  notificationId String       @db.Uuid
-  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  // notificationId String       @db.Uuid
+  // notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
 
-  @@unique([notificationId, language])
+  // @@unique([notificationId, language])
 }
 
 model UserNotification {

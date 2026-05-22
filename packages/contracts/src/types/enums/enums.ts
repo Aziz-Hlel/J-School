@@ -113,16 +113,8 @@ export const MediaType = {
 
 export type MediaType = (typeof MediaType)[keyof typeof MediaType];
 
-export const NotificationRecipientType = {
-  ALL: 'ALL',
-  COUNTRY: 'COUNTRY',
-  ROLE: 'ROLE',
-  USER: 'USER',
-} as const;
-
-export type NotificationRecipientType = (typeof NotificationRecipientType)[keyof typeof NotificationRecipientType];
-
 export const NotificationScheduleType = {
+  IMMEDIATE: 'IMMEDIATE',
   SCHEDULED: 'SCHEDULED',
   DELAYED: 'DELAYED',
 } as const;
@@ -137,15 +129,20 @@ export const NotificationLanguage = {
 
 export type NotificationLanguage = (typeof NotificationLanguage)[keyof typeof NotificationLanguage];
 
-export const DeliveryStatus = {
-  PENDING: 'PENDING',
-  SENT: 'SENT',
-  DELIVERED: 'DELIVERED',
-  READ: 'READ',
-  FAILED: 'FAILED',
+export const NotificationType = {
+  GLOBAL: 'GLOBAL',
+  GROUP: 'GROUP',
+  PRIVATE: 'PRIVATE',
 } as const;
 
-export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus];
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
+export const NotificationContentType = {
+  TEACHER_COMMENT: 'TEACHER_COMMENT',
+  FEED: 'FEED',
+} as const;
+
+export type NotificationContentType = (typeof NotificationContentType)[keyof typeof NotificationContentType];
 
 export const Gender = {
   MALE: 'MALE',

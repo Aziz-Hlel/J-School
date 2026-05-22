@@ -3,10 +3,6 @@ export type NotificationTargetingJob =
       type: 'ALL';
     }
   | {
-      type: 'COUNTRY';
-      countries: string[];
-    }
-  | {
-      type: 'ROLE';
+      type: 'GROUP';
       userIds: string[];
     };

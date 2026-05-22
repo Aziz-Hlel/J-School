@@ -45,7 +45,7 @@ const getRedisClient = async () => {
     port: cacheEnv.REDIS_PORT,
     password: cacheEnv.REDIS_PASSWORD,
     lazyConnect: true,
-    maxRetriesPerRequest: 3,
+    maxRetriesPerRequest: null, // ! make it ull just to satisfy the notification queue
     enableReadyCheck: true,
   });
   try {

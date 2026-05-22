@@ -98,3 +98,8 @@ export const cdnSchema = {
 };
 
 export type CdnSchema = z.infer<z.ZodObject<typeof cdnSchema>>;
+
+export const oneSignalSchema = {
+  ONE_SIGNAL_APP_SECRET: z.string().trim().nonempty(),
+  ONE_SIGNAL_APP_ID: z.string().trim().nonempty(),
+};

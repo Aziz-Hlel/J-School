@@ -1,50 +1,7 @@
 import redis from '@/bootstrap/redis.init';
 import QUEUE_NAMES from '@repo/contracts/const/queues.name';
-// import { NotificationJob } from '@repo/contracts/jobs/notificationJob';
+import { NotificationJob } from '@repo/contracts/jobs/notificationJob';
 import { Queue } from 'bullmq';
-import z from 'zod';
-
-// ! Add IMMEDIATE type
-export const notificationScheduleSchema = z.discriminatedUnion('scheduleType', [
-  z.object({
-    scheduleType: z.literal('DELAYED'),
-    delaySeconds: z.number().int().positive(),
-  }),
-  z.object({
-    scheduleType: z.literal('SCHEDULED'),
-    scheduledAt: z.string().refine((date) => !isNaN(Date.parse(date)), 'Invalid date'),
-  }),
-]);
-
-export type NotificationTargetingJob =
-  | {
-      type: 'ALL';
-    }
-  | {
-      type: 'COUNTRY';
-      countries: string[];
-    }
-  | {
-      type: 'ROLE';
-      userIds: string[];
-    };
-
-export type NotificationSchedule = z.infer<typeof notificationScheduleSchema>;
-
-export type LocalizedString = {
-  en: string;
-  ar?: string;
-  fr?: string;
-};
-
-export type NotificationJob = {
-  id: string;
-  titles: LocalizedString;
-  contents: LocalizedString;
-  data: LocalizedString;
-  targeting: NotificationTargetingJob;
-  schedule: NotificationSchedule;
-};
 
 type AddNotificationProps = {
   payload: NotificationJob;
@@ -76,3 +33,5 @@ export class NotificationQueue implements INotificationQueue {
     });
   };
 }
+
+export const globalNotificationQueue = new NotificationQueue();

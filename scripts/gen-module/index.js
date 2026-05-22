@@ -17,7 +17,7 @@ const ModuleNameSchema = z
   .trim()
   .min(2, 'Module name must be at least 2 characters')
   .max(20, 'Module name must be less than 20 characters')
-  .regex(/^[A-Za-z]+$/, 'Module name must contain only letters');
+  .regex(/^[A-Za-z_0-9]+$/, 'Module name must contain only letters, numbers and underscores');
 
 const moduleNameResult = ModuleNameSchema.safeParse(process.argv[2]);
 

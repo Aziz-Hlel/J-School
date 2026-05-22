@@ -41,10 +41,10 @@
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.13.14",
+    "@types/node": "catalog:",
     "@types/nodemailer": "^7.0.11",
     "tsdown": "^0.21.9",
-    "tsx": "^4.19.2",
+    "tsx": "catalog:",
     "typescript": "catalog:",
     "uuid": "^14.0.0"
   }

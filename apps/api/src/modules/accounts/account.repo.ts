@@ -1,5 +1,6 @@
 import { prisma } from '@/bootstrap/db.init';
 import { RepoError } from '@/err/repo/DbError';
+import { genUuid } from '@/seeds/helper/generateUuid';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { AccountRole } from '@repo/db/prisma/enums';
 import { AccountInclude } from '@repo/db/prisma/models';
@@ -66,9 +67,24 @@ export class AccountRepo {
     tx?: TX,
   ) => {
     const client = tx || prisma;
+
+    const getUuid = (email?: string) => {
+      const emailToUuid = {
+        'tigana137@gmail.com': genUuid('tigana137@gmail.com'),
+        'parent1@fake.com': genUuid('parent1@fake.com'),
+        'teacher1@fake.com': genUuid('teacher1@fake.com'),
+        'director1@fake.com': genUuid('director1@fake.com'),
+        'manager1@fake.com': genUuid('manager1@fake.com'),
+      };
+      if (email && email in emailToUuid) return emailToUuid[email as keyof typeof emailToUuid];
+
+      return undefined;
+    };
+
     try {
       const account = await client.account.create({
         data: {
+          id: getUuid(email), // ! remove this later, it was just for 7ama to integrate the uuid in one signal to test the feature
           authId,
           email,
           role: role ?? AccountRole.USER,

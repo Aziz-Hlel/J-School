@@ -7,6 +7,7 @@ import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular
 import { ExtraCurricularPostsModule } from '@/modules/ExtraCurricular/posts/ExtraCurricularPosts.module';
 import { FeeItemsModule } from '@/modules/FeeItems/feeItems.module';
 import { FeesModule } from '@/modules/Fees/fees.module';
+import { NotificationModule } from '@/modules/Notification/notification.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
 import { TeacherCommentsModule } from '@/modules/TeacherComments/teacherComments.module';
 import { createUserModule as userModule } from '@/modules/User';
@@ -27,7 +28,6 @@ import { SubjectModule } from '@/modules/subject/subject.module';
 import { TeacherModule } from '@/modules/teacher/teacher.module';
 import { TimeTableModule } from '@/modules/timetable/timetable.module';
 import { createUserRoleModule } from '@/modules/userRoles/userRole.module';
-// import { createNotificationModule as notificationModule } from '@/notification';
 import { SeedDevService } from '@/seeds/dev/seedDev.service';
 import { AccountSeed } from '@/seeds/fakes/account.seed';
 import { ActorSeed } from '@/seeds/fakes/actor.seed';
@@ -151,6 +151,7 @@ const { aftercareRouter } = AftercareModule();
 const { authRouter } = authModule(accountService);
 
 // * NOTIFICATION
+const { notificationRouter } = NotificationModule();
 // const { notificationRouter } = notificationModule({ userRepo });
 
 const mediaSeed = new MediaSeed();
@@ -238,6 +239,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: aftercareRouter, resource: 'schools/:schoolId/aftercares' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
+  { router: notificationRouter, resource: 'schools/:schoolId/notifications' },
   { router: userRoleRouter, resource: 'schools/:schoolId/users/:userId/roles' },
   // { router: notificationRouter, resource: 'notifications' },
 ];
