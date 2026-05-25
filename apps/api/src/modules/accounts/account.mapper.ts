@@ -3,7 +3,6 @@ import { AccountEntityRequest, accountInclude } from '@/types/includes/account';
 import { AccountResponse } from '@repo/contracts/schemas/account/accountResponse';
 import {
   AdministrationRole,
-  administrationRolesSet,
   AdministrationWorkspace,
   AuthResponse,
   ParentWorkspace,
@@ -133,8 +132,8 @@ export class AccountMapper {
       });
     }
     account.users.forEach((user) => {
-      user.roles.forEach((role) => {
-        switch (role.role) {
+      user.roles.forEach((userRole) => {
+        switch (userRole.role) {
           case UserRole.DIRECTOR:
           case UserRole.MANAGER:
           case UserRole.NURSE:
@@ -142,7 +141,7 @@ export class AccountMapper {
             administrationWorkspaces.push(
               this.toAdministrationWorkspace({
                 user,
-                role: role.role as AdministrationRole,
+                role: userRole.role as AdministrationRole,
               }),
             );
             break;
@@ -186,24 +185,24 @@ export class AccountMapper {
             break;
         }
 
-        if (administrationRolesSet.has(role.role as AdministrationRole)) {
-          administrationWorkspaces.push({
-            id: user.id,
-            userId: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            school: {
-              id: user.school.id,
-              slug: user.school.slug,
-              names: {
-                en: user.school.nameEn,
-                fr: user.school.nameFr,
-                ar: user.school.nameAr,
-              },
-              role: role.role as AdministrationRole,
-            },
-          });
-        }
+        // if (administrationRolesSet.has(userRole.role as AdministrationRole)) {
+        //   administrationWorkspaces.push({
+        //     id: user.id,
+        //     userId: user.id,
+        //     firstName: user.firstName,
+        //     lastName: user.lastName,
+        //     school: {
+        //       id: user.school.id,
+        //       slug: user.school.slug,
+        //       names: {
+        //         en: user.school.nameEn,
+        //         fr: user.school.nameFr,
+        //         ar: user.school.nameAr,
+        //       },
+        //       role: userRole.role as AdministrationRole,
+        //     },
+        //   });
+        // }
       });
     });
 
