@@ -1,5 +1,3 @@
-import { Account, UserRole } from '@repo/db/prisma/client';
-import { AccountGetPayload } from '@repo/db/prisma/models';
 import { globalMediaService } from '@/media/media.service';
 import { AccountEntityRequest, accountInclude } from '@/types/includes/account';
 import { AccountResponse } from '@repo/contracts/schemas/account/accountResponse';
@@ -11,6 +9,8 @@ import {
   ParentWorkspace,
 } from '@repo/contracts/schemas/auth/authResponse';
 import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
+import { Account, UserRole } from '@repo/db/prisma/client';
+import { AccountGetPayload } from '@repo/db/prisma/models';
 
 export class AccountMapper {
   static toResponseWithAvatar(account: AccountGetPayload<{ include: { avatar: true } }>): AccountResponse {
@@ -170,8 +170,14 @@ export class AccountMapper {
                   user,
                   student: {
                     id: student.id,
-                    firstName: student.student.firstName_en as any, // ! just add it to bypass compilation eror look into it afterwards
-                    lastName: student.student.lastName_en as any, // ! just add it to bypass compilation eror look into it afterwards
+                    firstName: {
+                      en: student.student.firstName_en,
+                      ar: student.student.firstName_ar,
+                    },
+                    lastName: {
+                      en: student.student.lastName_en,
+                      ar: student.student.lastName_ar,
+                    },
                   },
                 }),
               );

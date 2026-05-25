@@ -1,7 +1,7 @@
 import { prisma } from '@/bootstrap/db.init';
+import { faker, fakerAR, fakerFR } from '@faker-js/faker';
 import { SchoolPlan } from '@repo/db/prisma/enums';
 import { SchoolCreateInput } from '@repo/db/prisma/models';
-import { faker } from '@faker-js/faker';
 import { generateFakeMediaInstance } from '../helper/generateSeedMedia';
 
 export class SchoolSeed {
@@ -10,8 +10,8 @@ export class SchoolSeed {
   private generateFakeSchoolInstance = ({ ownerId }: { ownerId: string }): SchoolCreateInput => {
     return {
       nameEn: faker.company.name(),
-      nameFr: faker.company.name(),
-      nameAr: faker.company.name(),
+      nameFr: fakerFR.company.name(),
+      nameAr: fakerAR.company.name(),
       address: faker.location.streetAddress(),
       phone: faker.phone.number(),
       email: faker.internet.email(),
@@ -40,7 +40,10 @@ export class SchoolSeed {
         ownerId,
       },
       create: fakePayload,
-      update: {},
+      update: {
+        nameAr: fakePayload.nameAr,
+        nameFr: fakePayload.nameFr,
+      },
     });
     return result;
   };

@@ -3,8 +3,14 @@ import type { AccountResponse } from '../account/accountResponse';
 
 type StudentResponse = {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName: {
+    en: string | null;
+    ar: string | null;
+  };
+  lastName: {
+    en: string | null;
+    ar: string | null;
+  };
 };
 
 type SchoolResponse = {
