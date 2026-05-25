@@ -164,20 +164,21 @@ export class AccountMapper {
             });
             break;
           case UserRole.PARENT:
-            user.parent?.students.forEach((student) => {
+            user.parent?.students.forEach((parentStudent) => {
               parentWorkspaces.push(
                 this.toParentWorkspace({
                   user,
                   student: {
-                    id: student.id,
+                    id: parentStudent.id,
                     firstName: {
-                      en: student.student.firstName_en,
-                      ar: student.student.firstName_ar,
+                      en: parentStudent.student.firstName_en,
+                      ar: parentStudent.student.firstName_ar,
                     },
                     lastName: {
-                      en: student.student.lastName_en,
-                      ar: student.student.lastName_ar,
+                      en: parentStudent.student.lastName_en,
+                      ar: parentStudent.student.lastName_ar,
                     },
+                    gender: parentStudent.student.gender,
                   },
                 }),
               );

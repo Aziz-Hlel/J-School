@@ -5,6 +5,7 @@ export const mediaResponseSchema = z.object({
   id: z.uuid(),
   url: z.url(),
   key: z.string(),
+  blurHash: z.string().nullable(),
   type: z.enum(MediaType),
 });
 

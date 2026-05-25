@@ -1,3 +1,4 @@
+import type { Gender } from '@repo/db/prisma/enums';
 import { UserRole } from '../../types/enums/enums';
 import type { AccountResponse } from '../account/accountResponse';
 
@@ -11,6 +12,7 @@ type StudentResponse = {
     en: string | null;
     ar: string | null;
   };
+  gender: Gender;
 };
 
 type SchoolResponse = {
