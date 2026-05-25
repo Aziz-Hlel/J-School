@@ -41,8 +41,9 @@ export class SchoolSeed {
       },
       create: fakePayload,
       update: {
-        nameAr: fakePayload.nameAr,
-        nameFr: fakePayload.nameFr,
+        nameEn: 'Marthe Gautier',
+        nameAr: 'مارتا غوتييه',
+        nameFr: 'Marthe Gautier',
       },
     });
     return result;
