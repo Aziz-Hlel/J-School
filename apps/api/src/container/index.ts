@@ -2,6 +2,7 @@ import { createMediaModule as mediaModule } from '@/media';
 import { AftercareModule } from '@/modules/Aftercare/aftercare.module';
 import { AnnouncementModule } from '@/modules/Announcement/announcement.module';
 import { AttendanceModule } from '@/modules/Attendance/attendance.module';
+import { CalendarModule } from '@/modules/Calendar/calendar.module';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
 import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular.module';
 import { ExtraCurricularPostsModule } from '@/modules/ExtraCurricular/posts/ExtraCurricularPosts.module';
@@ -146,6 +147,9 @@ const { teacherCommentsRouter } = TeacherCommentsModule();
 // * AFTERCARE
 const { aftercareRouter } = AftercareModule();
 
+// * Calendar
+const { calendarRouter } = CalendarModule();
+
 // *
 // * AUTH
 const { authRouter } = authModule(accountService);
@@ -237,6 +241,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: feeItemsRouter, resource: 'schools/:schoolId/fees/:feeId/items' },
   { router: teacherCommentsRouter, resource: 'schools/:schoolId/teachers/:teacherId/comments' },
   { router: aftercareRouter, resource: 'schools/:schoolId/aftercares' },
+  { router: calendarRouter, resource: 'schools/:schoolId/calendars' },
 
   { router: userRouter, resource: 'schools/:schoolId/users' },
   { router: notificationRouter, resource: 'schools/:schoolId/notifications' },

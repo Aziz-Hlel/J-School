@@ -7,7 +7,7 @@ import requireUserInSchool from '@/middleware/requireUserInSchool.middleware';
 export const createClassroomManagementRouter = (controller: ClassroomManagementController) => {
   const router = Router({ mergeParams: true });
 
-  router.get('/subjects', requireAuth, requireUserInSchool, asyncHandler(controller.getSubjectsWithTeachers));
+  router.get('/subjects', requireAuth, requireUserInSchool, controller.getSubjectsWithTeachers);
 
   router.get('/exams', requireAuth, requireUserInSchool, asyncHandler(controller.getExams));
 

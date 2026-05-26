@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { getWeekNbr } from '../../utils/getWeekNbr';
+import { toWeekNbr } from '../../utils/getWeekNbr';
 
 export const getClassroomAttendancesQuerySchema = z.object({
-  week: z.coerce.number().int().positive().max(52).catch(getWeekNbr()),
+  week: z.coerce.number().int().positive().max(52).catch(toWeekNbr()),
   timetableId: z.uuid().optional(),
 });
 

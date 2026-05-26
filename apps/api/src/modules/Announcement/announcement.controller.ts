@@ -1,11 +1,11 @@
-import type { Request, Response } from 'express';
-import { AnnouncementService } from './announcement.service';
+import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { createAnnouncmentReq } from '@repo/contracts/schemas/Announcement/create';
-import { updateAnnouncementReq } from '@repo/contracts/schemas/Announcement/update';
-import { announcementQueryParamSchema } from '@repo/contracts/schemas/Announcement/announcementQueryParam';
-import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { syncReactionReqSchema } from '@repo/contracts/schemas/Announcement/syncReactionReq';
+import { updateAnnouncementReq } from '@repo/contracts/schemas/Announcement/update';
+import { cursorQueryParamsSchema } from '@repo/contracts/schemas/const/cursorQueryParams';
+import type { Request, Response } from 'express';
+import { AnnouncementService } from './announcement.service';
 
 export class AnnouncementController {
   constructor(private readonly service: AnnouncementService) {}
@@ -43,7 +43,7 @@ export class AnnouncementController {
   find = async (req: AuthenticatedRequest, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const accountId = req.token.claims.accountId;
-    const query = announcementQueryParamSchema.parse(req.query);
+    const query = cursorQueryParamsSchema.parse(req.query);
     const response = await this.service.find({ schoolId, accountId, query });
     res.status(200).json({
       message: 'Announcements fetched successfully',

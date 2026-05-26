@@ -184,25 +184,6 @@ export class AccountMapper {
             });
             break;
         }
-
-        // if (administrationRolesSet.has(userRole.role as AdministrationRole)) {
-        //   administrationWorkspaces.push({
-        //     id: user.id,
-        //     userId: user.id,
-        //     firstName: user.firstName,
-        //     lastName: user.lastName,
-        //     school: {
-        //       id: user.school.id,
-        //       slug: user.school.slug,
-        //       names: {
-        //         en: user.school.nameEn,
-        //         fr: user.school.nameFr,
-        //         ar: user.school.nameAr,
-        //       },
-        //       role: userRole.role as AdministrationRole,
-        //     },
-        //   });
-        // }
       });
     });
 

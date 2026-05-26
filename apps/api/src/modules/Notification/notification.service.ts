@@ -28,6 +28,7 @@ export class NotificationService {
         sourceId: input.sourceId,
         schoolId: input.schoolId,
         scheduleType: NotificationScheduleType.IMMEDIATE,
+        sourceType: input.sourceType,
       },
     });
 
@@ -53,3 +54,5 @@ export class NotificationService {
   delete = async () => {};
   find = async () => {};
 }
+
+export const globalNotificationService = new NotificationService();

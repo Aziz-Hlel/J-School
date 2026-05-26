@@ -1,13 +1,13 @@
-import { storageService } from '@/storage/storage.service';
-import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
-import { MediaRepo, singletonMediaRepo } from './media.repo';
 import { NotFoundError } from '@/err/service/customErrors';
-import { MediaStatus } from '@repo/db/prisma/enums';
+import { storageService } from '@/storage/storage.service';
+import { TX } from '@/types/prisma/PrismaTransaction';
+import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
+import { MediaResponseV2 } from '@repo/contracts/schemas/media/MediaResponseV2';
+import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
 import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
 import { Media } from '@repo/db/prisma/client';
-import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
-import { TX } from '@/types/prisma/PrismaTransaction';
-import { MediaResponseV2 } from '@repo/contracts/schemas/media/MediaResponseV2';
+import { MediaStatus } from '@repo/db/prisma/enums';
+import { MediaRepo, singletonMediaRepo } from './media.repo';
 
 export interface IMediaService {
   getPresignedUrl(schema: PresignedUrlRequest): Promise<PresignedUrlResponse>;
@@ -91,6 +91,7 @@ export class MediaService implements IMediaService {
       id: media.id,
       key: media.key,
       type: media.type,
+      blurHash: media.blurHash,
       url,
     };
   }
@@ -105,6 +106,7 @@ export class MediaService implements IMediaService {
       id: media.id,
       key: media.key,
       type: media.type,
+      blurHash: media.blurHash,
       url,
     };
   }
@@ -121,6 +123,7 @@ export class MediaService implements IMediaService {
       url,
       order: media.order,
       type: media.type,
+      blurHash: media.blurHash,
     };
   }
 }

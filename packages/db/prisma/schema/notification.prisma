@@ -16,7 +16,8 @@ enum NotificationType {
   PRIVATE
 }
 
-enum NotificationContentType {
+enum NotificationSourceType {
+  CALENDAR
   TEACHER_COMMENT
   FEED
 }
@@ -29,6 +30,7 @@ model Notification {
   type         NotificationType
   scheduleType NotificationScheduleType
   sourceId     String?
+  sourceType   NotificationSourceType
 
   schoolId String @db.Uuid
   school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)

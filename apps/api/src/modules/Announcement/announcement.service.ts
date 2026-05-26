@@ -1,11 +1,11 @@
+import { NotFoundError } from '@/err/service/customErrors';
 import { globalMediaService } from '@/media/media.service';
-import { AnnouncementQueryParamInput } from '@repo/contracts/schemas/Announcement/announcementQueryParam';
 import type { CreateAnnouncementReq } from '@repo/contracts/schemas/Announcement/create';
 import { AnnouncementResponse } from '@repo/contracts/schemas/Announcement/response';
+import type { SyncReactionReq } from '@repo/contracts/schemas/Announcement/syncReactionReq';
+import { CursorQueryParams } from '@repo/contracts/schemas/const/cursorQueryParams';
 import prisma from '@repo/db';
 import { MediaStatus, ReactionType } from '@repo/db/prisma/enums';
-import type { SyncReactionReq } from '@repo/contracts/schemas/Announcement/syncReactionReq';
-import { NotFoundError } from '@/err/service/customErrors';
 
 export class AnnouncementService {
   create = async (params: { schoolId: string; input: CreateAnnouncementReq }) => {
@@ -100,7 +100,7 @@ export class AnnouncementService {
   find = async (params: {
     schoolId: string;
     accountId: string;
-    query: AnnouncementQueryParamInput;
+    query: CursorQueryParams;
   }): Promise<AnnouncementResponse[]> => {
     const { schoolId, accountId, query } = params;
 

@@ -327,6 +327,9 @@ importers:
 
   packages/contracts:
     dependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../db
       dayjs:
         specifier: 'catalog:'
         version: 1.11.20

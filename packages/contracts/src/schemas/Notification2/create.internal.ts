@@ -1,3 +1,4 @@
+import { NotificationSourceType } from '@repo/db/prisma/enums';
 import z from 'zod';
 import { NotificationType } from '../../types/enums/enums';
 
@@ -20,6 +21,7 @@ export const createNotificationInternalSchema = z.object({
   type: notificationTypes,
   sourceId: z.uuid().nullable(),
   schoolId: z.uuid(),
+  sourceType: z.enum(NotificationSourceType),
 });
 
 export type CreateNotificationInternal = z.infer<typeof createNotificationInternalSchema>;

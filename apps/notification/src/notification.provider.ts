@@ -136,8 +136,8 @@ export class NotificationProvider implements INotificationProvider {
         {
           ...payload,
           // small_icon: 'ic_notification',
-          large_icon:
-            'https://fastly.picsum.photos/id/237/200/200.jpg?hmac=zHUGikXUDyLCCmvyww1izLK3R3k8oRYBRiTizZEdyfI',
+          // large_icon:
+          //   'https://fastly.picsum.photos/id/237/200/200.jpg?hmac=zHUGikXUDyLCCmvyww1izLK3R3k8oRYBRiTizZEdyfI',
           big_picture:
             'https://fastly.picsum.photos/id/237/200/200.jpg?hmac=zHUGikXUDyLCCmvyww1izLK3R3k8oRYBRiTizZEdyfI',
 

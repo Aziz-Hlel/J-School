@@ -1,9 +1,9 @@
-import type { ClassroomManagementService } from './ClassroomManagement.service';
 import getUrlParam from '@/utils/getUrlParam';
 import { assignTeacherRequestSchema } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
 import { AssignStudentRequestSchema } from '@repo/contracts/schemas/classroom/management/assignStudentRequest';
 import { getClassroomAttendancesQuerySchema } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
 import { Request, Response } from 'express';
+import type { ClassroomManagementService } from './ClassroomManagement.service';
 
 export class ClassroomManagementController {
   constructor(private readonly classroomManagementService: ClassroomManagementService) {}

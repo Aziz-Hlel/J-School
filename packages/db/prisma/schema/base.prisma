@@ -112,6 +112,7 @@ model School {
   annoucements Announcement[]
   aftercare Aftercare[]
   notifications Notification[]
+  calendars Calendar[]
 
   // RLS Related Models
   assignments Assignment[]
