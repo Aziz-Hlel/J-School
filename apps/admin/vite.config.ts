@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 
 function getPort(mode: string): number | undefined {
   const env = loadEnv(mode, process.cwd());
@@ -24,7 +25,7 @@ function getPort(mode: string): number | undefined {
 // https://vite.dev/config/
 export default ({ mode }: { mode: string }) => {
   return defineConfig({
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
     server: {
       port: getPort(mode),
       strictPort: true,
