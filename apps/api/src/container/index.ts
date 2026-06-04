@@ -214,7 +214,7 @@ const seedDevService = new SeedDevService(
 seedDevService.run();
 
 export const container: { router: Router; resource: string }[] = [
-  { router: rootRouter, resource: 'root' },
+  { router: rootRouter, resource: '' },
   { router: mediaRouter, resource: 'media' },
 
   { router: accountRouter, resource: 'accounts' },

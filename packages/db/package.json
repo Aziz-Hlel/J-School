@@ -26,6 +26,8 @@
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "catalog:",
     "@repo/env": "workspace:*",
+    "prisma": "^7.7.0",
+
     "dotenv": "catalog:",
     "pg": "^8.17.1",
     "zod": "catalog:"
@@ -33,7 +35,6 @@
   "devDependencies": {
     "@repo/config": "workspace:*",
     "@types/pg": "^8.16.0",
-    "prisma": "^7.7.0",
     "typescript": "catalog:"
   }
 }

@@ -5,7 +5,7 @@
 @baseUrl = http://localhost:10000/api
 
 
-@ManagerEmail = manager1@fake.com
+@ManagerEmail = parent1@fake.com
 @ManagerPassword = 12345678
 
 
@@ -37,6 +37,13 @@ Content-Type: application/json
 
 ###
 @schoolId = {{serverLogin.response.body.administration[0].school.id}}
+
+
+### 
+# @name me
+GET {{baseUrl}}/auth/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6Ijg1NGFhNGMyM2VkZTdiOGNhODc1OWZiMDZlNmExZDU4OTI0MjVkMDYiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiRGFyaWFuX1N0cmFja2U1NSIsImNsYWltcyI6eyJhY2NvdW50SWQiOiIyMGY2NDRkZi0xNTgyLTUwYmQtOThkNi04MjEyYzYzMDg2NjIiLCJhY2NvdW50Um9sZSI6IlVTRVIifSwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2otc2Nob29sLWE0MjEyIiwiYXVkIjoiai1zY2hvb2wtYTQyMTIiLCJhdXRoX3RpbWUiOjE3ODA1MDQyMDEsInVzZXJfaWQiOiIxSmJ4bFJGWW5PYjBpQVRpQWM3Sm9UMm1BYTYzIiwic3ViIjoiMUpieGxSRlluT2IwaUFUaUFjN0pvVDJtQWE2MyIsImlhdCI6MTc4MDUwNDIwMiwiZXhwIjoxNzgwNTA3ODAyLCJlbWFpbCI6Im1hbmFnZXIxQGZha2UuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbIm1hbmFnZXIxQGZha2UuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.UHo9afL-qzaReTinh4wftxqimqbR9qhmaJL0E40N9_KAdzhyMzxUfTKxWnCGm_uVWo2PLQIH0kEF88xe-7B9C4elv0hY9lQs8uQNZAAqgOjOZPus8EY6tELoZj5xv4mf7VqtNpXzu_YMJbH4NDC6z6YrxtSw390oy6zbQ-UiTtHcAIVtJT-xxJrqJhl6hjun3OVIzeJHT63kc5gBJlDw4iDHVGfWI1w56TzCa2dizaWdjBeipkGcJZroFeYMpVs-y_QfQyw0qbqmSg3tZXEC1NBhz2Y3s6BAVER1nl
 
 
 ###

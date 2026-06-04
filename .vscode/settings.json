@@ -9,6 +9,6 @@
     "LANG": "en_US.UTF-8"
   },
   "git.autofetch": true,
-  "js/ts.experimental.useTsgo": true,
+  // "js/ts.experimental.useTsgo": true,
   "files.eol": "\n"
 }

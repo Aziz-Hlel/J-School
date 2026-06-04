@@ -10,7 +10,7 @@ const Homepage = () => {
   return (
     <div className=' '>
       <div className='text-9xl'>Hompage {data.name}</div>
-      <Button className='bg-black'>Button</Button>
+      <Button className=' '>Button</Button>
     </div>
   );
 };

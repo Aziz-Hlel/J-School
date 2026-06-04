@@ -12,6 +12,7 @@
     "mikestead.dotenv", // * Dotenv
     "ferrierbenjamin.fold-unfold-all-icone", // * Fold Unfold All Icone
     "kisstkondoros.vscode-gutter-preview", // * Image Preview
+    "TypeScriptTeam.native-preview", // * TS/GO
     
     "usernamehw.errorlens" // * Error Lens
   ],

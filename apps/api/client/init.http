@@ -18,17 +18,17 @@
 
 ###
 # @name health
-GET {{baseUrl}}/root/health
+GET {{baseUrl}}/health
 Content-Type: application/json
 
 ###
 # @name healthz
-GET {{baseUrl}}/root/healthz
+GET {{baseUrl}}/healthz
 Content-Type: application/json
 
 ###
 # @name hardReset
-DELETE {{baseUrl}}/root/hard-reset
+DELETE {{baseUrl}}/hard-reset
 Content-Type: application/json
 
 

@@ -14,7 +14,7 @@ export interface IauthService {
 
   oAuthSignIn: (payload: FirebaseSignInRequestDto) => Promise<ApiResponse<SignInResponseDto>>;
 
-  me: () => Promise<ApiResponse<UserProfileResponse>>;
+  me: () => Promise<ApiResponse<{ data: UserProfileResponse }>>;
 }
 
 export const authService: IauthService = {

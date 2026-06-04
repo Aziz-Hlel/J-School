@@ -1,4 +1,4 @@
-import firebaseService from '@/Api/service/firebaseService';
+import firebaseService from '@/api/service/firebaseService';
 import { useAuthStore } from '@/store/useAuthStore';
 import { singUpSchema, type SignUpRequestSchema } from '@/types/auth/SignUpRequestDto';
 import { zodResolver } from '@hookform/resolvers/zod';

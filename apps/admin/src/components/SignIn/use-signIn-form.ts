@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type SignInRequestDto, singInSchema } from '@/types/auth/SignInRequestDto';
 import { useNavigate } from 'react-router';
-import firebaseService from '@/Api/service/firebaseService';
+import firebaseService from '@/api/service/firebaseService';
 import { useAuthStore } from '@/store/useAuthStore';
 
 const useSignInForm = () => {

@@ -1,4 +1,3 @@
-import type { UserFullResponse } from '../user/UserFullResponse';
-import type { ProfileResponse } from './ProfileResponse';
+import type { AuthResponse } from '../auth/authResponse';
 
-export type UserProfileResponse = UserFullResponse & { profile: ProfileResponse | null };
+export type UserProfileResponse = AuthResponse;
