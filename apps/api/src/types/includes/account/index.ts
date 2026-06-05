@@ -1,5 +1,5 @@
-import { AccountGetPayload, AccountInclude } from '@repo/db/prisma/models';
 import { DefaultArgs } from '@prisma/client/runtime/client';
+import { AccountGetPayload, AccountInclude } from '@repo/db/prisma/models';
 
 type AccountIncludeConstraint = AccountInclude<DefaultArgs>;
 
@@ -19,7 +19,11 @@ export const accountInclude = {
         include: {
           students: {
             include: {
-              student: true,
+              student: {
+                include: {
+                  avatar: true,
+                },
+              },
             },
           },
         },

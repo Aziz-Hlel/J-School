@@ -164,6 +164,7 @@ export class AccountMapper {
             break;
           case UserRole.PARENT:
             user.parent?.students.forEach((parentStudent) => {
+              const mediaResponse = globalMediaService.toMediaResponse(parentStudent.student.avatar);
               parentWorkspaces.push(
                 this.toParentWorkspace({
                   user,
@@ -178,6 +179,8 @@ export class AccountMapper {
                       ar: parentStudent.student.lastName_ar,
                     },
                     gender: parentStudent.student.gender,
+                    schoolId: parentStudent.student.schoolId,
+                    avatar: mediaResponse,
                   },
                 }),
               );
