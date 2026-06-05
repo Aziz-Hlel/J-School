@@ -35,6 +35,8 @@ export const staffQueryParams = {
 
 export type StaffQueryParamsTypes = {
   Query: QueryType;
+  TableRowType: TableRowType;
+  TableRowKeys: TableRowKeys;
   SortableFields: (typeof staffQueryParams.sortableFields)[number];
   FilterableFields: (typeof staffQueryParams.filterableFields)[number];
 };

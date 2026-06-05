@@ -1,25 +1,19 @@
-
-
-
-
 model TeacherComment {
     id String @id @default(uuid()) @db.Uuid
 
-    title String @db.VarChar(255)
-    content String @db.Text
+    title          String  @db.VarChar(255)
+    content        String  @db.Text
     canParentReply Boolean @default(false)
-    parentReply String? @db.Text
+    parentReply    String? @db.Text
 
+    teacherId String  @db.Uuid
+    teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 
-    teacherId String @db.Uuid
-    teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-
-    studentId String @db.Uuid
-    student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+    studentId String  @db.Uuid
+    student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
     schoolId String @db.Uuid
-    school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
+    school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

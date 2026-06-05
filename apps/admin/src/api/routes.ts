@@ -8,7 +8,15 @@ export const apiRoutes = {
   auth: {
     signIn: () => '/auth/sign-in',
     signUp: () => '/auth/sign-up',
-    oAuthSignIn: () => '/auth/o-auth/sign-in',
+    oAuthSignIn: () => '/auth/provider',
     me: () => '/auth/me',
+  },
+
+  staff: {
+    create: (schoolId: string) => `/schools/${schoolId}/staff`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/staff/${id}`,
+    getPage: (schoolId: string) => `/schools/${schoolId}/staff`,
+    getById: (schoolId: string, id: string) => `/schools/${schoolId}/staff/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/staff/${id}`,
   },
 };

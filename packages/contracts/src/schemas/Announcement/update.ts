@@ -1,6 +1,10 @@
 import z from 'zod';
 export const updateAnnouncementReq = z.object({
-  description: z.string().max(500, 'Description must be less than 500 characters'),
+  title: z.string().nonempty({ message: 'Title is required' }).max(100, 'Title must be less than 100 characters'),
+  description: z
+    .string()
+    .nonempty({ message: 'Description is required' })
+    .max(500, 'Description must be less than 500 characters'),
   media: z
     .array(
       z.object({
@@ -9,7 +13,7 @@ export const updateAnnouncementReq = z.object({
       }),
     )
     .max(20, 'You can upload a maximum of 20 media files')
-    .nullish(),
+    .nullable(),
 });
 
 export type UpdateAnnouncementReq = z.infer<typeof updateAnnouncementReq>;

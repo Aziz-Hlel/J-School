@@ -13,6 +13,7 @@ export class AnnouncementService {
     return await prisma.$transaction(async (tx) => {
       const createdAnnouncement = await tx.announcement.create({
         data: {
+          title: input.title,
           description: input.description,
           schoolId,
         },
@@ -53,6 +54,7 @@ export class AnnouncementService {
       const updatedAnnoucement = await tx.announcement.update({
         where: { id: announcementId, schoolId },
         data: {
+          title: input.title,
           description: input.description,
         },
       });

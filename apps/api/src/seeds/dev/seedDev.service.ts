@@ -205,9 +205,10 @@ export class SeedDevService implements ISeed {
         const mediaIds = medias.map((media) => media.id);
         await this.announcementSeed.run({
           id: accouncementSeed.id,
-          schoolId,
+          title: accouncementSeed.title,
           description: accouncementSeed.description,
           mediaIds,
+          schoolId,
           createdAt: accouncementSeed.createdAt,
         });
       }),

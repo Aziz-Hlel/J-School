@@ -1,8 +1,8 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../../src/generated"
+  provider     = "prisma-client"
+  output       = "../../src/generated"
   moduleFormat = "esm"
-  
+
   runtime = "nodejs"
 }
 
@@ -10,13 +10,9 @@ datasource db {
   provider = "postgresql"
 }
 
-
-
-
-
 enum Gender {
   MALE
-  FEMALE  
+  FEMALE
 }
 
 enum DayOfWeek {
@@ -28,5 +24,3 @@ enum DayOfWeek {
   SATURDAY
   SUNDAY
 }
-
- 

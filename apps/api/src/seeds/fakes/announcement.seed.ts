@@ -3,10 +3,10 @@ import prisma from '@repo/db';
 
 export class AnnouncementSeed {
   run = async (
-    params: { id: string; schoolId: string; description: string; mediaIds: string[]; createdAt: Date },
+    params: { title: string; id: string; schoolId: string; description: string; mediaIds: string[]; createdAt: Date },
     tx?: TX,
   ) => {
-    const { id, schoolId, description, mediaIds, createdAt } = params;
+    const { id, schoolId, title, description, mediaIds, createdAt } = params;
     const client = tx || prisma;
 
     await client.announcement.upsert({
@@ -16,6 +16,7 @@ export class AnnouncementSeed {
       update: {},
       create: {
         id,
+        title,
         schoolId,
         description,
 

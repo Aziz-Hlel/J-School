@@ -1,20 +1,18 @@
-
 model Name {
   id String @id @default(uuid()) @db.Uuid
   en String @db.VarChar(255)
   fr String @db.VarChar(255)
   ar String @db.VarChar(255)
 
-  extraCurricularId String? @db.Uuid @unique
-  extraCurricular ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
+  extraCurricularId String?          @unique @db.Uuid
+  extraCurricular   ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
 
-  notificationTitleId String? @db.Uuid @unique
-  notificationTitle Notification? @relation("NotificationTitle", fields: [notificationTitleId], references: [id])
+  notificationTitleId String?       @unique @db.Uuid
+  notificationTitle   Notification? @relation("NotificationTitle", fields: [notificationTitleId], references: [id])
 
-  notificationContentId String? @db.Uuid @unique
-  notificationContent Notification? @relation("NotificationContent", fields: [notificationContentId], references: [id])
+  notificationContentId String?       @unique @db.Uuid
+  notificationContent   Notification? @relation("NotificationContent", fields: [notificationContentId], references: [id])
 
-  
   // @@unique([en, schoolId]) // idk if necessary
   // @@unique([fr, schoolId]) // idk if necessary
   // @@unique([ar, schoolId]) // idk if necessary
@@ -24,11 +22,10 @@ model Name {
   @@map("names")
 }
 
-
-model ExtraCurricular{
+model ExtraCurricular {
   id String @id @default(uuid()) @db.Uuid
 
-  title Name? 
+  title Name?
 
   grade ClassGrade
 
@@ -36,11 +33,11 @@ model ExtraCurricular{
 
   posts Post[]
 
-  teacherId String? @db.Uuid
-  teacher Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+  teacherId String?  @db.Uuid
+  teacher   Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
 
   schoolId String @db.Uuid
-  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   studentExtraCurricular StudentExtraCurricular[]
 
@@ -49,73 +46,67 @@ model ExtraCurricular{
 
   @@index([schoolId, grade])
   @@map("extraCurriculars")
-  
 }
-
 
 model StudentExtraCurricular {
   id String @id @default(uuid()) @db.Uuid
 
-  studentId String @db.Uuid
-  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String  @db.Uuid
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  extraCurricularId String @db.Uuid
-  extraCurricular ExtraCurricular @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
+  extraCurricularId String          @db.Uuid
+  extraCurricular   ExtraCurricular @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
 
   schoolId String @db.Uuid
-  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([studentId, extraCurricularId])
-
   @@map("studentExtraCurriculars")
 }
-
 
 enum SessionType {
   WEEKLY
   SPECIAL
 }
 
-
 model Session {
   id String @id @default(uuid()) @db.Uuid
 
   type SessionType
 
-  day DayOfWeek
-  date DateTime? @db.Date
-  startTime DateTime @db.Time
-  endTime DateTime? @db.Time
+  day       DayOfWeek
+  date      DateTime? @db.Date
+  startTime DateTime  @db.Time
+  endTime   DateTime? @db.Time
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  extraCurricularId String? @db.Uuid @unique
-  extraCurricular ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
+  extraCurricularId String?          @unique @db.Uuid
+  extraCurricular   ExtraCurricular? @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
 
-
 model Post {
- id String @id @default(uuid()) @db.Uuid
- 
- content String? @db.Text
- 
- media Media[]
+  id String @id @default(uuid()) @db.Uuid
 
- extraCurricularId String @db.Uuid  // * if you gone attach another model to this you can just make this optional
- extraCurricular ExtraCurricular @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
+  content String? @db.Text
 
- schoolId String @db.Uuid
- school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
- 
- createdAt DateTime @default(now())
- updatedAt DateTime @updatedAt
+  media Media[]
 
- @@index([schoolId, extraCurricularId, createdAt(sort: Desc)]) // do the same for the announcements
- @@map("posts")
+  extraCurricularId String          @db.Uuid // * if you gone attach another model to this you can just make this optional
+  extraCurricular   ExtraCurricular @relation(fields: [extraCurricularId], references: [id], onDelete: Cascade)
+
+  schoolId String @db.Uuid
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId, extraCurricularId, createdAt(sort: Desc)]) // do the same for the announcements
+  @@map("posts")
 }

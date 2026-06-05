@@ -51,7 +51,7 @@ export class StaffController {
     const result = await this.staffService.findAll({ query, schoolId });
     res.status(200).json({
       message: 'Staff fetched successfully',
-      staff: result,
+      ...result,
     });
   };
 }

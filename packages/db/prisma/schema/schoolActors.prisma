@@ -1,14 +1,12 @@
-
 enum StudentStatus {
   ACTIVE
   INACTIVE
-  SUSPENDED
+  PENDING
   EXPELLED
 }
 
-
 model StudentProfile {
-  id String @id @db.Uuid 
+  id      String  @id @db.Uuid
   student Student @relation(fields: [id], references: [id], onDelete: Cascade)
 
   healthInfo String?
@@ -17,12 +15,12 @@ model StudentProfile {
   allergies  String?
   notes      String?
 
-  emergencyContactName1 String?
-  emergencyContactPhone1 String?
+  emergencyContactName1     String?
+  emergencyContactPhone1    String?
   emergencyContactRelation1 String?
 
-  emergencyContactName2 String?
-  emergencyContactPhone2 String?
+  emergencyContactName2     String?
+  emergencyContactPhone2    String?
   emergencyContactRelation2 String?
 
   createdAt DateTime @default(now())
@@ -31,96 +29,88 @@ model StudentProfile {
   @@map("student_profiles")
 }
 
-
 model Student {
-  id String @id @default(uuid()) @db.Uuid
+  id  String  @id @default(uuid()) @db.Uuid
   uid String? @db.VarChar(50)
 
   firstName_ar String? @db.VarChar(255)
-  lastName_ar String? @db.VarChar(255)
+  lastName_ar  String? @db.VarChar(255)
   firstName_en String? @db.VarChar(255)
-  lastName_en String? @db.VarChar(255)
+  lastName_en  String? @db.VarChar(255)
 
-  dateOfBirth DateTime? @db.Date
-  gender Gender
-  status StudentStatus
+  dateOfBirth DateTime?     @db.Date
+  gender      Gender
+  status      StudentStatus
 
   profile StudentProfile?
   parents StudentParents[]
 
   attendances Attendance[]
-  comments TeacherComment[]
-  aftercare Aftercare[]
-  homeworks StudentHomework[]
+  comments    TeacherComment[]
+  aftercare   Aftercare[]
+  homeworks   StudentHomework[]
 
   schoolId String @db.Uuid
-  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  classroomId String? @db.Uuid
-  classroom Classroom? @relation(fields: [classroomId], references: [id], onDelete: Restrict)
+  classroomId String?    @db.Uuid
+  classroom   Classroom? @relation(fields: [classroomId], references: [id], onDelete: Restrict)
 
   avatarId String? @db.Uuid
-  avatar Media? @relation(fields: [avatarId], references: [id], onDelete: SetNull)
+  avatar   Media?  @relation(fields: [avatarId], references: [id], onDelete: SetNull)
 
-  fees Fees[]
+  fees                   Fees[]
   studentExtraCurricular StudentExtraCurricular[]
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([avatarId])
   @@unique([schoolId, uid])
-
   @@map("students")
 }
 
-
-model Parent{
+model Parent {
   id String @id @default(uuid()) @db.Uuid
 
   emergencyPhone String? @db.VarChar(50)
- 
+
   userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   students StudentParents[]
-
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId])
-
   @@map("parents")
 }
-
 
 model StudentParents {
   id String @id @default(uuid()) @db.Uuid
 
   parentId String @db.Uuid
-  parent Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  parent   Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
 
-  studentId String @db.Uuid
-  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String  @db.Uuid
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  @@unique([parentId,studentId])
-
+  @@unique([parentId, studentId])
   @@map("student_parents")
 }
-
 
 model Teacher {
   id String @id @default(uuid()) @db.Uuid
 
   userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  assignments Assignment[]
+  assignments     Assignment[]
   extraCurricular ExtraCurricular[]
-  comments TeacherComment[]
-  aftercare Aftercare[]
-  
+  comments        TeacherComment[]
+  aftercare       Aftercare[]
+
   // sessions ClassSessions[] // * not so sure of
   // examSessions ExamSessions[] // * not so sure of
   // extraCurricularSessions ExtraCurricularSessions[] // * not so sure of
@@ -128,8 +118,5 @@ model Teacher {
   updatedAt DateTime @updatedAt
 
   @@unique([userId])
-
   @@map("teachers")
 }
-
-

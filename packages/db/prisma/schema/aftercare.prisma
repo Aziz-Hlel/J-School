@@ -1,18 +1,15 @@
-
-
-
 model Aftercare {
     id String @id @default(uuid()) @db.Uuid
-    
+
     date DateTime @db.Date
 
-    supervisorId String @db.Uuid
-    supervisor Teacher @relation(fields: [supervisorId], references: [id], onDelete: Cascade)
+    supervisorId String  @db.Uuid
+    supervisor   Teacher @relation(fields: [supervisorId], references: [id], onDelete: Cascade)
 
     students Student[]
 
     schoolId String @db.Uuid
-    school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+    school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

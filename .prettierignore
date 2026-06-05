@@ -16,7 +16,7 @@ target
 *.env
 *.env.*
 
-
+.prisma
 
 # Package manager artifacts
 package-lock.json

@@ -4,50 +4,44 @@ enum AccountRole {
   SUPER_ADMIN
 }
 
-
 enum AccountStatus {
   ACTIVE
   INACTIVE
-  DISABLED 
+  DISABLED
   DELETED
 }
 
-
 model Account {
-  id    String     @id @default(uuid()) @db.Uuid
-  authId String @db.VarChar(255)
-  email String? @db.VarChar(255)
-  provider String @db.VarChar(255)
-  username String? @db.VarChar(255)
-  role AccountRole @default(USER)
-  isEmailVerified Boolean @db.Boolean
-  status AccountStatus @default(ACTIVE)
+  id              String        @id @default(uuid()) @db.Uuid
+  authId          String        @db.VarChar(255)
+  email           String?       @db.VarChar(255)
+  provider        String        @db.VarChar(255)
+  username        String?       @db.VarChar(255)
+  role            AccountRole   @default(USER)
+  isEmailVerified Boolean       @db.Boolean
+  status          AccountStatus @default(ACTIVE)
 
   users User[]
   owner Owner?
 
   avatarId String? @db.Uuid
-  avatar Media? @relation(fields: [avatarId], references: [id])
-  
+  avatar   Media?  @relation(fields: [avatarId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([status])
 
   @@unique([email])
   @@unique([authId])
   @@unique([avatarId])
-
+  @@index([status])
   @@map("accounts")
 }
-
 
 enum SchoolPlan {
   FREE
   PRO
   ENTERPRISE
 }
-
 
 enum SchoolStatus {
   ACTIVE
@@ -56,28 +50,23 @@ enum SchoolStatus {
   DELETED
 }
 
-
 model Owner {
   id String @id @default(uuid()) @db.Uuid
 
   firstName String @db.VarChar(255)
-  lastName String @db.VarChar(255)
-  phone String @db.VarChar(50)  
-  
+  lastName  String @db.VarChar(255)
+  phone     String @db.VarChar(50)
 
-
-  accountId String @db.Uuid @unique
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) // * CASCADE : if the account is deleted, the owner will be deleted too
+  accountId String  @unique @db.Uuid
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade) // * CASCADE : if the account is deleted, the owner will be deleted too
 
   school School?
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-
   @@map("school_owner")
 }
-
 
 model School {
   id String @id @default(uuid()) @db.Uuid
@@ -85,65 +74,60 @@ model School {
   nameEn String @db.VarChar(255)
   nameFr String @db.VarChar(255)
   nameAr String @db.VarChar(255)
-  
+
   description String? @db.Text
-  address String? @db.Text
-  phone String @db.VarChar(30)
-  email String @db.VarChar(255)
-  website String? @db.VarChar(255)
-  
+  address     String? @db.Text
+  phone       String  @db.VarChar(30)
+  email       String  @db.VarChar(255)
+  website     String? @db.VarChar(255)
+
   plan SchoolPlan @default(FREE)
-  slug String @db.VarChar(255)
+  slug String     @db.VarChar(255)
 
   logoId String? @db.Uuid
-  logo Media? @relation(fields: [logoId], references: [id], onDelete: SetNull)
+  logo   Media?  @relation(fields: [logoId], references: [id], onDelete: SetNull)
 
+  ownerId String @unique @db.Uuid
+  owner   Owner  @relation(fields: [ownerId], references: [id], onDelete: Restrict) // * RESTRICT : the owner have to delete the school first
 
-  ownerId String @db.Uuid @unique
-  owner Owner @relation(fields: [ownerId], references: [id], onDelete: Restrict) // * RESTRICT : the owner have to delete the school first
-
-  users User[]
-  students Student[]
-  classes Classroom[]
-  studentFees Fees[]
-  exams Exam[]
-  subjects Subject[]
+  users            User[]
+  students         Student[]
+  classes          Classroom[]
+  studentFees      Fees[]
+  exams            Exam[]
+  subjects         Subject[]
   extraCurriculars ExtraCurricular[]
-  annoucements Announcement[]
-  aftercare Aftercare[]
-  notifications Notification[]
-  calendars Calendar[]
+  annoucements     Announcement[]
+  aftercare        Aftercare[]
+  notifications    Notification[]
+  calendars        Calendar[]
 
   // RLS Related Models
-  assignments Assignment[]
-  timetable Timetable[]
-  examSchedules ExamSchedule[]
+  assignments             Assignment[]
+  timetable               Timetable[]
+  examSchedules           ExamSchedule[]
   studentExtraCurriculars StudentExtraCurricular[]
-  attendances Attendance[]
-  posts Post[]
-  teacherComments TeacherComment[]
-  homeworks Homework[]
+  attendances             Attendance[]
+  posts                   Post[]
+  teacherComments         TeacherComment[]
+  homeworks               Homework[]
 
-  status SchoolStatus @default(PENDING)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([plan])
+  status    SchoolStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   @@unique([slug])
   @@unique([logoId])
-
+  @@index([plan])
   @@map("schools")
 }
-
 
 enum UserStatus {
   ACTIVE
   INACTIVE
-  DISABLED 
+  DISABLED
   DELETED
 }
-
 
 enum UserRole {
   DIRECTOR
@@ -154,12 +138,11 @@ enum UserRole {
   DRIVER
 }
 
-
 model UserRoles {
   id String @id @default(uuid()) @db.Uuid
 
   userId String @db.Uuid
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   role UserRole @default(PARENT)
 
@@ -170,39 +153,36 @@ model UserRoles {
   @@map("user_roles")
 }
 
-
 model User {
   id String @id @default(uuid()) @db.Uuid
 
   firstName String @db.VarChar(255)
-  lastName String @db.VarChar(255)
-  gender Gender
+  lastName  String @db.VarChar(255)
+  gender    Gender
 
   dateOfBirth DateTime? @db.Date
-  phone String? @db.VarChar(30)
-  address        String? @db.VarChar(255)
-  cin            String? @db.VarChar(50)
+  phone       String?   @db.VarChar(30)
+  address     String?   @db.VarChar(255)
+  cin         String?   @db.VarChar(50)
 
   schoolId String @db.Uuid
-  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  accountId String @db.Uuid
-  account Account @relation(fields: [accountId], references: [id], onDelete: Restrict) // * RESTRICT : the account have to delete all the users first
-  
+  accountId String  @db.Uuid
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Restrict) // * RESTRICT : the account have to delete all the users first
+
   roles UserRoles[]
 
   teacher Teacher?
-  parent Parent?
+  parent  Parent?
 
   userNotifications UserNotification[]
-  reactions Reaction[]
+  reactions         Reaction[]
 
-
-  status UserStatus @default(ACTIVE)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status    UserStatus @default(ACTIVE)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@unique([accountId, schoolId])
   @@map("users")
 }
-

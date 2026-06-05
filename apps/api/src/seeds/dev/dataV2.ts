@@ -1,11 +1,11 @@
+import { toCalendarDate } from '@/utils/dayjs';
 import { subjectsGradeSix } from '@repo/contracts/const/subjectAndExams/grade.six';
 import { BaseSubjectsKeys, InitSubjectWithExamsType } from '@repo/contracts/const/subjectAndExams/type';
 import { ClassGrade, DayOfWeek, MediaType, ReactionType } from '@repo/db/prisma/browser';
+import dayjs from 'dayjs';
 import { mediaTypeSeed, MediaTypeSeed } from '../fakes/media.seed2';
 import { genUuid } from '../helper/generateUuid';
 import { studentSeedData, teacherSeedData } from './actors';
-import dayjs from 'dayjs';
-import { toCalendarDate } from '@/utils/dayjs';
 
 export const subjectsWithExamsSeedData = {
   [ClassGrade.SIX]: {
@@ -249,6 +249,7 @@ type AnnouncementSeedDataType = {
   [key: string]: {
     id: string;
     name: string;
+    title: string;
     description: string;
     content: MediaTypeSeed[];
     createdAt: Date;
@@ -259,6 +260,7 @@ export const announcementSeedData = {
   Rentree: {
     id: genUuid('Rentree'),
     name: 'Rentree',
+    title: 'Rentree scolaire 2025-2026',
     description: 'Rentree scolaire 2025-2026, \n bienvenue a tous les eleves et personnels de notre ecole',
     content: [MediaType.VIDEO, MediaType.IMAGE],
     createdAt: new Date('2025-09-01'),
@@ -267,6 +269,7 @@ export const announcementSeedData = {
   Ramdhan: {
     id: genUuid('Ramdhan'),
     name: 'Ramdhan',
+    title: 'Ramdhan kareem',
     description: 'Ramdhan kareem, \n nous vous souhaitons un excellent mois de ramdhan',
     content: [MediaType.IMAGE],
     createdAt: new Date('2025-03-23'),
@@ -275,6 +278,7 @@ export const announcementSeedData = {
   AidFitr: {
     id: genUuid('AidFitr'),
     name: 'AidFitr',
+    title: 'Aid el fitr',
     description: 'Aid el fitr, \n nous vous souhaitons un excellent aid el fitr',
     content: [MediaType.IMAGE],
     createdAt: new Date('2025-04-10'),

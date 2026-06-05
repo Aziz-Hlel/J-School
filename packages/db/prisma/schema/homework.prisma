@@ -1,23 +1,20 @@
-
-
-model Homework{
+model Homework {
   id String @id @default(uuid()) @db.Uuid
 
-  title String? @db.VarChar(255)
+  title   String? @db.VarChar(255)
   content String? @db.Text
-  
+
   files Media[]
 
   studentHomeworks StudentHomework[]
 
-  assignmentId String @db.Uuid
-  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  assignmentId String     @db.Uuid
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
 
   due DateTime @db.Date
 
   schoolId String @db.Uuid
-  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -28,11 +25,11 @@ model Homework{
 model StudentHomework {
   id String @id @default(uuid()) @db.Uuid
 
-  studentId String @db.Uuid
-  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String  @db.Uuid
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  homeworkId String @db.Uuid
-  homework Homework @relation(fields: [homeworkId], references: [id], onDelete: Cascade)
+  homeworkId String   @db.Uuid
+  homework   Homework @relation(fields: [homeworkId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

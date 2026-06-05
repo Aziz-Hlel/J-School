@@ -11,6 +11,7 @@ type AuthStore = {
   status: AuthStatus;
   currentUser: null | UserProfileResponse;
   currentRole: UserRole | null;
+  schoolId: string | null;
   bootstrap: () => Promise<void>;
   login: (payload: FirebaseSignInRequestDto) => Promise<void>;
   register: (payload: FirebaseSignInRequestDto) => Promise<void>;
@@ -52,6 +53,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   status: 'idle',
   currentUser: null,
   currentRole: UserRole.DIRECTOR,
+  schoolId: '058752df-1076-4cf0-b126-0433217f5a56', // ! static
 
   bootstrap: async () => {
     set({ status: 'loading' });

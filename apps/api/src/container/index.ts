@@ -221,7 +221,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: authRouter, resource: 'auth' },
   { router: ownerRouter, resource: 'owners' },
   { router: schoolRouter, resource: 'schools' },
-  { router: staffRouter, resource: 'schools/:schoolId/staffs' },
+  { router: staffRouter, resource: 'schools/:schoolId/staff' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
   { router: studentRouter, resource: 'schools/:schoolId/students' },
   { router: studentProfileRouter, resource: 'schools/:schoolId/students/:studentId/profiles' },

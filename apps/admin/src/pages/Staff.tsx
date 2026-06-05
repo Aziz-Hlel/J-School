@@ -1,5 +1,7 @@
+import StaffIndex from '@/components/Staff';
+
 const Staff = () => {
-  return <div>Staff</div>;
+  return <StaffIndex />;
 };
 
 export default Staff;
