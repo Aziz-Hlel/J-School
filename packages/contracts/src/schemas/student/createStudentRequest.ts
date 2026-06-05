@@ -52,4 +52,4 @@ export const createStudentRequestSchema = baseSchema
     },
   );
 
-export type CreateStudentRequest = z.infer<typeof createStudentRequestSchema>;
+export type CreateStudentReq = z.infer<typeof createStudentRequestSchema>;

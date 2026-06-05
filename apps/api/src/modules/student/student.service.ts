@@ -4,14 +4,15 @@ import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { toTime } from '@/utils/dayjs';
 import { FeesQueryParamsTypes } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
+import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { Page } from '@repo/contracts/schemas/page/Page';
-import { CreateStudentRequest } from '@repo/contracts/schemas/student/createStudentRequest';
+import { CreateStudentReq } from '@repo/contracts/schemas/student/createStudentRequest';
 import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student/createStudentWithProfile';
 import type { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
 import type { StudentAttendanceResponse } from '@repo/contracts/schemas/student/getAttendancesResponse';
 import { StudentsQueryParamsTypes } from '@repo/contracts/schemas/student/getStudentsQueryParams';
 import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
-import { UpdateStudentRequest } from '@repo/contracts/schemas/student/updateStudentRequest';
+import { UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudentRequest';
 import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
 import { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
 import prisma from '@repo/db';
@@ -19,16 +20,15 @@ import { Prisma } from '@repo/db/prisma/client';
 import { StudentStatus } from '@repo/db/prisma/enums';
 import { ExtraCurricularMapper } from '../ExtraCurricular/ExtraCurricular.mapper';
 import { FeesMapper } from '../Fees/fees.mapper';
+import { HomeworkMapper } from '../Homework/homework.mapper';
 import { TeacherCommentsMapper } from '../TeacherComments/teacherComments.mapper';
 import { StudentMapper } from './student.mapper';
 import { StudentRepo } from './student.repo';
-import { HomeworkMapper } from '../Homework/homework.mapper';
-import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 
 export class StudentService {
   constructor(private readonly studentRepo: StudentRepo) {}
 
-  create = async (params: { input: CreateStudentRequest; schoolId: string }, tx?: TX) => {
+  create = async (params: { input: CreateStudentReq; schoolId: string }, tx?: TX) => {
     const { input, schoolId } = params;
     try {
       const createdStudent = await this.studentRepo.create({ input, schoolId }, tx);
@@ -46,7 +46,7 @@ export class StudentService {
   };
 
   update = async (
-    params: { input: UpdateStudentRequest & { status: StudentStatus }; studentId: string; schoolId: string },
+    params: { input: UpdateStudentReq & { status: StudentStatus }; studentId: string; schoolId: string },
     tx?: TX,
   ) => {
     const { input, schoolId, studentId } = params;

@@ -1,9 +1,9 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { type SignInRequestDto, singInSchema } from '@/types/auth/SignInRequestDto';
-import { useNavigate } from 'react-router';
 import firebaseService from '@/api/service/firebaseService';
 import { useAuthStore } from '@/store/useAuthStore';
+import { type SignInRequestDto, singInSchema } from '@/types/auth/SignInRequestDto';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 const useSignInForm = () => {
   const form = useForm<SignInRequestDto>({
@@ -26,7 +26,7 @@ const useSignInForm = () => {
       const idToken = firebaseResponse.data;
 
       await signIn({
-        idToken: idToken,
+        token: idToken,
       });
 
       // if (response.success === false) {

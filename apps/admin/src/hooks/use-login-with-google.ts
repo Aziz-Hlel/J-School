@@ -18,7 +18,7 @@ const useLoginWithGoogle = (form: UseFormReturn<{ email: string; password: strin
     }
     const idToken = googleLoginResponse.data;
 
-    await oAuthSignIn({ idToken });
+    await oAuthSignIn({ token: idToken });
 
     navigate('/profile');
   };

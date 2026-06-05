@@ -1,16 +1,16 @@
 import { prisma } from '@/bootstrap/db.init';
 import { RepoError } from '@/err/repo/DbError';
-import { StudentStatus } from '@repo/db/prisma/enums';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { toDate } from '@/utils/toDate';
-import { CreateStudentRequest } from '@repo/contracts/schemas/student/createStudentRequest';
+import { CreateStudentReq } from '@repo/contracts/schemas/student/createStudentRequest';
 import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student/createStudentWithProfile';
-import { UpdateStudentRequest } from '@repo/contracts/schemas/student/updateStudentRequest';
-import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
 import { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
+import { UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudentRequest';
+import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
+import { StudentStatus } from '@repo/db/prisma/enums';
 
 export class StudentRepo {
-  create = async (params: { input: CreateStudentRequest & { status: StudentStatus }; schoolId: string }, tx?: TX) => {
+  create = async (params: { input: CreateStudentReq & { status: StudentStatus }; schoolId: string }, tx?: TX) => {
     try {
       const { input, schoolId } = params;
       const client = tx ?? prisma;
@@ -36,7 +36,7 @@ export class StudentRepo {
   };
 
   update = async (
-    params: { input: UpdateStudentRequest & { status: StudentStatus }; studentId: string; schoolId: string },
+    params: { input: UpdateStudentReq & { status: StudentStatus }; studentId: string; schoolId: string },
     tx?: TX,
   ) => {
     try {

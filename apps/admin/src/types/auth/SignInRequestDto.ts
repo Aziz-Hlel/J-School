@@ -15,10 +15,7 @@ export const singInSchema = z.object({
 export type SignInRequestDto = z.infer<typeof singInSchema>;
 
 export const firebaseSignInSchema = z.object({
-  idToken: z
-    .string({ message: 'Invalid idToken' })
-    .trim()
-    .max(255, { message: 'Email is too long, max 255 characters' }),
+  token: z.string({ message: 'Invalid idToken' }).trim().max(255, { message: 'Email is too long, max 255 characters' }),
 });
 
 export type FirebaseSignInRequestDto = z.infer<typeof firebaseSignInSchema>;

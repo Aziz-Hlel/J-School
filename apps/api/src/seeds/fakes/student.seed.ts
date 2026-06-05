@@ -1,9 +1,9 @@
-import { ClassGrade, Gender, StudentStatus } from '@repo/db/prisma/enums';
-import { faker, fakerAR } from '@faker-js/faker';
-import { MediaSeed } from './media.seed';
-import { StudentCreateInput, StudentUncheckedCreateInput } from '@repo/db/prisma/models';
-import { TX } from '@/types/prisma/PrismaTransaction';
 import { prisma } from '@/bootstrap/db.init';
+import { TX } from '@/types/prisma/PrismaTransaction';
+import { faker, fakerAR } from '@faker-js/faker';
+import { ClassGrade, Gender, StudentStatus } from '@repo/db/prisma/enums';
+import { StudentCreateInput, StudentUncheckedCreateInput } from '@repo/db/prisma/models';
+import { MediaSeed } from './media.seed';
 
 export class StudentSeed {
   constructor(private readonly mediaSeed: MediaSeed) {}

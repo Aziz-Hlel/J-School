@@ -13,7 +13,7 @@ import {
 import { useAuthStore } from '@/store/useAuthStore';
 import { UserRole } from '@repo/contracts/types/enums/enums';
 import type { Prettify } from '@repo/contracts/utils/Prettify';
-import { BellRing, ChevronRight, LayoutDashboard, Package, Settings2, UsersRound } from 'lucide-react';
+import { BellRing, ChevronRight, GraduationCap, LayoutDashboard, Package, Settings2, UsersRound } from 'lucide-react';
 import { Link } from 'react-router';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
@@ -52,6 +52,13 @@ const navRoutes: NavRoute[] = [
     title: 'Staff',
     url: '/staff',
     icon: UsersRound,
+    isActive: true,
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  },
+  {
+    title: 'Students',
+    url: '/students',
+    icon: GraduationCap,
     isActive: true,
     roles: [UserRole.DIRECTOR, UserRole.MANAGER],
   },

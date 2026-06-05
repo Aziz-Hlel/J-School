@@ -3,4 +3,4 @@ import { createStudentRequestSchema } from './createStudentRequest';
 
 export const updateStudentRequestSchema = createStudentRequestSchema;
 
-export type UpdateStudentRequest = z.infer<typeof updateStudentRequestSchema>;
+export type UpdateStudentReq = z.infer<typeof updateStudentRequestSchema>;

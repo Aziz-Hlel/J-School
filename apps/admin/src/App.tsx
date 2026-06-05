@@ -13,6 +13,7 @@ import NotFound from './pages/NotFound';
 import Sidebar from './pages/Sidebar';
 import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
+import Students from './pages/Students';
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
                         <Route path='/' element={<Homepage />} />
 
                         <Route path='/staff' element={<Staff />} />
+                        <Route path='/students' element={<Students />} />
                         <Route path='*' element={<NotFound />} />
                       </Route>
                     </Route>

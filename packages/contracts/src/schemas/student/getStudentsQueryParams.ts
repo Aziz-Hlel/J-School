@@ -31,6 +31,7 @@ export const studentsQueryParams = {
 };
 
 export type StudentsQueryParamsTypes = {
+  TableRow: TableRowType;
   Query: QueryType;
   SortableFields: (typeof studentsQueryParams.sortableFields)[number];
   FilterableFields: (typeof studentsQueryParams.filterableFields)[number];

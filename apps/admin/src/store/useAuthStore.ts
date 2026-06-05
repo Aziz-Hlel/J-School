@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   status: 'idle',
   currentUser: null,
   currentRole: UserRole.DIRECTOR,
-  schoolId: '058752df-1076-4cf0-b126-0433217f5a56', // ! static
+  schoolId: '72d09e5e-87ab-46f5-b01a-7d14afd53dbe', // ! static
 
   bootstrap: async () => {
     set({ status: 'loading' });
