@@ -2,6 +2,9 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "workbench.iconTheme": "material-icon-theme",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
@@ -9,6 +12,8 @@
     "LANG": "en_US.UTF-8"
   },
   "git.autofetch": true,
+  "typescript.experimental.useTsgo": false,
+
   // "js/ts.experimental.useTsgo": true,
   "files.eol": "\n"
 }

@@ -3,6 +3,7 @@ import { MediaType, ReactionType } from '../../types/enums/enums';
 
 export const announcementResponseSchema = z.object({
   id: z.uuid(),
+  title: z.string(),
   description: z.string().nullable(),
   media: z.array(
     z.object({

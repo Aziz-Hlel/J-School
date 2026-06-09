@@ -142,6 +142,7 @@ export class AnnouncementService {
       const counts = reactionCountsMap.get(announcement.id);
       return {
         id: announcement.id,
+        title: announcement.title,
         description: announcement.description,
         media: announcement.media.map((m) => globalMediaService.generateMediaResponse_V2(m)),
         reactions: {
