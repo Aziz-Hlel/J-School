@@ -5,7 +5,7 @@ import {
 
 export type TableRowType = StudentsQueryParamsTypes['TableRow'];
 
-export type TableRowKeys = StudentsQueryParamsTypes['TableRow'];
+export type TableRowKeys = StudentsQueryParamsTypes['TableKeys'];
 
 export const columnFiltersKeys = studentsQueryParams.filterableFields;
 

@@ -1,86 +1,21 @@
 import dayjs from '@/utils/dayjsConfig';
+import { GradeMapping } from '@repo/contracts/map/GradeMapping';
 import type { Gender, StudentStatus } from '@repo/contracts/types/enums/enums';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUp, ChevronsUpDown } from 'lucide-react';
 import GenderComponent from '../../columns/enum/gender/GenderComponent';
 import StatusComponent from '../../columns/enum/status/StatusComponent';
-import type { TableRowType } from '../../core/types';
+import type { TableRowKeys, TableRowType } from '../../core/types';
 import ActionsColumn from '../columns/ActionsColumn';
 import HeaderContainer from '../ContainerComp/HeaderContainer';
 import RowContainer from '../ContainerComp/RowContainer';
 
-type ColumnDefCustom<T> = ColumnDef<T> & { accessorKey?: keyof T };
+type ColumnDefCustom<TableRowType, TableKeys> = ColumnDef<TableRowType> & {
+  accessorKey?: TableKeys;
+  accessorFn?: (row: TableRowType) => unknown;
+};
 
-const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
-  // {
-  //   id: 'email',
-  //   accessorKey: 'email',
-  //   accessorFn: (row: TableRowType) => ({
-  //     email: row.email,
-  //   }),
-  //   header: ({ column }) => {
-  //     return (
-  //       <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-  //         <span>Email </span>
-  //         {column.getIsSorted() === 'asc' && <ArrowUp />}
-  //         {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-  //         {column.getIsSorted() === false && <ChevronsUpDown />}
-  //       </HeaderContainer>
-  //     );
-  //   },
-  //   cell: ({ getValue }) => {
-  //     const { email } = getValue<{
-  //       email: string;
-  //     }>();
-  //     return <RowContainer className='w-96 lowercase'>{email}</RowContainer>;
-  //   },
-
-  //   enableSorting: true,
-  //   enableHiding: true,
-  //   enableGlobalFilter: true,
-  // },
-  // {
-  //   id: 'firstName',
-  //   accessorKey: 'firstName',
-  //   header: ({ column }) => {
-  //     return (
-  //       <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-  //         <span>First Name</span>
-  //         {column.getIsSorted() === 'asc' && <ArrowUp />}
-  //         {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-  //         {column.getIsSorted() === false && <ChevronsUpDown />}
-  //       </HeaderContainer>
-  //     );
-  //   },
-  //   cell: ({ getValue }) => {
-  //     const firstName = getValue<string>();
-  //     return <RowContainer className='w-96 truncate whitespace-nowrap'>{firstName}</RowContainer>;
-  //   },
-
-  //   enableSorting: true,
-  //   enableHiding: true,
-  // },
-  // {
-  //   id: 'lastName',
-  //   accessorKey: 'lastName',
-  //   header: ({ column }) => {
-  //     return (
-  //       <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-  //         <span>Last Name</span>
-  //         {column.getIsSorted() === 'asc' && <ArrowUp />}
-  //         {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-  //         {column.getIsSorted() === false && <ChevronsUpDown />}
-  //       </HeaderContainer>
-  //     );
-  //   },
-  //   cell: ({ getValue }) => {
-  //     const lastName = getValue<string>();
-  //     return <RowContainer className='w-96 truncate whitespace-nowrap'>{lastName}</RowContainer>;
-  //   },
-
-  //   enableSorting: true,
-  //   enableHiding: true,
-  // },
+const columnsRowsDefinition: ColumnDefCustom<TableRowType, TableRowKeys>[] = [
   {
     id: 'uid',
     accessorKey: 'uid',
@@ -89,11 +24,15 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     }),
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.getCanSort() && column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Unique Identifier</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
+          {column.getCanSort() && (
+            <>
+              {column.getIsSorted() === 'asc' && <ArrowUp />}
+              {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+              {column.getIsSorted() === false && <ChevronsUpDown />}
+            </>
+          )}
         </HeaderContainer>
       );
     },
@@ -104,20 +43,97 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
       return <RowContainer className='w-96 lowercase'>{uid}</RowContainer>;
     },
 
-    enableSorting: true,
+    enableSorting: false,
     enableHiding: true,
     enableGlobalFilter: true,
+  },
+  {
+    id: 'english_name',
+    accessorFn: (row: TableRowType) => `${row.firstName.en} ${row.lastName.en}`,
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.getCanSort() && column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Name En</span>
+          {column.getCanSort() && (
+            <>
+              {column.getIsSorted() === 'asc' && <ArrowUp />}
+              {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+              {column.getIsSorted() === false && <ChevronsUpDown />}
+            </>
+          )}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => {
+      const enName = getValue<string>();
+      return <RowContainer className='w-96 truncate whitespace-nowrap'>{enName}</RowContainer>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    id: 'arabic_name',
+    accessorFn: (row: TableRowType) => `${row.firstName.ar} ${row.lastName.ar}`,
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.getCanSort() && column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Name Ar</span>
+          {column.getCanSort() && (
+            <>
+              {column.getIsSorted() === 'asc' && <ArrowUp />}
+              {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+              {column.getIsSorted() === false && <ChevronsUpDown />}
+            </>
+          )}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => {
+      const firstName = getValue<string>();
+      return <RowContainer className='w-96 truncate whitespace-nowrap'>{firstName}</RowContainer>;
+    },
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    id: 'classroom.name',
+    accessorFn: (row: TableRowType) =>
+      row.classroom ? `${GradeMapping[row.classroom.grade]}-${row.classroom.name}` : 'N/A',
+    header: ({ column }) => {
+      return (
+        <HeaderContainer onClick={() => column.getCanSort() && column.toggleSorting(column.getIsSorted() === 'asc')}>
+          <span>Class</span>
+          {column.getCanSort() && (
+            <>
+              {column.getIsSorted() === 'asc' && <ArrowUp />}
+              {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+              {column.getIsSorted() === false && <ChevronsUpDown />}
+            </>
+          )}
+        </HeaderContainer>
+      );
+    },
+    cell: ({ getValue }) => {
+      const className = getValue<string>();
+      return <RowContainer className='w-96 truncate whitespace-nowrap'>{className}</RowContainer>;
+    },
+    enableSorting: false,
+    enableHiding: true,
   },
   {
     id: 'status',
     accessorKey: 'status',
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.getCanSort() && column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Status</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
+          {column.getCanSort() && (
+            <>
+              {column.getIsSorted() === 'asc' && <ArrowUp />}
+              {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+              {column.getIsSorted() === false && <ChevronsUpDown />}
+            </>
+          )}
         </HeaderContainer>
       );
     },
@@ -130,7 +146,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
       );
     },
 
-    enableSorting: true,
+    enableSorting: false,
     enableHiding: true,
   },
   {
@@ -138,11 +154,15 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     accessorKey: 'gender',
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.getCanSort() && column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Gender</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
+          {column.getCanSort() && (
+            <>
+              {column.getIsSorted() === 'asc' && <ArrowUp />}
+              {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+              {column.getIsSorted() === false && <ChevronsUpDown />}
+            </>
+          )}
         </HeaderContainer>
       );
     },
@@ -155,39 +175,22 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
       );
     },
 
-    enableSorting: true,
+    enableSorting: false,
     enableHiding: true,
   },
-  // {
-  //   id: 'price',
-  //   accessorKey: 'price',
-  //   header: ({ column }) => {
-  //     return (
-  //       <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-  //         <span>Price</span>
-  //         {column.getIsSorted() === 'asc' && <ArrowUp />}
-  //         {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-  //         {column.getIsSorted() === false && <ChevronsUpDown />}
-  //       </HeaderContainer>
-  //     );
-  //   },
-  //   cell: ({ getValue }) => {
-  //     const price = getValue<string>();
-  //     return <RowContainer className=" w-96 truncate whitespace-nowrap ">{price}</RowContainer>;
-  //   },
-
-  //   enableSorting: true,
-  //   enableHiding: true,
-  // },
   {
     accessorKey: 'createdAt',
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+        <HeaderContainer onClick={() => column.getCanSort() && column.toggleSorting(column.getIsSorted() === 'asc')}>
           <span>Created At</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
+          {column.getCanSort() && (
+            <>
+              {column.getIsSorted() === 'asc' && <ArrowUp />}
+              {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+              {column.getIsSorted() === false && <ChevronsUpDown />}
+            </>
+          )}
         </HeaderContainer>
       );
     },
@@ -196,7 +199,6 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
       const formattedDate = dayjs(dateString).format('LL');
       return <RowContainer className='w-full'>{formattedDate}</RowContainer>;
     },
-
     enableSorting: true,
     enableHiding: true,
   },

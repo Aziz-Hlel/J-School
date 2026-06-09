@@ -1,4 +1,4 @@
-import type { ClassGrade, Gender, StudentStatus } from '../../types/enums/enums';
+import type { Gender, StudentStatus } from '../../types/enums/enums';
 import type { ClassroomResponse } from '../classroom/classResponse';
 import type { MediaResponse } from '../media/MediaResponse';
 
@@ -7,7 +7,7 @@ type LocalizedString = {
   ar: string | null;
 };
 
-export type StudentResponse2 = {
+export type StudentWithClassroomResponse = {
   id: string;
   uid: string | null;
   firstName: LocalizedString;

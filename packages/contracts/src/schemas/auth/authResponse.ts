@@ -81,6 +81,7 @@ export type ParentWorkspace = {
   userId: string;
   firstName: string;
   lastName: string;
+  school: SchoolResponse;
   student: StudentResponse;
 };
 

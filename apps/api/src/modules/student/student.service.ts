@@ -177,6 +177,7 @@ export class StudentService {
       orderBy,
       include: {
         avatar: true,
+        classroom: true,
       },
     });
 
@@ -184,7 +185,7 @@ export class StudentService {
 
     const [content, totalElements] = await Promise.all([students, studentsCount]);
 
-    const studentResponses = content.map(StudentMapper.toResponse);
+    const studentResponses = content.map(StudentMapper.toResponseWithClassroom);
     const pageResponse = PageMapper.toPage({
       pagination: query,
       totalElements,

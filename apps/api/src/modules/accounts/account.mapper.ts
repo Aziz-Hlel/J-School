@@ -88,15 +88,18 @@ export class AccountMapper {
   static toParentWorkspace({
     user,
     student,
+    school,
   }: {
     user: AccountEntityRequest['users'][0];
     student: ParentWorkspace['student'];
+    school: ParentWorkspace['school'];
   }): ParentWorkspace {
     return {
       id: user.parent?.id as any, // ! just add it to bypass compilation eror look into it afterwards
       userId: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      school,
       student,
     };
   }
@@ -181,6 +184,15 @@ export class AccountMapper {
                     gender: parentStudent.student.gender,
                     schoolId: parentStudent.student.schoolId,
                     avatar: mediaResponse,
+                  },
+                  school: {
+                    id: user.school.id,
+                    slug: user.school.slug,
+                    names: {
+                      en: user.school.nameEn,
+                      fr: user.school.nameFr,
+                      ar: user.school.nameAr,
+                    },
                   },
                 }),
               );

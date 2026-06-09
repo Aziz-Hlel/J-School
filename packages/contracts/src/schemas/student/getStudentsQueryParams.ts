@@ -1,14 +1,17 @@
 import z from 'zod';
+import type { Prettify } from '../../utils/Prettify';
 import { baseQueryParamsSchema } from '../helper/queryParams';
-import type { StudentResponse } from './studentResponse';
+import type { StudentWithClassroomResponse } from './studentWithClassroomResponse';
 
-type TableRowType = StudentResponse;
-type TableRowKeys =
-  | Omit<keyof TableRowType, 'firstName' | 'lastName'>
-  | `firstName.${keyof StudentResponse['firstName']}`
-  | `lastName.${keyof StudentResponse['lastName']}`;
+type TableRowType = StudentWithClassroomResponse;
+type TableRowKeys = Prettify<
+  | keyof Omit<TableRowType, 'firstName' | 'lastName' | 'classroom'>
+  | `firstName.${keyof StudentWithClassroomResponse['firstName']}`
+  | `lastName.${keyof StudentWithClassroomResponse['lastName']}`
+  | `classroom.${keyof StudentWithClassroomResponse['classroom']}`
+>;
 
-const sortableFields = ['firstName', 'lastName', 'createdAt', 'updatedAt'] as const satisfies TableRowKeys[];
+const sortableFields = ['createdAt', 'updatedAt'] as const satisfies TableRowKeys[];
 const filterableFields = ['gender'] as const satisfies TableRowKeys[];
 
 const schema = z.object({
