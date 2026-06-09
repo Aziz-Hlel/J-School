@@ -11,7 +11,9 @@ type TableRowKeys = Prettify<
   | `classroom.${keyof StudentWithClassroomResponse['classroom']}`
 >;
 
-const sortableFields = ['createdAt', 'updatedAt'] as const satisfies TableRowKeys[];
+const sortableFieldsFromKeys = ['status', 'createdAt', 'updatedAt'] as const satisfies TableRowKeys[];
+const sortableCustomFields = ['english_name', 'arabic_name', 'grade'] as const;
+const sortableFields = [...sortableFieldsFromKeys, ...sortableCustomFields] as const;
 const filterableFields = ['gender'] as const satisfies TableRowKeys[];
 
 const schema = z.object({

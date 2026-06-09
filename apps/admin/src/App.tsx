@@ -8,6 +8,7 @@ import { UserSessionProvider } from './context/UserContext';
 import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
 import NetworkStatusGuard from './guard/NetworkStatusGuard';
 import { ThemeProvider } from './lib/theme-provider';
+import Classrooms from './pages/Classrooms';
 import Homepage from './pages/Homepage';
 import NotFound from './pages/NotFound';
 import Sidebar from './pages/Sidebar';
@@ -33,6 +34,7 @@ const App = () => {
                         <Route path='/' element={<Homepage />} />
 
                         <Route path='/staff' element={<Staff />} />
+                        <Route path='/classrooms' element={<Classrooms />} />
                         <Route path='/students' element={<Students />} />
                         <Route path='*' element={<NotFound />} />
                       </Route>

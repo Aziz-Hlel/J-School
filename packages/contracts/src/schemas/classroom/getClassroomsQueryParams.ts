@@ -34,6 +34,8 @@ export const classroomsQueryParams = {
 };
 
 export type ClassroomsQueryParamsTypes = {
+  TableRow: TableRowType;
+  TableRowKeys: TableRowKeys;
   Query: QueryType;
   SortableFields: (typeof classroomsQueryParams.sortableFields)[number];
   FilterableFields: (typeof classroomsQueryParams.filterableFields)[number];

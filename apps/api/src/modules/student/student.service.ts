@@ -162,12 +162,22 @@ export class StudentService {
 
     const orderBy: Prisma.StudentOrderByWithRelationInput = {};
 
-    if (query.sortBy === 'firstName') {
-      orderBy.firstName_en = query.order;
-    } else if (query.sortBy === 'lastName') {
-      orderBy.lastName_en = query.order;
-    } else {
-      orderBy.createdAt = query.order;
+    switch (query.sortBy) {
+      case 'english_name':
+        orderBy.firstName_en = query.order;
+        break;
+      case 'arabic_name':
+        orderBy.firstName_en = query.order;
+        break;
+      case 'grade':
+        orderBy.classroom = { grade: query.order };
+        break;
+      case 'status':
+        orderBy.status = query.order;
+        break;
+      default:
+        orderBy[query.sortBy] = query.order;
+        break;
     }
 
     const students = prisma.student.findMany({

@@ -27,4 +27,12 @@ export const apiRoutes = {
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
   },
+
+  classrooms: {
+    create: (schoolId: string) => `/schools/${schoolId}/classrooms`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
+    getPage: (schoolId: string) => `/schools/${schoolId}/classrooms`,
+    getById: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
+  },
 };

@@ -72,7 +72,7 @@ const getPage = defineOperation({
 
 type OperationsReqFields = {
   [x: string]: {
-    mutationKey: (...args: any[]) => string[];
+    mutationKey: (...args: unknown[]) => string[];
   };
 };
 

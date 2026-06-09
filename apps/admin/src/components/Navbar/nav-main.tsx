@@ -10,95 +10,12 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import navRoutes, { type NavRoute } from '@/data/sidebar/sidebarRoutes';
 import { useAuthStore } from '@/store/useAuthStore';
-import { UserRole } from '@repo/contracts/types/enums/enums';
 import type { Prettify } from '@repo/contracts/utils/Prettify';
-import { BellRing, ChevronRight, GraduationCap, LayoutDashboard, Package, Settings2, UsersRound } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
-
-type NavRoute = {
-  title: string;
-  url: string;
-  icon: React.ElementType;
-  isActive: boolean;
-  items?: (Omit<NavRoute, 'items' | 'icon'> & { roles: UserRole[] })[];
-  roles: UserRole[];
-};
-
-const navRoutes: NavRoute[] = [
-  {
-    title: 'Dashboard',
-    url: '/dashboard',
-    icon: LayoutDashboard,
-    isActive: true,
-    items: [
-      {
-        title: 'Overview',
-        url: '/dashboard/overview',
-        isActive: true,
-        roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-      },
-      {
-        title: 'Stats',
-        url: '/dashboard/stats',
-        isActive: false,
-        roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-      },
-    ],
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Staff',
-    url: '/staff',
-    icon: UsersRound,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Students',
-    url: '/students',
-    icon: GraduationCap,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Products',
-    url: '/products',
-    icon: Package,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Notification',
-    url: '/notification',
-    icon: BellRing,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Products2',
-    url: '/products2',
-    icon: Package,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Settings',
-    url: '/settings',
-    icon: Settings2,
-    isActive: true,
-    items: [
-      {
-        title: 'Profile',
-        url: '/settings/profile',
-        isActive: true,
-        roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-      },
-    ],
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-];
 
 export function NavMain() {
   const currentUserRole = useAuthStore((state) => state.currentRole);
