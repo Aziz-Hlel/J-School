@@ -110,6 +110,7 @@ export class AnnouncementService {
 
     const queryResponse = await prisma.announcement.findMany({
       take: query.limit + 1,
+      // skip: query.cursor ? 1 : 0,
       cursor: query.cursor ? { id: query.cursor } : undefined,
       orderBy: { createdAt: 'desc' },
       where: { schoolId },
@@ -136,22 +137,23 @@ export class AnnouncementService {
         type: true,
       },
     });
+    const likesCount: Map<string, number> = new Map();
+    const heartCounts: Map<string, number> = new Map();
 
-    const reactionCountsMap = reactionCounts.reduce((acc, rc) => {
-      acc.set(rc.annoucementId, rc);
-      return acc;
-    }, new Map<string, { annoucementId: string; type: ReactionType; _count: { type: number } }>());
+    reactionCounts.forEach((reactionCount) => {
+      const map = reactionCount.type === ReactionType.LIKE ? likesCount : heartCounts;
+      map.set(reactionCount.annoucementId, reactionCount._count.type);
+    });
 
     const data: AnnouncementResponse[] = announcements.map((announcement) => {
-      const counts = reactionCountsMap.get(announcement.id);
       return {
         id: announcement.id,
         title: announcement.title,
         description: announcement.description,
         media: announcement.media.map((m) => globalMediaService.generateMediaResponse_V2(m)),
         reactions: {
-          likesCount: counts?.type === 'LIKE' ? counts._count.type : 0,
-          heartsCount: counts?.type === 'HEART' ? counts._count.type : 0,
+          likesCount: likesCount.get(announcement.id) ?? 0,
+          heartsCount: heartCounts.get(announcement.id) ?? 0,
           userReaction: announcement.reactions[0]?.type || null,
         },
         createdAt: announcement.createdAt.toISOString(),
