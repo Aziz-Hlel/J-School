@@ -3,7 +3,7 @@ import getUrlParam from '@/utils/getUrlParam';
 import { createAnnouncmentReq } from '@repo/contracts/schemas/Announcement/create';
 import { syncReactionReqSchema } from '@repo/contracts/schemas/Announcement/syncReactionReq';
 import { updateAnnouncementReq } from '@repo/contracts/schemas/Announcement/update';
-import { cursorQueryParamsSchema } from '@repo/contracts/schemas/const/cursorQueryParams';
+import { cursorQueryParamsSchema } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import type { Request, Response } from 'express';
 import { AnnouncementService } from './announcement.service';
 
@@ -47,7 +47,7 @@ export class AnnouncementController {
     const response = await this.service.find({ schoolId, accountId, query });
     res.status(200).json({
       message: 'Announcements fetched successfully',
-      data: response,
+      ...response,
     });
   };
 

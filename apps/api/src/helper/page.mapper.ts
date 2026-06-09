@@ -7,6 +7,7 @@ export class PageMapper {
     const totalPages = Math.ceil(totalElements / pagination.size);
     const offset = (pagination.page - 1) * pagination.size;
     const pageSize = data.length;
+
     return {
       data,
       pagination: {

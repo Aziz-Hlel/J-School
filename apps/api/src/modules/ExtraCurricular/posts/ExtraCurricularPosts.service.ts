@@ -1,5 +1,5 @@
 import { globalMediaService } from '@/media/media.service';
-import { CursorQueryParams } from '@repo/contracts/schemas/const/cursorQueryParams';
+import { CursorQueryParams } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import { CreatePostReq } from '@repo/contracts/schemas/extraCurricular/post/create';
 import { PostResponse } from '@repo/contracts/schemas/extraCurricular/post/postResponse';
 import { UpdatePostReq } from '@repo/contracts/schemas/extraCurricular/post/update';

@@ -1,9 +1,9 @@
 import getUrlParam from '@/utils/getUrlParam';
-import { ExtraCurricularPostsService } from './ExtraCurricularPosts.service';
-import { cursorQueryParamsSchema } from '@repo/contracts/schemas/const/cursorQueryParams';
-import { Request, Response } from 'express';
+import { cursorQueryParamsSchema } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import { createPostReqSchema } from '@repo/contracts/schemas/extraCurricular/post/create';
 import { updatePostReqSchema } from '@repo/contracts/schemas/extraCurricular/post/update';
+import { Request, Response } from 'express';
+import { ExtraCurricularPostsService } from './ExtraCurricularPosts.service';
 
 export class ExtraCurricularPostsController {
   constructor(private readonly extraCurricularPostsService: ExtraCurricularPostsService) {}

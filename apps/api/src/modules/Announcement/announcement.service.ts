@@ -1,9 +1,11 @@
 import { NotFoundError } from '@/err/service/customErrors';
+import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalMediaService } from '@/media/media.service';
 import type { CreateAnnouncementReq } from '@repo/contracts/schemas/Announcement/create';
 import { AnnouncementResponse } from '@repo/contracts/schemas/Announcement/response';
 import type { SyncReactionReq } from '@repo/contracts/schemas/Announcement/syncReactionReq';
-import { CursorQueryParams } from '@repo/contracts/schemas/const/cursorQueryParams';
+import { CursorQueryParams } from '@repo/contracts/schemas/cursor/cursorQueryParams';
+import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import prisma from '@repo/db';
 import { MediaStatus, ReactionType } from '@repo/db/prisma/enums';
 
@@ -103,11 +105,11 @@ export class AnnouncementService {
     schoolId: string;
     accountId: string;
     query: CursorQueryParams;
-  }): Promise<AnnouncementResponse[]> => {
+  }): Promise<Cursor<AnnouncementResponse>> => {
     const { schoolId, accountId, query } = params;
 
-    const announcements = await prisma.announcement.findMany({
-      take: query.limit,
+    const queryResponse = await prisma.announcement.findMany({
+      take: query.limit + 1,
       skip: query.cursor ? 1 : 0,
       cursor: query.cursor ? { id: query.cursor } : undefined,
       orderBy: { createdAt: 'desc' },
@@ -121,6 +123,9 @@ export class AnnouncementService {
       },
     });
 
+    const lastItem = queryResponse[query.limit];
+    const nextCursor = lastItem?.id || null;
+    const announcements = queryResponse.slice(0, query.limit);
     const announcementIds = announcements.map((a) => a.id);
 
     const reactionCounts = await prisma.reaction.groupBy({
@@ -138,7 +143,7 @@ export class AnnouncementService {
       return acc;
     }, new Map<string, { annoucementId: string; type: ReactionType; _count: { type: number } }>());
 
-    const response: AnnouncementResponse[] = announcements.map((announcement) => {
+    const data: AnnouncementResponse[] = announcements.map((announcement) => {
       const counts = reactionCountsMap.get(announcement.id);
       return {
         id: announcement.id,
@@ -155,7 +160,8 @@ export class AnnouncementService {
       };
     });
 
-    return response;
+    const cursor = CursorMapper.toCursor({ data, nextCursor });
+    return cursor;
   };
 
   syncReaction = async (params: {
