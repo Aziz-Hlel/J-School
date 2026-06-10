@@ -236,7 +236,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: extraCurricularRouter, resource: 'schools/:schoolId/extra-curriculars' },
   { router: extraCurricularPostsRouter, resource: 'schools/:schoolId/extra-curriculars/:extraCurricularId/posts' },
   { router: attendanceRouter, resource: 'schools/:schoolId/attendances' },
-  { router: announcementRouter, resource: 'schools/:schoolId/announcements' },
+  { router: announcementRouter, resource: 'schools/:schoolId/feed' },
   { router: feesRouter, resource: 'schools/:schoolId/fees' },
   { router: feeItemsRouter, resource: 'schools/:schoolId/fees/:feeId/items' },
   { router: teacherCommentsRouter, resource: 'schools/:schoolId/teachers/:teacherId/comments' },

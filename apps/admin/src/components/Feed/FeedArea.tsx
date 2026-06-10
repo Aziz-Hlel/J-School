@@ -105,9 +105,11 @@ const FeedArea = () => {
     },
   ];
 
-  const { data, isLoading } = useInfiniteQuery({
-    queryKey: ['posts'],
-  });
+  //   const { data, isLoading } = useInfiniteQuery({
+  //     queryKey: ['posts'],
+  //     initialPageParam: null,
+  //     queryFn: async () =>
+  //   });
 
   const posts = [];
   return (
