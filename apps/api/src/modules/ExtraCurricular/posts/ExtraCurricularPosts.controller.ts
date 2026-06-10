@@ -38,6 +38,6 @@ export class ExtraCurricularPostsController {
     const schoolId = getUrlParam(req, 'schoolId');
     const extraCurricularId = getUrlParam(req, 'extraCurricularId');
     const response = await this.extraCurricularPostsService.findAll({ schoolId, extraCurricularId, cursorParams });
-    res.json({ data: response });
+    res.json(response);
   };
 }

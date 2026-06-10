@@ -10,13 +10,14 @@ interface FeedCardProps {
     avatarUrl?: string;
   };
   createdAt: string;
+  title: string;
   content: string;
   images?: string[];
   likes?: number;
   loves?: number;
 }
 
-const FeedCard = ({ author, createdAt, content, images = [], likes = 0, loves = 0 }: FeedCardProps) => {
+const FeedCard = ({ author, createdAt, title, content, images = [], likes = 0, loves = 0 }: FeedCardProps) => {
   const displayImages = images.slice(0, 4);
   const extraImagesCount = images.length > 4 ? images.length - 3 : 0;
 
@@ -50,7 +51,7 @@ const FeedCard = ({ author, createdAt, content, images = [], likes = 0, loves = 
 
       <CardContent className='p-0'>
         <div className='px-4 pb-3'>
-          <p className='text-md leading-relaxed whitespace-pre-wrap'>{content}</p>
+          <p className='text-md leading-relaxed font-bold whitespace-pre-wrap'>{title}</p>
 
           <p className='text-sm leading-relaxed whitespace-pre-wrap'>{content}</p>
         </div>

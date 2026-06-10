@@ -1,7 +1,8 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
 import FeedCard from './FeedCard';
 
 const FeedArea = () => {
-  const posts = [
+  const feedData = [
     {
       id: 1,
       author: {
@@ -10,6 +11,7 @@ const FeedArea = () => {
         avatarUrl: '/images/avatar.png',
       },
       createdAt: '24 Nov 2025 • 10:30 AM',
+      title: 'Happy Birthday',
       content: 'Happy Birthday to all students born in November! May your day be filled with joy and success.',
       images: [
         'https://images.unsplash.com/photo-1573782175368-f64dd9a0b5d8?w=800&q=80',
@@ -28,6 +30,7 @@ const FeedArea = () => {
         initials: 'SC',
       },
       createdAt: '23 Nov 2025 • 2:15 PM',
+      title: 'Science Fair',
       content: 'Our students participating in the National Science Fair. Proud moment!',
       images: ['https://images.unsplash.com/photo-1694876873094-4e7c9d0b0b38?w=800&q=80'],
       likes: 34,
@@ -40,6 +43,7 @@ const FeedArea = () => {
         initials: 'SD',
       },
       createdAt: '22 Nov 2025 • 4:00 PM',
+      title: 'Congratulations',
       content: 'Congratulations to our football team for winning the district championship!',
       likes: 67,
       loves: 18,
@@ -51,6 +55,7 @@ const FeedArea = () => {
         initials: 'MS',
       },
       createdAt: '21 Nov 2025 • 11:00 AM',
+      title: 'Annual Music Concert',
       content: "Annual Music Concert tickets are now available for purchase. Don't miss it!",
       images: ['https://images.unsplash.com/photo-1506157786151-b84915b07b44?w=800&q=80'],
       likes: 29,
@@ -63,6 +68,7 @@ const FeedArea = () => {
         initials: 'LT',
       },
       createdAt: '20 Nov 2025 • 3:30 PM',
+      title: 'New Arrivals in the Library',
       content: 'New arrivals in the library! Check out the latest collection of fiction and non-fiction books.',
       images: [
         'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&q=80',
@@ -79,6 +85,7 @@ const FeedArea = () => {
         initials: 'PD',
       },
       createdAt: '19 Nov 2025 • 9:00 AM',
+      title: "Principal's Message",
       content: 'A message to all parents regarding the upcoming Parent-Teacher Conference.',
       likes: 89,
       loves: 25,
@@ -90,6 +97,7 @@ const FeedArea = () => {
         initials: 'MD',
       },
       createdAt: '18 Nov 2025 • 1:00 PM',
+      title: 'Weekly Mathematics Challenge Winners',
       content:
         'Weekly Mathematics challenge winners announced! Congratulations to the following students:\n1. John Doe (Grade 10) - 15/15\n2. Jane Smith (Grade 9) - 14/15\n3. Alex Johnson (Grade 10) - 14/15',
       likes: 55,
@@ -97,11 +105,17 @@ const FeedArea = () => {
     },
   ];
 
+  const { data, isLoading } = useInfiniteQuery({
+    queryKey: ['posts'],
+  });
+
+  const posts = [];
   return (
     <div className='mx-auto flex w-full flex-col items-center gap-6'>
-      {posts.map((post) => (
+      {feedData.map((post) => (
         <FeedCard key={post.id} {...post} />
       ))}
+      <footer />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalMediaService } from '@/media/media.service';
 import { CursorQueryParams } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import { CreatePostReq } from '@repo/contracts/schemas/extraCurricular/post/create';
@@ -78,12 +79,7 @@ export class ExtraCurricularPostsService {
     const lastItem = queryResult[cursorParams.limit];
     const nextCursor = lastItem?.id || null;
 
-    return {
-      data: response,
-      meta: {
-        hasMore: queryResult.length > cursorParams.limit,
-        nextCursor,
-      },
-    };
+    const cursorResponse = CursorMapper.toCursor({ data: response, nextCursor });
+    return cursorResponse;
   };
 }
