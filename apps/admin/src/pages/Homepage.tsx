@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { createClassroomRequestSchema } from '@repo/contracts/schemas/classroom/createClassRequest';
+import { createClassroomReqSchema } from '@repo/contracts/schemas/classroom/createClassRequest';
 
 const Homepage = () => {
-  const data = createClassroomRequestSchema.parse({
+  const data = createClassroomReqSchema.parse({
     name: 'Classroom 1',
     description: 'Classroom 1 description',
     grade: 'KG',

@@ -1,9 +1,9 @@
-import React from 'react';
-import type { Table } from '@tanstack/react-table';
-import { DataTableFacetedFilter } from './faceted-filter';
-import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import type { Table } from '@tanstack/react-table';
+import { X } from 'lucide-react';
+import React from 'react';
 import type { TableRowType } from '../../core/types';
+import { DataTableFacetedFilter } from './faceted-filter';
 
 type EnumFilterToolBarProps = {
   table: Table<TableRowType>;
@@ -40,8 +40,8 @@ const EnumFilterToolBar = ({ table, filters }: EnumFilterToolBarProps) => {
       {isFiltered && (
         <Button
           variant='ghost'
-          onClick={async () => {
-            await table.resetColumnFilters();
+          onClick={() => {
+            table.resetColumnFilters();
           }}
           className='h-8 px-2 lg:px-3'
         >

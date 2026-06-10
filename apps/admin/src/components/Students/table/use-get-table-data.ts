@@ -20,13 +20,13 @@ const useGetTableData = () => {
   const adjustedQueryParams = {
     ...queryParams,
     page: queryParams.page,
+    gender: queryParams.gender.length > 0 ? queryParams.gender.join(',') : undefined,
+    status: queryParams.status.length > 0 ? queryParams.status.join(',') : undefined,
   };
   const schoolId = useAuthStore((state) => state.schoolId);
-
   const { data, isFetching } = useQuery({
     queryKey: [MODULE_NAME, { ...queryParams }],
     queryFn: async () => await operations.getPage.fn(schoolId, adjustedQueryParams),
-    // queryFn: async () => await services.getPage(adjustedQueryParams),
     placeholderData: (previousData) => previousData,
   });
 

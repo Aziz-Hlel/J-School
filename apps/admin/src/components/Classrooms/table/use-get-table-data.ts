@@ -26,7 +26,6 @@ const useGetTableData = () => {
   const { data, isFetching } = useQuery({
     queryKey: [MODULE_NAME, { ...queryParams }],
     queryFn: async () => await operations.getPage.fn(schoolId, adjustedQueryParams),
-    // queryFn: async () => await services.getPage(adjustedQueryParams),
     placeholderData: (previousData) => previousData,
   });
 

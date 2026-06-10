@@ -68,6 +68,7 @@ export class StudentController {
   };
 
   findAll = async (req: Request, res: Response) => {
+    console.log('query : ', req.query);
     const query = studentsQueryParams.schema.parse(req.query);
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const pageResponse = await this.studentService.findAll({ query, schoolId });

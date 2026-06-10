@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const updateClassroomRequestSchema = z
+export const updateClassroomReqSchema = z
   .object({
     name: z
       .string()
@@ -18,4 +18,4 @@ export const updateClassroomRequestSchema = z
   })
   .strict();
 
-export type UpdateClassroomRequest = z.infer<typeof updateClassroomRequestSchema>;
+export type UpdateClassroomRequest = z.infer<typeof updateClassroomReqSchema>;

@@ -1,5 +1,7 @@
 import { apiRoutes } from '@/api/routes';
 import type { ClassroomResponse } from '@repo/contracts/schemas/classroom/classResponse';
+import type { CreateClassroomRequest as CreateClassroomReq } from '@repo/contracts/schemas/classroom/createClassRequest';
+import type { UpdateClassroomRequest as UpdateClassroomReq } from '@repo/contracts/schemas/classroom/updateClassRequest';
 import type { Page } from '@repo/contracts/schemas/page/Page';
 import { apiService } from '../apiService';
 
@@ -12,12 +14,12 @@ export const classroomsService = {
   getById: async (schoolId: string, id: string) =>
     apiService.getThrowable<ClassroomResponse>(apiRoutes.classrooms.getById(schoolId, id)),
 
-  create: async (schoolId: string, data: { name: string; email: string; phone: string }) =>
-    apiService.postThrowable<ClassroomResponse>(apiRoutes.classrooms.create(schoolId), data),
+  create: async (params: { schoolId: string; data: CreateClassroomReq }) =>
+    apiService.postThrowable<ClassroomResponse>(apiRoutes.classrooms.create(params.schoolId), params.data),
 
-  update: async (schoolId: string, id: string, data: { name: string; email: string; phone: string }) =>
-    apiService.putThrowable<ClassroomResponse>(apiRoutes.classrooms.update(schoolId, id), data),
+  update: async (params: { schoolId: string; id: string; data: UpdateClassroomReq }) =>
+    apiService.putThrowable<ClassroomResponse>(apiRoutes.classrooms.update(params.schoolId, params.id), params.data),
 
-  delete: async (schoolId: string, id: string) =>
-    apiService.deleteThrowable<void>(apiRoutes.classrooms.delete(schoolId, id)),
+  delete: async (params: { schoolId: string; id: string }) =>
+    apiService.deleteThrowable<void>(apiRoutes.classrooms.delete(params.schoolId, params.id)),
 };

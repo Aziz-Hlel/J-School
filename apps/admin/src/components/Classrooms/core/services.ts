@@ -1,15 +1,14 @@
 import { classroomsService } from '@/api/service/classroomsService';
-import { createClassroomRequestSchema } from '@repo/contracts/schemas/classroom/createClassRequest';
-import { updateClassroomRequestSchema } from '@repo/contracts/schemas/classroom/updateClassRequest';
-import { createStudentRequestSchema } from '@repo/contracts/schemas/student/createStudentRequest';
+import { createClassroomReqSchema } from '@repo/contracts/schemas/classroom/createClassRequest';
+import { updateClassroomReqSchema } from '@repo/contracts/schemas/classroom/updateClassRequest';
 import { ClassGrade } from '@repo/contracts/types/enums/enums';
 import { type z } from 'zod';
 import { TableData } from './core';
 import { defaultQuery, queryParamsSchema, type TableRowType } from './types';
 
 export type schemasType = {
-  create: z.infer<typeof createStudentRequestSchema>;
-  update: z.infer<typeof updateClassroomRequestSchema>;
+  create: z.infer<typeof createClassroomReqSchema>;
+  update: z.infer<typeof updateClassroomReqSchema>;
   delete: typeof classroomsService.delete;
   getPage: typeof classroomsService.getPage;
 };
@@ -25,7 +24,7 @@ function defineOperation<TSchema extends z.ZodType, TFn, T, K>(config: {
 
 const create = defineOperation({
   fn: classroomsService.create,
-  schema: createClassroomRequestSchema,
+  schema: createClassroomReqSchema,
   mutationKey: () => [TableData.MODULE_NAME, 'create'],
   defaultValues: () => {
     return {
@@ -38,12 +37,11 @@ const create = defineOperation({
 
 const update = defineOperation({
   fn: classroomsService.update,
-  schema: updateClassroomRequestSchema,
+  schema: updateClassroomReqSchema,
   mutationKey: () => [TableData.MODULE_NAME, 'update'],
   defaultValues: (moduleInstance: TableRowType) => ({
     name: moduleInstance.name,
     description: moduleInstance.description,
-    grade: moduleInstance.grade,
   }),
 });
 

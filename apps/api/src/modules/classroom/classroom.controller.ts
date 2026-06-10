@@ -1,10 +1,10 @@
 import getUrlParam from '@/utils/getUrlParam';
+import { createClassroomReqSchema } from '@repo/contracts/schemas/classroom/createClassRequest';
+import { classroomsQueryParams } from '@repo/contracts/schemas/classroom/getClassroomsQueryParams';
+import { updateClassroomReqSchema } from '@repo/contracts/schemas/classroom/updateClassRequest';
 import { Request, Response } from 'express';
 import { ClassroomService } from './classroom.service';
-import { createClassroomRequestSchema } from '@repo/contracts/schemas/classroom/createClassRequest';
-import { updateClassroomRequestSchema } from '@repo/contracts/schemas/classroom/updateClassRequest';
 import { CreateClassroomUseCase } from './use-case/createClassroom.use-case';
-import { classroomsQueryParams } from '@repo/contracts/schemas/classroom/getClassroomsQueryParams';
 
 export class ClassroomController {
   constructor(
@@ -13,7 +13,7 @@ export class ClassroomController {
   ) {}
 
   create = async (req: Request, res: Response) => {
-    const input = createClassroomRequestSchema.parse(req.body);
+    const input = createClassroomReqSchema.parse(req.body);
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const data = await this.createClassroomUseCase.execute({ input, schoolId });
     res.status(201).json({
@@ -23,7 +23,7 @@ export class ClassroomController {
   };
 
   update = async (req: Request, res: Response) => {
-    const input = updateClassroomRequestSchema.parse(req.body, {});
+    const input = updateClassroomReqSchema.parse(req.body, {});
     console.log(input);
     const classroomId = getUrlParam(req, 'classroomId', { uuid: true });
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });

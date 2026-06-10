@@ -1,13 +1,14 @@
 import type { Page } from '@repo/contracts/schemas/page/Page';
 import { type CreateStudentReq } from '@repo/contracts/schemas/student/createStudentRequest';
 import type { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
+import type { StudentWithClassroomResponse } from '@repo/contracts/schemas/student/studentWithClassroomResponse';
 import { type UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudentRequest';
 import { apiService } from '../apiService';
 import { apiRoutes } from '../routes';
 
 export const studentService = {
   getPage: async (schoolId: string, searchParams: { [k: string]: string | number | Array<string> }) =>
-    apiService.getThrowable<Page<StudentResponse>>(apiRoutes.student.getPage(schoolId), {
+    apiService.getThrowable<Page<StudentWithClassroomResponse>>(apiRoutes.student.getPage(schoolId), {
       params: searchParams,
     }),
 

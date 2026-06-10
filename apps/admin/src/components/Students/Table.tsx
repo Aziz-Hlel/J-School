@@ -5,6 +5,7 @@ import { DataTablePagination } from './table/pagination/Pagination';
 import { type TableRowType } from './core/types';
 import useMyTable from './use-my-table';
 import TableBodyContent from './table/TableMainComp/TableBodyContent';
+import tableFilters from './table/toolBar/Filters/ColumnFilters';
 
 const MainTable = () => {
   const { table, pageSize, isLoading } = useMyTable();
@@ -12,7 +13,7 @@ const MainTable = () => {
   return (
     <>
       <div className='flex w-full max-w-full flex-col gap-4'>
-        <DataTableToolbar table={table} filters={[]} />
+        <DataTableToolbar table={table} filters={tableFilters} />
         <div className='overflow-hidden rounded-md border'>
           <Table className='table-fixed'>
             <TableHeaders<TableRowType> table={table} />

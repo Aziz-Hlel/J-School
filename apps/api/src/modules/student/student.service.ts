@@ -150,6 +150,20 @@ export class StudentService {
       schoolId,
     };
 
+    if (query.status.length > 0) {
+      where.status = {
+        in: query.status,
+      };
+    }
+
+    if (query.gender.length > 0) {
+      where.gender = {
+        in: query.gender,
+      };
+    }
+    console.log('query.status = ', query.status);
+    console.log('query.gender = ', query.gender);
+
     if (query.search && query.search.trim().length > 0) {
       const searchValue = query.search.trim();
       where.OR = [
