@@ -110,7 +110,6 @@ export class AnnouncementService {
 
     const queryResponse = await prisma.announcement.findMany({
       take: query.limit + 1,
-      // skip: query.cursor ? 1 : 0,
       cursor: query.cursor ? { id: query.cursor } : undefined,
       orderBy: { createdAt: 'desc' },
       where: { schoolId },

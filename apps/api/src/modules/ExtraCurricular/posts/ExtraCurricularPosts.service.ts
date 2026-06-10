@@ -60,13 +60,12 @@ export class ExtraCurricularPostsService {
         schoolId,
         extraCurricularId,
       },
-      take: cursorParams.limit,
+      take: cursorParams.limit + 1,
       orderBy: { createdAt: 'desc' },
       cursor: cursorParams.cursor ? { id: cursorParams.cursor } : undefined,
-      skip: cursorParams.cursor ? 1 : 0,
       include: { media: true },
     });
-    const response: PostResponse[] = queryResult.map((s) => {
+    const response: PostResponse[] = queryResult.slice(0, cursorParams.limit).map((s) => {
       const mediaResponses = s.media.map((media) => globalMediaService.toMediaResponse(media));
       return {
         id: s.id,
@@ -76,6 +75,15 @@ export class ExtraCurricularPostsService {
         updatedAt: s.updatedAt.toISOString(),
       };
     });
-    return response;
+    const lastItem = queryResult[cursorParams.limit];
+    const nextCursor = lastItem?.id || null;
+
+    return {
+      data: response,
+      meta: {
+        hasMore: queryResult.length > cursorParams.limit,
+        nextCursor,
+      },
+    };
   };
 }
