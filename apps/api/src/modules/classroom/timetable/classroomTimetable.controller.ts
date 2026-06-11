@@ -1,8 +1,8 @@
 import getUrlParam from '@/utils/getUrlParam';
-import { createClassroomTimetableRequestSchema } from '@repo/contracts/schemas/classroom/timeTable/createTimetableRequest2';
+import { createClassroomTimetableReqSchema } from '@repo/contracts/schemas/classroom/timeTable/createTimetableRequest2';
+import { updateTimetableRequestSchema } from '@repo/contracts/schemas/timeTable/updateTimetableRequest';
 import { Request, Response } from 'express';
 import { ClassroomTimetableService } from './classroomTimetable.service';
-import { updateTimetableRequestSchema } from '@repo/contracts/schemas/timeTable/updateTimetableRequest';
 
 export class ClassroomTimetableController {
   constructor(private readonly classroomTimetableService: ClassroomTimetableService) {}
@@ -20,7 +20,7 @@ export class ClassroomTimetableController {
     const schoolId = getUrlParam(req, 'schoolId');
     const classroomId = getUrlParam(req, 'classroomId');
 
-    const input = createClassroomTimetableRequestSchema.parse(req.body);
+    const input = createClassroomTimetableReqSchema.parse(req.body);
     const timetableResponse = await this.classroomTimetableService.create({ input, schoolId, classroomId });
     res.status(201).json({
       message: 'Timetable created successfully',

@@ -1,11 +1,12 @@
 import z from 'zod';
 import { globalTimetableItemSchema } from '../../shared/timetable.schema';
 
-export const createClassroomTimetableRequestSchema = z.object({
+export const createClassroomTimetableReqSchema = z.object({
   subjectId: z.uuid(),
   day: globalTimetableItemSchema.day,
   startTime: globalTimetableItemSchema.startTime,
   endTime: globalTimetableItemSchema.endTime,
+  room: globalTimetableItemSchema.room,
 });
 
-export type CreateClassroomTimetableRequest = z.infer<typeof createClassroomTimetableRequestSchema>;
+export type CreateClassroomTimetableReq = z.infer<typeof createClassroomTimetableReqSchema>;

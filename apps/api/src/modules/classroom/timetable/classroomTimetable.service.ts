@@ -1,11 +1,11 @@
+import { NotFoundError } from '@/err/service/customErrors';
 import { AssignemntMapper } from '@/modules/assignment/assignment.mapper';
+import { TimetableMapper } from '@/modules/timetable/timetable.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
-import { CreateClassroomTimetableRequest } from '@repo/contracts/schemas/classroom/timeTable/createTimetableRequest2';
+import { CreateClassroomTimetableReq } from '@repo/contracts/schemas/classroom/timeTable/createTimetableRequest2';
 import { updateTimetableRequest } from '@repo/contracts/schemas/timeTable/updateTimetableRequest';
 import prisma from '@repo/db';
 import { TimetableRepo } from './timetable.repo';
-import { NotFoundError } from '@/err/service/customErrors';
-import { TimetableMapper } from '@/modules/timetable/timetable.mapper';
 
 export class ClassroomTimetableService {
   constructor(private readonly repo: TimetableRepo) {}
@@ -45,7 +45,7 @@ export class ClassroomTimetableService {
     return assignment.id;
   };
 
-  create = async (params: { input: CreateClassroomTimetableRequest; schoolId: string; classroomId: string }) => {
+  create = async (params: { input: CreateClassroomTimetableReq; schoolId: string; classroomId: string }) => {
     const { input, schoolId, classroomId } = params;
     const assignmentId = await this.getAssignmentId({
       schoolId,

@@ -1,14 +1,11 @@
 import { prisma } from '@/bootstrap/db.init';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { parseTime } from '@/utils/dayjs';
-import { CreateClassroomTimetableRequest } from '@repo/contracts/schemas/classroom/timeTable/createTimetableRequest2';
+import { CreateClassroomTimetableReq } from '@repo/contracts/schemas/classroom/timeTable/createTimetableRequest2';
 import { updateTimetableRequest } from '@repo/contracts/schemas/timeTable/updateTimetableRequest';
 
 export class TimetableRepo {
-  create = async (
-    params: { input: CreateClassroomTimetableRequest; schoolId: string; assignmentId: string },
-    tx?: TX,
-  ) => {
+  create = async (params: { input: CreateClassroomTimetableReq; schoolId: string; assignmentId: string }, tx?: TX) => {
     const { input, schoolId, assignmentId } = params;
     const client = tx ?? prisma;
     return await client.timetable.create({
@@ -18,6 +15,7 @@ export class TimetableRepo {
         day: input.day,
         startTime: parseTime(input.startTime),
         endTime: parseTime(input.endTime),
+        room: input.room,
       },
     });
   };
@@ -34,6 +32,7 @@ export class TimetableRepo {
         day: input.day,
         startTime: parseTime(input.startTime),
         endTime: parseTime(input.endTime),
+        room: input.room,
       },
     });
   };
