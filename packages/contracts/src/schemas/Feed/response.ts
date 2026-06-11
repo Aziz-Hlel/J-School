@@ -1,7 +1,7 @@
 import z from 'zod';
 import { MediaType, ReactionType } from '../../types/enums/enums';
 
-export const announcementResponseSchema = z.object({
+export const feedResponseSchema = z.object({
   id: z.uuid(),
   title: z.string(),
   description: z.string().nullable(),
@@ -28,4 +28,4 @@ export const announcementResponseSchema = z.object({
   updatedAt: z.string(),
 });
 
-export type AnnouncementResponse = z.infer<typeof announcementResponseSchema>;
+export type FeedResponse = z.infer<typeof feedResponseSchema>;

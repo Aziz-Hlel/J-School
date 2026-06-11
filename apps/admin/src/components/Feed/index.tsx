@@ -1,7 +1,12 @@
 import Main from './Main';
+import { SelectedRowProvider } from './context/selected-row-provider';
 
 const FeedIndex = () => {
-  return <Main />;
+  return (
+    <SelectedRowProvider>
+      <Main />
+    </SelectedRowProvider>
+  );
 };
 
 export default FeedIndex;

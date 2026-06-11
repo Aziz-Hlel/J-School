@@ -1,8 +1,8 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
-import { createFeedReq } from '@repo/contracts/schemas/Announcement/create';
-import { syncReactionReqSchema } from '@repo/contracts/schemas/Announcement/syncReactionReq';
-import { updateAnnouncementReq } from '@repo/contracts/schemas/Announcement/update';
+import { createFeedReq } from '@repo/contracts/schemas/Feed/create';
+import { syncReactionReqSchema } from '@repo/contracts/schemas/Feed/syncReactionReq';
+import { updateAnnouncementReq } from '@repo/contracts/schemas/Feed/update';
 import { cursorQueryParamsSchema } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import type { Request, Response } from 'express';
 import { AnnouncementService } from './announcement.service';

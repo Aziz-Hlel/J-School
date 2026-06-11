@@ -1,5 +1,5 @@
 import { apiRoutes } from '@/api/routes';
-import type { AnnouncementResponse } from '@repo/contracts/schemas/Announcement/response';
+import type { AnnouncementResponse } from '@repo/contracts/schemas/Feed/response';
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import { apiService } from '../apiService';
 

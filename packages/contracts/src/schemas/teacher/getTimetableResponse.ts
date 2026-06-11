@@ -5,6 +5,7 @@ export type TeacherTimetableRes = {
   day: DayOfWeek;
   endTime: string;
   startTime: string;
+  room: string | null;
   subject: {
     name: {
       en: string;
@@ -15,5 +16,6 @@ export type TeacherTimetableRes = {
   classroom: {
     id: string;
     name: string;
+    grade: string;
   };
 };

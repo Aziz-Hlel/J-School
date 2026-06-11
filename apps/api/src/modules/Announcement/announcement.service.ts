@@ -1,9 +1,9 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalMediaService } from '@/media/media.service';
-import type { CreateFeedReq } from '@repo/contracts/schemas/Announcement/create';
-import { AnnouncementResponse } from '@repo/contracts/schemas/Announcement/response';
-import type { SyncReactionReq } from '@repo/contracts/schemas/Announcement/syncReactionReq';
+import type { CreateFeedReq } from '@repo/contracts/schemas/Feed/create';
+import { FeedResponse } from '@repo/contracts/schemas/Feed/response';
+import type { SyncReactionReq } from '@repo/contracts/schemas/Feed/syncReactionReq';
 import { CursorQueryParams } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import prisma from '@repo/db';
@@ -105,7 +105,7 @@ export class AnnouncementService {
     schoolId: string;
     accountId: string;
     query: CursorQueryParams;
-  }): Promise<Cursor<AnnouncementResponse>> => {
+  }): Promise<Cursor<FeedResponse>> => {
     const { schoolId, accountId, query } = params;
 
     const queryResponse = await prisma.announcement.findMany({
@@ -144,7 +144,7 @@ export class AnnouncementService {
       map.set(reactionCount.annoucementId, reactionCount._count.type);
     });
 
-    const data: AnnouncementResponse[] = announcements.map((announcement) => {
+    const data: FeedResponse[] = announcements.map((announcement) => {
       return {
         id: announcement.id,
         title: announcement.title,

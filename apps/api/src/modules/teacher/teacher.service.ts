@@ -1,18 +1,18 @@
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
+import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
+import { toTime } from '@/utils/dayjs';
+import { Page } from '@repo/contracts/schemas/page/Page';
+import { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
+import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
+import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
 import { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
+import prisma from '@repo/db';
+import { DayOfWeek, Prisma } from '@repo/db/prisma/client';
+import { ClassroomMapper } from '../classroom/classroom.mapper';
 import { UserService } from '../User/user.service';
 import { TeacherMapper } from './teacher.mapper';
 import { TeacherRepo } from './teacher.repo';
-import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
-import { Page } from '@repo/contracts/schemas/page/Page';
-import { DayOfWeek, Prisma } from '@repo/db/prisma/client';
-import { PageMapper } from '@/helper/page.mapper';
-import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
-import prisma from '@repo/db';
-import { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
-import { toTime } from '@/utils/dayjs';
-import { ClassroomMapper } from '../classroom/classroom.mapper';
 
 export class TeacherService {
   constructor(
@@ -176,6 +176,7 @@ export class TeacherService {
         day: true,
         startTime: true,
         endTime: true,
+        room: true,
         assignment: {
           select: {
             subject: {
@@ -189,6 +190,7 @@ export class TeacherService {
               select: {
                 id: true,
                 name: true,
+                grade: true,
               },
             },
           },
@@ -201,6 +203,7 @@ export class TeacherService {
       day: entry.day,
       startTime: toTime(entry.startTime),
       endTime: toTime(entry.endTime),
+      room: entry.room,
       subject: {
         name: {
           en: entry.assignment.subject.name_en,
@@ -211,6 +214,7 @@ export class TeacherService {
       classroom: {
         id: entry.assignment.classroom.id,
         name: entry.assignment.classroom.name,
+        grade: entry.assignment.classroom.grade,
       },
     }));
 

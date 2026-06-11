@@ -1,6 +1,6 @@
+import { faker } from '@faker-js/faker';
 import { MediaStatus } from '@repo/db/prisma/enums';
 import { MediaCreateInput } from '@repo/db/prisma/models';
-import { faker } from '@faker-js/faker';
 
 export type SeedMedia = {
   baseName: string;
@@ -28,8 +28,8 @@ const generateSeedMedia = (props: { prefix: string; baseName: string } | { key: 
     return {
       baseName: key,
       key,
-      fileType: key.split('.')[1],
-      mimeType: key.split('.')[1],
+      fileType: key.split('.')[1] ?? 'png',
+      mimeType: key.split('.')[1] ?? 'png',
       fileSize: 1024 * 500,
       status: MediaStatus.CONFIRMED,
     };
@@ -44,8 +44,8 @@ const generateSeedMedia = (props: { prefix: string; baseName: string } | { key: 
   return {
     baseName,
     key: `${prefix}/${baseName}`,
-    fileType: baseName.split('.')[1],
-    mimeType: baseName.split('.')[1],
+    fileType: baseName.split('.')[1] ?? 'png',
+    mimeType: baseName.split('.')[1] ?? 'png',
     fileSize: 1024 * 500,
     status: MediaStatus.CONFIRMED,
   };

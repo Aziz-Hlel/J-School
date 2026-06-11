@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import type { AnnouncementResponse } from '@repo/contracts/schemas/Announcement/response';
+import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
 import dayjs from 'dayjs';
 import { Heart, MoreVertical, ThumbsUp } from 'lucide-react';
 
@@ -11,7 +11,7 @@ const FeedCard = ({
   description,
   media = [],
   reactions = { likesCount: 0, heartsCount: 0, userReaction: null },
-}: AnnouncementResponse) => {
+}: FeedResponse) => {
   const images = media.filter((m) => m.type === 'IMAGE').map((m) => m.url);
   const displayImages = images.slice(0, 4);
   const extraImagesCount = images.length > 4 ? images.length - 3 : 0;

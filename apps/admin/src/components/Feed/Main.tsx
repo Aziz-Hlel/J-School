@@ -1,10 +1,14 @@
 import BreadcrumbHeader from '@/pages/Header';
 import { Button } from '../ui/button';
 import { Card, CardAction, CardContent, CardHeader } from '../ui/card';
+import { useSelectedRow } from './context/selected-row-provider';
 import { TableData } from './core/core';
 import FeedArea from './FeedArea';
+import DialogContainer from './dialogs/DialogContainer';
 
 const Main = () => {
+  const { handleDialogStateChange } = useSelectedRow();
+
   return (
     <div>
       <BreadcrumbHeader breadcrumbs={[{ title: TableData.MainCard.title, href: TableData.href }]} />
@@ -12,12 +16,18 @@ const Main = () => {
         <Card>
           <CardHeader>
             <CardAction>
-              <Button onClick={() => {}}>{TableData.MainCard.addButton.label}</Button>
+              <Button
+                onClick={() => {
+                  handleDialogStateChange({ openDialog: 'add' });
+                }}
+              >
+                {TableData.MainCard.addButton.label}
+              </Button>
             </CardAction>
           </CardHeader>
           <CardContent>
             <FeedArea />
-            {/* <DialogContainer /> */}
+            <DialogContainer />
           </CardContent>
         </Card>
       </div>
