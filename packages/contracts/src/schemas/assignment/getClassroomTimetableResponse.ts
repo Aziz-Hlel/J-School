@@ -12,6 +12,7 @@ export type GetClassroomTimetableResponse = Record<
     };
     startTime: string;
     endTime: string;
+    room: string | null;
     teacher: { firstName: string; lastName: string; gender: Gender; id: string } | null;
   }[]
 >;

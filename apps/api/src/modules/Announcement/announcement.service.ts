@@ -1,7 +1,7 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalMediaService } from '@/media/media.service';
-import type { CreateAnnouncementReq } from '@repo/contracts/schemas/Announcement/create';
+import type { CreateFeedReq } from '@repo/contracts/schemas/Announcement/create';
 import { AnnouncementResponse } from '@repo/contracts/schemas/Announcement/response';
 import type { SyncReactionReq } from '@repo/contracts/schemas/Announcement/syncReactionReq';
 import { CursorQueryParams } from '@repo/contracts/schemas/cursor/cursorQueryParams';
@@ -10,7 +10,7 @@ import prisma from '@repo/db';
 import { MediaStatus, ReactionType } from '@repo/db/prisma/enums';
 
 export class AnnouncementService {
-  create = async (params: { schoolId: string; input: CreateAnnouncementReq }) => {
+  create = async (params: { schoolId: string; input: CreateFeedReq }) => {
     const { schoolId, input } = params;
     return await prisma.$transaction(async (tx) => {
       const createdAnnouncement = await tx.announcement.create({
@@ -50,7 +50,7 @@ export class AnnouncementService {
     });
   };
 
-  update = async (params: { schoolId: string; input: CreateAnnouncementReq; announcementId: string }) => {
+  update = async (params: { schoolId: string; input: CreateFeedReq; announcementId: string }) => {
     const { input, announcementId, schoolId } = params;
     return await prisma.$transaction(async (tx) => {
       const updatedAnnoucement = await tx.announcement.update({

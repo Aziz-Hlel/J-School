@@ -6,6 +6,7 @@ export type TimetableResponse = {
   day: DayOfWeek;
   startTime: string;
   endTime: string;
+  room: string | null;
   createdAt: string;
   updatedAt: string;
 };

@@ -10,6 +10,7 @@ export class TimetableMapper {
       day: timetable.day,
       startTime: toTime(timetable.startTime),
       endTime: toTime(timetable.endTime),
+      room: timetable.room,
       createdAt: timetable.createdAt.toISOString(),
       updatedAt: timetable.updatedAt.toISOString(),
     };

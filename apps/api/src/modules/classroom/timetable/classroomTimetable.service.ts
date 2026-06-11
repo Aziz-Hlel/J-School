@@ -22,7 +22,7 @@ export class ClassroomTimetableService {
         subject: { select: { id: true, name_en: true, name_fr: true, name_ar: true } },
         teacher: { select: { id: true, user: { select: { firstName: true, lastName: true, gender: true } } } },
         timetable: {
-          select: { id: true, day: true, startTime: true, endTime: true },
+          select: { id: true, day: true, startTime: true, endTime: true, room: true },
           orderBy: { startTime: 'asc' },
         },
       },

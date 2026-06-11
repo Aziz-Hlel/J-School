@@ -1,7 +1,7 @@
-import { DayOfWeek } from '@repo/db/prisma/enums';
-import { AssignmentGetPayload } from '@repo/db/prisma/models';
 import { toTime } from '@/utils/dayjs';
 import { GetClassroomTimetableResponse } from '@repo/contracts/schemas/assignment/getClassroomTimetableResponse';
+import { DayOfWeek } from '@repo/db/prisma/enums';
+import { AssignmentGetPayload } from '@repo/db/prisma/models';
 
 export class AssignemntMapper {
   static toClassroomTimeTable(
@@ -10,7 +10,7 @@ export class AssignemntMapper {
         subject: { select: { id: true; name_en: true; name_fr: true; name_ar: true } };
         teacher: { select: { id: true; user: { select: { firstName: true; lastName: true; gender: true } } } };
         timetable: {
-          select: { id: true; day: true; startTime: true; endTime: true };
+          select: { id: true; day: true; startTime: true; endTime: true; room: true };
           orderBy: { startTime: 'asc' };
         };
       };
@@ -37,6 +37,7 @@ export class AssignemntMapper {
           },
           startTime: toTime(session.startTime),
           endTime: toTime(session.endTime),
+          room: session.room,
           teacher: assignment.teacher
             ? {
                 id: assignment.teacher.id,

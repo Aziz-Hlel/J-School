@@ -1,6 +1,6 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
-import { createAnnouncmentReq } from '@repo/contracts/schemas/Announcement/create';
+import { createFeedReq } from '@repo/contracts/schemas/Announcement/create';
 import { syncReactionReqSchema } from '@repo/contracts/schemas/Announcement/syncReactionReq';
 import { updateAnnouncementReq } from '@repo/contracts/schemas/Announcement/update';
 import { cursorQueryParamsSchema } from '@repo/contracts/schemas/cursor/cursorQueryParams';
@@ -12,7 +12,7 @@ export class AnnouncementController {
 
   create = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
-    const input = createAnnouncmentReq.parse(req.body);
+    const input = createFeedReq.parse(req.body);
     const response = await this.service.create({ schoolId, input });
     const statusCode = response.failedCount > 0 ? 207 : 201;
     res.status(statusCode).json({

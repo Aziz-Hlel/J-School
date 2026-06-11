@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const createAnnouncmentReq = z.object({
+export const createFeedReq = z.object({
   title: z.string().nonempty({ message: 'Title is required' }).max(100, 'Title must be less than 100 characters'),
   description: z
     .string()
@@ -17,4 +17,4 @@ export const createAnnouncmentReq = z.object({
     .nullable(),
 });
 
-export type CreateAnnouncementReq = z.infer<typeof createAnnouncmentReq>;
+export type CreateFeedReq = z.infer<typeof createFeedReq>;
