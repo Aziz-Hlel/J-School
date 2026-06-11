@@ -242,6 +242,7 @@ export class TeacherService {
           select: {
             subject: {
               select: {
+                id: true,
                 name_en: true,
                 name_fr: true,
                 name_ar: true,
@@ -270,16 +271,15 @@ export class TeacherService {
     };
     queryResponse.forEach((entry) => {
       timetableResponse[entry.day].push({
-        id: entry.id,
+        timetableId: entry.id,
+        subjectId: entry.assignment.subject.id,
         startTime: toTime(entry.startTime),
         endTime: toTime(entry.endTime),
         room: entry.room,
-        subject: {
-          name: {
-            en: entry.assignment.subject.name_en,
-            fr: entry.assignment.subject.name_fr,
-            ar: entry.assignment.subject.name_ar,
-          },
+        subjectName: {
+          en: entry.assignment.subject.name_en,
+          fr: entry.assignment.subject.name_fr,
+          ar: entry.assignment.subject.name_ar,
         },
         classroom: {
           id: entry.assignment.classroom.id,
