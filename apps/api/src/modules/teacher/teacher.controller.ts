@@ -68,6 +68,16 @@ export class TeacherController {
     });
   };
 
+  getFullTimeTable = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const timetable = await this.teacherService.getFullTimetable({ teacherId, schoolId });
+    res.status(200).json({
+      message: 'Teacher timetable fetched successfully',
+      data: timetable,
+    });
+  };
+
   getExtraCurricularWithSession = async (req: Request, res: Response) => {
     const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
