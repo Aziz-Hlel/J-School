@@ -1,4 +1,4 @@
-import type { DayOfWeek } from '../../types/enums/enums';
+import type { DayOfWeek } from '@repo/db/prisma/enums';
 
 export type TimetableResponse = {
   id: string;

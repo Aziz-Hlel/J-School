@@ -3,7 +3,8 @@ import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { toTime } from '@/utils/dayjs';
 import { Page } from '@repo/contracts/schemas/page/Page';
-import { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
+import type { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
+import { TeacherFullTimetableRes } from '@repo/contracts/schemas/teacher/teacherFullTimeTableRes';
 import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
 import { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
@@ -219,6 +220,76 @@ export class TeacherService {
     }));
 
     return response;
+  };
+
+  getFullTimetable = async (params: { schoolId: string; teacherId: string }) => {
+    const { schoolId, teacherId } = params;
+
+    const queryResponse = await prisma.timetable.findMany({
+      where: {
+        assignment: {
+          schoolId,
+          teacherId,
+        },
+      },
+      select: {
+        id: true,
+        day: true,
+        startTime: true,
+        endTime: true,
+        room: true,
+        assignment: {
+          select: {
+            subject: {
+              select: {
+                name_en: true,
+                name_fr: true,
+                name_ar: true,
+              },
+            },
+            classroom: {
+              select: {
+                id: true,
+                name: true,
+                grade: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const timetableResponse: TeacherFullTimetableRes = {
+      [DayOfWeek.MONDAY]: [],
+      [DayOfWeek.TUESDAY]: [],
+      [DayOfWeek.WEDNESDAY]: [],
+      [DayOfWeek.THURSDAY]: [],
+      [DayOfWeek.FRIDAY]: [],
+      [DayOfWeek.SATURDAY]: [],
+      [DayOfWeek.SUNDAY]: [],
+    };
+    queryResponse.forEach((entry) => {
+      timetableResponse[entry.day].push({
+        id: entry.id,
+        startTime: toTime(entry.startTime),
+        endTime: toTime(entry.endTime),
+        room: entry.room,
+        subject: {
+          name: {
+            en: entry.assignment.subject.name_en,
+            fr: entry.assignment.subject.name_fr,
+            ar: entry.assignment.subject.name_ar,
+          },
+        },
+        classroom: {
+          id: entry.assignment.classroom.id,
+          name: entry.assignment.classroom.name,
+          grade: entry.assignment.classroom.grade,
+        },
+      });
+    });
+
+    return timetableResponse;
   };
 
   getExtracurricular = async (params: { schoolId: string; teacherId: string; query: { day?: DayOfWeek } }) => {
