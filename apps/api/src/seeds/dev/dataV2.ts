@@ -49,6 +49,7 @@ type TimeTableSeedData = {
       day: DayOfWeek;
       startTime: string;
       endTime: string;
+      room: string | null;
     }[];
   };
 };
@@ -62,18 +63,21 @@ export const timeTableSeedData: TimeTableSeedData = {
         day: DayOfWeek.MONDAY,
         startTime: '08:00',
         endTime: '10:00',
+        room: 'Salle 1',
       },
       {
         subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
         day: DayOfWeek.WEDNESDAY,
         startTime: '08:00',
         endTime: '10:00',
+        room: 'Salle 12',
       },
       {
         subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
         day: DayOfWeek.FRIDAY,
         startTime: '08:00',
         endTime: '10:00',
+        room: 'Salle 3',
       },
     ],
   },
@@ -86,18 +90,21 @@ export const timeTableSeedData: TimeTableSeedData = {
         day: DayOfWeek.MONDAY,
         startTime: '10:00',
         endTime: '12:00',
+        room: 'Salle 4',
       },
       {
         subjectNameEn: subjectsGradeSix.math.subject.name.en,
         day: DayOfWeek.WEDNESDAY,
         startTime: '10:00',
         endTime: '12:00',
+        room: 'Salle 4',
       },
       {
         subjectNameEn: subjectsGradeSix.math.subject.name.en,
         day: DayOfWeek.FRIDAY,
         startTime: '10:00',
         endTime: '12:00',
+        room: 'Salle Electronique',
       },
     ],
   },

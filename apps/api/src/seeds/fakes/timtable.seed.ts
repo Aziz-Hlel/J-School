@@ -16,6 +16,7 @@ export class TimetableSeed {
         day: DayOfWeek;
         startTime: string;
         endTime: string;
+        room: string | null;
       };
     },
     tx?: TX,
@@ -54,10 +55,13 @@ export class TimetableSeed {
         day: params.timetable.day,
         startTime: parseTime(params.timetable.startTime),
         endTime: parseTime(params.timetable.endTime),
+        room: params.timetable.room,
       },
       update: {
+        day: params.timetable.day,
         startTime: parseTime(params.timetable.startTime),
         endTime: parseTime(params.timetable.endTime),
+        room: params.timetable.room,
       },
     });
   };
