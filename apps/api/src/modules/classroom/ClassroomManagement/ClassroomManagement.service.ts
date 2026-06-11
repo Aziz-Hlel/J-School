@@ -1,11 +1,12 @@
-import prisma from '@repo/db';
-import { ClassroomManagementMapper } from './ClassroomManagement.mapper';
+import { BadRequestError } from '@/err/service/customErrors';
+import { globalMediaService } from '@/media/media.service';
+import { StudentMapper } from '@/modules/student/student.mapper';
 import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
 import type { AssignStudentRequestInput } from '@repo/contracts/schemas/classroom/management/assignStudentRequest';
 import type { GetClassroomAttendancesQuery } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
-import { BadRequestError } from '@/err/service/customErrors';
 import type { ClassroomAttendancesResponse } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesResponse';
-import { StudentMapper } from '@/modules/student/student.mapper';
+import prisma from '@repo/db';
+import { ClassroomManagementMapper } from './ClassroomManagement.mapper';
 
 export const getSubjectsWithTeachersSelect = {
   id: true,
@@ -110,6 +111,7 @@ export class ClassroomManagementService {
         lastName_en: true,
         firstName_ar: true,
         lastName_ar: true,
+        gender: true,
         attendances: {
           where: {
             timetableId: query.timetableId,
@@ -120,6 +122,7 @@ export class ClassroomManagementService {
             id: true,
           },
         },
+        avatar: true,
       },
     });
 
@@ -130,6 +133,8 @@ export class ClassroomManagementService {
         lastName_en: student.lastName_en,
         firstName_ar: student.firstName_ar,
         lastName_ar: student.lastName_ar,
+        gender: student.gender,
+        avatar: globalMediaService.toMediaResponse(student.avatar),
         attendance: student.attendances[0] ?? null,
       };
     });

@@ -352,6 +352,21 @@ export function MultipleMediaUpload({
         </CardContent>
       </Card>
 
+      {/* Error Messages */}
+      {errors.length > 0 && (
+        <Alert variant='destructive' className='mt-5'>
+          <CircleAlertIcon />
+          <AlertTitle>File upload error(s)</AlertTitle>
+          <AlertDescription>
+            {errors.map((error, index) => (
+              <p key={index} className='last:mb-0'>
+                {error}
+              </p>
+            ))}
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Upload Progress Cards */}
       {images.length > 0 && (
         <div className='mt-6 space-y-3'>
@@ -386,21 +401,6 @@ export function MultipleMediaUpload({
             </Card>
           ))}
         </div>
-      )}
-
-      {/* Error Messages */}
-      {errors.length > 0 && (
-        <Alert variant='destructive' className='mt-5'>
-          <CircleAlertIcon />
-          <AlertTitle>File upload error(s)</AlertTitle>
-          <AlertDescription>
-            {errors.map((error, index) => (
-              <p key={index} className='last:mb-0'>
-                {error}
-              </p>
-            ))}
-          </AlertDescription>
-        </Alert>
       )}
     </div>
   );
