@@ -183,6 +183,13 @@ export class AccountMapper {
                     },
                     gender: parentStudent.student.gender,
                     schoolId: parentStudent.student.schoolId,
+                    classroom: parentStudent.student.classroom
+                      ? {
+                          id: parentStudent.student.classroom.id,
+                          name: parentStudent.student.classroom.name,
+                          grade: parentStudent.student.classroom.grade,
+                        }
+                      : null,
                     avatar: mediaResponse,
                   },
                   school: {

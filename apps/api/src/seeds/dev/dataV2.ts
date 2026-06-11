@@ -261,8 +261,8 @@ export const announcementSeedData = {
     id: genUuid('Rentree'),
     name: 'Rentree',
     title: 'Rentree scolaire 2025-2026',
-    description: 'Rentree scolaire 2025-2026, \n bienvenue a tous les eleves et personnels de notre ecole',
-    content: [MediaType.VIDEO, MediaType.IMAGE],
+    description: 'bienvenue a tous les eleves et personnels de notre ecole',
+    content: [MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE],
     createdAt: new Date('2025-09-01'),
   },
 
@@ -270,18 +270,26 @@ export const announcementSeedData = {
     id: genUuid('Ramdhan'),
     name: 'Ramdhan',
     title: 'Ramdhan kareem',
-    description: 'Ramdhan kareem, \n nous vous souhaitons un excellent mois de ramdhan',
-    content: [MediaType.IMAGE],
-    createdAt: new Date('2025-03-23'),
+    description: 'nous vous souhaitons un excellent mois de ramdhan',
+    content: [MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE],
+    createdAt: new Date('2026-03-23'),
   },
 
   AidFitr: {
     id: genUuid('AidFitr'),
     name: 'AidFitr',
     title: 'Aid el fitr',
-    description: 'Aid el fitr, \n nous vous souhaitons un excellent aid el fitr',
+    description: 'nous vous souhaitons un excellent aid el fitr',
+    content: [MediaType.IMAGE, MediaType.IMAGE],
+    createdAt: new Date('2026-04-10'),
+  },
+  EidAdha: {
+    id: genUuid('EidAdha'),
+    name: 'EidAdha',
+    title: 'Eid Adha',
+    description: 'Eid Adha moubarak a tous',
     content: [MediaType.IMAGE],
-    createdAt: new Date('2025-04-10'),
+    createdAt: new Date('2026-06-10'),
   },
 } as const satisfies AnnouncementSeedDataType;
 

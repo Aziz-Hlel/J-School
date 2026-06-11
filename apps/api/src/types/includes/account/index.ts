@@ -1,7 +1,6 @@
-import { DefaultArgs } from '@prisma/client/runtime/client';
 import { AccountGetPayload, AccountInclude } from '@repo/db/prisma/models';
 // * fix the erros above, i think you should use other types since those are from files not recommened to import from , not sure though
-type AccountIncludeConstraint = AccountInclude<DefaultArgs>;
+type AccountIncludeConstraint = AccountInclude;
 
 export const accountInclude = {
   avatar: true,
@@ -22,6 +21,7 @@ export const accountInclude = {
               student: {
                 include: {
                   avatar: true,
+                  classroom: true,
                 },
               },
             },

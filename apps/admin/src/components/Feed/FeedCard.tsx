@@ -1,23 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Heart, MoreVertical, Pin, ThumbsUp } from 'lucide-react';
+import type { AnnouncementResponse } from '@repo/contracts/schemas/Announcement/response';
+import dayjs from 'dayjs';
+import { Heart, MoreVertical, ThumbsUp } from 'lucide-react';
 
-interface FeedCardProps {
-  author: {
-    name: string;
-    initials: string;
-    avatarUrl?: string;
-  };
-  createdAt: string;
-  title: string;
-  content: string;
-  images?: string[];
-  likes?: number;
-  loves?: number;
-}
-
-const FeedCard = ({ author, createdAt, title, content, images = [], likes = 0, loves = 0 }: FeedCardProps) => {
+const FeedCard = ({
+  createdAt,
+  title,
+  description,
+  media = [],
+  reactions = { likesCount: 0, heartsCount: 0, userReaction: null },
+}: AnnouncementResponse) => {
+  const images = media.filter((m) => m.type === 'IMAGE').map((m) => m.url);
   const displayImages = images.slice(0, 4);
   const extraImagesCount = images.length > 4 ? images.length - 3 : 0;
 
@@ -26,23 +21,20 @@ const FeedCard = ({ author, createdAt, title, content, images = [], likes = 0, l
       <CardHeader className='flex flex-row items-start justify-between space-y-0 p-4'>
         <div className='flex items-center gap-3'>
           <Avatar className='h-10 w-10 border'>
-            <AvatarImage src={author.avatarUrl} alt={author.name} />
-            <AvatarFallback className='text-sm font-medium'>{author.initials}</AvatarFallback>
+            <AvatarImage alt={'System'} />
+            <AvatarFallback className='text-sm font-medium'>Sys</AvatarFallback>
           </Avatar>
           <div className='flex flex-col'>
             <div className='flex items-center gap-2'>
-              <span className='text-sm font-semibold'>{author.name}</span>
+              <span className='text-sm font-semibold'>System</span>
             </div>
             <div className='text-muted-foreground flex items-center text-xs'>
-              <span>{createdAt}</span>
+              <span>{dayjs(createdAt).format('DD MMM YYYY [at] HH:mm')}</span>
               <span className='bg-muted-foreground/50 mx-1.5 inline-block h-0.5 w-0.5 rounded-full'></span>
             </div>
           </div>
         </div>
         <div className='flex items-center gap-2'>
-          <Button variant='ghost' size='icon' className='text-muted-foreground h-8 w-8'>
-            <Pin className='h-4 w-4' />
-          </Button>
           <Button variant='ghost' size='icon' className='text-muted-foreground h-8 w-8'>
             <MoreVertical className='h-4 w-4' />
           </Button>
@@ -53,7 +45,7 @@ const FeedCard = ({ author, createdAt, title, content, images = [], likes = 0, l
         <div className='px-4 pb-3'>
           <p className='text-md leading-relaxed font-bold whitespace-pre-wrap'>{title}</p>
 
-          <p className='text-sm leading-relaxed whitespace-pre-wrap'>{content}</p>
+          <p className='text-sm leading-relaxed whitespace-pre-wrap'>{description}</p>
         </div>
 
         {images.length > 0 && (
@@ -70,7 +62,7 @@ const FeedCard = ({ author, createdAt, title, content, images = [], likes = 0, l
               }`}
             >
               {displayImages.map((img, idx) => (
-                <div key={idx} className='bg-muted relative aspect-video sm:aspect-[4/3]'>
+                <div key={idx} className='bg-muted relative aspect-video sm:aspect-4/3'>
                   <img src={img} alt={`Attachment ${idx + 1}`} className='h-full w-full object-cover' />
                   {idx === 3 && extraImagesCount > 0 && (
                     <div className='absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[1px]'>
@@ -84,9 +76,9 @@ const FeedCard = ({ author, createdAt, title, content, images = [], likes = 0, l
         )}
 
         <div className='text-muted-foreground flex items-center justify-end px-4 py-2 text-xs'>
-          <span>{likes} Aime</span>
+          <span>{reactions.likesCount} Aime</span>
           <span className='mx-2'>·</span>
-          <span>{loves} Adore</span>
+          <span>{reactions.heartsCount} Adore</span>
         </div>
       </CardContent>
 

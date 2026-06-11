@@ -4,6 +4,7 @@ import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
 import queryClient from './config/react-qeury';
 import { AuthProvider } from './context/AuthContext';
+import { SchoolIdProvider } from './context/SchoolContext';
 import { UserSessionProvider } from './context/UserContext';
 import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
 import NetworkStatusGuard from './guard/NetworkStatusGuard';
@@ -20,7 +21,7 @@ import Students from './pages/Students';
 const App = () => {
   return (
     <>
-      <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
+      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
         <QueryClientProvider client={queryClient}>
           <NetworkStatusGuard>
             <Router>
@@ -31,14 +32,16 @@ const App = () => {
                   <Route path='/signup' element={<SignupPage />} />
                   <Route element={<AuthenticatedRoutes />}>
                     <Route element={<UserSessionProvider />}>
-                      <Route element={<Sidebar dir={'ltr'} />}>
-                        <Route path='/' element={<Homepage />} />
+                      <Route element={<SchoolIdProvider />}>
+                        <Route element={<Sidebar dir={'ltr'} />}>
+                          <Route path='/' element={<Homepage />} />
 
-                        <Route path='/staff' element={<Staff />} />
-                        <Route path='/classrooms' element={<Classrooms />} />
-                        <Route path='/students' element={<Students />} />
-                        <Route path='/feed' element={<Feed />} />
-                        <Route path='*' element={<NotFound />} />
+                          <Route path='/staff' element={<Staff />} />
+                          <Route path='/classrooms' element={<Classrooms />} />
+                          <Route path='/students' element={<Students />} />
+                          <Route path='/feed' element={<Feed />} />
+                          <Route path='*' element={<NotFound />} />
+                        </Route>
                       </Route>
                     </Route>
                   </Route>
