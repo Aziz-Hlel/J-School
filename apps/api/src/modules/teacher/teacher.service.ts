@@ -271,15 +271,20 @@ export class TeacherService {
     };
     queryResponse.forEach((entry) => {
       timetableResponse[entry.day].push({
-        timetableId: entry.id,
-        subjectId: entry.assignment.subject.id,
-        startTime: toTime(entry.startTime),
-        endTime: toTime(entry.endTime),
-        room: entry.room,
-        subjectName: {
-          en: entry.assignment.subject.name_en,
-          fr: entry.assignment.subject.name_fr,
-          ar: entry.assignment.subject.name_ar,
+        timetable: {
+          id: entry.id,
+          day: entry.day,
+          startTime: toTime(entry.startTime),
+          endTime: toTime(entry.endTime),
+          room: entry.room,
+        },
+        subject: {
+          id: entry.assignment.subject.id,
+          name: {
+            en: entry.assignment.subject.name_en,
+            fr: entry.assignment.subject.name_fr,
+            ar: entry.assignment.subject.name_ar,
+          },
         },
         classroom: {
           id: entry.assignment.classroom.id,

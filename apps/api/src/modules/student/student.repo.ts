@@ -209,6 +209,7 @@ export class StudentRepo {
           id: true,
           status: true,
           week: true,
+          note: true,
           timetable: {
             select: {
               id: true,

@@ -233,6 +233,7 @@ export class StudentService {
       return {
         id: item.id,
         status: item.status,
+        note: item.note,
         subject: {
           name: {
             en: item.timetable.assignment.subject.name_en,
@@ -270,17 +271,25 @@ export class StudentService {
 
     queryResult.forEach((item) =>
       timeTableResponse[item.timetable.day].push({
-        timetableId: item.timetable.id,
-        status: item.status,
-        subjectId: item.timetable.assignment.subject.id,
-
-        subjectName: {
-          en: item.timetable.assignment.subject.name_en,
-          ar: item.timetable.assignment.subject.name_ar,
-          fr: item.timetable.assignment.subject.name_fr,
+        timetable: {
+          id: item.timetable.id,
+          day: item.timetable.day,
+          startTime: toTime(item.timetable.startTime),
+          endTime: toTime(item.timetable.endTime),
         },
-        startTime: toTime(item.timetable.startTime),
-        endTime: toTime(item.timetable.endTime),
+        subject: {
+          id: item.timetable.assignment.subject.id,
+          name: {
+            en: item.timetable.assignment.subject.name_en,
+            ar: item.timetable.assignment.subject.name_ar,
+            fr: item.timetable.assignment.subject.name_fr,
+          },
+        },
+        attendance: {
+          id: item.id,
+          status: item.status,
+          note: item.note,
+        },
       }),
     );
 
