@@ -33,7 +33,7 @@ export const createRouter = (teacherController: TeacherController) => {
   // * removed requireUserPermissionOrTeacherHimself just cause ... fck it, no time to be pondering about it
   router.get('/:teacherId/timetable', requireAuth, asyncHandler(teacherController.getTimetable));
 
-  router.get('/:teacherId/full-timetable', requireAuth, asyncHandler(teacherController.getFullTimeTable));
+  router.get('/:teacherId/timetable/weekly', requireAuth, asyncHandler(teacherController.getFullTimeTable));
 
   router.get(
     '/:teacherId/extraCurriculars',

@@ -5,7 +5,7 @@ import { requireAuth } from '@/middleware/requireAuth.middleware';
 
 export const createClassroomTimetableRouter = (classroomTimetableController: ClassroomTimetableController) => {
   const router = Router({ mergeParams: true });
-  router.get('/', requireAuth, asyncHandler(classroomTimetableController.findAll));
+  router.get('/weekly', requireAuth, asyncHandler(classroomTimetableController.findAll));
   router.post('/', requireAuth, asyncHandler(classroomTimetableController.create));
   router.put('/:timetableId', requireAuth, asyncHandler(classroomTimetableController.update));
   router.delete('/:timetableId', requireAuth, asyncHandler(classroomTimetableController.delete));
