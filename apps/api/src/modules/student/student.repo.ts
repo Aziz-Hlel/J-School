@@ -211,10 +211,13 @@ export class StudentRepo {
           week: true,
           timetable: {
             select: {
+              id: true,
               day: true,
               startTime: true,
               endTime: true,
-              assignment: { select: { subject: { select: { name_en: true, name_ar: true, name_fr: true } } } },
+              assignment: {
+                select: { subject: { select: { id: true, name_en: true, name_ar: true, name_fr: true } } },
+              },
             },
           },
         },

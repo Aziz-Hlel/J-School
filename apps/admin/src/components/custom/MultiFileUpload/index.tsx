@@ -22,6 +22,7 @@ import {
   VideoIcon,
   XIcon,
 } from 'lucide-react';
+import getCroppedImg from './cropImg.func';
 
 interface FileUploadItem extends FileWithPreview {
   id: string;
@@ -102,9 +103,10 @@ export function MultiFileUpload({
     maxFiles,
     maxSize,
     accept,
+
     multiple,
     initialFiles: defaultImages,
-    onFilesChange: (newFiles) => {
+    onFilesChange: async (newFiles) => {
       // Convert to upload items when files change, preserving existing status
       const newUploadFiles = newFiles.map((file) => {
         // Check if this file already exists in uploadFiles
@@ -125,7 +127,14 @@ export function MultiFileUpload({
           };
         }
       });
-      setUploadFiles(newUploadFiles);
+      const newOptimizedFiles = await Promise.all(
+        newUploadFiles.map(async (file) => {
+          const optimizedImg = await getCroppedImg(file.preview, file.file.name, null);
+          return { ...file, file: optimizedImg };
+        }),
+      );
+
+      setUploadFiles(newOptimizedFiles);
       onFilesChange?.(newFiles);
     },
   });
@@ -279,6 +288,21 @@ export function MultiFileUpload({
         </div>
       )}
 
+      {/* Error Messages */}
+      {errors.length > 0 && (
+        <Alert variant='destructive' className='mt-5'>
+          <CircleAlertIcon />
+          <AlertTitle>File upload error(s)</AlertTitle>
+          <AlertDescription>
+            {errors.map((error, index) => (
+              <p key={index} className='last:mb-0'>
+                {error}
+              </p>
+            ))}
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* File List */}
       <Sortable
         value={uploadFiles}
@@ -366,21 +390,6 @@ export function MultiFileUpload({
           </div>
         )}
       </Sortable>
-
-      {/* Error Messages */}
-      {errors.length > 0 && (
-        <Alert variant='destructive' className='mt-5'>
-          <CircleAlertIcon />
-          <AlertTitle>File upload error(s)</AlertTitle>
-          <AlertDescription>
-            {errors.map((error, index) => (
-              <p key={index} className='last:mb-0'>
-                {error}
-              </p>
-            ))}
-          </AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 }

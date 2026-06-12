@@ -11,13 +11,15 @@ import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student
 import type { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
 import type { StudentAttendanceResponse } from '@repo/contracts/schemas/student/getAttendancesResponse';
 import { StudentsQueryParamsTypes } from '@repo/contracts/schemas/student/getStudentsQueryParams';
+import type { StudentWeeklyAttendancesQueryParam } from '@repo/contracts/schemas/student/getWeeklyAttendances';
+import type { StudentWeeklyAttendanceResponse } from '@repo/contracts/schemas/student/getWeeklyAttendancesResponse';
 import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
 import { UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudentRequest';
 import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
 import { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/client';
-import { StudentStatus } from '@repo/db/prisma/enums';
+import { DayOfWeek, StudentStatus } from '@repo/db/prisma/enums';
 import { ExtraCurricularMapper } from '../ExtraCurricular/ExtraCurricular.mapper';
 import { FeesMapper } from '../Fees/fees.mapper';
 import { HomeworkMapper } from '../Homework/homework.mapper';
@@ -245,6 +247,44 @@ export class StudentService {
     });
 
     return response;
+  };
+
+  findWeeklyAttendances = async (params: {
+    schoolId: string;
+    studentId: string;
+    query: StudentWeeklyAttendancesQueryParam;
+  }): Promise<StudentWeeklyAttendanceResponse> => {
+    const { schoolId, studentId, query } = params;
+
+    const queryResult = await this.studentRepo.findStudentAttendance({ schoolId, studentId, query });
+
+    const timeTableResponse: StudentWeeklyAttendanceResponse = {
+      [DayOfWeek.MONDAY]: [],
+      [DayOfWeek.TUESDAY]: [],
+      [DayOfWeek.WEDNESDAY]: [],
+      [DayOfWeek.THURSDAY]: [],
+      [DayOfWeek.FRIDAY]: [],
+      [DayOfWeek.SATURDAY]: [],
+      [DayOfWeek.SUNDAY]: [],
+    };
+
+    queryResult.forEach((item) =>
+      timeTableResponse[item.timetable.day].push({
+        timetableId: item.timetable.id,
+        status: item.status,
+        subjectId: item.timetable.assignment.subject.id,
+
+        subjectName: {
+          en: item.timetable.assignment.subject.name_en,
+          ar: item.timetable.assignment.subject.name_ar,
+          fr: item.timetable.assignment.subject.name_fr,
+        },
+        startTime: toTime(item.timetable.startTime),
+        endTime: toTime(item.timetable.endTime),
+      }),
+    );
+
+    return timeTableResponse;
   };
 
   findFees = async (params: { schoolId: string; query: FeesQueryParamsTypes['Query']; studentId: string }) => {

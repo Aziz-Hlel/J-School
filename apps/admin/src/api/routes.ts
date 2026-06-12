@@ -5,6 +5,10 @@ export const apiRoutes = {
 
   health: () => '/health',
 
+  media: {
+    presignedUrl: () => '/media/presigned-url' as const,
+  },
+
   auth: {
     signIn: () => '/auth/sign-in',
     signUp: () => '/auth/sign-up',
