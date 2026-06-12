@@ -1,4 +1,4 @@
-import { MultipleMediaUpload } from '@/components/custom/MultipleMediaUpload/MultipleMediaUpload';
+import { MultiFileUpload } from '@/components/custom/MultiFileUpload';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
@@ -41,7 +41,7 @@ const CreateFeed = () => {
       <DialogTrigger asChild>
         <Button>Create Feed</Button>
       </DialogTrigger>
-      <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-y-auto sm:max-w-106.25'>
+      <DialogContent className='scrollbar flex h-[calc(100dvh-4rem)] scrollbar-thumb-zinc-700 scrollbar-track-zinc-200 flex-col overflow-y-auto sm:max-w-106.25'>
         <DialogHeader>
           <DialogTitle>Create a New Feed</DialogTitle>
         </DialogHeader>
@@ -75,7 +75,7 @@ const CreateFeed = () => {
             )}
           />
 
-          <MultipleMediaUpload />
+          <MultiFileUpload />
 
           <DialogFooter className='pt-4'>
             <Button type='button' variant='outline' onClick={handleCancel}>

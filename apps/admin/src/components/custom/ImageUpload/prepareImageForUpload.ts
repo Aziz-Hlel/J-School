@@ -39,8 +39,8 @@ const prepareImageForUpload = async (
   await imgLoaded;
 
   // Calculate new dimensions while maintaining aspect ratio
-  let width = img.width;
-  let height = img.height;
+  const width = img.width;
+  const height = img.height;
   // if (width > maxWidth) {
   //   height = Math.round((height * maxWidth) / width);
   //   width = maxWidth;

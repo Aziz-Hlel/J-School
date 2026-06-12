@@ -129,19 +129,23 @@ export class ClassroomManagementService {
 
     const studentIds = students.map((s) => s.id);
 
-    const lastAttendances = await prisma.attendance.findMany({
-      where: {
-        studentId: { in: studentIds },
-      },
-      orderBy: { createdAt: 'desc' },
-      distinct: ['studentId'],
-      select: {
-        id: true,
-        status: true,
-        note: true,
-        studentId: true,
-      },
-    });
+    const isLastAttendance = students.find((student) => student.attendances.length !== 0);
+
+    const lastAttendances = isLastAttendance
+      ? await prisma.attendance.findMany({
+          where: {
+            studentId: { in: studentIds },
+          },
+          orderBy: { createdAt: 'desc' },
+          distinct: ['studentId'],
+          select: {
+            id: true,
+            status: true,
+            note: true,
+            studentId: true,
+          },
+        })
+      : [];
 
     const lastAttendanceMap = new Map(lastAttendances.map((a) => [a.studentId, a]));
 
@@ -157,8 +161,6 @@ export class ClassroomManagementService {
           en: student.lastName_en,
           ar: student.lastName_ar,
         },
-        firstName_ar: student.firstName_ar,
-        lastName_ar: student.lastName_ar,
         gender: student.gender,
         avatar: globalMediaService.toMediaResponse(student.avatar),
         attendance: student.attendances[0]

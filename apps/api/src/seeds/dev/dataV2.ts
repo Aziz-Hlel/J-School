@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { mediaTypeSeed, MediaTypeSeed } from '../fakes/media.seed2';
 import { genUuid } from '../helper/generateUuid';
 import { studentSeedData, teacherSeedData } from './actors';
-import { toWeekNbr } from '@repo/contracts/schemas/utils/getWeekNbr';
 
 export const subjectsWithExamsSeedData = {
   [ClassGrade.SIX]: {
@@ -265,39 +264,45 @@ type AnnouncementSeedDataType = {
 };
 
 export const announcementSeedData = {
-  Rentree: {
-    id: genUuid('Rentree'),
-    name: 'Rentree',
-    title: 'Rentree scolaire 2025-2026',
-    description: 'bienvenue a tous les eleves et personnels de notre ecole',
-    content: [MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE],
-    createdAt: new Date('2025-09-01'),
-  },
-
-  Ramdhan: {
-    id: genUuid('Ramdhan'),
-    name: 'Ramdhan',
-    title: 'Ramdhan kareem',
-    description: 'nous vous souhaitons un excellent mois de ramdhan',
-    content: [MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE],
-    createdAt: new Date('2026-03-23'),
-  },
-
-  AidFitr: {
-    id: genUuid('AidFitr'),
-    name: 'AidFitr',
-    title: 'Aid el fitr',
-    description: 'nous vous souhaitons un excellent aid el fitr',
-    content: [MediaType.IMAGE, MediaType.IMAGE],
-    createdAt: new Date('2026-04-10'),
-  },
   EidAdha: {
     id: genUuid('EidAdha'),
     name: 'EidAdha',
     title: 'Eid Adha',
     description: 'Eid Adha moubarak a tous',
-    content: [MediaType.IMAGE],
+    content: [
+      MediaType.IMAGE,
+      MediaType.IMAGE,
+      MediaType.IMAGE,
+      MediaType.IMAGE,
+      MediaType.IMAGE,
+      MediaType.IMAGE,
+      MediaType.IMAGE,
+    ],
     createdAt: new Date('2026-06-10'),
+  },
+  AidFitr: {
+    id: genUuid('AidFitr'),
+    name: 'AidFitr',
+    title: 'Aid el fitr',
+    description: 'nous vous souhaitons un excellent aid el fitr',
+    content: [MediaType.IMAGE, MediaType.IMAGE, MediaType.IMAGE],
+    createdAt: new Date('2026-04-10'),
+  },
+  Ramdhan: {
+    id: genUuid('Ramdhan'),
+    name: 'Ramdhan',
+    title: 'Ramdhan kareem',
+    description: 'nous vous souhaitons un excellent mois de ramdhan',
+    content: [MediaType.IMAGE, MediaType.IMAGE],
+    createdAt: new Date('2026-03-23'),
+  },
+  Rentree: {
+    id: genUuid('Rentree'),
+    name: 'Rentree',
+    title: 'Rentree scolaire 2025-2026',
+    description: 'bienvenue a tous les eleves et personnels de notre ecole',
+    content: [MediaType.IMAGE],
+    createdAt: new Date('2025-09-01'),
   },
 } as const satisfies AnnouncementSeedDataType;
 
