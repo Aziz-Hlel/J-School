@@ -66,8 +66,22 @@ export const timeTableSeedData: TimeTableSeedData = {
         room: 'Salle 1',
       },
       {
+        subjectNameEn: subjectsGradeSix.sport.subject.name.en,
+        day: DayOfWeek.MONDAY,
+        startTime: '10:00',
+        endTime: '11:30',
+        room: 'Salle 2',
+      },
+      {
         subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
         day: DayOfWeek.WEDNESDAY,
+        startTime: '08:00',
+        endTime: '10:00',
+        room: 'Salle 12',
+      },
+      {
+        subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
+        day: DayOfWeek.THURSDAY,
         startTime: '08:00',
         endTime: '10:00',
         room: 'Salle 12',
@@ -78,6 +92,13 @@ export const timeTableSeedData: TimeTableSeedData = {
         startTime: '08:00',
         endTime: '10:00',
         room: 'Salle 3',
+      },
+      {
+        subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
+        day: DayOfWeek.FRIDAY,
+        startTime: '10:00',
+        endTime: '12:00',
+        room: 'Salle 2',
       },
     ],
   },
@@ -95,6 +116,14 @@ export const timeTableSeedData: TimeTableSeedData = {
       {
         subjectNameEn: subjectsGradeSix.math.subject.name.en,
         day: DayOfWeek.WEDNESDAY,
+        startTime: '10:00',
+        endTime: '12:00',
+        room: 'Salle 4',
+      },
+
+      {
+        subjectNameEn: subjectsGradeSix.math.subject.name.en,
+        day: DayOfWeek.THURSDAY,
         startTime: '10:00',
         endTime: '12:00',
         room: 'Salle 4',
@@ -242,13 +271,11 @@ export const extraCurricularAssignmentSeedData = [
 export const studentClassroomAssignmentSeedData = [
   {
     classroom: classroomsSeedData.A,
-    students: [
-      studentSeedData.student1,
-      studentSeedData.student2,
-      studentSeedData.student3,
-      studentSeedData.student4,
-      studentSeedData.student5,
-    ],
+    students: [studentSeedData.student1, studentSeedData.student2, studentSeedData.student4, studentSeedData.student5],
+  },
+  {
+    classroom: classroomsSeedData.B,
+    students: [studentSeedData.student3],
   },
 ];
 
