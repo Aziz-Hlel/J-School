@@ -24,6 +24,7 @@ export class AttendanceService {
           },
           update: {
             status: student.status,
+            note: student.note,
           },
           create: {
             schoolId,
@@ -31,6 +32,7 @@ export class AttendanceService {
             timetableId: input.timetableId,
             studentId: student.studentId,
             status: student.status,
+            note: student.note,
           },
         });
       });

@@ -9,6 +9,7 @@ export const attendanceSyncDto = z.object({
       z.object({
         studentId: z.uuid('Invalid student ID'),
         status: globalAttendanceSchema.status,
+        note: globalAttendanceSchema.note,
       }),
     )
     .nonempty('Students array cannot be empty'),
