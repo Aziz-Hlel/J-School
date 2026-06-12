@@ -271,12 +271,10 @@ export class StudentService {
 
     queryResult.forEach((item) =>
       timeTableResponse[item.timetable.day].push({
-        timetable: {
-          id: item.timetable.id,
-          day: item.timetable.day,
-          startTime: toTime(item.timetable.startTime),
-          endTime: toTime(item.timetable.endTime),
-        },
+        id: item.timetable.id,
+        day: item.timetable.day,
+        startTime: toTime(item.timetable.startTime),
+        endTime: toTime(item.timetable.endTime),
         subject: {
           id: item.timetable.assignment.subject.id,
           name: {

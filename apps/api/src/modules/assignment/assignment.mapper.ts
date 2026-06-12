@@ -28,13 +28,11 @@ export class AssignemntMapper {
     assignments.forEach((assignment) => {
       assignment.timetable.forEach((session) => {
         const sessionDetail: GetClassroomTimetableResponse['FRIDAY'][number] = {
-          timetable: {
-            id: session.id,
-            day: session.day,
-            startTime: toTime(session.startTime),
-            endTime: toTime(session.endTime),
-            room: session.room,
-          },
+          id: session.id,
+          day: session.day,
+          startTime: toTime(session.startTime),
+          endTime: toTime(session.endTime),
+          room: session.room,
           subject: {
             id: assignment.subject.id,
             name: {

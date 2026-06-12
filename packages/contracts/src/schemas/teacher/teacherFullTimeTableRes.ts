@@ -3,13 +3,11 @@ import type { DayOfWeek } from '../../types/enums/enums';
 export type TeacherFullTimetableRes = Record<
   DayOfWeek,
   {
-    timetable: {
-      id: string;
-      day: DayOfWeek;
-      endTime: string;
-      startTime: string;
-      room: string | null;
-    };
+    id: string;
+    day: DayOfWeek;
+    endTime: string;
+    startTime: string;
+    room: string | null;
     subject: {
       id: string;
       name: {
