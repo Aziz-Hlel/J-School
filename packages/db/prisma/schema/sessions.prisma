@@ -144,6 +144,7 @@ enum AttendanceStatus {
   ABSENT
   LATE
   EXCUSED
+  EXCLUDED
 }
 
 model Attendance {
@@ -151,6 +152,7 @@ model Attendance {
 
   week   Int               @db.SmallInt
   status AttendanceStatus?
+  note   String?           @db.VarChar(255)
 
   studentId String  @db.Uuid
   student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)

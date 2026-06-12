@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { mediaTypeSeed, MediaTypeSeed } from '../fakes/media.seed2';
 import { genUuid } from '../helper/generateUuid';
 import { studentSeedData, teacherSeedData } from './actors';
+import { toWeekNbr } from '@repo/contracts/schemas/utils/getWeekNbr';
 
 export const subjectsWithExamsSeedData = {
   [ClassGrade.SIX]: {
@@ -420,3 +421,11 @@ export const homeworkSeedData = [
     students: studentClassroomAssignmentSeedData[0]!.students,
   },
 ];
+
+// export const attendanceSeedData = [
+//   {
+//     week:toWeekNbr(),
+//     timetable:timetableSeedData[0],
+
+//   }
+// ]

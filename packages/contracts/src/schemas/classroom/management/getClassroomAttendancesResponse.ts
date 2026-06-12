@@ -3,15 +3,26 @@ import type { MediaResponse } from '../../media/MediaResponse';
 
 export type ClassroomAttendancesResponse = {
   id: string;
-  firstName_en: string | null;
-  lastName_en: string | null;
-  firstName_ar: string | null;
-  lastName_ar: string | null;
+  firstName: {
+    en: string | null;
+    ar: string | null;
+  };
+  lastName: {
+    en: string | null;
+    ar: string | null;
+  };
   gender: Gender;
   avatar: MediaResponse | null;
 
   attendance: {
     id: string;
     status: AttendanceStatus | null;
+    note: string | null;
+  } | null;
+
+  lastAttendance: {
+    id: string;
+    status: AttendanceStatus | null;
+    note: string | null;
   } | null;
 };

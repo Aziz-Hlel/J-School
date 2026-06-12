@@ -118,24 +118,57 @@ export class ClassroomManagementService {
             week: query.week,
           },
           select: {
-            status: true,
             id: true,
+            status: true,
+            note: true,
           },
         },
         avatar: true,
       },
     });
 
+    const studentIds = students.map((s) => s.id);
+
+    const lastAttendances = await prisma.attendance.findMany({
+      where: {
+        studentId: { in: studentIds },
+      },
+      orderBy: { createdAt: 'desc' },
+      distinct: ['studentId'],
+      select: {
+        id: true,
+        status: true,
+        note: true,
+        studentId: true,
+      },
+    });
+
+    const lastAttendanceMap = new Map(lastAttendances.map((a) => [a.studentId, a]));
+
     const response: ClassroomAttendancesResponse[] = students.map((student) => {
+      const lastAtt = lastAttendanceMap.get(student.id);
       return {
         id: student.id,
-        firstName_en: student.firstName_en,
-        lastName_en: student.lastName_en,
+        firstName: {
+          en: student.firstName_en,
+          ar: student.firstName_ar,
+        },
+        lastName: {
+          en: student.lastName_en,
+          ar: student.lastName_ar,
+        },
         firstName_ar: student.firstName_ar,
         lastName_ar: student.lastName_ar,
         gender: student.gender,
         avatar: globalMediaService.toMediaResponse(student.avatar),
-        attendance: student.attendances[0] ?? null,
+        attendance: student.attendances[0]
+          ? {
+              id: student.attendances[0]?.id,
+              status: student.attendances[0]?.status,
+              note: student.attendances[0]?.note,
+            }
+          : null,
+        lastAttendance: lastAtt ? { id: lastAtt.id, status: lastAtt.status, note: lastAtt.note } : null,
       };
     });
 
