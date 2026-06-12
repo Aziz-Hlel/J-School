@@ -131,7 +131,7 @@ export class ClassroomManagementService {
 
     const isLastAttendance = students.find((student) => student.attendances.length !== 0);
 
-    const lastAttendances = isLastAttendance
+    const lastAttendances = !isLastAttendance
       ? await prisma.attendance.findMany({
           where: {
             studentId: { in: studentIds },
