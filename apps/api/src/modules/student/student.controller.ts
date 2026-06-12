@@ -1,14 +1,15 @@
-import { createStudentRequestSchema } from '@repo/contracts/schemas/student/createStudentRequest';
-import { StudentService } from './student.service';
-import type { Request, Response } from 'express';
 import getUrlParam from '@/utils/getUrlParam';
-import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudentRequest';
-import { CreateStudentWithParentUseCase } from './use-case/createStudentWithParent';
-import { createStudentWithParentSchema } from '@repo/contracts/schemas/student/withParent/createWithParent';
-import { studentsQueryParams } from '@repo/contracts/schemas/student/getStudentsQueryParams';
-import { studentAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getAttendances';
 import { feesQueryParams } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
+import { createStudentRequestSchema } from '@repo/contracts/schemas/student/createStudentRequest';
+import { studentAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getAttendances';
+import { studentsQueryParams } from '@repo/contracts/schemas/student/getStudentsQueryParams';
+import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudentRequest';
+import { createStudentWithParentSchema } from '@repo/contracts/schemas/student/withParent/createWithParent';
 import { teacherCommentsQueryParams } from '@repo/contracts/schemas/TeacherComments/queryParams';
+import type { Request, Response } from 'express';
+import { StudentService } from './student.service';
+import { CreateStudentWithParentUseCase } from './use-case/createStudentWithParent';
+import { studentWeeklyAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getWeeklyAttendances';
 
 export class StudentController {
   constructor(
@@ -85,6 +86,17 @@ export class StudentController {
     const response = await this.studentService.findAttendances({ query, schoolId, studentId });
     res.status(200).json({
       message: 'Student attendances found successfully',
+      data: response,
+    });
+  };
+
+  getWeeklyAttendances = async (req: Request, res: Response) => {
+    const query = studentWeeklyAttendanceQueryParamSchema.parse(req.query);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const studentId = getUrlParam(req, 'studentId', { uuid: true });
+    const response = await this.studentService.findWeeklyAttendances({ query, schoolId, studentId });
+    res.status(200).json({
+      message: 'Student weekly attendances found successfully',
       data: response,
     });
   };

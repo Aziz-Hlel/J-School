@@ -24,6 +24,8 @@ export const createRouter = (studentController: StudentController) => {
 
   router.get('/:studentId/attendances', requireAuth, asyncHandler(studentController.getAttendances));
 
+  router.get('/:studentId/weekly-attendances', requireAuth, asyncHandler(studentController.getWeeklyAttendances));
+
   router.get('/:studentId/fees', requireAuth, asyncHandler(studentController.findFees));
 
   router.get('/:studentId/extra-curriculars', requireAuth, asyncHandler(studentController.getExtraCurricular));
