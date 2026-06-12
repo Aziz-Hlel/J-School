@@ -22,12 +22,13 @@ import {
   VideoIcon,
   XIcon,
 } from 'lucide-react';
-import getCroppedImg from './cropImg.func';
+import prepareImageForUpload from '../ImageUpload/prepareImageForUpload';
+import { uploadImage } from './getSignedUrlUpload';
 
 interface FileUploadItem extends FileWithPreview {
   id: string;
   progress: number;
-  status: 'uploading' | 'completed' | 'error';
+  status: 'new' | 'uploading' | 'completed' | 'error';
   error?: string;
 }
 
@@ -82,6 +83,7 @@ export function MultiFileUpload({
   }));
 
   const [uploadFiles, setUploadFiles] = useState<FileUploadItem[]>(defaultUploadFiles);
+  const [filesProgress, setFilesProgress] = useState<Record<string, number>>({});
 
   const handleSortChange = (newItems: FileUploadItem[]) => {
     setUploadFiles(newItems);
@@ -103,7 +105,6 @@ export function MultiFileUpload({
     maxFiles,
     maxSize,
     accept,
-
     multiple,
     initialFiles: defaultImages,
     onFilesChange: async (newFiles) => {
@@ -123,13 +124,13 @@ export function MultiFileUpload({
           return {
             ...file,
             progress: 0,
-            status: 'uploading' as const,
+            status: 'new' as const,
           };
         }
       });
       const newOptimizedFiles = await Promise.all(
         newUploadFiles.map(async (file) => {
-          const optimizedImg = await getCroppedImg(file.preview, file.file.name, null);
+          const optimizedImg = await prepareImageForUpload(file.file, file.file.name);
           return { ...file, file: optimizedImg };
         }),
       );
@@ -141,43 +142,19 @@ export function MultiFileUpload({
 
   // Simulate upload progress
   useEffect(() => {
-    if (!simulateUpload) return;
-
-    const interval = setInterval(() => {
-      setUploadFiles((prev) =>
-        prev.map((file) => {
-          if (file.status !== 'uploading') return file;
-
-          const increment = Math.random() * 15 + 5; // 5-20% increment
-          const newProgress = Math.min(file.progress + increment, 100);
-
-          // Simulate occasional errors (10% chance when progress > 50%)
-          if (newProgress > 50 && Math.random() < 0.1) {
-            return {
-              ...file,
-              status: 'error' as const,
-              error: 'Upload failed. Please try again.',
-            };
-          }
-
-          // Complete when progress reaches 100%
-          if (newProgress >= 100) {
-            return {
-              ...file,
-              progress: 100,
-              status: 'completed' as const,
-            };
-          }
-
-          return {
-            ...file,
-            progress: newProgress,
-          };
-        }),
-      );
-    }, 500);
-
-    return () => clearInterval(interval);
+    uploadFiles
+      .filter((f) => f.status === 'new')
+      .map(async (file) => {
+        setFilesProgress((prev) => ({ ...prev, [file.id]: 10 }));
+        const { id } = await uploadImage({
+          uploadedImg: file.file,
+          name: file.file.name,
+          setProgress: (progress) => {
+            setFilesProgress((prev) => ({ ...prev, [file.id]: progress }));
+          },
+        });
+        setUploadFiles((prev) => prev.map((f) => (f.id === file.id ? { ...f, status: 'completed', id } : f)));
+      });
   }, [simulateUpload]);
 
   const retryUpload = (fileId: string) => {
