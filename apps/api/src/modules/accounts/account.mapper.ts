@@ -172,7 +172,7 @@ export class AccountMapper {
                 this.toParentWorkspace({
                   user,
                   student: {
-                    id: parentStudent.id,
+                    id: parentStudent.student.id,
                     firstName: {
                       en: parentStudent.student.firstName_en,
                       ar: parentStudent.student.firstName_ar,
