@@ -36,7 +36,7 @@ export const createRouter = (teacherController: TeacherController) => {
   router.get('/:teacherId/timetable/weekly', requireAuth, asyncHandler(teacherController.getFullTimeTable));
 
   router.get(
-    '/:teacherId/extraCurriculars',
+    '/:teacherId/extra-curriculars',
     requireAuth,
     asyncHandler(teacherController.getExtraCurricularWithSession),
   );

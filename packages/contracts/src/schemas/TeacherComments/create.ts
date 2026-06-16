@@ -1,6 +1,6 @@
 import z from 'zod';
 export const createTeacherCommentsReqSchema = z.object({
-  studentId: z.uuid(),
+  studentIds: z.array(z.uuid()),
   title: z.string(),
   content: z.string(),
   canParentReply: z.boolean(),

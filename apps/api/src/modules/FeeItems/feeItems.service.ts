@@ -1,10 +1,11 @@
-import { CreateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/create';
-import prisma from '@repo/db';
-import { FeeItemsMapper } from './feeItems.mapper';
-import { UpdateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/update';
-import { Prisma } from '@repo/db/prisma/client';
 import { PrismaErrorCode } from '@/err/repo/PrismaErrorCode';
 import { NotFoundError } from '@/err/service/customErrors';
+import { toDate } from '@/utils/toDate';
+import { CreateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/create';
+import { UpdateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/update';
+import prisma from '@repo/db';
+import { Prisma } from '@repo/db/prisma/client';
+import { FeeItemsMapper } from './feeItems.mapper';
 
 export class FeeItemsService {
   constructor() {}
@@ -18,6 +19,15 @@ export class FeeItemsService {
         description: input.description,
         amount: input.amount,
         status: input.status,
+        payment: input.payment
+          ? {
+              create: {
+                method: input.payment.method,
+                reference: input.payment.reference,
+                date: toDate(input.payment.date),
+              },
+            }
+          : undefined,
       },
     });
 
@@ -37,6 +47,22 @@ export class FeeItemsService {
           amount: input.amount,
           description: input.description ?? null,
           status: input.status,
+          payment: input.payment
+            ? {
+                upsert: {
+                  create: {
+                    method: input.payment.method,
+                    reference: input.payment.reference,
+                    date: toDate(input.payment.date),
+                  },
+                  update: {
+                    method: input.payment.method,
+                    reference: input.payment.reference,
+                    date: toDate(input.payment.date),
+                  },
+                },
+              }
+            : undefined,
         },
       });
       const response = FeeItemsMapper.toResponse(updatedFeeItem);
