@@ -4,7 +4,9 @@ import { FeesGetPayload } from '@repo/db/prisma/models';
 import { FeeItemsMapper } from '../FeeItems/feeItems.mapper';
 
 export class FeesMapper {
-  static toResponse = (data: FeesGetPayload<{ include: { feeItems: true } }>): FeesResponse => {
+  static toResponse = (
+    data: FeesGetPayload<{ include: { feeItems: { include: { payment: true } } } }>,
+  ): FeesResponse => {
     const paidFees = data.feeItems.filter((item) => item.status === FeeItemStatus.PAID);
     let feeStatus: FeeItemStatus = FeeItemStatus.UNPAID;
     if (paidFees.length !== 0) {

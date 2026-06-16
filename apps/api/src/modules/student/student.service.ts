@@ -328,6 +328,7 @@ export class StudentService {
       orderBy,
       include: {
         feeItems: {
+          include: { payment: true },
           orderBy: {
             createdAt: 'asc',
           },

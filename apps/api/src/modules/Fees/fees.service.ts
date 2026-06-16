@@ -1,11 +1,11 @@
 import { PrismaErrorCode } from '@/err/repo/PrismaErrorCode';
 import { NotFoundError } from '@/err/service/customErrors';
+import { parseCalendarDate } from '@/utils/dayjs';
 import { CreateFeesReq } from '@repo/contracts/schemas/Fees/create';
 import { UpdateFeesReq } from '@repo/contracts/schemas/Fees/update';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/client';
 import { FeesMapper } from './fees.mapper';
-import { parseCalendarDate } from '@/utils/dayjs';
 
 export class FeesService {
   create = async (params: { schoolId: string; input: CreateFeesReq }) => {
@@ -37,7 +37,7 @@ export class FeesService {
           startDate: parseCalendarDate(input.startDate),
           endDate: parseCalendarDate(input.endDate),
         },
-        include: { feeItems: true },
+        include: { feeItems: { include: { payment: true } } },
       });
       const response = FeesMapper.toResponse(updatedFee);
       return response;
@@ -69,7 +69,7 @@ export class FeesService {
           id: feeId,
           schoolId,
         },
-        include: { feeItems: true },
+        include: { feeItems: { include: { payment: true } } },
       });
       if (!fee) throw new NotFoundError('Fee not found');
       const response = FeesMapper.toResponse(fee);

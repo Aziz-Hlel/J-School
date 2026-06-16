@@ -1,26 +1,33 @@
+import { ConflictError, NotFoundError } from '@/err/service/customErrors';
+import { PageMapper } from '@/helper/page.mapper';
 import { CreateTeacherCommentsReq } from '@repo/contracts/schemas/TeacherComments/create';
+import type { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
+import { ReplyToCommentReq } from '@repo/contracts/schemas/TeacherComments/replyToComment';
 import { UpdateTeacherCommentsReq } from '@repo/contracts/schemas/TeacherComments/update';
 import prisma from '@repo/db';
-import { TeacherCommentsMapper } from './teacherComments.mapper';
-import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { Prisma } from '@repo/db/prisma/client';
-import type { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
-import { PageMapper } from '@/helper/page.mapper';
-import { ReplyToCommentReq } from '@repo/contracts/schemas/TeacherComments/replyToComment';
+import { TeacherCommentsMapper } from './teacherComments.mapper';
 
 export class TeacherCommentsService {
   constructor() {}
 
   create = async (params: { input: CreateTeacherCommentsReq; teacherId: string; schoolId: string }) => {
     const { schoolId, teacherId, input } = params;
-    const result = await prisma.teacherComment.create({
-      data: {
-        ...input,
-        teacherId,
-        schoolId,
-      },
+
+    const queries = input.studentIds.map(async (studentId) => {
+      await prisma.teacherComment.create({
+        data: {
+          studentId,
+          teacherId,
+          schoolId,
+          content: input.content,
+          title: input.title,
+          canParentReply: input.canParentReply,
+        },
+      });
     });
-    return result;
+    await Promise.all(queries);
+    return true;
   };
 
   update = async (params: { input: UpdateTeacherCommentsReq; id: string }) => {

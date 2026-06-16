@@ -29,6 +29,9 @@ export class FeeItemsService {
             }
           : undefined,
       },
+      include: {
+        payment: true,
+      },
     });
 
     const response = FeeItemsMapper.toResponse(createdFeeItem);
@@ -63,6 +66,9 @@ export class FeeItemsService {
                 },
               }
             : undefined,
+        },
+        include: {
+          payment: true,
         },
       });
       const response = FeeItemsMapper.toResponse(updatedFeeItem);

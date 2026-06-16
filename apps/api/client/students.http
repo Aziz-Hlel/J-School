@@ -67,3 +67,16 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 
 
+###
+# @name getHomeWorks
+GET {{baseUrl}}/schools/{{schoolId}}/students/296f6611-1d36-54ad-adab-fec236540239/home-works
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+
+###
+# @name getExtraCurriculars
+GET {{baseUrl}}/schools/{{schoolId}}/students/296f6611-1d36-54ad-adab-fec236540239/extra-curriculars
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
