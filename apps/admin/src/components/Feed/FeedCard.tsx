@@ -1,20 +1,29 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
 import dayjs from 'dayjs';
-import { Heart, MoreVertical, ThumbsUp } from 'lucide-react';
+import { Heart, MoreVertical, SquarePen, ThumbsUp, Trash2 } from 'lucide-react';
+import { useSelectedRow } from './context/selected-row-provider';
 
-const FeedCard = ({
-  createdAt,
-  title,
-  description,
-  media = [],
-  reactions = { likesCount: 0, heartsCount: 0, userReaction: null },
-}: FeedResponse) => {
+const FeedCard = (params: FeedResponse) => {
+  const {
+    createdAt,
+    title,
+    description,
+    media = [],
+    reactions = { likesCount: 0, heartsCount: 0, userReaction: null },
+  } = params;
   const images = media.filter((m) => m.type === 'IMAGE').map((m) => m.url);
   const displayImages = images.slice(0, 4);
   const extraImagesCount = images.length > 4 ? images.length - 3 : 0;
+  const { handleDialogStateChange } = useSelectedRow();
 
   return (
     <Card className='w-full max-w-2xl overflow-hidden rounded-xl'>
@@ -35,9 +44,27 @@ const FeedCard = ({
           </div>
         </div>
         <div className='flex items-center gap-2'>
-          <Button variant='ghost' size='icon' className='text-muted-foreground h-8 w-8'>
-            <MoreVertical className='h-4 w-4' />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='ghost' size='icon' className='text-muted-foreground h-8 w-8'>
+                <MoreVertical className='h-4 w-4' />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-36'>
+              <DropdownMenuItem
+                onClick={() => {
+                  handleDialogStateChange({ openDialog: 'edit', selectedRow: params });
+                }}
+              >
+                <SquarePen className='mr-2 h-4 w-4 text-green-600' />
+                <span>Edit</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className='text-destructive focus:text-destructive'>
+                <Trash2 className='mr-2 h-4 w-4 text-red-600' />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </CardHeader>
 

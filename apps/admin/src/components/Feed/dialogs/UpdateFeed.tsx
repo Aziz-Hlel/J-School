@@ -15,22 +15,22 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../context/selected-row-provider';
 
-const CreateFeed = () => {
+const UpdateFeed = () => {
   const { handleCancel, dialogState } = useSelectedRow();
   const schoolId = useCurrentSchoolId();
 
   const form = useForm<CreateFeedReq>({
     resolver: zodResolver(createFeedReq),
     defaultValues: {
-      title: '',
-      description: '',
-      media: [],
+      title: dialogState.openDialog === 'edit' ? dialogState.selectedRow.title : '',
+      description: dialogState.openDialog === 'edit' ? dialogState.selectedRow.description : '',
+      media: dialogState.openDialog === 'edit' ? dialogState.selectedRow.media : [],
     },
   });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['feed', 'create'],
-    mutationFn: feedService.create,
+    mutationKey: ['feed', 'update'],
+    mutationFn: feedService.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['feed'], exact: false });
       form.reset();
@@ -45,25 +45,26 @@ const CreateFeed = () => {
     }
   };
 
-  const dialogIsOpen = dialogState.openDialog === 'add';
+  const dialogIsOpen = dialogState.openDialog === 'edit';
 
-  // const defaultMedias = form.getValues('media').map(
-  //   (media): FileUploadItem => ({
-  //     id: media.id,
-  //     status: 'completed' as const,
-  //     serverId: media.id,
-  //     file: {
-  //       id: media.id,
-  //       name: '',
-  //       size: 0,
-  //       type: '',
-  //       url:media.
-  //     },
-  //     preview: '',
-  //   }),
-  // );
+  const defaultMedias =
+    dialogState.openDialog === 'edit'
+      ? dialogState.selectedRow.media.map((media) => ({
+          id: media.id,
+          status: 'completed' as const,
+          serverId: media.id,
+          file: {
+            id: media.id,
+            name: '',
+            size: 100,
+            type: 'image/jpeg',
+            url: media.url,
+          },
+          preview: media.url,
+        }))
+      : [];
 
-  const [uploadFiles, setUploadFiles] = useState<FileUploadItem[]>([]);
+  const [uploadFiles, setUploadFiles] = useState<FileUploadItem[]>(defaultMedias);
 
   const setMedia = () => {
     const medias = uploadFiles
@@ -74,10 +75,12 @@ const CreateFeed = () => {
 
   const onSubmit = async (data: CreateFeedReq) => {
     try {
-      await mutateAsync({ schoolId, data });
-      toast.success(`Feed created successfully`);
+      if (dialogState.openDialog === 'edit') {
+        await mutateAsync({ schoolId, data, id: dialogState.selectedRow.id });
+        toast.success(`Feed updated successfully`);
+      }
     } catch {
-      toast.error(`Failed to create feed`);
+      toast.error(`Failed to update feed`);
     }
   };
   return (
@@ -119,7 +122,7 @@ const CreateFeed = () => {
             )}
           />
 
-          <MultiFileUpload uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} maxFiles={10} />
+          <MultiFileUpload uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} maxFiles={100} />
 
           <DialogFooter className='pt-4'>
             <Button type='button' variant='outline' onClick={handleCancel}>
@@ -135,4 +138,4 @@ const CreateFeed = () => {
   );
 };
 
-export default CreateFeed;
+export default UpdateFeed;

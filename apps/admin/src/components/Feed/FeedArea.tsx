@@ -1,14 +1,14 @@
 import { feedService } from '@/api/service/feedService';
-import { useSchoolId } from '@/context/SchoolContext';
+import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import FeedCard from './FeedCard';
 
 const FeedArea = () => {
-  const schoolId = useSchoolId();
+  const schoolId = useCurrentSchoolId();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ['posts'],
+    queryKey: ['feed'],
     initialPageParam: null,
     queryFn: ({ pageParam }) => feedService.getCursor({ schoolId, cursor: pageParam }),
     getNextPageParam: (lastPage) => {

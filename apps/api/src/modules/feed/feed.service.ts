@@ -9,7 +9,7 @@ import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import prisma from '@repo/db';
 import { MediaStatus, ReactionType } from '@repo/db/prisma/enums';
 
-export class AnnouncementService {
+export class FeedService {
   create = async (params: { schoolId: string; input: CreateFeedReq }) => {
     const { schoolId, input } = params;
     return await prisma.$transaction(async (tx) => {
@@ -53,14 +53,6 @@ export class AnnouncementService {
   update = async (params: { schoolId: string; input: CreateFeedReq; announcementId: string }) => {
     const { input, announcementId, schoolId } = params;
     return await prisma.$transaction(async (tx) => {
-      const updatedAnnoucement = await tx.announcement.update({
-        where: { id: announcementId, schoolId },
-        data: {
-          title: input.title,
-          description: input.description,
-        },
-      });
-
       const inputMedia = input.media ?? [];
 
       const mediaIds = inputMedia.map((m) => m.id);
@@ -68,8 +60,13 @@ export class AnnouncementService {
         where: { id: { in: mediaIds } },
         data: {
           status: MediaStatus.CONFIRMED,
-          annoucementId: updatedAnnoucement.id,
+          annoucementId: announcementId,
         },
+      });
+
+      const existingMediasIds = await tx.media.findMany({
+        where: { id: { in: mediaIds } },
+        select: { id: true },
       });
 
       const orderUpdates = inputMedia.map((m) =>
@@ -80,6 +77,17 @@ export class AnnouncementService {
           })
           .catch(() => null),
       );
+
+      const updatedAnnoucement = await tx.announcement.update({
+        where: { id: announcementId, schoolId },
+        data: {
+          title: input.title,
+          description: input.description,
+          media: {
+            set: existingMediasIds,
+          },
+        },
+      });
 
       await Promise.all(orderUpdates);
 

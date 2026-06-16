@@ -2,13 +2,13 @@ import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { createFeedReq } from '@repo/contracts/schemas/Feed/create';
 import { syncReactionReqSchema } from '@repo/contracts/schemas/Feed/syncReactionReq';
-import { updateAnnouncementReq } from '@repo/contracts/schemas/Feed/update';
+import { updateFeedReq } from '@repo/contracts/schemas/Feed/update';
 import { cursorQueryParamsSchema } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import type { Request, Response } from 'express';
-import { AnnouncementService } from './announcement.service';
+import { FeedService } from './feed.service';
 
-export class AnnouncementController {
-  constructor(private readonly service: AnnouncementService) {}
+export class FeedController {
+  constructor(private readonly service: FeedService) {}
 
   create = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
@@ -24,7 +24,7 @@ export class AnnouncementController {
   update = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const announcementId = getUrlParam(req, 'announcementId');
-    const input = updateAnnouncementReq.parse(req.body);
+    const input = updateFeedReq.parse(req.body);
     const response = await this.service.update({ schoolId, input, announcementId });
     const statusCode = response.failedCount > 0 ? 207 : 200;
     res.status(statusCode).json({

@@ -1,35 +1,22 @@
 'use client';
 
-import { Alert, AlertAction, AlertDescription, AlertTitle } from '@/components/reui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/reui/alert';
 import { Badge } from '@/components/reui/badge';
 import { formatBytes, useFileUpload, type FileMetadata, type FileWithPreview } from '@/hooks/use-file-upload';
 import { useEffect, useState } from 'react';
 
 import { Sortable, SortableItem, SortableItemHandle } from '@/components/reui/sortable';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
-import {
-  CircleAlertIcon,
-  FileArchiveIcon,
-  FileSpreadsheetIcon,
-  FileTextIcon,
-  GripVerticalIcon,
-  HeadphonesIcon,
-  ImageIcon,
-  RefreshCwIcon,
-  UploadIcon,
-  VideoIcon,
-  XIcon,
-} from 'lucide-react';
-import prepareImageForUpload from '../ImageUpload/prepareImageForUpload';
+import { CircleAlertIcon, GripVerticalIcon, UploadIcon, XIcon } from 'lucide-react';
+import CircularProgressBar from '../ImageUpload/CircularProgressBar ';
 import { uploadImage } from './getSignedUrlUpload';
 
-interface FileUploadItem extends FileWithPreview {
+export interface FileUploadItem extends FileWithPreview {
   id: string;
-  progress: number;
-  status: 'new' | 'uploading' | 'completed' | 'error';
+  status: 'uploading' | 'completed' | 'error';
   error?: string;
+  serverId?: string;
 }
 
 interface ProgressUploadProps {
@@ -39,7 +26,8 @@ interface ProgressUploadProps {
   multiple?: boolean;
   className?: string;
   onFilesChange?: (files: FileWithPreview[]) => void;
-  simulateUpload?: boolean;
+  uploadFiles: FileUploadItem[];
+  setUploadFiles: React.Dispatch<React.SetStateAction<FileUploadItem[]>>;
 }
 
 export function MultiFileUpload({
@@ -49,45 +37,21 @@ export function MultiFileUpload({
   multiple = true,
   className,
   onFilesChange,
-  simulateUpload = true,
+  uploadFiles,
+  setUploadFiles,
 }: ProgressUploadProps) {
-  // Create default images using FileMetadata type
-  const defaultImages: FileMetadata[] = [
-    {
-      id: 'default-3',
-      name: 'image-1.png',
-      size: 42048,
-      type: 'image/png',
-      url: 'https://picsum.photos/1000/800?grayscale&random=10',
-    },
-    {
-      id: 'default-4',
-      name: 'image-2.png',
-      size: 62807,
-      type: 'image/png',
-      url: 'https://picsum.photos/1000/800?grayscale&random=11',
-    },
-  ];
-
-  // Convert default images to FileUploadItem format
-  const defaultUploadFiles: FileUploadItem[] = defaultImages.map((image) => ({
-    id: image.id,
-    file: {
-      name: image.name,
-      size: image.size,
-      type: image.type,
-    } as File,
-    preview: image.url,
-    progress: 100,
-    status: 'completed' as const,
-  }));
-
-  const [uploadFiles, setUploadFiles] = useState<FileUploadItem[]>(defaultUploadFiles);
   const [filesProgress, setFilesProgress] = useState<Record<string, number>>({});
-
   const handleSortChange = (newItems: FileUploadItem[]) => {
     setUploadFiles(newItems);
   };
+  const initMedia: FileMetadata[] = uploadFiles.map((file) => ({
+    id: file.id,
+    name: file.file.name,
+    size: file.file.size,
+    type: file.file.type,
+    url: file.preview,
+    preview: file.preview,
+  }));
 
   const [
     { isDragging, errors },
@@ -106,7 +70,7 @@ export function MultiFileUpload({
     maxSize,
     accept,
     multiple,
-    initialFiles: defaultImages,
+    initialFiles: initMedia,
     onFilesChange: async (newFiles) => {
       // Convert to upload items when files change, preserving existing status
       const newUploadFiles = newFiles.map((file) => {
@@ -124,16 +88,17 @@ export function MultiFileUpload({
           return {
             ...file,
             progress: 0,
-            status: 'new' as const,
+            status: 'uploading' as const,
           };
         }
       });
-      const newOptimizedFiles = await Promise.all(
-        newUploadFiles.map(async (file) => {
-          const optimizedImg = await prepareImageForUpload(file.file, file.file.name);
-          return { ...file, file: optimizedImg };
-        }),
-      );
+      const newOptimizedFiles = newUploadFiles;
+      // const newOptimizedFiles = await Promise.all(
+      //   newUploadFiles.map(async (file) => {
+      //     const optimizedImg = await prepareImageForUpload(file, file.file.name);
+      //     return { ...file, file: optimizedImg };
+      //   }),
+      // );
 
       setUploadFiles(newOptimizedFiles);
       onFilesChange?.(newFiles);
@@ -143,8 +108,10 @@ export function MultiFileUpload({
   // Simulate upload progress
   useEffect(() => {
     uploadFiles
-      .filter((f) => f.status === 'new')
-      .map(async (file) => {
+      .filter((f) => f.status === 'uploading')
+      .forEach(async (file) => {
+        if (!(file.file instanceof File)) return;
+        if (filesProgress[file.id]) return;
         setFilesProgress((prev) => ({ ...prev, [file.id]: 10 }));
         const { id } = await uploadImage({
           uploadedImg: file.file,
@@ -153,40 +120,29 @@ export function MultiFileUpload({
             setFilesProgress((prev) => ({ ...prev, [file.id]: progress }));
           },
         });
-        setUploadFiles((prev) => prev.map((f) => (f.id === file.id ? { ...f, status: 'completed', id } : f)));
+        setUploadFiles((prev) => prev.map((f) => (f.id === file.id ? { ...f, status: 'completed', serverId: id } : f)));
       });
-  }, [simulateUpload]);
+  }, [uploadFiles, filesProgress, setUploadFiles]);
 
-  const retryUpload = (fileId: string) => {
-    setUploadFiles((prev) =>
-      prev.map((file) =>
-        file.id === fileId
-          ? {
-              ...file,
-              progress: 0,
-              status: 'uploading' as const,
-              error: undefined,
-            }
-          : file,
-      ),
-    );
-  };
+  // const retryUpload = (fileId: string) => {
+  //   setUploadFiles((prev) =>
+  //     prev.map((file) =>
+  //       file.id === fileId
+  //         ? {
+  //             ...file,
+  //             progress: 0,
+  //             status: 'uploading' as const,
+  //             error: undefined,
+  //           }
+  //         : file,
+  //     ),
+  //   );
+  // };
 
   const removeUploadFile = (fileId: string) => {
+    console.log('id to be removed : ', fileId);
     setUploadFiles((prev) => prev.filter((file) => file.id !== fileId));
     removeFile(fileId);
-  };
-
-  const getFileIcon = (file: File | FileMetadata) => {
-    const type = file instanceof File ? file.type : file.type;
-    if (type.startsWith('image/')) return <ImageIcon className='size-4' />;
-    if (type.startsWith('video/')) return <VideoIcon className='size-4' />;
-    if (type.startsWith('audio/')) return <HeadphonesIcon className='size-4' />;
-    if (type.includes('pdf')) return <FileTextIcon className='size-4' />;
-    if (type.includes('word') || type.includes('doc')) return <FileTextIcon className='size-4' />;
-    if (type.includes('excel') || type.includes('sheet')) return <FileSpreadsheetIcon className='size-4' />;
-    if (type.includes('zip') || type.includes('rar')) return <FileArchiveIcon className='size-4' />;
-    return <FileTextIcon className='size-4' />;
   };
 
   const completedCount = uploadFiles.filter((f) => f.status === 'completed').length;
@@ -199,8 +155,8 @@ export function MultiFileUpload({
 
       <div
         className={cn(
-          'relative rounded-lg border border-dashed p-8 text-center transition-colors',
-          isDragging ? 'border-primary bg-primary/5' : 'border-muted-foreground/25 hover:border-muted-foreground/50',
+          'relative flex items-center justify-between rounded-lg border p-4 transition-colors',
+          isDragging ? 'border-primary bg-primary/5' : 'border-border hover:border-muted-foreground/30',
         )}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -209,31 +165,30 @@ export function MultiFileUpload({
       >
         <input {...getInputProps()} className='sr-only' />
 
-        <div className='flex flex-col items-center gap-4'>
-          <div
-            className={cn(
-              'flex h-16 w-16 items-center justify-center rounded-full',
-              isDragging ? 'bg-primary/10' : 'bg-muted',
-            )}
-          >
-            <UploadIcon className={cn('h-6', isDragging ? 'text-primary' : 'text-muted-foreground')} />
-          </div>
-
-          <div className='space-y-2'>
-            <h3 className='text-lg font-semibold'>Upload your files</h3>
-            <p className='text-muted-foreground text-sm'>Drag and drop files here or click to browse</p>
-            <p className='text-muted-foreground text-xs'>
-              Support for multiple file types up to {formatBytes(maxSize)} each
-            </p>
-          </div>
-
-          <Button onClick={openFileDialog}>
-            <UploadIcon className='h-4 w-4' />
-            Select files
-          </Button>
+        <div className='flex items-center gap-3'>
+          <UploadIcon className='text-muted-foreground/80 h-4 w-4' />
+          <span className='text-muted-foreground text-sm font-normal'>Drop files here or browse</span>
         </div>
+
+        <Button
+          type='button'
+          variant='outline'
+          size='lg'
+          className='border-border bg-background hover:bg-accent hover:text-accent-foreground h-10 rounded-lg border px-4 text-sm font-medium shadow-xs'
+          onClick={openFileDialog}
+        >
+          Browse files
+        </Button>
       </div>
 
+      {/* Instructions */}
+      <div className='mt-4 text-center'>
+        <p className='text-muted-foreground text-xs'>
+          Upload up to {maxFiles} images (JPG, PNG, GIF, WebP, max {formatBytes(maxSize)} each). <br />
+          Drag and drop images to reorder.
+          {uploadFiles.length > 0 && ` ${uploadFiles.length}/${maxFiles} uploaded.`}
+        </p>
+      </div>
       {/* Upload Stats */}
 
       {uploadFiles.length > 0 && (
@@ -280,93 +235,55 @@ export function MultiFileUpload({
         </Alert>
       )}
 
-      {/* File List */}
-      <Sortable
-        value={uploadFiles}
-        onValueChange={handleSortChange}
-        getItemValue={(item) => item.id}
-        strategy='vertical'
-        className='space-y-2'
-      >
-        {uploadFiles.length > 0 && (
-          <div className='mt-4 space-y-3'>
-            {uploadFiles.map((fileItem: FileUploadItem) => (
-              <SortableItem key={fileItem.id} value={fileItem.id}>
-                <div key={fileItem.id} className='border-border bg-card rounded-lg border p-2.5'>
-                  <div className='flex items-start gap-2.5'>
-                    <SortableItemHandle className='text-muted-foreground hover:text-foreground h-12'>
-                      <div className='my-auto flex h-full items-center justify-center'>
-                        <GripVerticalIcon className='h-4 w-4' />
-                      </div>
-                    </SortableItemHandle>
-
-                    {/* File Icon */}
-                    <div className='shrink-0'>
-                      {fileItem.preview && fileItem.file.type.startsWith('image/') ? (
-                        <img
-                          src={fileItem.preview}
-                          alt={fileItem.file.name}
-                          className='h-12 w-12 rounded-lg border object-cover'
-                        />
-                      ) : (
-                        <div className='border-border text-muted-foreground flex h-12 w-12 items-center justify-center rounded-lg border'>
-                          {getFileIcon(fileItem.file)}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* File Info */}
-                    <div className='min-w-0 flex-1'>
-                      <div className='mt-0.75 flex items-center justify-between'>
-                        <p className='inline-flex flex-col justify-center gap-1 truncate font-medium'>
-                          <span className='text-sm'>{fileItem.file.name}</span>
-                          <span className='text-muted-foreground text-xs'>{formatBytes(fileItem.file.size)}</span>
-                        </p>
-                        <div className='flex items-center gap-2'>
-                          {/* Remove Button */}
-                          <Button
-                            onClick={() => removeUploadFile(fileItem.id)}
-                            variant='ghost'
-                            size='icon'
-                            className='text-muted-foreground size-6 hover:bg-transparent hover:opacity-100'
-                          >
-                            <XIcon className='size-4' />
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Progress Bar */}
-                      {fileItem.status === 'uploading' && (
-                        <div className='mt-2'>
-                          <Progress value={fileItem.progress} className='h-1' />
-                        </div>
-                      )}
-
-                      {/* Error Message */}
-                      {fileItem.status === 'error' && fileItem.error && (
-                        <Alert variant='destructive' className='mt-2 px-2 py-1'>
-                          <CircleAlertIcon className='size-4' />
-                          <AlertTitle className='text-xs'>{fileItem.error}</AlertTitle>
-                          <AlertAction>
-                            <Button
-                              onClick={() => retryUpload(fileItem.id)}
-                              variant='ghost'
-                              size='icon'
-                              className='text-muted-foreground size-6 hover:bg-transparent hover:opacity-100'
-                            >
-                              <RefreshCwIcon className='size-3.5' />
-                            </Button>
-                          </AlertAction>
-                        </Alert>
-                      )}
-                    </div>
+      {/* Image Grid with Sortable */}
+      <div className='mb-6'>
+        {/* Combined Images Sortable */}
+        <Sortable
+          value={uploadFiles}
+          onValueChange={handleSortChange}
+          getItemValue={(item) => item.id}
+          strategy='grid'
+          className='grid auto-rows-fr grid-cols-5 gap-2.5'
+        >
+          {uploadFiles.map((item) => (
+            <SortableItem key={item.id} value={item.id}>
+              <div className='bg-accent/50 group/item border-border hover:bg-accent/70 relative flex shrink-0 items-center justify-center rounded-md border shadow-none transition-all duration-200 hover:z-10 data-[dragging=true]:z-50'>
+                <img
+                  src={item.preview}
+                  className='pointer-events-none h-30 w-full rounded-md object-cover'
+                  alt={item.file.name}
+                />
+                {item.status === 'uploading' && (
+                  <div className='absolute inset-0 flex items-center justify-center bg-black/50'>
+                    <CircularProgressBar progress={filesProgress[item.id] ?? 0} />
                   </div>
-                </div>
-              </SortableItem>
-            ))}
-          </div>
-        )}
-      </Sortable>
+                )}
+
+                {/* Drag Handle */}
+                <SortableItemHandle className='absolute inset-s-2 top-2 cursor-grab opacity-0 group-hover/item:opacity-100 active:cursor-grabbing'>
+                  <Button
+                    variant='outline'
+                    size='icon'
+                    className='size-6 rounded-full dark:bg-zinc-800 hover:dark:bg-zinc-700'
+                  >
+                    <GripVerticalIcon className='size-3.5' />
+                  </Button>
+                </SortableItemHandle>
+
+                {/* Remove Button Overlay */}
+                <Button
+                  onClick={() => removeUploadFile(item.id)}
+                  variant='outline'
+                  size='icon'
+                  className='absolute inset-e-2 top-2 size-6 rounded-full opacity-0 shadow-sm group-hover/item:opacity-100 dark:bg-zinc-800 hover:dark:bg-zinc-700'
+                >
+                  <XIcon className='size-3.5' />
+                </Button>
+              </div>
+            </SortableItem>
+          ))}
+        </Sortable>
+      </div>
     </div>
   );
 }

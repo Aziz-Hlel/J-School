@@ -1,5 +1,5 @@
+import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
 import { createContext, useContext, useState } from 'react';
-import type { TableRowType } from '../core/types';
 
 export type TableDialogType = 'add' | 'edit' | 'delete' | null;
 
@@ -9,7 +9,7 @@ export type DialogState =
     }
   | {
       openDialog: 'edit' | 'delete';
-      selectedRow: TableRowType;
+      selectedRow: FeedResponse;
     };
 
 type SelectedRowContextType = {

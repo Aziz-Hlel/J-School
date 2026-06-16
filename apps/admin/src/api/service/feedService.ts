@@ -1,23 +1,25 @@
 import { apiRoutes } from '@/api/routes';
-import type { AnnouncementResponse } from '@repo/contracts/schemas/Feed/response';
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import { apiService } from '../apiService';
+import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
+import type { CreateFeedReq } from '@repo/contracts/schemas/Feed/create';
+import type { UpdateFeedReq } from '@repo/contracts/schemas/Feed/update';
 
 export const feedService = {
   getCursor: async (params: { schoolId: string; cursor: string | null }) =>
-    apiService.getThrowable<Cursor<AnnouncementResponse>>(apiRoutes.feed.get(params.schoolId), {
+    apiService.getThrowable<Cursor<FeedResponse>>(apiRoutes.feed.get(params.schoolId), {
       params: { cursor: params.cursor, limit: 1 },
     }),
 
   // getById: async (schoolId: string, id: string) =>
   //   apiService.getThrowable<AnnouncementResponse>(apiRoutes.feed.getById(schoolId, id)),
 
-  // create: async (params: { schoolId: string; data: CreateClassroomReq }) =>
-  //   apiService.postThrowable<AnnouncementResponse>(apiRoutes.feed.create(params.schoolId), params.data),
+  create: async (params: { schoolId: string; data: CreateFeedReq }) =>
+    apiService.postThrowable<FeedResponse>(apiRoutes.feed.create(params.schoolId), params.data),
 
-  // update: async (params: { schoolId: string; id: string; data: UpdateClassroomReq }) =>
-  //   apiService.putThrowable<AnnouncementResponse>(apiRoutes.feed.update(params.schoolId, params.id), params.data),
+  update: async (params: { schoolId: string; id: string; data: UpdateFeedReq }) =>
+    apiService.putThrowable<FeedResponse>(apiRoutes.feed.update(params.schoolId, params.id), params.data),
 
-  // delete: async (params: { schoolId: string; id: string }) =>
-  //   apiService.deleteThrowable<void>(apiRoutes.classrooms.delete(params.schoolId, params.id)),
+  delete: async (params: { schoolId: string; id: string }) =>
+    apiService.deleteThrowable<void>(apiRoutes.feed.delete(params.schoolId, params.id)),
 };

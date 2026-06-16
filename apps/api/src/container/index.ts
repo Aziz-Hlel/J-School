@@ -1,6 +1,5 @@
 import { createMediaModule as mediaModule } from '@/media';
 import { AftercareModule } from '@/modules/Aftercare/aftercare.module';
-import { AnnouncementModule } from '@/modules/Announcement/announcement.module';
 import { AttendanceModule } from '@/modules/Attendance/attendance.module';
 import { CalendarModule } from '@/modules/Calendar/calendar.module';
 import { ExamScheduleModule } from '@/modules/ExamSchedule/ExamSchedule.module';
@@ -18,6 +17,7 @@ import { authModule } from '@/modules/auth/auth.module';
 import { ClassroomManagementModule } from '@/modules/classroom/ClassroomManagement/ClassroomManagement.module';
 import { ClassroomModule } from '@/modules/classroom/classroom.module';
 import { ClassroomTimetableModule } from '@/modules/classroom/timetable/ClassroomTimetable.module';
+import { FeedModule } from '@/modules/feed/feed.module';
 import { createOwnerModule as ownerModule } from '@/modules/owner/owner.module';
 import { ParentModule } from '@/modules/parent/parent.module';
 import { createRootModule as rootModule } from '@/modules/root/root.module';
@@ -133,7 +133,7 @@ const { extraCurricularPostsRouter } = ExtraCurricularPostsModule();
 const { attendanceRouter } = AttendanceModule();
 
 // * ANNOUNCEMENT
-const { announcementRouter } = AnnouncementModule();
+const { announcementRouter } = FeedModule();
 
 // * FEES
 const { feesRouter } = FeesModule();

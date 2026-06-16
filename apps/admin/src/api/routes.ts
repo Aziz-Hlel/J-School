@@ -42,5 +42,8 @@ export const apiRoutes = {
 
   feed: {
     get: (schoolId: string) => `/schools/${schoolId}/feed`,
+    create: (schoolId: string) => `/schools/${schoolId}/feed`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/feed/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/feed/${id}`,
   },
 };

@@ -16,7 +16,7 @@ export function SchoolIdProvider() {
   );
 }
 
-export const useSchoolId = (): string => {
+export const useCurrentSchoolId = (): string => {
   const schoolId = useContext(SchoolContext);
 
   if (schoolId === undefined) {

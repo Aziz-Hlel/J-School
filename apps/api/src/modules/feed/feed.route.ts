@@ -1,11 +1,11 @@
-import { Router } from 'express';
-import { AnnouncementController } from './announcement.controller';
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
 import requireUserRoles from '@/middleware/requirePermission.middleware';
 import { UserRole } from '@repo/db/prisma/enums';
+import { Router } from 'express';
+import { FeedController } from './feed.controller';
 
-export const createRouter = (controller: AnnouncementController) => {
+export const createRouter = (controller: FeedController) => {
   const router = Router({ mergeParams: true });
 
   router.post(
