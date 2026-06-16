@@ -1,5 +1,6 @@
 import getUrlParam from '@/utils/getUrlParam';
 import { feesQueryParams } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
+import { homeworkQueryParams } from '@repo/contracts/schemas/Homework/queryParam';
 import { createStudentRequestSchema } from '@repo/contracts/schemas/student/createStudentRequest';
 import { studentAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getAttendances';
 import { studentsQueryParams } from '@repo/contracts/schemas/student/getStudentsQueryParams';
@@ -108,6 +109,17 @@ export class StudentController {
     const response = await this.studentService.findFees({ query, schoolId, studentId });
     res.status(200).json({
       message: 'Student fees found successfully',
+      ...response,
+    });
+  };
+
+  findHomework = async (req: Request, res: Response) => {
+    const query = homeworkQueryParams.schema.parse(req.query);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const studentId = getUrlParam(req, 'studentId', { uuid: true });
+    const response = await this.studentService.findAllHomework({ query, schoolId, studentId });
+    res.status(200).json({
+      message: 'Student homeworks found successfully',
       ...response,
     });
   };

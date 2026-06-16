@@ -32,6 +32,8 @@ export const createRouter = (studentController: StudentController) => {
 
   router.get('/:studentId/teacher-comments', requireAuth, asyncHandler(studentController.findTeacherComments));
 
+  router.get('/:studentId/homework', requireAuth, asyncHandler(studentController.findHomework));
+
   router.get('/:studentId', requireAuth, asyncHandler(studentController.findById));
 
   return router;

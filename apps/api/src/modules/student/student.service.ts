@@ -417,6 +417,15 @@ export class StudentService {
       studentHomeworks: {
         some: {
           studentId,
+          ...(query.teacherId && {
+            homework: {
+              assignment: {
+                teacherId: {
+                  equals: query.teacherId,
+                },
+              },
+            },
+          }),
         },
       },
     };

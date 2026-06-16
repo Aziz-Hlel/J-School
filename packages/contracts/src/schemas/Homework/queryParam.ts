@@ -12,6 +12,7 @@ const schema = z
   .object({
     ...baseQueryParamsSchema.shape,
     sortBy: z.enum(sortableFields).catch('due'),
+    teacherId: z.uuid().optional().catch(undefined),
   })
   .omit({ search: true });
 
@@ -22,6 +23,7 @@ const defaultQuery = {
   size: 10,
   sortBy: 'due',
   order: 'desc',
+  teacherId: undefined,
 } as const satisfies QueryType;
 
 export const homeworkQueryParams = {
