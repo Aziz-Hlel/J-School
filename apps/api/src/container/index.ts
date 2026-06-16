@@ -7,6 +7,7 @@ import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular
 import { ExtraCurricularPostsModule } from '@/modules/ExtraCurricular/posts/ExtraCurricularPosts.module';
 import { FeeItemsModule } from '@/modules/FeeItems/feeItems.module';
 import { FeesModule } from '@/modules/Fees/fees.module';
+import { MobileModule } from '@/modules/Mobile/mobile.module';
 import { NotificationModule } from '@/modules/Notification/notification.module';
 import { parentStudentModule } from '@/modules/ParentStudent/parentStudent.module';
 import { TeacherCommentsModule } from '@/modules/TeacherComments/teacherComments.module';
@@ -58,6 +59,9 @@ import { Router } from 'express';
 
 // * ROOT
 const { rootRouter } = rootModule();
+
+// * MOBILE
+const { mobileRouter } = MobileModule();
 
 // * MEDIA
 const { mediaRouter } = mediaModule();
@@ -216,6 +220,7 @@ seedDevService.run();
 export const container: { router: Router; resource: string }[] = [
   { router: rootRouter, resource: '' },
   { router: mediaRouter, resource: 'media' },
+  { router: mobileRouter, resource: 'mobile' },
 
   { router: accountRouter, resource: 'accounts' },
   { router: authRouter, resource: 'auth' },
