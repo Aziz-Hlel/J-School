@@ -1,6 +1,6 @@
 enum CalendarSessionType {
-    PUBLIC_HOLIYDAY
-    PRIVATE_HOLIDAY
+    PUBLIC_HOLIDAY
+    SCHOOL_HOLIDAY
     TRIP
     EVENT
     OTHER
