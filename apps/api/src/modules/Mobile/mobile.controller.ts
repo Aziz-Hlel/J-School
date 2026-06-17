@@ -6,12 +6,12 @@ export class MobileController {
   constructor(private readonly service: MobileService) {}
 
   async getAndroidVersion(_: Request, res: Response<VersionPolicyResponse>) {
-    const version = await this.service.getAppVersion('android');
+    const version = this.service.getAppVersion('android');
     res.status(200).json(version);
   }
 
   async getIosVersion(_: Request, res: Response<VersionPolicyResponse>) {
-    const version = await this.service.getAppVersion('ios');
+    const version = this.service.getAppVersion('ios');
     res.status(200).json(version);
   }
 }

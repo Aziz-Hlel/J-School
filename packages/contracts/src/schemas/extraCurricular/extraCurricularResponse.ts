@@ -1,4 +1,4 @@
-import type { DayOfWeek, Gender } from '../../types/enums/enums';
+import type { DayOfWeek, Gender, SessionType } from '../../types/enums/enums';
 
 export type ExtraCurricularResponse = {
   id: string;
@@ -11,6 +11,7 @@ export type ExtraCurricularResponse = {
     day: DayOfWeek | null;
     startTime: string | null;
     endTime: string | null;
+    type: SessionType | null;
   };
   teacher: {
     id: string;

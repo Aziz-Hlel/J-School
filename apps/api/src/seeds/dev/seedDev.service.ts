@@ -290,6 +290,7 @@ export class SeedDevService implements ISeed {
           day: extraCurricularSession.day,
           startTime: extraCurricularSession.startTime,
           endTime: extraCurricularSession.endTime,
+          type: extraCurricularSession.type,
           extraCurricularId: extraCurricularSession.extraCurricular.id,
         });
       }),

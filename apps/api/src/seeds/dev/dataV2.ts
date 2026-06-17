@@ -1,7 +1,7 @@
 import { toCalendarDate } from '@/utils/dayjs';
 import { subjectsGradeSix } from '@repo/contracts/const/subjectAndExams/grade.six';
 import { BaseSubjectsKeys, InitSubjectWithExamsType } from '@repo/contracts/const/subjectAndExams/type';
-import { ClassGrade, DayOfWeek, MediaType, ReactionType } from '@repo/db/prisma/browser';
+import { ClassGrade, DayOfWeek, MediaType, ReactionType, SessionType } from '@repo/db/prisma/browser';
 import dayjs from 'dayjs';
 import { mediaTypeSeed, MediaTypeSeed } from '../fakes/media.seed2';
 import { genUuid } from '../helper/generateUuid';
@@ -172,6 +172,7 @@ export const extraCurricularSessionSeedData = {
     id: genUuid('mat_6emeSession'),
     extraCurricular: extraCurricularSeedData.mat_6eme,
     day: DayOfWeek.MONDAY,
+    type: SessionType.WEEKLY,
     startTime: '16:00',
     endTime: '17:30',
   },
@@ -179,6 +180,7 @@ export const extraCurricularSessionSeedData = {
     id: genUuid('english_6emeSession'),
     extraCurricular: extraCurricularSeedData.english_6eme,
     day: DayOfWeek.WEDNESDAY,
+    type: SessionType.WEEKLY,
     startTime: '16:00',
     endTime: '17:30',
   },

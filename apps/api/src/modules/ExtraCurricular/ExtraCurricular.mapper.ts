@@ -19,6 +19,7 @@ export class ExtraCurricularMapper {
         day: input.session?.day ?? null,
         startTime: input.session?.startTime ? toTime(input.session.startTime) : null,
         endTime: input.session?.endTime ? toTime(input.session.endTime) : null,
+        type: input.session?.type ?? null,
       },
       teacher: input.teacher
         ? {

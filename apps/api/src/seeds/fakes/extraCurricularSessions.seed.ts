@@ -9,20 +9,23 @@ export class ExtraCurricularSessionsSeed {
     startTime: string;
     endTime: string;
     extraCurricularId: string;
+    type: SessionType;
   }) => {
-    const { startTime, endTime, day, extraCurricularId, id } = params;
+    const { startTime, endTime, day, extraCurricularId, id, type } = params;
 
     await prisma.session.upsert({
       where: { id },
       create: {
         id,
         day,
+        type,
         startTime: parseTime(startTime),
         endTime: parseTime(endTime),
         extraCurricularId,
-        type: SessionType.WEEKLY,
       },
-      update: {},
+      update: {
+        type,
+      },
     });
   };
 }

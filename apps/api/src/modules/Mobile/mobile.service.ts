@@ -2,7 +2,8 @@ import ENV from '@/config/env';
 import { VersionPolicyResponse } from '@repo/contracts/schemas/Mobile/versionPolicyResponse';
 
 export class MobileService {
-  async getAppVersion(platform: 'ios' | 'android'): Promise<VersionPolicyResponse> {
+  getAppVersion(platform: 'ios' | 'android'): VersionPolicyResponse {
+    console.log('ousil');
     if (platform === 'ios') {
       return { minSupportedVersion: ENV.IOS_MIN_SUPPORTED_VER };
     }
