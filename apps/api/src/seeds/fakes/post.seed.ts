@@ -23,6 +23,7 @@ export class PostSeed {
         },
       },
       create: {
+        id,
         schoolId,
         content,
         media: {

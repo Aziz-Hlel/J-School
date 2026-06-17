@@ -53,7 +53,7 @@ Content-Type: application/json
 
 ###
 # @name getExtraCurricularPosts
-GET {{baseUrl}}/schools/{{schoolId}}/extra-curriculars/{{extraCurricularId}}/posts
+GET {{baseUrl}}/schools/{{schoolId}}/extra-curriculars/{{extraCurricularId}}/posts?limit=3&cursor=50458b8c-d420-5942-b1f8-837c6a19caa9
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 Content-Type: application/json
 

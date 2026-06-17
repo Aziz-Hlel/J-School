@@ -7,15 +7,13 @@ import { toast } from 'sonner';
 type getSignedUrlUploadParams = {
   fileName: string;
   mimeType: string;
-  fileType: IMimeType;
   fileSize: number;
 };
 
-export const getSignedUrlUpload = async ({ fileName, mimeType, fileType, fileSize }: getSignedUrlUploadParams) => {
+export const getSignedUrlUpload = async ({ fileName, mimeType, fileSize }: getSignedUrlUploadParams) => {
   const response = await mediaService.presignedUrl({
-    mimeType: mimeType,
+    mimeType: mimeType as IMimeType,
     fileSize,
-    fileType: fileType,
     name: fileName,
   });
 
@@ -36,12 +34,9 @@ export const uploadImage = async ({
 }) => {
   const { type: mimeType, size } = uploadedImg;
 
-  const subtype = mimeType.split('/')[1];
-
   const { url, key, id } = await getSignedUrlUpload({
     fileName: name,
     mimeType,
-    fileType: subtype as IMimeType,
     fileSize: size,
   });
 

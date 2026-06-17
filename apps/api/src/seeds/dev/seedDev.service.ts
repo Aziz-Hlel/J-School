@@ -300,18 +300,20 @@ export class SeedDevService implements ISeed {
   };
 
   private seedExtraCurricularPosts = async ({ schoolId }: { schoolId: string }) => {
-    await Promise.all(
-      Object.values(postsSeedData).map(async (post) => {
-        const medias = await Promise.all(post.medias.map((type) => this.mediaSeed.run({ type })));
-        await this.postSeed.run({
-          schoolId,
-          id: post.id,
-          content: post.content,
-          mediaIds: medias.map((m) => m.id),
-          extraCurricularId: post.extraCurricular.id,
-        });
-      }),
-    );
+    for (const post of Object.values(postsSeedData)) {
+      const medias = await Promise.all(post.medias.map((type) => this.mediaSeed.run({ type })));
+
+      await this.postSeed.run({
+        schoolId,
+        id: post.id,
+        content: post.content,
+        mediaIds: medias.map((m) => m.id),
+        extraCurricularId: post.extraCurricular.id,
+      });
+
+      // small delay to separate DB calls
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
   };
 
   private seedExtraCurricularStudents = async ({ schoolId }: { schoolId: string }) => {

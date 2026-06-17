@@ -1,19 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+// import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { classroomTypeMeta } from '@/features/classroom/data/data';
 import { cn } from '@/lib/utils';
-import { getRouteApi, Link } from '@tanstack/react-router';
 import { CalendarDays, Edit, GraduationCap, MapPin, Phone, User } from 'lucide-react';
-import StudentProfileTabs from './components/student-profile-tabs';
+import { Link } from 'react-router';
 import { studentData } from './studentData';
+import StudentProfileTabs from './components/student-profile-tabs';
+import { Badge } from '@/components/ui/badge';
 
-const route = getRouteApi('/_authenticated/students/$studentId/');
-
-export default function StudentProfile() {
+const StudentProfile = () => {
   const currentLanguage = 'en';
-  const { studentId } = route.useParams();
   const t = (x: string) => x;
 
   // if (isError)
@@ -45,7 +42,7 @@ export default function StudentProfile() {
 
   return (
     <>
-      <div className='flex flex-1 flex-col gap-6 py-6'>
+      <div className='flex flex-1 flex-col gap-6 p-6'>
         {/* Hero Section */}
         <div className='border-primary/10 from-primary/10 via-background to-primary/5 relative overflow-hidden rounded-3xl border bg-linear-to-r p-8'>
           <div className='relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-center'>
@@ -61,9 +58,9 @@ export default function StudentProfile() {
             <div className='flex-1 space-y-3'>
               <div className='flex flex-wrap items-center gap-3'>
                 <h1 className='text-foreground text-4xl font-bold tracking-tight'>{studentData.name}</h1>
-                <Badge variant='outline' className='rounded-none border-green-500 bg-green-500/10 text-green-700'>
-                  {t(`common:status.${studentData.status.toLowerCase()}`)}
-                </Badge>
+                {/* <Badge variant='outline' className='rounded-none border-green-500 bg-green-500/10 text-green-700'> */}
+                {studentData.status.toLowerCase()}
+                {/* </Badge> */}
               </div>
 
               <div className='text-muted-foreground flex flex-wrap gap-6 text-sm'>
@@ -90,17 +87,17 @@ export default function StudentProfile() {
                         variant='outline'
                         className={cn(
                           'rounded-none border-transparent',
-                          classroomTypeMeta.get(studentData.classroom.type)!.className,
+                          'classroomTypeMeta.get(studentData.classroom.type)!.className',
                         )}
                       >
-                        {t(`common:classroom_types.${studentData.classroom.type.toLowerCase()}`)}
+                        studentData.classroom.type.toLowerCase()
                       </Badge>
                     </>
                   ) : (
                     <Badge variant={'destructive'} className='rounded-none font-medium'>
                       <div className='flex items-center gap-2'>
                         <GraduationCap className='h-4 w-4' />
-                        {t('students:profile.no_class')}
+                        students:profile.no_class
                       </div>
                     </Badge>
                   )}
@@ -110,7 +107,7 @@ export default function StudentProfile() {
 
             <div className='flex gap-3'>
               <Button variant='outline' size='icon' asChild className='rounded-full'>
-                <Link to='/students/$studentId/edit' params={{ studentId }}>
+                <Link to={`/students/${studentData.id}/edit`}>
                   <Edit className='h-4 w-4' />
                 </Link>
               </Button>
@@ -128,34 +125,34 @@ export default function StudentProfile() {
             <Card className='outline-border overflow-hidden border-none shadow-sm outline-1 transition-all hover:shadow-md'>
               <CardContent className='p-6'>
                 <h3 className='text-foreground decoration-primary/30 mb-6 font-semibold underline-offset-4'>
-                  {t('students:profile.quick_details')}
+                  students:profile.quick_details
                 </h3>
                 <div className='space-y-5'>
                   <div className='flex flex-col gap-1'>
                     <span className='text-muted-foreground text-xs font-medium tracking-wider uppercase'>
-                      {t('students:profile.parent_guardian')}
+                      students:profile.parent_guardian
                     </span>
                     <div className='flex items-center gap-2 text-sm font-semibold'>
                       <User className='text-primary/70 h-4 w-4' />
-                      {studentData.parents[0]?.user.name || t('common:not_provided')}
+                      {studentData.parents[0]?.user.name || 'common:not_provided'}
                     </div>
                   </div>
                   <div className='flex flex-col gap-1'>
                     <span className='text-muted-foreground text-xs font-medium tracking-wider uppercase'>
-                      {t('students:profile.emergency_phone')}
+                      students:profile.emergency_phone
                     </span>
                     <div className='flex items-center gap-2 text-sm font-semibold'>
                       <Phone className='text-primary/70 h-4 w-4' />
-                      {studentData.parents[0]?.phone || t('common:not_provided')}
+                      {studentData.parents[0]?.phone || 'common:not_provided'}
                     </div>
                   </div>
                   <div className='flex flex-col gap-1'>
                     <span className='text-muted-foreground text-xs font-medium tracking-wider uppercase'>
-                      {t('students:profile.home_address')}
+                      students:profile.home_address
                     </span>
                     <div className='flex items-center gap-2 text-sm leading-relaxed'>
                       <MapPin className='text-primary/70 mt-0.5 h-4 w-4 shrink-0' />
-                      <span className='font-medium'>{studentData.parents[0]?.address || t('common:not_provided')}</span>
+                      <span className='font-medium'>{studentData.parents[0]?.address || 'common:not_provided'}</span>
                     </div>
                   </div>
                 </div>
@@ -190,4 +187,6 @@ export default function StudentProfile() {
       </div>
     </>
   );
-}
+};
+
+export default StudentProfile;
