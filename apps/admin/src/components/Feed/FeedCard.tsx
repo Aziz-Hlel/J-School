@@ -59,7 +59,12 @@ const FeedCard = (params: FeedResponse) => {
                 <SquarePen className='mr-2 h-4 w-4 text-green-600' />
                 <span>Edit</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className='text-destructive focus:text-destructive'>
+              <DropdownMenuItem
+                onClick={() => {
+                  handleDialogStateChange({ openDialog: 'delete', selectedRow: params });
+                }}
+                className='text-destructive focus:text-destructive'
+              >
                 <Trash2 className='mr-2 h-4 w-4 text-red-600' />
                 <span>Delete</span>
               </DropdownMenuItem>

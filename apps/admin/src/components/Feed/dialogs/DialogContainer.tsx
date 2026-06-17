@@ -1,5 +1,6 @@
 import { useSelectedRow } from '../context/selected-row-provider';
 import CreateFeed from './CreateFeed';
+import DeleteDialog from './delete/DeleteDialog';
 import UpdateFeed from './UpdateFeed';
 // import DeleteDialog from './delete/DeleteDialog';
 // import UpdateDialog from './update/UpdateDialog';
@@ -11,7 +12,7 @@ const DialogContainer = () => {
     <>
       {dialogState.openDialog === 'edit' && <UpdateFeed />}
       {dialogState.openDialog === 'add' && <CreateFeed />}
-      {/* {dialogState.openDialog === 'delete' && <DeleteDialog />} */}
+      {dialogState.openDialog === 'delete' && <DeleteDialog />}
     </>
   );
 };

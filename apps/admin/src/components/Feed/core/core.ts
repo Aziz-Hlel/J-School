@@ -1,8 +1,8 @@
 import capitalize from '@/utils/capitalize';
 
-export const MODULE_NAME = 'student';
+export const MODULE_NAME = 'feed';
 
-export const MODULE_NAME_PLURAL = 'students';
+export const MODULE_NAME_PLURAL = 'feed';
 
 export const ModuleName = {
   singular: MODULE_NAME,
@@ -15,11 +15,11 @@ export const TableData = {
 
   ModuleNamePlural: capitalize(ModuleName.plural),
 
-  href: '/students',
+  href: '/feed',
 
   MainCard: {
     title: capitalize(ModuleName.plural),
-    description: `Manage your ${capitalize(ModuleName.plural)} and their details here.`,
+    description: `Manage your ${capitalize(ModuleName.plural)} here.`,
     addButton: {
       label: `Add New ${capitalize(ModuleName.singular)}`,
     },

@@ -4,7 +4,6 @@ import { parseCalendarDate } from '@/utils/dayjs';
 import { CreateCalendarReq } from '@repo/contracts/schemas/Calendar/create';
 import { CalendarQueryParams } from '@repo/contracts/schemas/Calendar/queryParam';
 import { UpdateCalendarReq } from '@repo/contracts/schemas/Calendar/update';
-import { toWeekNbr } from '@repo/contracts/schemas/utils/getWeekNbr';
 import prisma from '@repo/db';
 import { NotificationSourceType, NotificationType } from '@repo/db/prisma/enums';
 import { globalNotificationService } from '../Notification/notification.service';
@@ -15,12 +14,9 @@ export class CalendarService {
   create = async (params: { input: CreateCalendarReq; schoolId: string }) => {
     const { input, schoolId } = params;
 
-    const week = toWeekNbr(input.startDate);
-
     const createdCalendar = await prisma.calendar.create({
       data: {
         schoolId,
-        week,
         title: input.title,
         description: input.description,
         type: input.type,
@@ -52,8 +48,6 @@ export class CalendarService {
   update = async (params: { id: string; input: UpdateCalendarReq; schoolId: string }) => {
     const { id, input, schoolId } = params;
 
-    const week = toWeekNbr(input.startDate);
-
     const updatedCalendar = await prisma.calendar.update({
       where: {
         id,
@@ -61,7 +55,6 @@ export class CalendarService {
       },
       data: {
         ...input,
-        week,
       },
     });
 
@@ -81,13 +74,14 @@ export class CalendarService {
 
   findAll = async (params: { schoolId: string; query: CalendarQueryParams }) => {
     const { schoolId, query } = params;
-    const week = query.week ?? toWeekNbr();
     const calendars = await prisma.calendar.findMany({
       where: {
         schoolId,
-        week,
+        startDate: {
+          gte: query.startDate,
+          lte: query.endDate,
+        },
       },
-      take: query.limit,
       orderBy: [
         {
           startDate: 'asc',
