@@ -1,12 +1,12 @@
-import { TeacherGetPayload } from '@repo/db/prisma/models';
 import { globalMediaService } from '@/media/media.service';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
+import { TeacherGetPayload } from '@repo/db/prisma/models';
 
 export class TeacherMapper {
   static toResponse(
     teacher: TeacherGetPayload<{ include: { user: { include: { account: { include: { avatar: true } } } } } }>,
   ): TeacherResponse {
-    const avatar = globalMediaService.toMediaResponse(teacher.user.account.avatar);
+    const avatar = globalMediaService.toMediaRes(teacher.user.account.avatar);
     return {
       id: teacher.id,
       firstName: teacher.user.firstName,

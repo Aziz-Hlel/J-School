@@ -1,20 +1,22 @@
 import { prisma } from '@/bootstrap/db.init';
 import { logger } from '@/bootstrap/logger.init';
-import { MediaStatus, MediaType } from '@repo/db/prisma/enums';
-import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
 import { TX } from '@/types/prisma/PrismaTransaction';
+import { mimeTypeToMediaType } from '@repo/contracts/schemas/media/MimeType/toMediaType';
+import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
+import { MediaStatus } from '@repo/db/prisma/enums';
 
 export class MediaRepo {
   async createPendingMedia(preSignedUrlDto: PresignedUrlRequest, mediaKey: string) {
+    const type = mimeTypeToMediaType[preSignedUrlDto.mimeType];
     const createdMedia = await prisma.media.create({
       data: {
         baseName: preSignedUrlDto.name,
-        type: MediaType.IMAGE, // ! just add it to bypass compilation eror look into it afterwards
+        type,
         key: mediaKey,
         mimeType: preSignedUrlDto.mimeType,
         fileSize: preSignedUrlDto.fileSize,
-        // fileType: preSignedUrlDto.fileType,
         status: MediaStatus.PENDING,
+        blurHash: preSignedUrlDto.blurhash,
       },
     });
 

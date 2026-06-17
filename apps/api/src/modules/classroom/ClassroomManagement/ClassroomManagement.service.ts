@@ -162,7 +162,7 @@ export class ClassroomManagementService {
           ar: student.lastName_ar,
         },
         gender: student.gender,
-        avatar: globalMediaService.toMediaResponse(student.avatar),
+        avatar: globalMediaService.toMediaRes(student.avatar),
         attendance: student.attendances[0]
           ? {
               id: student.attendances[0]?.id,

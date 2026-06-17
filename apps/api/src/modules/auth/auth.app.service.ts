@@ -1,9 +1,9 @@
 import { NotFoundError, UnauthorizedError } from '@/err/service/customErrors';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
-import { AccountRole } from '@repo/db/prisma/enums';
 import { globalMediaService } from '@/media/media.service';
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
+import { AccountRole } from '@repo/db/prisma/enums';
 import { AccountMapper } from '../accounts/account.mapper';
 import { AccountService } from '../accounts/account.service';
 
@@ -41,7 +41,7 @@ export class AuthAppService {
         internalLog: 'Account exists but send 404 since it has no users',
       });
     }
-    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaRes(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -80,7 +80,7 @@ export class AuthAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaRes(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -114,7 +114,7 @@ export class AuthAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaRes(account.avatar);
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
     return accountResponse;
   };

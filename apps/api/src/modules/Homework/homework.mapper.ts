@@ -24,7 +24,7 @@ export class HomeworkMapper {
     const subjectResponse = SubjectMapper.toResponse(homework.assignment.subject);
     const classroomResponse = ClassroomMapper.toResponse(homework.assignment.classroom);
     const teacherResponse = homework.assignment.teacher ? TeacherMapper.toResponse(homework.assignment.teacher) : null;
-    const filesResponse = homework.files.map((f) => globalMediaService.generateMediaResponse_V2(f));
+    const filesResponse = homework.files.map((f) => globalMediaService.toMediaResWithOrder(f));
     return {
       id: homework.id,
       title: homework.title,

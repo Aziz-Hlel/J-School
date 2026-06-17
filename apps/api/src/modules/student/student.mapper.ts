@@ -7,7 +7,7 @@ import { ClassroomMapper } from '../classroom/classroom.mapper';
 
 export class StudentMapper {
   static toResponse(student: StudentGetPayload<{ include: { avatar: true } }>): StudentResponse {
-    const avatarResponse = globalMediaService.toMediaResponse(student.avatar);
+    const avatarResponse = globalMediaService.toMediaRes(student.avatar);
     return {
       id: student.id,
       uid: student.uid,
@@ -31,7 +31,7 @@ export class StudentMapper {
   static toResponseWithClassroom(
     student: StudentGetPayload<{ include: { avatar: true; classroom: true } }>,
   ): StudentWithClassroomResponse {
-    const avatarResponse = globalMediaService.toMediaResponse(student.avatar);
+    const avatarResponse = globalMediaService.toMediaRes(student.avatar);
     return {
       id: student.id,
       uid: student.uid,
@@ -56,7 +56,7 @@ export class StudentMapper {
   static toResponse2(
     student: StudentGetPayload<{ include: { avatar: true; classroom: true } }>,
   ): StudentWithClassroomResponse {
-    const avatarResponse = globalMediaService.toMediaResponse(student.avatar);
+    const avatarResponse = globalMediaService.toMediaRes(student.avatar);
     return {
       id: student.id,
       uid: student.uid,

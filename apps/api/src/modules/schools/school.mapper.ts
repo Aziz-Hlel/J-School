@@ -1,10 +1,10 @@
 // import { SchoolGetPayload } from '@repo/db/prisma/models';
 import { globalMediaService } from '@/media/media.service';
 import { CreateSchoolRequest } from '@repo/contracts/schemas/school/createSchoolRequest';
-import { CreateSchoolPayload } from './types/createSchoolPayload';
 import { GetMySchoolResponse } from '@repo/contracts/schemas/school/getMySchoolResponse';
 import { SchoolPlan } from '@repo/db/prisma/enums';
 import { SchoolGetPayload } from '@repo/db/prisma/models';
+import { CreateSchoolPayload } from './types/createSchoolPayload';
 
 export class SchoolMapper {
   static toCreateSchoolPayload = ({
@@ -22,7 +22,7 @@ export class SchoolMapper {
   };
 
   static toGetMySchoolResponse = (school: SchoolGetPayload<{ include: { logo: true } }>): GetMySchoolResponse => {
-    const logoResponse = globalMediaService.toMediaResponse(school.logo);
+    const logoResponse = globalMediaService.toMediaRes(school.logo);
     return {
       id: school.id,
       nameEn: school.nameEn,

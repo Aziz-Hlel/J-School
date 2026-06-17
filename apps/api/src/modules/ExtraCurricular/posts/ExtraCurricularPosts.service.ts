@@ -67,7 +67,7 @@ export class ExtraCurricularPostsService {
       include: { media: true },
     });
     const response: PostResponse[] = queryResult.slice(0, cursorParams.limit).map((s) => {
-      const mediaResponses = s.media.map((media) => globalMediaService.toMediaResponse(media));
+      const mediaResponses = s.media.map((media) => globalMediaService.toMediaRes(media));
       return {
         id: s.id,
         content: s.content,

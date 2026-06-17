@@ -2,8 +2,9 @@ import { NotFoundError } from '@/err/service/customErrors';
 import { storageService } from '@/storage/storage.service';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { MediaResponse } from '@repo/contracts/schemas/media/MediaResponse';
-import { MediaResponseV2 } from '@repo/contracts/schemas/media/MediaResponseV2';
+import { MediaResponseWithOrder } from '@repo/contracts/schemas/media/MediaResponseWithOrder';
 import { PresignedUrlRequest } from '@repo/contracts/schemas/media/PresignedUrlRequest';
+import { PresignedUrlRequestList } from '@repo/contracts/schemas/media/PresignedUrlRequestList';
 import { PresignedUrlResponse } from '@repo/contracts/schemas/media/PresignedUrlResponse';
 import { Media } from '@repo/db/prisma/client';
 import { MediaStatus } from '@repo/db/prisma/enums';
@@ -22,7 +23,8 @@ export interface IMediaService {
     newMediaKey: string;
   }): Promise<string | null>;
   getMediaKeyAndUrl(media: Media | null): MediaResponse | null;
-  toMediaResponse(media: Media | null): MediaResponse | null;
+  toMediaRes(media: Media | null): MediaResponse | null;
+  getPresignedUrls(schema: PresignedUrlRequestList): Promise<PresignedUrlResponse[]>;
 }
 
 export class MediaService implements IMediaService {
@@ -96,10 +98,10 @@ export class MediaService implements IMediaService {
     };
   }
 
-  toMediaResponse(media: Media): MediaResponse;
-  toMediaResponse(media: null): null;
-  toMediaResponse(media: Media | null): MediaResponse | null;
-  toMediaResponse(media: Media | null): MediaResponse | null {
+  toMediaRes(media: Media): MediaResponse;
+  toMediaRes(media: null): null;
+  toMediaRes(media: Media | null): MediaResponse | null;
+  toMediaRes(media: Media | null): MediaResponse | null {
     if (!media) return null;
     const url = storageService.getObjectUrl(media.key);
     return {
@@ -111,10 +113,10 @@ export class MediaService implements IMediaService {
     };
   }
 
-  public generateMediaResponse_V2(media: Media): MediaResponseV2;
-  public generateMediaResponse_V2(media: null): null;
-  public generateMediaResponse_V2(media: Media | null): MediaResponseV2 | null;
-  public generateMediaResponse_V2(media: Media | null) {
+  public toMediaResWithOrder(media: Media): MediaResponseWithOrder;
+  public toMediaResWithOrder(media: null): null;
+  public toMediaResWithOrder(media: Media | null): MediaResponseWithOrder | null;
+  public toMediaResWithOrder(media: Media | null) {
     if (!media) return null;
 
     const url = storageService.getObjectUrl(media.key);
@@ -125,6 +127,32 @@ export class MediaService implements IMediaService {
       type: media.type,
       blurHash: media.blurHash,
     };
+  }
+
+  async getPresignedUrls(schema: PresignedUrlRequestList): Promise<PresignedUrlResponse[]> {
+    const expiresIn = 3600;
+    const createdMedias = await Promise.all(
+      schema.files.map(async (file) => {
+        const mediaKey = storageService.generateMediaKey(file.name);
+        return await this.mediaRepo.createPendingMedia(file, mediaKey);
+      }),
+    );
+
+    const signedUrls = await Promise.all(
+      createdMedias.map(async (media) => {
+        return await storageService.generatePresignedUrl({
+          mediaKey: media.key,
+          mimeType: media.mimeType,
+          expiresIn,
+        });
+      }),
+    );
+
+    return createdMedias.map((media, index) => ({
+      id: media.id,
+      url: signedUrls[index]!,
+      key: media.key,
+    }));
   }
 }
 

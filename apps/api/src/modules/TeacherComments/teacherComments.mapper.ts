@@ -15,7 +15,7 @@ export class TeacherCommentsMapper {
       };
     }>,
   ): TeacherCommentsResponse {
-    const teacherAvatar = globalMediaService.toMediaResponse(teacherComment.teacher.user.account.avatar);
+    const teacherAvatar = globalMediaService.toMediaRes(teacherComment.teacher.user.account.avatar);
     return {
       id: teacherComment.id,
       title: teacherComment.title,

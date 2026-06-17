@@ -1,5 +1,5 @@
 import type { ClassroomResponse } from '../classroom/classResponse';
-import type { MediaResponseV2 } from '../media/MediaResponseV2';
+import type { MediaResponseWithOrder } from '../media/MediaResponseWithOrder';
 import type { SubjectResponse } from '../subject/subjectResponse';
 import type { TeacherResponse } from '../teacher/teacherResponse';
 
@@ -7,7 +7,7 @@ export type HomeworkResponse = {
   id: string;
   title: string | null;
   content: string | null;
-  files: MediaResponseV2[];
+  files: MediaResponseWithOrder[];
   due: string;
   subject: SubjectResponse;
   classroom: ClassroomResponse;

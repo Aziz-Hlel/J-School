@@ -9,4 +9,4 @@ export const mediaResponseSchemaV2 = z.object({
   type: z.enum(MediaType),
 });
 
-export type MediaResponseV2 = z.infer<typeof mediaResponseSchemaV2>;
+export type MediaResponseWithOrder = z.infer<typeof mediaResponseSchemaV2>;

@@ -33,7 +33,7 @@ export class ExtraCurricularMapper {
             firstName: input.teacher.user.firstName,
             lastName: input.teacher.user.lastName,
             gender: input.teacher.user.gender,
-            avatar: globalMediaService.toMediaResponse(input.teacher.user.account.avatar),
+            avatar: globalMediaService.toMediaRes(input.teacher.user.account.avatar),
           }
         : null,
       createdAt: input.createdAt.toISOString(),

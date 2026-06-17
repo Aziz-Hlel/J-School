@@ -2,11 +2,11 @@ import { logger } from '@/bootstrap/logger.init';
 import { ConflictError, NotFoundError, UnauthorizedError } from '@/err/service/customErrors';
 import { firebaseAuthService } from '@/firebase/service/firebase.auth.service';
 import { FirebaseMapper } from '@/firebase/service/firebase.mapper';
-import { AccountRole } from '@repo/db/prisma/enums';
 import { globalMediaService } from '@/media/media.service';
 import { DecodedIdTokenWithClaims } from '@/types/auth/DecodedTokenWithClaims';
 import { accountInclude } from '@/types/includes/account';
 import { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
+import { AccountRole } from '@repo/db/prisma/enums';
 import { AccountMapper } from './account.mapper';
 import { AccountRepo } from './account.repo';
 import { AccountService } from './account.service';
@@ -65,7 +65,7 @@ export class AccountAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaRes(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -97,7 +97,7 @@ export class AccountAppService {
       throw new NotFoundError(`Account Not found`);
     }
 
-    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaRes(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 
@@ -126,7 +126,7 @@ export class AccountAppService {
       });
     }
 
-    const accountAvatar = globalMediaService.toMediaResponse(account.avatar);
+    const accountAvatar = globalMediaService.toMediaRes(account.avatar);
 
     const accountResponse = AccountMapper.toAuthResponse({ account, avatar: accountAvatar });
 

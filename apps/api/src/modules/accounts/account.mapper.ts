@@ -13,7 +13,7 @@ import { AccountGetPayload } from '@repo/db/prisma/models';
 
 export class AccountMapper {
   static toResponseWithAvatar(account: AccountGetPayload<{ include: { avatar: true } }>): AccountResponse {
-    const avatar = globalMediaService.toMediaResponse(account.avatar);
+    const avatar = globalMediaService.toMediaRes(account.avatar);
     return {
       id: account.id,
       authId: account.authId,
@@ -167,7 +167,7 @@ export class AccountMapper {
             break;
           case UserRole.PARENT:
             user.parent?.students.forEach((parentStudent) => {
-              const mediaResponse = globalMediaService.toMediaResponse(parentStudent.student.avatar);
+              const mediaResponse = globalMediaService.toMediaRes(parentStudent.student.avatar);
               parentWorkspaces.push(
                 this.toParentWorkspace({
                   user,

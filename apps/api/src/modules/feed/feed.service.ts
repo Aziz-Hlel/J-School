@@ -157,7 +157,7 @@ export class FeedService {
         id: announcement.id,
         title: announcement.title,
         description: announcement.description,
-        media: announcement.media.map((m) => globalMediaService.generateMediaResponse_V2(m)),
+        media: announcement.media.map((m) => globalMediaService.toMediaResWithOrder(m)),
         reactions: {
           likesCount: likesCount.get(announcement.id) ?? 0,
           heartsCount: heartCounts.get(announcement.id) ?? 0,
