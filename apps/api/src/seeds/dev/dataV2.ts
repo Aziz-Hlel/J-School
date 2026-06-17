@@ -165,12 +165,28 @@ export const extraCurricularSeedData = {
     name: 'Etud English',
     grade: ClassGrade.SIX,
   },
+  tripHammamet: {
+    id: genUuid('tripHammamet'),
+    name: 'Trip Hammamet',
+    grade: ClassGrade.SIX,
+  },
 };
 
-export const extraCurricularSessionSeedData = {
+export const extraCurricularSessionSeedData: Record<
+  string,
+  {
+    id: string;
+    day?: DayOfWeek;
+    date?: string;
+    startTime: string;
+    endTime?: string;
+    extraCurricularId: string;
+    type: SessionType;
+  }
+> = {
   mat_6emeSession: {
     id: genUuid('mat_6emeSession'),
-    extraCurricular: extraCurricularSeedData.mat_6eme,
+    extraCurricularId: extraCurricularSeedData.mat_6eme.id,
     day: DayOfWeek.MONDAY,
     type: SessionType.WEEKLY,
     startTime: '16:00',
@@ -178,13 +194,59 @@ export const extraCurricularSessionSeedData = {
   },
   english_6emeSession: {
     id: genUuid('english_6emeSession'),
-    extraCurricular: extraCurricularSeedData.english_6eme,
+    extraCurricularId: extraCurricularSeedData.english_6eme.id,
     day: DayOfWeek.WEDNESDAY,
     type: SessionType.WEEKLY,
     startTime: '16:00',
     endTime: '17:30',
   },
+  tripHammametSession: {
+    id: genUuid('tripHammametSession'),
+    extraCurricularId: extraCurricularSeedData.tripHammamet.id,
+    date: '2026-07-01',
+    type: SessionType.SPECIAL,
+    startTime: '16:00',
+  },
 };
+
+export const extraCurricularStudentAssignmentSeedData = [
+  {
+    extraCurricularId: extraCurricularSeedData.mat_6eme.id,
+    studentId: studentSeedData.student1.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.english_6eme.id,
+    studentId: studentSeedData.student1.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.tripHammamet.id,
+    studentId: studentSeedData.student1.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.mat_6eme.id,
+    studentId: studentSeedData.student2.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.english_6eme.id,
+    studentId: studentSeedData.student2.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.tripHammamet.id,
+    studentId: studentSeedData.student2.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.mat_6eme.id,
+    studentId: studentSeedData.student3.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.english_6eme.id,
+    studentId: studentSeedData.student3.id,
+  },
+  {
+    extraCurricularId: extraCurricularSeedData.tripHammamet.id,
+    studentId: studentSeedData.student3.id,
+  },
+];
 
 export const postsSeedData = {
   post1: {

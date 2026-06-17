@@ -1,4 +1,4 @@
-import { toTime } from '@/utils/dayjs';
+import { toCalendarDate, toTime } from '@/utils/dayjs';
 import type { ExtraCurricularResponse } from '@repo/contracts/schemas/extraCurricular/extraCurricularResponse';
 import type { Prisma } from '@repo/db/prisma/client';
 
@@ -17,6 +17,7 @@ export class ExtraCurricularMapper {
       },
       session: {
         day: input.session?.day ?? null,
+        date: input.session?.startTime ? toCalendarDate(input.session.date) : null,
         startTime: input.session?.startTime ? toTime(input.session.startTime) : null,
         endTime: input.session?.endTime ? toTime(input.session.endTime) : null,
         type: input.session?.type ?? null,

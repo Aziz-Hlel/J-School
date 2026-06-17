@@ -8,6 +8,7 @@ export type ExtraCurricularResponse = {
     ar: string;
   };
   session: {
+    date: string | null;
     day: DayOfWeek | null;
     startTime: string | null;
     endTime: string | null;

@@ -1,9 +1,9 @@
-import { ExtraCurricularService } from './ExtraCurricular.service';
 import getUrlParam from '@/utils/getUrlParam';
 import { createExtraCurricularRequestSchema } from '@repo/contracts/schemas/extraCurricular/createExtraCurricularRequest';
 import { extraCurricularQueryParams } from '@repo/contracts/schemas/extraCurricular/findAllQueryParams';
 import { updateExtraCurricularReqSchema } from '@repo/contracts/schemas/extraCurricular/updateExtraCurricularReq';
 import type { Request, Response } from 'express';
+import { ExtraCurricularService } from './ExtraCurricular.service';
 
 export class ExtraCurricularController {
   constructor(private readonly extraCurricularService: ExtraCurricularService) {}
@@ -44,7 +44,7 @@ export class ExtraCurricularController {
     const data = await this.extraCurricularService.findAll({ schoolId, query });
     res.status(200).json({
       message: 'Extra curriculars fetched successfully',
-      data,
+      ...data,
     });
   };
 
@@ -58,6 +58,7 @@ export class ExtraCurricularController {
     });
   };
 
+  // ! wrong approach , just make one api to set all student in the extra curricular
   assignToStudent = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const extraCurricularId = getUrlParam(req, 'extraCurricularId', { uuid: true });

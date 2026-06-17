@@ -193,10 +193,10 @@ export class ExtraCurricularService {
         extraCurricularId,
       },
       include: {
-        student: { include: { avatar: true } },
+        student: { include: { avatar: true, classroom: true } },
       },
     });
-    const response = queryResult.map((s) => StudentMapper.toResponse(s.student));
+    const response = queryResult.map((s) => StudentMapper.toResponseWithClassroom(s.student));
     return response;
   };
 }

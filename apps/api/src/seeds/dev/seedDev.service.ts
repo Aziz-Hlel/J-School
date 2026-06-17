@@ -31,6 +31,7 @@ import {
   extraCurricularAssignmentSeedData,
   extraCurricularSeedData,
   extraCurricularSessionSeedData,
+  extraCurricularStudentAssignmentSeedData,
   homeworkSeedData,
   postsSeedData,
   reactionSeedData,
@@ -288,10 +289,11 @@ export class SeedDevService implements ISeed {
         await this.extraCurricularSessionsSeed.run({
           id: extraCurricularSession.id,
           day: extraCurricularSession.day,
+          date: extraCurricularSession.date,
           startTime: extraCurricularSession.startTime,
           endTime: extraCurricularSession.endTime,
           type: extraCurricularSession.type,
-          extraCurricularId: extraCurricularSession.extraCurricular.id,
+          extraCurricularId: extraCurricularSession.extraCurricularId,
         });
       }),
     );
@@ -307,6 +309,18 @@ export class SeedDevService implements ISeed {
           content: post.content,
           mediaIds: medias.map((m) => m.id),
           extraCurricularId: post.extraCurricular.id,
+        });
+      }),
+    );
+  };
+
+  private seedExtraCurricularStudents = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      Object.values(extraCurricularStudentAssignmentSeedData).map(async (extraCurricularStudentAssignment) => {
+        await this.extraCurricularSeed.assignStudent({
+          schoolId,
+          extraCurricularId: extraCurricularStudentAssignment.extraCurricularId,
+          studentId: extraCurricularStudentAssignment.studentId,
         });
       }),
     );
@@ -418,6 +432,8 @@ export class SeedDevService implements ISeed {
       await this.seedExtraCurricular({ schoolId: school.id });
 
       await this.assignTeacherToExtraCurricular({ schoolId: school.id });
+
+      await this.seedExtraCurricularStudents({ schoolId: school.id });
 
       await this.seedExtraCurricularSessions();
 

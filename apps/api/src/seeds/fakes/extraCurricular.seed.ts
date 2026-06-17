@@ -51,4 +51,19 @@ export class ExtracurricularSeed {
     });
     return row;
   };
+
+  assignStudent = async (params: { schoolId: string; extraCurricularId: string; studentId: string }) => {
+    const { schoolId, extraCurricularId, studentId } = params;
+
+    const row = await prisma.studentExtraCurricular.upsert({
+      where: { studentId_extraCurricularId: { studentId, extraCurricularId } },
+      create: {
+        extraCurricularId,
+        studentId,
+        schoolId,
+      },
+      update: {},
+    });
+    return row;
+  };
 }

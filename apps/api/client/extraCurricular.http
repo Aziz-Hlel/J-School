@@ -36,11 +36,11 @@ Content-Type: application/json
 }
 
 ###
-@schoolId = {{serverLogin.response.body.administration[0].school.id}}
+@schoolId = {{serverLogin.response.body.data.administration[0].school.id}}
 
 ###
 # @name createExtraCurricular
-POST {{baseUrl}}/schools/{{schoolId}}/extraCurriculars
+POST {{baseUrl}}/schools/{{schoolId}}/extra-curriculars
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
@@ -60,7 +60,7 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 ###
 # @name updateExtraCurricular
-PUT {{baseUrl}}/schools/{{schoolId}}/extraCurriculars/{{createExtraCurricular.response.body.data.id}}
+PUT {{baseUrl}}/schools/{{schoolId}}/extra-curriculars/{{createExtraCurricular.response.body.data.id}}
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
@@ -79,21 +79,32 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 ###
 # @name findOne
-GET {{baseUrl}}/schools/{{schoolId}}/extraCurriculars/{{createExtraCurricular.response.body.data.id}}
+GET {{baseUrl}}/schools/{{schoolId}}/extra-curriculars/{{createExtraCurricular.response.body.data.id}}
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 
 ###
 # @name deleteExtraCurricular
-DELETE {{baseUrl}}/schools/{{schoolId}}/extraCurriculars/{{createExtraCurricular.response.body.data.id}}
+DELETE {{baseUrl}}/schools/{{schoolId}}/extra-curriculars/{{createExtraCurricular.response.body.data.id}}
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 
 ###
 # @name findAllExtraCurricular
-GET {{baseUrl}}/schools/{{schoolId}}/extraCurriculars?page=1&size=10
+GET {{baseUrl}}/schools/{{schoolId}}/extra-curriculars?page=1&size=10
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
+
+###
+@extraCurricularId = {{findAllExtraCurricular.response.body.data[0].id}}
+
+
+###
+# @name getExtraCurricularStudents
+GET {{baseUrl}}/schools/{{schoolId}}/extra-curriculars/{{extraCurricularId}}/students
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+ 

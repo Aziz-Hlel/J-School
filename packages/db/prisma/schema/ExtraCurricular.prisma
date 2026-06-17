@@ -77,7 +77,7 @@ model Session {
 
   type SessionType
 
-  day       DayOfWeek
+  day       DayOfWeek?
   date      DateTime? @db.Date
   startTime DateTime  @db.Time
   endTime   DateTime? @db.Time
