@@ -131,7 +131,13 @@ export class StudentService {
         schoolId,
       },
       include: {
-        extraCurricular: { include: { title: true, session: true, teacher: { include: { user: true } } } },
+        extraCurricular: {
+          include: {
+            title: true,
+            session: true,
+            teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
+          },
+        },
       },
     });
 

@@ -1,3 +1,4 @@
+import { globalMediaService } from '@/media/media.service';
 import { toCalendarDate, toTime } from '@/utils/dayjs';
 import type { ExtraCurricularResponse } from '@repo/contracts/schemas/extraCurricular/extraCurricularResponse';
 import type { Prisma } from '@repo/db/prisma/client';
@@ -5,7 +6,11 @@ import type { Prisma } from '@repo/db/prisma/client';
 export class ExtraCurricularMapper {
   static toResponse(
     input: Prisma.ExtraCurricularGetPayload<{
-      include: { title: true; session: true; teacher: { include: { user: true } } };
+      include: {
+        title: true;
+        session: true;
+        teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } };
+      };
     }>,
   ): ExtraCurricularResponse {
     return {
@@ -28,6 +33,7 @@ export class ExtraCurricularMapper {
             firstName: input.teacher.user.firstName,
             lastName: input.teacher.user.lastName,
             gender: input.teacher.user.gender,
+            avatar: globalMediaService.toMediaResponse(input.teacher.user.account.avatar),
           }
         : null,
       createdAt: input.createdAt.toISOString(),

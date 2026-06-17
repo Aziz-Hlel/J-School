@@ -144,7 +144,7 @@ export class ExtraCurricularService {
       include: {
         title: true,
         session: true,
-        teacher: { include: { user: true } },
+        teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
       },
     });
     if (!extraCurricular) {

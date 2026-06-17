@@ -1,5 +1,5 @@
 import { globalMediaService } from '@/media/media.service';
-import { toCalendarDateOrNull } from '@/utils/dayjs';
+import { toCalendarDate } from '@/utils/dayjs';
 import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
 import { StudentWithClassroomResponse } from '@repo/contracts/schemas/student/studentWithClassroomResponse';
 import { StudentGetPayload } from '@repo/db/prisma/models';
@@ -20,7 +20,7 @@ export class StudentMapper {
         ar: student.lastName_ar,
       },
       gender: student.gender,
-      dateOfBirth: toCalendarDateOrNull(student.dateOfBirth),
+      dateOfBirth: toCalendarDate(student.dateOfBirth),
       avatar: avatarResponse,
       status: student.status,
       createdAt: student.createdAt.toISOString(),
@@ -44,7 +44,7 @@ export class StudentMapper {
         ar: student.lastName_ar,
       },
       gender: student.gender,
-      dateOfBirth: toCalendarDateOrNull(student.dateOfBirth),
+      dateOfBirth: toCalendarDate(student.dateOfBirth),
       avatar: avatarResponse,
       status: student.status,
       classroom: student.classroom ? ClassroomMapper.toResponse(student.classroom) : null,
@@ -69,7 +69,7 @@ export class StudentMapper {
         ar: student.lastName_ar,
       },
       gender: student.gender,
-      dateOfBirth: toCalendarDateOrNull(student.dateOfBirth),
+      dateOfBirth: toCalendarDate(student.dateOfBirth),
       avatar: avatarResponse,
       status: student.status,
       classroom: student.classroom ? ClassroomMapper.toResponse(student.classroom) : null,

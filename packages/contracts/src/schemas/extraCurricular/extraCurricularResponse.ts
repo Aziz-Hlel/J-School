@@ -1,4 +1,5 @@
 import type { DayOfWeek, Gender, SessionType } from '../../types/enums/enums';
+import type { MediaResponse } from '../media/MediaResponse';
 
 export type ExtraCurricularResponse = {
   id: string;
@@ -19,6 +20,7 @@ export type ExtraCurricularResponse = {
     firstName: string;
     lastName: string;
     gender: Gender;
+    avatar: MediaResponse | null;
   } | null;
   createdAt: string;
 };

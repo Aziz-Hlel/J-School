@@ -53,6 +53,6 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
     "startTime": null,
     "endDate": "2026-01-03",
     "endTime": null,
-    "type": "PUBLIC_HOLIYDAY",
+    "type": "PUBLIC_HOLIDAY",
     "sendNotification": true
 }

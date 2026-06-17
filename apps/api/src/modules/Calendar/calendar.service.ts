@@ -13,7 +13,6 @@ export class CalendarService {
   constructor() {}
   create = async (params: { input: CreateCalendarReq; schoolId: string }) => {
     const { input, schoolId } = params;
-
     const createdCalendar = await prisma.calendar.create({
       data: {
         schoolId,
@@ -77,10 +76,21 @@ export class CalendarService {
     const calendars = await prisma.calendar.findMany({
       where: {
         schoolId,
-        startDate: {
-          gte: query.startDate,
-          lte: query.endDate,
-        },
+
+        OR: [
+          {
+            startDate: {
+              gte: query.startDate,
+              lte: query.endDate,
+            },
+          },
+          {
+            endDate: {
+              gte: query.startDate,
+              lte: query.endDate,
+            },
+          },
+        ],
       },
       orderBy: [
         {
