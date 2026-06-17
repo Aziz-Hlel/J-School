@@ -1,11 +1,11 @@
-import { Table, TableBody } from '../ui/table';
-import TableHeaders from './table/tableComposites/TableHeaders';
-import { DataTableToolbar } from './table/toolBar/DataTableToolbar';
-import { DataTablePagination } from './table/pagination/Pagination';
+import { Table, TableBody } from '@/components/ui/table';
 import { type TableRowType } from './core/types';
-import useMyTable from './use-my-table';
+import { DataTablePagination } from './table/pagination/Pagination';
+import TableHeaders from './table/tableComposites/TableHeaders';
 import TableBodyContent from './table/TableMainComp/TableBodyContent';
+import { DataTableToolbar } from './table/toolBar/DataTableToolbar';
 import tableFilters from './table/toolBar/Filters/ColumnFilters';
+import useMyTable from './use-my-table';
 
 const MainTable = () => {
   const { table, pageSize, isLoading } = useMyTable();
