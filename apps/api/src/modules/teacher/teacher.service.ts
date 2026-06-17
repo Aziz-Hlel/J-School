@@ -1,7 +1,7 @@
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
-import { toTime } from '@/utils/dayjs';
+import { toCalendarDate, toTime } from '@/utils/dayjs';
 import { Page } from '@repo/contracts/schemas/page/Page';
 import type { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
 import { TeacherFullTimetableRes } from '@repo/contracts/schemas/teacher/teacherFullTimeTableRes';
@@ -324,6 +324,8 @@ export class TeacherService {
         day: entry.session?.day ?? null,
         startTime: entry.session?.startTime ? toTime(entry.session.startTime) : null,
         endTime: entry.session?.endTime ? toTime(entry.session.endTime) : null,
+        date: entry.session?.date ? toCalendarDate(entry.session.date) : null,
+        type: entry.session?.type ?? null,
       },
       createdAt: entry.createdAt.toISOString(),
     }));
