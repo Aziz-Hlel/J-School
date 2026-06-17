@@ -1,4 +1,10 @@
-import { format } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { formatBytes } from '@/hooks/use-file-upload';
+import { cn } from '@/lib/utils';
+import dayjs from 'dayjs';
 import {
   Activity,
   AlertTriangle,
@@ -14,16 +20,8 @@ import {
   User,
   Users,
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import type { Gender } from '@/api/api.types';
-import type { MedicalConditionType, StudentById } from '@/api/student/student.types';
-import { cn } from '@/lib/utils';
-import { formatBytes } from '@/hooks/use-file-upload';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { genderTypes, statusTypes } from '../../data/data';
+import { statusTypes } from '../data/data';
+import type { MedicalConditionType, StudentById } from './student.types';
 
 const conditionMeta: Record<MedicalConditionType, { bg: string; text: string; badge: string }> = {
   ALLERGY: {
@@ -58,8 +56,8 @@ interface IProps {
 }
 
 export default function StudentProfileTabs({ student }: IProps) {
-  const genderType = genderTypes.get(student.gender as Gender);
-  const { t } = useTranslation(['students', 'common']);
+  const genderType = student.gender;
+  const t = (x: string) => x;
   if (!genderType) return null;
   return (
     <Tabs defaultValue='overview' className='w-full'>
@@ -114,7 +112,7 @@ export default function StudentProfileTabs({ student }: IProps) {
               </div>
               <div className='flex justify-between'>
                 <span className='text-muted-foreground text-sm'>{t('students:profile.tabs.overview.birth_date')}</span>
-                <span className='text-sm font-medium'>{format(student.birthDate, 'dd MMMM yyyy')}</span>
+                <span className='text-sm font-medium'>{dayjs(student.birthDate).format('dd MMMM yyyy')}</span>
               </div>
               <div className='flex justify-between'>
                 <span className='text-muted-foreground text-sm'>{t('students:profile.tabs.overview.nationality')}</span>

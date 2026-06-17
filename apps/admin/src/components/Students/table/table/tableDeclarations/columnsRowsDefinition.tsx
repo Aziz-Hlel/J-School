@@ -3,6 +3,7 @@ import { GradeMapping } from '@repo/contracts/map/GradeMapping';
 import type { Gender, StudentStatus } from '@repo/contracts/types/enums/enums';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUp, ChevronsUpDown } from 'lucide-react';
+import { Link } from 'react-router';
 import GenderComponent from '../../columns/enum/gender/GenderComponent';
 import StatusComponent from '../../columns/enum/status/StatusComponent';
 import type { TableRowKeys, TableRowType } from '../../core/types';
@@ -64,9 +65,18 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType, TableRowKeys>[] = [
         </HeaderContainer>
       );
     },
-    cell: ({ getValue }) => {
+    cell: ({ getValue, row }) => {
       const enName = getValue<string>();
-      return <RowContainer className='w-96 truncate whitespace-nowrap'>{enName}</RowContainer>;
+      return (
+        <RowContainer className='w-96 truncate whitespace-nowrap'>
+          <Link
+            to={`/students/${row.original.uid}`}
+            className='hover:text-primary font-semibold underline-offset-4 hover:underline'
+          >
+            {enName}
+          </Link>
+        </RowContainer>
+      );
     },
     enableSorting: true,
     enableHiding: true,
@@ -88,9 +98,18 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType, TableRowKeys>[] = [
         </HeaderContainer>
       );
     },
-    cell: ({ getValue }) => {
-      const firstName = getValue<string>();
-      return <RowContainer className='w-96 truncate whitespace-nowrap'>{firstName}</RowContainer>;
+    cell: ({ getValue, row }) => {
+      const arName = getValue<string>();
+      return (
+        <RowContainer className='w-96 truncate whitespace-nowrap'>
+          <Link
+            to={`/students/${row.original.uid}`}
+            className='hover:text-primary font-semibold underline-offset-4 hover:underline'
+          >
+            {arName}
+          </Link>
+        </RowContainer>
+      );
     },
     enableSorting: true,
     enableHiding: true,

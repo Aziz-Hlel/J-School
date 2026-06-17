@@ -1,10 +1,10 @@
 import BreadcrumbHeader from '@/pages/Header';
-import { Button } from '../ui/button';
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import MainTable from './Table';
 import { useSelectedRow } from './context/selected-row-provider';
 import { TableData } from './core/core';
 import DialogContainer from './dialogs/DialogContainer';
+import { Button } from '@/components/ui/button';
 
 const Main = () => {
   const { handleDialogStateChange } = useSelectedRow();

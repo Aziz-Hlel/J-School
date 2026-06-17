@@ -1,4 +1,4 @@
-import StudentsIndex from '@/components/Students';
+import StudentsIndex from '@/components/Students/table';
 
 const Students = () => <StudentsIndex />;
 

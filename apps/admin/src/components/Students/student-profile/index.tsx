@@ -1,120 +1,51 @@
-import { useQuery } from '@tanstack/react-query';
-import { getRouteApi, Link } from '@tanstack/react-router';
-import { CalendarDays, Edit, GraduationCap, Loader2, MapPin, Phone, User } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { studentRepository } from '@/api/student/student.repository';
-import { cn } from '@/lib/utils';
-import { useLanguage } from '@/context/language-provider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import LanguageSwitch from '@/components/language-switch';
-import { Header } from '@/components/layout/header';
-import { Main } from '@/components/layout/main';
-import { ProfileDropdown } from '@/components/profile-dropdown';
-import { ThemeSwitch } from '@/components/theme-switch';
 import { classroomTypeMeta } from '@/features/classroom/data/data';
-import { NotFoundError } from '@/features/errors/not-found-error';
+import { cn } from '@/lib/utils';
+import { getRouteApi, Link } from '@tanstack/react-router';
+import { CalendarDays, Edit, GraduationCap, MapPin, Phone, User } from 'lucide-react';
 import StudentProfileTabs from './components/student-profile-tabs';
+import { studentData } from './studentData';
 
 const route = getRouteApi('/_authenticated/students/$studentId/');
 
 export default function StudentProfile() {
-  const { currentLanguage } = useLanguage();
+  const currentLanguage = 'en';
   const { studentId } = route.useParams();
-  const { t } = useTranslation(['common', 'students']);
+  const t = (x: string) => x;
 
-  const { data: studentData, isPending, isError } = useQuery(studentRepository.findOne(studentId));
+  // if (isError)
+  //   return (
+  //     <>
+  //       <Header fixed className='border-b'>
+  //         <div className='ms-auto flex items-center space-x-4'>
+  //           <ThemeSwitch />
+  //           <LanguageSwitch triggerVariant='icon' />
+  //           <ProfileDropdown />
+  //         </div>
+  //       </Header>
+  //       <div className='flex-1 [&>div]:h-full'>
+  //         <NotFoundError />
+  //       </div>
+  //     </>
+  //   );
 
-  if (isError)
-    return (
-      <>
-        <Header fixed className='border-b'>
-          <div className='ms-auto flex items-center space-x-4'>
-            <ThemeSwitch />
-            <LanguageSwitch triggerVariant='icon' />
-            <ProfileDropdown />
-          </div>
-        </Header>
-        <div className='flex-1 [&>div]:h-full'>
-          <NotFoundError />
-        </div>
-      </>
-    );
-
-  if (isPending || !studentData)
-    return (
-      <>
-        <Header fixed className='border-b'>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <Skeleton className='h-4 w-12' />
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <Skeleton className='h-4 w-16' />
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <Skeleton className='h-4 w-24' />
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-          <div className='ms-auto flex items-center space-x-4'>
-            <ThemeSwitch />
-            <LanguageSwitch triggerVariant='icon' />
-            <ProfileDropdown />
-          </div>
-        </Header>
-        <div className='flex-1 [&>div]:h-full'>
-          <div className='flex items-center justify-center'>
-            <Loader2 className='animate-spin' />
-          </div>
-        </div>
-      </>
-    );
+  // if (isPending || !studentData)
+  //   return (
+  //     <>
+  //       <div className='flex-1 [&>div]:h-full'>
+  //         <div className='flex items-center justify-center'>
+  //           <Loader2 className='animate-spin' />
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
 
   return (
     <>
-      <Header fixed>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild className='cursor-pointer'>
-                <Link to='/'>{t('common:breadcrumbs.home')}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink className='cursor-pointer' asChild>
-                <Link to='/students'>{t('common:entities.students')}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{studentData.name}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className='ms-auto flex items-center space-x-4'>
-          <ThemeSwitch />
-          <LanguageSwitch triggerVariant='icon' />
-          <ProfileDropdown />
-        </div>
-      </Header>
-
-      <Main className='flex flex-1 flex-col gap-6 py-6'>
+      <div className='flex flex-1 flex-col gap-6 py-6'>
         {/* Hero Section */}
         <div className='border-primary/10 from-primary/10 via-background to-primary/5 relative overflow-hidden rounded-3xl border bg-linear-to-r p-8'>
           <div className='relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-center'>
@@ -256,7 +187,7 @@ export default function StudentProfile() {
             <StudentProfileTabs student={studentData} />
           </div>
         </div>
-      </Main>
+      </div>
     </>
   );
 }
