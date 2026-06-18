@@ -80,3 +80,8 @@ GET {{baseUrl}}/schools/{{schoolId}}/students/296f6611-1d36-54ad-adab-fec2365402
 Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
+###
+# @name getFullDetails
+GET {{baseUrl}}/schools/{{schoolId}}/students/296f6611-1d36-54ad-adab-fec236540239/full-details
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}

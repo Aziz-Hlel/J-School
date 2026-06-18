@@ -475,16 +475,20 @@ export class StudentService {
     return pageResponse;
   };
 
-  getFullDetails = async (params: { id: string; schoolId: string }) => {
-    const { id, schoolId } = params;
+  getFullDetails = async (params: { studentId: string; schoolId: string }) => {
+    const { studentId, schoolId } = params;
     const studentDetails = await prisma.student.findUnique({
       where: {
-        id,
+        id: studentId,
         schoolId,
       },
       include: studentFullDetailsInclude,
     });
 
-    return studentDetails;
+    if (!studentDetails) {
+      throw new NotFoundError({ message: 'Student not found' });
+    }
+
+    return StudentMapper.toFullDetailsRes(studentDetails);
   };
 }

@@ -59,6 +59,16 @@ export class StudentController {
     });
   };
 
+  getFullDetails = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const studentId = getUrlParam(req, 'studentId', { uuid: true });
+    const response = await this.studentService.getFullDetails({ studentId, schoolId });
+    res.status(200).json({
+      message: 'Student full details found successfully',
+      data: response,
+    });
+  };
+
   getExtraCurricular = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const studentId = getUrlParam(req, 'studentId', { uuid: true });

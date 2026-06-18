@@ -1,15 +1,62 @@
 const studentFullDetailsInclude = {
   profile: true,
-  classroom: true,
   avatar: true,
+  classroom: {
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      grade: true,
+      createdAt: true,
+      updatedAt: true,
+      schoolId: true,
+      assignments: {
+        select: {
+          id: true,
+          subject: {
+            select: {
+              id: true,
+              name_ar: true,
+              name_en: true,
+              name_fr: true,
+              domain: true,
+            },
+          },
+          teacher: {
+            select: {
+              id: true,
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                  gender: true,
+                  account: {
+                    select: { avatar: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
   parents: {
-    include: {
+    select: {
       parent: {
-        include: {
+        select: {
+          id: true,
           user: {
-            include: {
+            select: {
+              firstName: true,
+              lastName: true,
+              gender: true,
+              phone: true,
+              address: true,
+              cin: true,
+              dateOfBirth: true,
               account: {
-                include: { avatar: true },
+                select: { avatar: true },
               },
             },
           },
