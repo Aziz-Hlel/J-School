@@ -1,8 +1,10 @@
-import { ConflictError, NotFoundError } from '@/err/service/customErrors';
-import { ParentRepo } from './parent.repo';
 import { RepoKnownErrors } from '@/err/repo/DbError';
+import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { TX } from '@/types/prisma/PrismaTransaction';
+import prisma from '@repo/db';
 import { UserService } from '../User/user.service';
+import { ParentRepo } from './parent.repo';
+import includeUserAndAvatar from './includes/includeUserAndAvatar';
 
 export class ParentService {
   constructor(
@@ -70,5 +72,15 @@ export class ParentService {
       }
       throw error;
     }
+  };
+
+  findById = async (params: { parentId: string; schoolId: string }, tx?: TX) => {
+    const { parentId, schoolId } = params;
+    const parent = await prisma.parent.findUnique({
+      where: {
+        id: parentId,
+      },
+      include: includeUserAndAvatar,
+    });
   };
 }

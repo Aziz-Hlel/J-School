@@ -24,6 +24,7 @@ import { ExtraCurricularMapper } from '../ExtraCurricular/ExtraCurricular.mapper
 import { FeesMapper } from '../Fees/fees.mapper';
 import { HomeworkMapper } from '../Homework/homework.mapper';
 import { TeacherCommentsMapper } from '../TeacherComments/teacherComments.mapper';
+import studentFullDetailsInclude from './includes/studentFullDetails';
 import { StudentMapper } from './student.mapper';
 import { StudentRepo } from './student.repo';
 
@@ -472,5 +473,18 @@ export class StudentService {
     });
 
     return pageResponse;
+  };
+
+  getFullDetails = async (params: { id: string; schoolId: string }) => {
+    const { id, schoolId } = params;
+    const studentDetails = await prisma.student.findUnique({
+      where: {
+        id,
+        schoolId,
+      },
+      include: studentFullDetailsInclude,
+    });
+
+    return studentDetails;
   };
 }
