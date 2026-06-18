@@ -1,7 +1,8 @@
+import { globalMediaService } from '@/media/media.service';
+import type { ClassroomExamScheduleResponse } from '@repo/contracts/schemas/classroom/management/ClassroomExamSchedulesResponse';
+import type { ClassroomSubjectsWithTeachersResponse } from '@repo/contracts/schemas/classroom/management/ClassroomSubjectsWithTeachers';
 import { Prisma } from '@repo/db/prisma/client';
 import { getSubjectsWithTeachersSelect } from './ClassroomManagement.service';
-import type { ClassroomSubjectsWithTeachersResponse } from '@repo/contracts/schemas/classroom/management/ClassroomSubjectsWithTeachers';
-import type { ClassroomExamScheduleResponse } from '@repo/contracts/schemas/classroom/management/ClassroomExamSchedulesResponse';
 
 export class ClassroomManagementMapper {
   static toClassroomSubjectsWithTeachersResponse(
@@ -24,6 +25,7 @@ export class ClassroomManagementMapper {
               firstName: assignment.teacher?.user.firstName,
               lastName: assignment.teacher?.user.lastName,
               gender: assignment.teacher?.user.gender,
+              avatar: globalMediaService.toMediaRes(assignment.teacher?.user.account?.avatar),
             }
           : null,
       };

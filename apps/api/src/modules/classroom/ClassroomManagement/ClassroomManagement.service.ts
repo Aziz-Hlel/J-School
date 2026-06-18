@@ -19,6 +19,11 @@ export const getSubjectsWithTeachersSelect = {
           firstName: true,
           lastName: true,
           gender: true,
+          account: {
+            select: {
+              avatar: true,
+            },
+          },
         },
       },
     },

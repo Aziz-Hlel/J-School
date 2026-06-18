@@ -489,6 +489,6 @@ export class StudentService {
       throw new NotFoundError({ message: 'Student not found' });
     }
 
-    return StudentMapper.toFullDetailsRes(studentDetails);
+    return StudentMapper.toFullDetails(studentDetails);
   };
 }

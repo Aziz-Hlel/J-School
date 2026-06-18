@@ -44,17 +44,9 @@ const studentFullDetailsInclude = {
   parents: {
     select: {
       parent: {
-        select: {
-          id: true,
+        include: {
           user: {
-            select: {
-              firstName: true,
-              lastName: true,
-              gender: true,
-              phone: true,
-              address: true,
-              cin: true,
-              dateOfBirth: true,
+            include: {
               account: {
                 select: { avatar: true },
               },
