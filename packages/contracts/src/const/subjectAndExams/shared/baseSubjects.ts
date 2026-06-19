@@ -88,7 +88,7 @@ export const baseSubjects = {
       fr: 'Dessin',
       ar: 'الرسم',
     },
-    domain: SubjectDomain.SOCIAL_EDUCATION,
+    domain: SubjectDomain.ART_EDUCATION,
   },
   music: {
     name: {
@@ -96,7 +96,7 @@ export const baseSubjects = {
       fr: 'Musique',
       ar: 'الموسيقى',
     },
-    domain: SubjectDomain.SOCIAL_EDUCATION,
+    domain: SubjectDomain.ART_EDUCATION,
   },
   sport: {
     name: {
@@ -104,6 +104,6 @@ export const baseSubjects = {
       fr: 'Sport',
       ar: 'تربية بدنيّة',
     },
-    domain: SubjectDomain.SOCIAL_EDUCATION,
+    domain: SubjectDomain.PHYSICAL_EDUCATION,
   },
 } as const satisfies Record<BaseSubjectsKeys, Omit<InitSubjectsPerGradeType, 'hoursPerWeek'>>;
