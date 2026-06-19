@@ -1,4 +1,5 @@
 {
+  // editor settings
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "workbench.iconTheme": "material-icon-theme",
@@ -8,12 +9,23 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
+
+  // terminal settings
   "terminal.integrated.env.windows": {
     "LANG": "en_US.UTF-8"
   },
-  "git.autofetch": true,
-  "typescript.experimental.useTsgo": false,
 
-  // "js/ts.experimental.useTsgo": true,
+  // git settings
+  "git.autofetch": true,
+
+  // ts-go settings
+  "typescript.experimental.useTsgo": true,
+  "js/ts.experimental.useTsgo": true,
+
+  // ts Version
+  "js/ts.tsdk.path": "node_modules\\typescript\\lib",
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+
+  //
   "files.eol": "\n"
 }

@@ -1,18 +1,17 @@
 import { RepoKnownErrors } from '@/err/repo/DbError';
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { TX } from '@/types/prisma/PrismaTransaction';
+import { ParentsQueryParamsTypes } from '@repo/contracts/schemas/parent/queryParams';
 import prisma from '@repo/db';
-import { UserService } from '../User/user.service';
-import { ParentRepo } from './parent.repo';
+import { Prisma } from '@repo/db/prisma/client';
 import includeUserAndAvatar from './includes/includeUserAndAvatar';
+import { ParentMapper } from './parent.mapper';
+import { ParentRepo } from './parent.repo';
 
 export class ParentService {
-  constructor(
-    private readonly parentRepo: ParentRepo,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly parentRepo: ParentRepo) {}
 
-  create = async (params: { input: { emergencyPhone: string | null }; userId: string; schoolId: string }, tx?: TX) => {
+  create = async (params: { userId: string; schoolId: string }, tx?: TX) => {
     try {
       const createdParent = await this.parentRepo.create(params, tx);
       return createdParent;
@@ -27,10 +26,7 @@ export class ParentService {
     }
   };
 
-  findOrCreate = async (
-    params: { input: { emergencyPhone: string | null }; userId: string; schoolId: string },
-    tx?: TX,
-  ) => {
+  findOrCreate = async (params: { userId: string; schoolId: string }, tx?: TX) => {
     const { userId, schoolId } = params;
     try {
       const parent = await this.parentRepo.findByUserId({ userId, schoolId }, tx);
@@ -74,13 +70,60 @@ export class ParentService {
     }
   };
 
-  findById = async (params: { parentId: string; schoolId: string }, tx?: TX) => {
-    const { parentId, schoolId } = params;
-    const parent = await prisma.parent.findUnique({
+  findById = async (params: { parentId: string; schoolId: string }) => {
+    const { parentId } = params;
+    const queryResponse = await prisma.parent.findUnique({
       where: {
         id: parentId,
       },
       include: includeUserAndAvatar,
     });
+
+    if (!queryResponse) throw new NotFoundError({ message: 'Parent not found' });
+    const response = ParentMapper.toParentResponse(queryResponse);
+    return response;
+  };
+
+  findAll = async (params: { queryParams: ParentsQueryParamsTypes['Query']; schoolId: string }) => {
+    const { queryParams, schoolId } = params;
+
+    const skip = (queryParams.page - 1) * queryParams.size;
+    const take = queryParams.size;
+
+    const where: Prisma.ParentWhereInput = { user: { schoolId } };
+
+    if (queryParams.search && queryParams.search.trim().length > 0) {
+      const searchValue = queryParams.search.trim().toLowerCase();
+      where.OR = [
+        { user: { firstName: { contains: searchValue, mode: 'insensitive' } } },
+        { user: { lastName: { contains: searchValue, mode: 'insensitive' } } },
+      ];
+    }
+
+    const orderBy: Prisma.ParentOrderByWithRelationInput = {};
+
+    if (queryParams.sortBy) {
+      orderBy.user = {
+        [queryParams.sortBy]: queryParams.order,
+      };
+    }
+
+    const query = prisma.parent.findMany({
+      skip,
+      take,
+      where,
+      include: includeUserAndAvatar,
+      orderBy,
+    });
+
+    const count = prisma.parent.count({
+      where,
+    });
+
+    const [queryResult, totalElements] = await Promise.all([query, count]);
+
+    const parentRepsonse = queryResult.map((parent) => ParentMapper.toParentResponse(parent));
+
+    return { content: parentRepsonse, totalElements };
   };
 }

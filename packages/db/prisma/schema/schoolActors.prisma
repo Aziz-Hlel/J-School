@@ -5,15 +5,21 @@ enum StudentStatus {
   EXPELLED
 }
 
+enum VaccineStatus {
+  NOT_VACCINATED
+  PARTIALLY_VACCINATED
+  FULLY_VACCINATED
+}
+
 model StudentProfile {
   id      String  @id @db.Uuid
   student Student @relation(fields: [id], references: [id], onDelete: Cascade)
 
-  healthInfo String?
-  vaccine    String?
-  cpr        String?
-  allergies  String?
-  notes      String?
+  healthInfo   String?
+  vaccine      VaccineStatus
+  vaccineNotes String?
+  allergies    String?
+  notes        String?
 
   emergencyContactName1     String?
   emergencyContactPhone1    String?
@@ -72,8 +78,6 @@ model Student {
 
 model Parent {
   id String @id @default(uuid()) @db.Uuid
-
-  emergencyPhone String? @db.VarChar(50)
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

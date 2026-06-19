@@ -3,13 +3,12 @@ import { RepoError } from '@/err/repo/DbError';
 import { TX } from '@/types/prisma/PrismaTransaction';
 
 export class ParentRepo {
-  create = async (params: { input: { emergencyPhone: string | null }; userId: string; schoolId: string }, tx?: TX) => {
-    const { input, userId, schoolId } = params;
+  create = async (params: { userId: string; schoolId: string }, tx?: TX) => {
+    const { userId, schoolId } = params;
     const client = tx ?? prisma;
     try {
       const createdParent = await client.parent.create({
         data: {
-          emergencyPhone: input.emergencyPhone,
           user: {
             connect: {
               id: userId,
@@ -24,11 +23,8 @@ export class ParentRepo {
     }
   };
 
-  update = async (
-    params: { input: { emergencyPhone: string | null }; parentId: string; schoolId: string },
-    tx?: TX,
-  ) => {
-    const { input, parentId, schoolId } = params;
+  update = async (params: { parentId: string; schoolId: string }, tx?: TX) => {
+    const { parentId, schoolId } = params;
     const client = tx ?? prisma;
     try {
       const updatedParent = await client.parent.update({
@@ -38,9 +34,7 @@ export class ParentRepo {
             schoolId,
           },
         },
-        data: {
-          emergencyPhone: input.emergencyPhone,
-        },
+        data: {},
       });
       return updatedParent;
     } catch (error) {
@@ -67,7 +61,7 @@ export class ParentRepo {
   };
 
   findByUserId = async (params: { userId: string; schoolId: string }, tx?: TX) => {
-    const { userId, schoolId } = params;
+    const { userId } = params;
     const client = tx ?? prisma;
     try {
       const parent = await client.parent.findUnique({

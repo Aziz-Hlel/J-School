@@ -18,7 +18,6 @@ export class ParentMapper {
       cin: parent.user.cin,
       address: parent.user.address,
       avatar: avatar,
-      emergencyPhone: parent.emergencyPhone,
 
       createdAt: parent.user.createdAt.toISOString(),
       updatedAt: parent.user.updatedAt.toISOString(),

@@ -12,7 +12,6 @@ export type ParentResponse = {
   cin: string | null;
   address: string | null;
   avatar: MediaResponse | null;
-  emergencyPhone: string | null;
 
   createdAt: string;
   updatedAt: string;

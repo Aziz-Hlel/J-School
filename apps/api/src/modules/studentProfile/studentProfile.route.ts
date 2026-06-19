@@ -11,14 +11,14 @@ export const createRouter = (studentProfileController: StudentProfileController)
   router.post(
     '/',
     requireAuth,
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.PARENT]),
     asyncHandler(studentProfileController.create),
   );
 
   router.put(
     '/',
     requireAuth,
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.PARENT]),
     asyncHandler(studentProfileController.update),
   );
 
