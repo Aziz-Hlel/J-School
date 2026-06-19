@@ -11,6 +11,23 @@ enum VaccineStatus {
   FULLY_VACCINATED
 }
 
+model EmergencyContact {
+  id String @id @default(uuid()) @db.Uuid
+
+  name     String @db.VarChar(255)
+  phone    String @db.VarChar(20)
+  relation String @db.VarChar(255)
+
+  profileId String         @db.Uuid
+  profile   StudentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@map("emergency_contacts")
+}
+
 model StudentProfile {
   id      String  @id @db.Uuid
   student Student @relation(fields: [id], references: [id], onDelete: Cascade)
@@ -21,13 +38,7 @@ model StudentProfile {
   allergies    String?
   notes        String?
 
-  emergencyContactName1     String?
-  emergencyContactPhone1    String?
-  emergencyContactRelation1 String?
-
-  emergencyContactName2     String?
-  emergencyContactPhone2    String?
-  emergencyContactRelation2 String?
+  emergencyContacts EmergencyContact[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

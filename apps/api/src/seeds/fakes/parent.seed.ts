@@ -1,6 +1,5 @@
-import { TX } from '@/types/prisma/PrismaTransaction';
 import { prisma } from '@/bootstrap/db.init';
-import { faker } from '@faker-js/faker';
+import { TX } from '@/types/prisma/PrismaTransaction';
 
 export class ParentSeed {
   runV2 = async (params: { parentId: string; userId: string }, tx?: TX) => {
@@ -12,7 +11,6 @@ export class ParentSeed {
       },
       create: {
         id: parentId,
-        emergencyPhone: faker.phone.number(),
         userId,
       },
       update: {},
@@ -28,7 +26,6 @@ export class ParentSeed {
         userId,
       },
       create: {
-        emergencyPhone: faker.phone.number(),
         userId,
       },
       update: {},

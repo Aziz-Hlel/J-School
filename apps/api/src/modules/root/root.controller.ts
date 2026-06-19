@@ -6,6 +6,7 @@ import { RootAppService } from './root.app.service';
 export class RootController {
   constructor(private readonly rootAppService: RootAppService) {}
   getHealth = async (req: Request, res: Response<SimpleApiResponse>) => {
+    console.log(this);
     res.json({ message: 'i feel good !' });
   };
 

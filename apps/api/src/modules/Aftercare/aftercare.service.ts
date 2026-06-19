@@ -2,9 +2,9 @@ import { prisma } from '@/bootstrap/db.init';
 import { NotFoundError } from '@/err/service/customErrors';
 import { parseCalendarDate } from '@/utils/dayjs';
 import { SyncAftercareReq } from '@repo/contracts/schemas/Aftercare/sync';
+import { SyncAftercareQueryParam } from '@repo/contracts/schemas/Aftercare/syncQueryParam';
 import dayjs from 'dayjs';
 import { AftercareMapper } from './aftercare.mapper';
-import { SyncAftercareQueryParam } from '@repo/contracts/schemas/Aftercare/syncQueryParam';
 
 export class AftercareService {
   constructor() {}
@@ -30,6 +30,7 @@ export class AftercareService {
         schoolId_date: {
           schoolId,
           date: input.date,
+          sex: '',
         },
       },
       create: {

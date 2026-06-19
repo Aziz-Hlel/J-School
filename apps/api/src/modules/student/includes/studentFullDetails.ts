@@ -1,5 +1,11 @@
+import { StudentInclude } from '@repo/db/prisma/models';
+
 const studentFullDetailsInclude = {
-  profile: true,
+  profile: {
+    include: {
+      emergencyContacts: true,
+    },
+  },
   avatar: true,
   classroom: {
     select: {
@@ -56,5 +62,5 @@ const studentFullDetailsInclude = {
       },
     },
   },
-};
+} as const satisfies StudentInclude;
 export default studentFullDetailsInclude;

@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/store/useAuthStore';
+import { useCurrentSchoolId } from '@/context/SchoolContext';
 import type { Pageable } from '@repo/contracts/schemas/page/Pageable';
 import { useQuery } from '@tanstack/react-query';
 import { MODULE_NAME } from '../core/core';
@@ -21,7 +21,7 @@ const useGetTableData = () => {
     ...queryParams,
     page: queryParams.page,
   };
-  const schoolId = useAuthStore((state) => state.schoolId);
+  const schoolId = useCurrentSchoolId();
 
   const { data, isFetching } = useQuery({
     queryKey: [MODULE_NAME, { ...queryParams }],

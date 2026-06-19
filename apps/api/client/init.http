@@ -16,6 +16,12 @@
 @TeacherEmail = teacher1@restclient.com
 @TeacherPassword = 12345678
 
+
+### 
+# @name version
+GET {{baseUrl}}/mobile/android/version-policy
+Content-Type: application/json
+
 ###
 # @name health
 GET {{baseUrl}}/health

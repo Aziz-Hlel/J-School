@@ -14,13 +14,6 @@ export class StudentProfileRepo {
           allergies: input.allergies,
           healthInfo: input.healthInfo,
           vaccine: input.vaccine,
-          cpr: input.cpr,
-          emergencyContactName1: input.emergencyContacts?.[0]?.name ?? null,
-          emergencyContactPhone1: input.emergencyContacts?.[0]?.phone ?? null,
-          emergencyContactRelation1: input.emergencyContacts?.[0]?.relation ?? null,
-          emergencyContactName2: input.emergencyContacts?.[1]?.name ?? null,
-          emergencyContactPhone2: input.emergencyContacts?.[1]?.phone ?? null,
-          emergencyContactRelation2: input.emergencyContacts?.[1]?.relation ?? null,
           notes: input.notes,
           student: {
             connect: {
@@ -28,6 +21,12 @@ export class StudentProfileRepo {
               schoolId,
             },
           },
+          emergencyContacts: {
+            createMany: { data: input.emergencyContacts },
+          },
+        },
+        include: {
+          emergencyContacts: true,
         },
       });
       return createdStudentProfile;
@@ -36,32 +35,34 @@ export class StudentProfileRepo {
     }
   };
 
-  update = async (params: { input: UpdateStudentProfileRequest; studentId: string; schoolId: string }, tx?: TX) => {
+  update = async (params: { input: UpdateStudentProfileRequest; studentId: string; schoolId: string }) => {
     const { input, studentId, schoolId } = params;
-    const client = tx ?? prisma;
     try {
-      const updatedStudentProfile = await client.studentProfile.update({
-        where: {
-          id: studentId,
-          student: {
-            schoolId,
+      return await prisma.$transaction(async (tx) => {
+        await tx.emergencyContact.deleteMany({
+          where: {
+            profileId: studentId,
           },
-        },
-        data: {
-          allergies: input.allergies,
-          healthInfo: input.healthInfo,
-          vaccine: input.vaccine,
-          cpr: input.cpr,
-          emergencyContactName1: input.emergencyContacts?.[0]?.name ?? null,
-          emergencyContactPhone1: input.emergencyContacts?.[0]?.phone ?? null,
-          emergencyContactRelation1: input.emergencyContacts?.[0]?.relation ?? null,
-          emergencyContactName2: input.emergencyContacts?.[1]?.name ?? null,
-          emergencyContactPhone2: input.emergencyContacts?.[1]?.phone ?? null,
-          emergencyContactRelation2: input.emergencyContacts?.[1]?.relation ?? null,
-          notes: input.notes,
-        },
+        });
+        const updatedStudentProfile = await tx.studentProfile.update({
+          where: {
+            id: studentId,
+            student: {
+              schoolId,
+            },
+          },
+          data: {
+            allergies: input.allergies,
+            healthInfo: input.healthInfo,
+            vaccine: input.vaccine,
+            notes: input.notes,
+          },
+          include: {
+            emergencyContacts: true,
+          },
+        });
+        return updatedStudentProfile;
       });
-      return updatedStudentProfile;
     } catch (error) {
       RepoError.throwRepoError(error);
     }
@@ -77,6 +78,9 @@ export class StudentProfileRepo {
           student: {
             schoolId,
           },
+        },
+        include: {
+          emergencyContacts: true,
         },
       });
       return studentProfile;

@@ -91,7 +91,7 @@ const { teacherRouter } = TeacherModule({ createSimpleUserUseCase, userService }
 const { parentStudentRouter, parentStudentService } = parentStudentModule();
 
 // * PARENT
-const { parentService, parentRepo } = ParentModule();
+const { parentService, parentRepo, parentRouter } = ParentModule({ accountService, userRoleService, userService });
 
 // * STUDENT
 const { studentRouter } = StudentModule({
@@ -229,6 +229,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: staffRouter, resource: 'schools/:schoolId/staff' },
   { router: teacherRouter, resource: 'schools/:schoolId/teachers' },
   { router: studentRouter, resource: 'schools/:schoolId/students' },
+  { router: parentRouter, resource: 'schools/:schoolId/parents' },
   { router: studentProfileRouter, resource: 'schools/:schoolId/students/:studentId/profiles' },
   { router: parentStudentRouter, resource: 'schools/:schoolId/students/:studentId/parents/:parentId' },
   { router: subjectRouter, resource: 'schools/:schoolId/subjects' },

@@ -2,9 +2,9 @@ import { RepoKnownErrors } from '@/err/repo/DbError';
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { CreateStudentProfileRequest } from '@repo/contracts/schemas/studentProfile/createStudentProfileRequest';
-import { StudentProfileRepo } from './studentProfile.repo';
-import { StudentProfileMapper } from './studentProfile.mapper';
 import { UpdateStudentProfileRequest } from '@repo/contracts/schemas/studentProfile/updateStudentProfileRequest';
+import { StudentProfileMapper } from './studentProfile.mapper';
+import { StudentProfileRepo } from './studentProfile.repo';
 
 export class StudentProfileService {
   constructor(private readonly studentProfileRepo: StudentProfileRepo) {}
@@ -30,10 +30,10 @@ export class StudentProfileService {
     }
   };
 
-  update = async (params: { input: UpdateStudentProfileRequest; studentId: string; schoolId: string }, tx?: TX) => {
+  update = async (params: { input: UpdateStudentProfileRequest; studentId: string; schoolId: string }) => {
     const { input, studentId, schoolId } = params;
     try {
-      const updatedStudentProfile = await this.studentProfileRepo.update({ input, studentId, schoolId }, tx);
+      const updatedStudentProfile = await this.studentProfileRepo.update({ input, studentId, schoolId });
       const studentProfileResponse = StudentProfileMapper.toResponse(updatedStudentProfile);
       return studentProfileResponse;
     } catch (error) {

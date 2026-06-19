@@ -1,7 +1,9 @@
-export type EmergencyContact = {
-  name: string | null;
-  phone: string | null;
-  relation: string | null;
+import type { VaccineStatus } from '@repo/db/prisma/enums';
+
+export type EmergencyContactRes = {
+  name: string;
+  phone: string;
+  relation: string;
 };
 
 export type StudentProfileResponse = {
@@ -9,10 +11,10 @@ export type StudentProfileResponse = {
 
   allergies: string | null;
   healthInfo: string | null;
-  vaccine: string | null;
-  cpr: string | null;
+  vaccine: VaccineStatus;
+  vaccineNotes: string | null;
 
-  emergencyContacts: EmergencyContact[];
+  emergencyContacts: EmergencyContactRes[];
 
   notes: string | null;
 };

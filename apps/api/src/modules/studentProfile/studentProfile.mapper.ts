@@ -1,36 +1,27 @@
-import { StudentProfile } from '@repo/db/prisma/client';
 import {
-  EmergencyContact,
+  EmergencyContactRes,
   StudentProfileResponse,
 } from '@repo/contracts/schemas/studentProfile/studentProfileResponse';
+import { EmergencyContact, Prisma } from '@repo/db/prisma/client';
 
 export class StudentProfileMapper {
-  private static toEmergencyContact(studentProfile: StudentProfile): EmergencyContact[] {
-    const emergencyContacts: EmergencyContact[] = [];
-    if (studentProfile.emergencyContactName1) {
-      emergencyContacts.push({
-        name: studentProfile.emergencyContactName1,
-        phone: studentProfile.emergencyContactPhone1,
-        relation: studentProfile.emergencyContactRelation1,
-      });
-    }
-    if (studentProfile.emergencyContactName2) {
-      emergencyContacts.push({
-        name: studentProfile.emergencyContactName2,
-        phone: studentProfile.emergencyContactPhone2,
-        relation: studentProfile.emergencyContactRelation2,
-      });
-    }
-    return emergencyContacts;
+  private static toEmergencyContact(contact: EmergencyContact): EmergencyContactRes {
+    return {
+      name: contact.name,
+      phone: contact.phone,
+      relation: contact.relation,
+    };
   }
-  static toResponse(studentProfile: StudentProfile): StudentProfileResponse {
-    const emergencyContactsResponse = this.toEmergencyContact(studentProfile);
+  static toResponse(
+    studentProfile: Prisma.StudentProfileGetPayload<{ include: { emergencyContacts: true } }>,
+  ): StudentProfileResponse {
+    const emergencyContactsResponse = studentProfile.emergencyContacts.map(this.toEmergencyContact);
     return {
       id: studentProfile.id,
       allergies: studentProfile.allergies,
       healthInfo: studentProfile.healthInfo,
       vaccine: studentProfile.vaccine,
-      cpr: studentProfile.cpr,
+      vaccineNotes: studentProfile.vaccineNotes,
       emergencyContacts: emergencyContactsResponse,
       notes: studentProfile.notes,
     };

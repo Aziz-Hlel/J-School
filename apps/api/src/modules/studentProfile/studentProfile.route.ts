@@ -25,7 +25,7 @@ export const createRouter = (studentProfileController: StudentProfileController)
   router.get(
     '/',
     requireAuth,
-    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
+    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.PARENT]),
     asyncHandler(studentProfileController.getById),
   );
 

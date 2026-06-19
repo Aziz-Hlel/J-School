@@ -26,12 +26,6 @@ Content-Type: application/json
 }
 
 
-### 
-# @name version
-GET {{baseUrl}}/mobile/android/version-policy
-Content-Type: application/json
-
-
 ###
 # @name serverLogin
 POST {{baseUrl}}/auth/password
