@@ -34,7 +34,6 @@ model StudentProfile {
 
   healthInfo   String?
   vaccine      VaccineStatus
-  vaccineNotes String?
   allergies    String?
   notes        String?
 
