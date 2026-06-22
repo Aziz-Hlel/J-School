@@ -9,12 +9,10 @@ export type EmergencyContactRes = {
 export type StudentProfileResponse = {
   id: string;
 
-  allergies: string | null;
   healthInfo: string | null;
   vaccine: VaccineStatus;
-  vaccineNotes: string | null;
+  allergies: string | null;
+  notes: string | null;
 
   emergencyContacts: EmergencyContactRes[];
-
-  notes: string | null;
 };

@@ -18,12 +18,13 @@ export class StudentProfileMapper {
     const emergencyContactsResponse = studentProfile.emergencyContacts.map(this.toEmergencyContact);
     return {
       id: studentProfile.id,
-      allergies: studentProfile.allergies,
-      healthInfo: studentProfile.healthInfo,
+
       vaccine: studentProfile.vaccine,
-      vaccineNotes: studentProfile.vaccineNotes,
-      emergencyContacts: emergencyContactsResponse,
+      healthInfo: studentProfile.healthInfo,
+      allergies: studentProfile.allergies,
       notes: studentProfile.notes,
+
+      emergencyContacts: emergencyContactsResponse,
     };
   }
 }

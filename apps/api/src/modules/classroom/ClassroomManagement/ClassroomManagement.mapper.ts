@@ -1,4 +1,5 @@
 import { globalMediaService } from '@/media/media.service';
+import { toTime } from '@/utils/dayjs';
 import type { ClassroomExamScheduleResponse } from '@repo/contracts/schemas/classroom/management/ClassroomExamSchedulesResponse';
 import type { ClassroomSubjectsWithTeachersResponse } from '@repo/contracts/schemas/classroom/management/ClassroomSubjectsWithTeachers';
 import { Prisma } from '@repo/db/prisma/client';
@@ -38,21 +39,21 @@ export class ClassroomManagementMapper {
     return {
       id: examSchedule.exam.id,
       day: examSchedule.day?.toISOString() ?? null,
-      startTime: examSchedule.startTime?.toISOString() ?? null,
-      endTime: examSchedule.endTime?.toISOString() ?? null,
+      startTime: toTime(examSchedule.startTime) ?? null,
+      endTime: toTime(examSchedule.endTime) ?? null,
       name: {
-        en: examSchedule.exam.subject.name_en,
-        fr: examSchedule.exam.subject.name_fr,
-        ar: examSchedule.exam.subject.name_ar,
+        en: examSchedule.exam.name_en,
+        fr: examSchedule.exam.name_fr,
+        ar: examSchedule.exam.name_ar,
       },
       subject: {
         id: examSchedule.exam.subject.id,
-        domain: examSchedule.exam.subject.domain,
         name: {
           en: examSchedule.exam.subject.name_en,
           fr: examSchedule.exam.subject.name_fr,
           ar: examSchedule.exam.subject.name_ar,
         },
+        domain: examSchedule.exam.subject.domain,
       },
     };
   }

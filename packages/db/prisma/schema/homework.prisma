@@ -1,5 +1,12 @@
+enum HomeworkType {
+  STANDARD
+  AI
+}
+
 model Homework {
   id String @id @default(uuid()) @db.Uuid
+
+  type HomeworkType @default(STANDARD)
 
   title   String? @db.VarChar(255)
   content String? @db.Text

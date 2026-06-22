@@ -29,6 +29,7 @@ export class HomeworkMapper {
       id: homework.id,
       title: homework.title,
       content: homework.content,
+      type: homework.type,
       files: filesResponse,
       due: toCalendarDate(homework.due),
       subject: subjectResponse,

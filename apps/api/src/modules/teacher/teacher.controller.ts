@@ -1,11 +1,13 @@
-import { Request, Response } from 'express';
-import { CreateTeacherUseCase } from './use-cases/createTeacher.use-case';
 import getUrlParam from '@/utils/getUrlParam';
+import { myCommentsQueryParams } from '@repo/contracts/schemas/teacher/commentsQueryParams';
 import { createTeacherRequestSchema } from '@repo/contracts/schemas/teacher/createTeacherRequest';
-import { TeacherService } from './teacher.service';
-import { updateTeacherRequestSchema } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
-import { teacherQueryParams } from '@repo/contracts/schemas/teacher/teacherQueryParams';
 import { getTeacherTimetableQuery } from '@repo/contracts/schemas/teacher/getTimetableQuery';
+import { teacherHomeworkQueryParams } from '@repo/contracts/schemas/teacher/homeworQueryParams';
+import { teacherQueryParams } from '@repo/contracts/schemas/teacher/teacherQueryParams';
+import { updateTeacherRequestSchema } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
+import { Request, Response } from 'express';
+import { TeacherService } from './teacher.service';
+import { CreateTeacherUseCase } from './use-cases/createTeacher.use-case';
 
 export class TeacherController {
   constructor(
@@ -96,6 +98,38 @@ export class TeacherController {
     res.status(200).json({
       message: 'Teacher classrooms fetched successfully',
       data: classrooms,
+    });
+  };
+
+  getExamSchedule = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const examSchedules = await this.teacherService.getExamSchedule({ teacherId, schoolId });
+    res.status(200).json({
+      message: 'Teacher exam schedules fetched successfully',
+      data: examSchedules,
+    });
+  };
+
+  getHomeworks = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const query = teacherHomeworkQueryParams.schema.parse(req.query);
+    const homeworks = await this.teacherService.getHomeworks({ teacherId, schoolId, query });
+    res.status(200).json({
+      message: 'Teacher homeworks fetched successfully',
+      ...homeworks,
+    });
+  };
+
+  getMyComments = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const query = myCommentsQueryParams.schema.parse(req.query);
+    const comments = await this.teacherService.getComments({ teacherId, schoolId, query });
+    res.status(200).json({
+      message: 'Teacher comments fetched successfully',
+      ...comments,
     });
   };
 }

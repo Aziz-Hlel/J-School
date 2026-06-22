@@ -373,6 +373,8 @@ export class StudentService {
       studentId,
     };
 
+    if (query.teacherId) where.teacherId = query.teacherId;
+
     const orderBy: Prisma.TeacherCommentOrderByWithRelationInput = {};
 
     if (query.sortBy) {
@@ -424,12 +426,10 @@ export class StudentService {
       studentHomeworks: {
         some: {
           studentId,
-          ...(query.teacherId && {
+          ...(query.subjectId && {
             homework: {
               assignment: {
-                teacherId: {
-                  equals: query.teacherId,
-                },
+                subjectId: query.subjectId,
               },
             },
           }),

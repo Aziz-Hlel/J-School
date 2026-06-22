@@ -1,6 +1,7 @@
 import type { SubjectDomain } from '@repo/db/prisma/browser';
+import type { ClassroomResponse } from '../classroom/classResponse';
 
-export type ClassroomExamScheduleResponse = {
+export type ExamScheduleWithClassroomRes = {
   id: string;
   day: string | null;
   endTime: string | null;
@@ -19,4 +20,5 @@ export type ClassroomExamScheduleResponse = {
     };
     domain: SubjectDomain;
   };
+  classroom: ClassroomResponse;
 };

@@ -1,6 +1,6 @@
 import z from 'zod';
 import { baseQueryParamsSchema } from '../helper/queryParams';
-import type { HomeworkResponse } from './response';
+import type { HomeworkResponse } from '../Homework/response';
 
 type TableRowType = HomeworkResponse;
 type TableRowKeys = keyof TableRowType;
@@ -12,7 +12,8 @@ const schema = z
   .object({
     ...baseQueryParamsSchema.shape,
     sortBy: z.enum(sortableFields).catch('due'),
-    subjectId: z.uuid().optional().catch(undefined),
+    classroomId: z.uuid().optional().catch(undefined),
+    studentId: z.uuid().optional().catch(undefined),
   })
   .omit({ search: true });
 
@@ -23,18 +24,19 @@ const defaultQuery = {
   size: 10,
   sortBy: 'due',
   order: 'desc',
-  subjectId: undefined,
+  classroomId: undefined,
+  studentId: undefined,
 } as const satisfies QueryType;
 
-export const homeworkQueryParams = {
+export const teacherHomeworkQueryParams = {
   schema,
   defaultQuery,
   sortableFields,
   filterableFields,
 };
 
-export type HomeworkQueryParamsTypes = {
+export type TeacherHomeworkQueryParamsTypes = {
   Query: QueryType;
-  SortableFields: (typeof homeworkQueryParams.sortableFields)[number];
-  FilterableFields: (typeof homeworkQueryParams.filterableFields)[number];
+  SortableFields: (typeof teacherHomeworkQueryParams.sortableFields)[number];
+  FilterableFields: (typeof teacherHomeworkQueryParams.filterableFields)[number];
 };

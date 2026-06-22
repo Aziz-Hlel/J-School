@@ -1,6 +1,6 @@
 import z from 'zod';
 import { baseQueryParamsSchema } from '../helper/queryParams';
-import type { TeacherCommentsResponse } from './response';
+import type { TeacherCommentsResponse } from '../TeacherComments/response';
 
 type TableRowType = TeacherCommentsResponse;
 type TableRowKeys = keyof TableRowType;
@@ -12,7 +12,7 @@ const schema = z
   .object({
     ...baseQueryParamsSchema.shape,
     sortBy: z.enum(sortableFields).catch('createdAt'),
-    teacherId: z.uuid().optional().catch(undefined),
+    studentId: z.uuid().optional().catch(undefined),
   })
   .omit({ search: true });
 
@@ -25,15 +25,15 @@ const defaultQuery = {
   order: 'desc',
 } as const satisfies QueryType;
 
-export const teacherCommentsQueryParams = {
+export const myCommentsQueryParams = {
   schema,
   defaultQuery,
   sortableFields,
   filterableFields,
 };
 
-export type TeacherCommentsQueryParamsTypes = {
+export type MyCommentsQueryParamsTypes = {
   Query: QueryType;
-  SortableFields: (typeof teacherCommentsQueryParams.sortableFields)[number];
-  FilterableFields: (typeof teacherCommentsQueryParams.filterableFields)[number];
+  SortableFields: (typeof myCommentsQueryParams.sortableFields)[number];
+  FilterableFields: (typeof myCommentsQueryParams.filterableFields)[number];
 };

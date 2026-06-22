@@ -3,7 +3,9 @@ import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { toCalendarDate, toTime } from '@/utils/dayjs';
 import { Page } from '@repo/contracts/schemas/page/Page';
+import { MyCommentsQueryParamsTypes } from '@repo/contracts/schemas/teacher/commentsQueryParams';
 import type { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
+import { TeacherHomeworkQueryParamsTypes } from '@repo/contracts/schemas/teacher/homeworQueryParams';
 import { TeacherFullTimetableRes } from '@repo/contracts/schemas/teacher/teacherFullTimeTableRes';
 import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
@@ -11,6 +13,9 @@ import { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeac
 import prisma from '@repo/db';
 import { DayOfWeek, Prisma } from '@repo/db/prisma/client';
 import { ClassroomMapper } from '../classroom/classroom.mapper';
+import { ExamScheduleMapper } from '../ExamSchedule/ExamSchedule.mapper';
+import { HomeworkMapper } from '../Homework/homework.mapper';
+import { TeacherCommentsMapper } from '../TeacherComments/teacherComments.mapper';
 import { UserService } from '../User/user.service';
 import { TeacherMapper } from './teacher.mapper';
 import { TeacherRepo } from './teacher.repo';
@@ -349,5 +354,164 @@ export class TeacherService {
     const classrooms = result.map((entry) => entry.classroom);
     const response = classrooms.map(ClassroomMapper.toResponse);
     return response;
+  };
+
+  getExamSchedule = async (params: { schoolId: string; teacherId: string }) => {
+    const { schoolId, teacherId } = params;
+
+    const examSchedules = await prisma.examSchedule.findMany({
+      where: {
+        schoolId,
+        assignement: {
+          teacherId,
+        },
+      },
+      include: {
+        exam: {
+          include: {
+            subject: true,
+          },
+        },
+        assignement: {
+          include: {
+            classroom: true,
+          },
+        },
+      },
+      orderBy: [
+        {
+          day: {
+            sort: 'asc',
+            nulls: 'last',
+          },
+        },
+        {
+          startTime: 'asc',
+        },
+      ],
+    });
+
+    const response = examSchedules.map(ExamScheduleMapper.teacherExamScheduleResponse);
+
+    return response;
+  };
+
+  getHomeworks = async (params: {
+    schoolId: string;
+    teacherId: string;
+    query: TeacherHomeworkQueryParamsTypes['Query'];
+  }) => {
+    const { schoolId, teacherId, query } = params;
+
+    const skip = (query.page - 1) * query.size;
+    const take = query.size;
+
+    const where: Prisma.HomeworkWhereInput = {
+      schoolId,
+      assignment: {
+        teacherId,
+      },
+    };
+
+    if (query.classroomId || query.studentId) {
+      where.studentHomeworks = {
+        some: {
+          ...(query.classroomId && {
+            student: {
+              classroomId: query.classroomId,
+            },
+          }),
+          ...(query.studentId && {
+            studentId: query.studentId,
+          }),
+        },
+      };
+    }
+
+    const orderBy: Prisma.HomeworkOrderByWithRelationInput = {
+      due: 'desc',
+    };
+
+    const queryResponse = prisma.homework.findMany({
+      skip,
+      take,
+      where,
+      orderBy,
+      include: {
+        files: true,
+        assignment: {
+          include: {
+            classroom: true,
+            subject: true,
+            teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
+          },
+        },
+      },
+    });
+
+    const count = prisma.homework.count({
+      where,
+    });
+
+    const [content, totalElements] = await Promise.all([queryResponse, count]);
+
+    const dataResponse = content.map((homework) => HomeworkMapper.toResponse(homework));
+
+    const pageResponse = PageMapper.toPage({
+      data: dataResponse,
+      pagination: query,
+      totalElements: totalElements,
+    });
+
+    return pageResponse;
+  };
+
+  getComments = async (params: { schoolId: string; teacherId: string; query: MyCommentsQueryParamsTypes['Query'] }) => {
+    const { schoolId, teacherId, query } = params;
+
+    const skip = (query.page - 1) * query.size;
+    const take = query.size;
+
+    const where: Prisma.TeacherCommentWhereInput = {
+      schoolId,
+      teacherId,
+    };
+
+    if (query.studentId) where.studentId = query.studentId;
+
+    const orderBy: Prisma.TeacherCommentOrderByWithRelationInput = {};
+
+    if (query.sortBy) {
+      orderBy[query.sortBy] = query.order;
+    }
+
+    const queryResponse = prisma.teacherComment.findMany({
+      skip,
+      take,
+      where,
+      orderBy,
+      include: {
+        student: true,
+        teacher: {
+          include: {
+            user: { select: { account: { select: { avatar: true } }, firstName: true, lastName: true, id: true } },
+          },
+        },
+      },
+    });
+
+    const count = prisma.teacherComment.count({ where });
+
+    const [content, totalElements] = await Promise.all([queryResponse, count]);
+
+    const dataResponse = content.map(TeacherCommentsMapper.toResponse);
+
+    const pageResponse = PageMapper.toPage({
+      data: dataResponse,
+      pagination: query,
+      totalElements: totalElements,
+    });
+
+    return pageResponse;
   };
 }

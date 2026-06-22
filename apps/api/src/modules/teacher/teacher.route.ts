@@ -1,10 +1,10 @@
-import { Router } from 'express';
-import { TeacherController } from './teacher.controller';
 import { asyncHandler } from '@/core/async-handler';
-import { UserRole } from '@repo/db/prisma/enums';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
-import { requireUserPermissionOrTeacherHimself } from './middleware/requireUserPermissionOrTeacherHimself';
 import requireUserRoles from '@/middleware/requirePermission.middleware';
+import { UserRole } from '@repo/db/prisma/enums';
+import { Router } from 'express';
+import { requireUserPermissionOrTeacherHimself } from './middleware/requireUserPermissionOrTeacherHimself';
+import { TeacherController } from './teacher.controller';
 
 export const createRouter = (teacherController: TeacherController) => {
   const router = Router({ mergeParams: true });
@@ -42,6 +42,17 @@ export const createRouter = (teacherController: TeacherController) => {
   );
 
   router.get('/:teacherId/classrooms', requireAuth, asyncHandler(teacherController.getClassrooms));
+
+  router.get('/:teacherId/exam-schedules', requireAuth, asyncHandler(teacherController.getExamSchedule));
+
+  router.get('/:teacherId/comments', requireAuth, asyncHandler(teacherController.getMyComments));
+
+  router.get(
+    '/:teacherId/homeworks',
+    requireAuth,
+    requireUserPermissionOrTeacherHimself([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(teacherController.getHomeworks),
+  );
 
   router.get(
     '/:teacherId',
