@@ -19,6 +19,7 @@ export type TeacherCommentsResponse = {
     id: string;
     firstName: string;
     lastName: string;
+    gender: Gender;
     avatar: MediaResponse | null;
   };
 

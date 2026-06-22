@@ -9,7 +9,15 @@ export class TeacherCommentsMapper {
         student: true;
         teacher: {
           include: {
-            user: { select: { account: { select: { avatar: true } }; firstName: true; lastName: true; id: true } };
+            user: {
+              select: {
+                account: { select: { avatar: true } };
+                firstName: true;
+                lastName: true;
+                id: true;
+                gender: true;
+              };
+            };
           };
         };
       };
@@ -26,6 +34,7 @@ export class TeacherCommentsMapper {
         id: teacherComment.teacher.id,
         firstName: teacherComment.teacher.user.firstName,
         lastName: teacherComment.teacher.user.lastName,
+        gender: teacherComment.teacher.user.gender,
         avatar: teacherAvatar,
       },
       student: {

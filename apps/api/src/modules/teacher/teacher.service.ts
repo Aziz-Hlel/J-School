@@ -443,7 +443,11 @@ export class TeacherService {
           include: {
             classroom: true,
             subject: true,
-            teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
+          },
+        },
+        studentHomeworks: {
+          include: {
+            student: true,
           },
         },
       },
@@ -455,7 +459,7 @@ export class TeacherService {
 
     const [content, totalElements] = await Promise.all([queryResponse, count]);
 
-    const dataResponse = content.map((homework) => HomeworkMapper.toResponse(homework));
+    const dataResponse = content.map((homework) => HomeworkMapper.toResWithStudents(homework));
 
     const pageResponse = PageMapper.toPage({
       data: dataResponse,
