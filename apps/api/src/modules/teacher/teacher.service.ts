@@ -441,7 +441,6 @@ export class TeacherService {
         files: true,
         assignment: {
           include: {
-            classroom: true,
             subject: true,
           },
         },

@@ -1,19 +1,39 @@
+import { NotFoundError } from '@/err/service/customErrors';
+import { PageMapper } from '@/helper/page.mapper';
 import { CreateHomeworkReq } from '@repo/contracts/schemas/Homework/create';
+import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
-import { HomeworkMapper } from './homework.mapper';
-import { NotFoundError } from '@/err/service/customErrors';
-import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { Prisma } from '@repo/db/prisma/browser';
-import { PageMapper } from '@/helper/page.mapper';
+import { HomeworkMapper } from './homework.mapper';
 
 export class HomeworkService {
   constructor() {}
 
   create = async (params: { schoolId: string; input: CreateHomeworkReq }) => {
     const { schoolId, input } = params;
-    const homework = await prisma.homework.create({
-      data: {
+    // const homework = await prisma.homework.create({
+    //   data: {
+    //     title: input.title,
+    //     content: input.content,
+    //     files: {
+    //       connect: input.files.map((id) => ({
+    //         id,
+    //       })),
+    //     },
+    //     due: input.due,
+    //     assignmentId: input.assignmentId,
+    //     schoolId: schoolId,
+    //     studentHomeworks: {
+    //       create: input.studentIds.map((studentId) => ({
+    //         studentId: studentId,
+    //       })),
+    //     },
+    //   },
+    // });
+
+    const homework = await prisma.homework.createMany({
+      data: input.details.map((detail) => ({
         title: input.title,
         content: input.content,
         files: {
@@ -21,15 +41,15 @@ export class HomeworkService {
             id,
           })),
         },
-        due: input.due,
-        assignmentId: input.assignmentId,
+        due: detail.due,
+        assignmentId: detail.assignmentId,
         schoolId: schoolId,
         studentHomeworks: {
-          create: input.studentIds.map((studentId) => ({
+          create: detail.studentIds.map((studentId) => ({
             studentId: studentId,
           })),
         },
-      },
+      })),
     });
     return homework;
   };

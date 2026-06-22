@@ -50,7 +50,6 @@ export class HomeworkMapper {
         };
         assignment: {
           include: {
-            classroom: true;
             subject: true;
           };
         };
@@ -58,7 +57,6 @@ export class HomeworkMapper {
     }>,
   ): HomeworkWithStudentsRes {
     const subjectResponse = SubjectMapper.toResponse(homework.assignment.subject);
-    const classroomResponse = ClassroomMapper.toResponse(homework.assignment.classroom);
     const filesResponse = homework.files.map((f) => globalMediaService.toMediaResWithOrder(f));
     return {
       id: homework.id,
@@ -68,7 +66,6 @@ export class HomeworkMapper {
       files: filesResponse,
       due: toCalendarDate(homework.due),
       subject: subjectResponse,
-      classroom: classroomResponse,
       students: homework.studentHomeworks.map((sh) => ({
         id: sh.studentId,
         firstName: {
