@@ -32,6 +32,7 @@ export class TeacherCommentsMapper {
         id: teacherComment.student.id,
         firstName: { en: teacherComment.student.firstName_en, ar: teacherComment.student.firstName_ar },
         lastName: { en: teacherComment.student.lastName_en, ar: teacherComment.student.lastName_ar },
+        gender: teacherComment.student.gender,
         avatar: teacherAvatar,
       },
       createdAt: teacherComment.createdAt.toISOString(),

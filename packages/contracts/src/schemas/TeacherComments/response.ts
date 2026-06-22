@@ -1,3 +1,4 @@
+import type { Gender } from '@repo/db/prisma/enums';
 import type { MediaResponse } from '../media/MediaResponse';
 
 export type TeacherCommentsResponse = {
@@ -11,6 +12,7 @@ export type TeacherCommentsResponse = {
     id: string;
     firstName: { en: string | null; ar: string | null };
     lastName: { en: string | null; ar: string | null };
+    gender: Gender;
     avatar: MediaResponse | null;
   };
   teacher: {
