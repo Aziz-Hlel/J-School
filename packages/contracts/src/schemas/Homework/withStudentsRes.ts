@@ -8,6 +8,7 @@ export type HomeworkWithStudentsRes = {
   title: string | null;
   type: HomeworkType;
   content: string | null;
+  assignementId: string;
   files: MediaResponseWithOrder[];
   due: string;
   subject: SubjectResponse;
