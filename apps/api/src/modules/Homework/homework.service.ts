@@ -6,6 +6,7 @@ import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/browser';
 import { HomeworkMapper } from './homework.mapper';
+import { parseCalendarDate } from '@/utils/dayjs';
 
 export class HomeworkService {
   constructor() {}
@@ -41,7 +42,7 @@ export class HomeworkService {
             id,
           })),
         },
-        due: detail.due,
+        due: parseCalendarDate(detail.due),
         assignmentId: detail.assignmentId,
         schoolId: schoolId,
         studentHomeworks: {
@@ -79,7 +80,7 @@ export class HomeworkService {
               id,
             })),
           },
-          due: input.due,
+          due: parseCalendarDate(input.due),
           assignmentId: input.assignmentId,
           studentHomeworks: {
             createMany: {
