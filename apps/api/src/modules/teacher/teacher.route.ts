@@ -43,6 +43,8 @@ export const createRouter = (teacherController: TeacherController) => {
 
   router.get('/:teacherId/classrooms', requireAuth, asyncHandler(teacherController.getClassrooms));
 
+  router.get('/:teacherId/assignments', requireAuth, asyncHandler(teacherController.getAssignments));
+
   router.get('/:teacherId/exam-schedules', requireAuth, asyncHandler(teacherController.getExamSchedule));
 
   router.get('/:teacherId/comments', requireAuth, asyncHandler(teacherController.getMyComments));
