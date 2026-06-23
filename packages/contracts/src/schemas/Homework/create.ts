@@ -4,12 +4,12 @@ import { homeworkSchema } from '../shared/homework.schema';
 export const createHomeworkReqSchema = z.object({
   title: homeworkSchema.title,
   content: homeworkSchema.content,
-  files: z.array(z.uuid()),
+  files: z.array(z.uuid()).max(5, 'At most 5 files are allowed'),
   details: z.array(
     z.object({
       due: homeworkSchema.due,
       assignmentId: homeworkSchema.assignmentId,
-      studentIds: z.array(z.uuid()),
+      studentIds: z.array(z.uuid()).max(100, 'At most 100 students are allowed'),
     }),
   ),
 });

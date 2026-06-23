@@ -494,10 +494,21 @@ export class TeacherService {
       where,
       orderBy,
       include: {
-        student: true,
+        student: {
+          include: {
+            avatar: true,
+          },
+        },
         teacher: {
           include: {
-            user: { select: { account: { select: { avatar: true } }, firstName: true, lastName: true, id: true } },
+            user: {
+              select: {
+                account: { select: { avatar: true } },
+                firstName: true,
+                lastName: true,
+                id: true,
+              },
+            },
           },
         },
       },

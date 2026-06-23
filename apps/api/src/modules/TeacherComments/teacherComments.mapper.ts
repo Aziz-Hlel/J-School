@@ -6,7 +6,11 @@ export class TeacherCommentsMapper {
   static toResponse(
     teacherComment: TeacherCommentGetPayload<{
       include: {
-        student: true;
+        student: {
+          include: {
+            avatar: true;
+          };
+        };
         teacher: {
           include: {
             user: {
@@ -24,6 +28,7 @@ export class TeacherCommentsMapper {
     }>,
   ): TeacherCommentsResponse {
     const teacherAvatar = globalMediaService.toMediaRes(teacherComment.teacher.user.account.avatar);
+    const studentAvatar = globalMediaService.toMediaRes(teacherComment.student.avatar);
     return {
       id: teacherComment.id,
       title: teacherComment.title,
@@ -42,7 +47,7 @@ export class TeacherCommentsMapper {
         firstName: { en: teacherComment.student.firstName_en, ar: teacherComment.student.firstName_ar },
         lastName: { en: teacherComment.student.lastName_en, ar: teacherComment.student.lastName_ar },
         gender: teacherComment.student.gender,
-        avatar: teacherAvatar,
+        avatar: studentAvatar,
       },
       createdAt: teacherComment.createdAt.toISOString(),
       updatedAt: teacherComment.updatedAt.toISOString(),
