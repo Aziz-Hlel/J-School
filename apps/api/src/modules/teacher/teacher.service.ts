@@ -12,6 +12,7 @@ import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse
 import { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
 import prisma from '@repo/db';
 import { DayOfWeek, Prisma } from '@repo/db/prisma/client';
+import { AssignemntMapper } from '../assignment/assignment.mapper';
 import { ClassroomMapper } from '../classroom/classroom.mapper';
 import { ExamScheduleMapper } from '../ExamSchedule/ExamSchedule.mapper';
 import { HomeworkMapper } from '../Homework/homework.mapper';
@@ -527,5 +528,37 @@ export class TeacherService {
     });
 
     return pageResponse;
+  };
+
+  getAssignments = async (params: { schoolId: string; teacherId: string }) => {
+    const queryResult = await prisma.assignment.findMany({
+      where: {
+        teacherId: params.teacherId,
+        schoolId: params.schoolId,
+      },
+      include: {
+        subject: true,
+        classroom: true,
+        teacher: {
+          include: {
+            user: {
+              include: {
+                account: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [
+        {
+          classroom: { grade: 'asc' },
+        },
+        { subject: { name_fr: 'asc' } },
+      ],
+    });
+
+    const response = queryResult.map((assignment) => AssignemntMapper.toResponse(assignment));
+
+    return response;
   };
 }

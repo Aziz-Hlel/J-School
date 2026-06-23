@@ -17,5 +17,12 @@ export const createSchoolRoute = (controller: SchoolController) => {
 
   router.delete('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.delete));
 
+  router.get(
+    '/:schoolId/classrooms/select',
+    requireAuth,
+    requireRole(AccountRole.ADMIN),
+    asyncHandler(controller.selectClassrooms),
+  );
+
   return router;
 };

@@ -5,21 +5,13 @@ import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchool
 import { SchoolMapper } from './school.mapper';
 import { SchoolRepo } from './school.repo';
 // import { School } from '@repo/db/prisma/client';
+import { SelectClassroomsRes } from '@repo/contracts/schemas/classroom/SelectClassroomsRes';
 import { GetMySchoolResponse } from '@repo/contracts/schemas/school/getMySchoolResponse';
-import { School } from '@repo/db/prisma/client';
+import prisma from '@repo/db';
 import { OwnerService } from '../owner/owner.service';
 import { SchoolService } from './school.service';
 
-export interface ISchoolAppService {
-  create: (params: { schema: CreateSchoolRequest; token: DecodedIdTokenWithClaims }) => Promise<School>;
-  update: (params: { schema: UpdateSchoolRequest; schoolId: string; accountId: string }) => Promise<void>;
-  getMySchool: (params: { token: DecodedIdTokenWithClaims }) => Promise<GetMySchoolResponse>;
-  getById: (params: { schoolId: string; token: DecodedIdTokenWithClaims }) => Promise<void>;
-  getPage: (params: { schema: any; token: DecodedIdTokenWithClaims }) => Promise<void>;
-  delete: (params: { schoolId: string; token: DecodedIdTokenWithClaims }) => Promise<void>;
-}
-
-export class SchoolAppService implements ISchoolAppService {
+export class SchoolAppService {
   constructor(
     private readonly schoolRepo: SchoolRepo,
     private readonly schoolService: SchoolService,
@@ -82,5 +74,46 @@ export class SchoolAppService implements ISchoolAppService {
 
   delete = async ({}: { schoolId: string; token: DecodedIdTokenWithClaims }) => {
     throw new Error('Method not implemented.');
+  };
+
+  selectClassrooms = async (params: { schoolId: string }): Promise<SelectClassroomsRes[]> => {
+    const queryResponse = await prisma.classroom.findMany({
+      where: {
+        schoolId: params.schoolId,
+      },
+      orderBy: [
+        {
+          grade: 'asc',
+        },
+        {
+          name: 'asc',
+        },
+      ],
+      select: {
+        id: true,
+        name: true,
+        grade: true,
+      },
+    });
+    return queryResponse;
+  };
+
+  selectParents = async () => {
+    const queryResponse = await prisma.user.findMany({
+      select: {
+        id: true,
+
+        phone: true,
+      },
+      orderBy: [
+        {
+          firstName: 'asc',
+        },
+        {
+          lastName: 'asc',
+        },
+      ],
+    });
+    return queryResponse;
   };
 }

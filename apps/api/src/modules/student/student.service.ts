@@ -6,6 +6,7 @@ import { toTime } from '@/utils/dayjs';
 import { FeesQueryParamsTypes } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
 import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { Page } from '@repo/contracts/schemas/page/Page';
+import { AssignStudentToClassroomReq } from '@repo/contracts/schemas/student/assignStudentToClassroomReq';
 import { CreateStudentReq } from '@repo/contracts/schemas/student/createStudentRequest';
 import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student/createStudentWithProfile';
 import type { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
@@ -494,5 +495,19 @@ export class StudentService {
     }
 
     return StudentMapper.toFullDetails(studentDetails);
+  };
+
+  assignToClassroom = async (params: { schoolId: string; input: AssignStudentToClassroomReq; studentId: string }) => {
+    const { schoolId, input, studentId } = params;
+
+    return await prisma.student.update({
+      where: {
+        id: studentId,
+        schoolId,
+      },
+      data: {
+        classroomId: input.classroomId,
+      },
+    });
   };
 }

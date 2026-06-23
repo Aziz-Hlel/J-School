@@ -2,7 +2,6 @@ import { BadRequestError } from '@/err/service/customErrors';
 import { globalMediaService } from '@/media/media.service';
 import { StudentMapper } from '@/modules/student/student.mapper';
 import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
-import type { AssignStudentRequestInput } from '@repo/contracts/schemas/classroom/management/assignStudentRequest';
 import type { GetClassroomAttendancesQuery } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
 import type { ClassroomAttendancesResponse } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesResponse';
 import prisma from '@repo/db';
@@ -81,20 +80,6 @@ export class ClassroomManagementService {
       },
     });
     return assignment;
-  };
-
-  assignStudent = async (params: { schoolId: string; classroomId: string; input: AssignStudentRequestInput }) => {
-    const { schoolId, classroomId, input } = params;
-
-    return await prisma.student.update({
-      where: {
-        id: input.studentId,
-        schoolId,
-      },
-      data: {
-        classroomId,
-      },
-    });
   };
 
   getAttendances = async (params: {

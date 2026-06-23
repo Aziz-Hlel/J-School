@@ -132,4 +132,14 @@ export class TeacherController {
       ...comments,
     });
   };
+
+  getAssignments = async (req: Request, res: Response) => {
+    const teacherId = getUrlParam(req, 'teacherId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const assignments = await this.teacherService.getAssignments({ teacherId, schoolId });
+    res.status(200).json({
+      message: 'Teacher assignments fetched successfully',
+      data: assignments,
+    });
+  };
 }

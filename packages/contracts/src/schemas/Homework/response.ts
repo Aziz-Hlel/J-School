@@ -1,8 +1,8 @@
-import type { HomeworkType } from '../../types/enums/enums';
+import type { Gender, HomeworkType } from '../../types/enums/enums';
 import type { ClassroomResponse } from '../classroom/classResponse';
+import type { MediaResponse } from '../media/MediaResponse';
 import type { MediaResponseWithOrder } from '../media/MediaResponseWithOrder';
 import type { SubjectResponse } from '../subject/subjectResponse';
-import type { TeacherResponse } from '../teacher/teacherResponse';
 
 export type HomeworkResponse = {
   id: string;
@@ -13,5 +13,11 @@ export type HomeworkResponse = {
   due: string;
   subject: SubjectResponse;
   classroom: ClassroomResponse;
-  teacher: TeacherResponse | null;
+  teacher: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    gender: Gender;
+    avatar: MediaResponse | null;
+  } | null;
 };

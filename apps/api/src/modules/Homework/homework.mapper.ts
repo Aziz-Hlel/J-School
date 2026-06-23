@@ -5,7 +5,6 @@ import { HomeworkWithStudentsRes } from '@repo/contracts/schemas/Homework/withSt
 import { HomeworkGetPayload } from '@repo/db/prisma/models';
 import { ClassroomMapper } from '../classroom/classroom.mapper';
 import { SubjectMapper } from '../subject/subject.mapper';
-import { TeacherMapper } from '../teacher/teacher.mapper';
 
 export class HomeworkMapper {
   static toResponse(
@@ -24,7 +23,7 @@ export class HomeworkMapper {
   ): HomeworkResponse {
     const subjectResponse = SubjectMapper.toResponse(homework.assignment.subject);
     const classroomResponse = ClassroomMapper.toResponse(homework.assignment.classroom);
-    const teacherResponse = homework.assignment.teacher ? TeacherMapper.toResponse(homework.assignment.teacher) : null;
+    const teacherAvatar = globalMediaService.toMediaRes(homework.assignment.teacher?.user?.account?.avatar ?? null);
     const filesResponse = homework.files.map((f) => globalMediaService.toMediaResWithOrder(f));
     return {
       id: homework.id,
@@ -35,7 +34,15 @@ export class HomeworkMapper {
       due: toCalendarDate(homework.due),
       subject: subjectResponse,
       classroom: classroomResponse,
-      teacher: teacherResponse,
+      teacher: homework.assignment.teacher
+        ? {
+            id: homework.assignment.teacher.id,
+            firstName: homework.assignment.teacher.user.firstName,
+            lastName: homework.assignment.teacher.user.lastName,
+            gender: homework.assignment.teacher.user.gender,
+            avatar: teacherAvatar,
+          }
+        : null,
     };
   }
 

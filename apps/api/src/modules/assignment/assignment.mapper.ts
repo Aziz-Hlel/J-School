@@ -1,7 +1,11 @@
 import { toTime } from '@/utils/dayjs';
+import { AssignmentRes } from '@repo/contracts/schemas/assignment/assignmentResonse';
 import { GetClassroomTimetableResponse } from '@repo/contracts/schemas/assignment/getClassroomTimetableResponse';
 import { DayOfWeek } from '@repo/db/prisma/enums';
 import { AssignmentGetPayload } from '@repo/db/prisma/models';
+import { ClassroomMapper } from '../classroom/classroom.mapper';
+import { SubjectMapper } from '../subject/subject.mapper';
+import { TeacherMapper } from '../teacher/teacher.mapper';
 
 export class AssignemntMapper {
   static toClassroomTimeTable(
@@ -55,5 +59,33 @@ export class AssignemntMapper {
     });
 
     return timeTableResponse;
+  }
+
+  static toResponse(
+    assignment: AssignmentGetPayload<{
+      include: {
+        subject: true;
+        classroom: true;
+        teacher: {
+          include: {
+            user: {
+              include: {
+                account: true;
+              };
+            };
+          };
+        };
+      };
+    }>,
+  ): AssignmentRes {
+    const classroomResponse = ClassroomMapper.toResponse(assignment.classroom);
+    const teacherShortRes = assignment.teacher ? TeacherMapper.toShortRes(assignment.teacher) : null;
+    const subjectRes = SubjectMapper.toResponse(assignment.subject);
+    return {
+      id: assignment.id,
+      classroom: classroomResponse,
+      teacher: teacherShortRes,
+      subject: subjectRes,
+    };
   }
 }

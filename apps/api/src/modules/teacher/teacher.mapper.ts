@@ -1,7 +1,7 @@
 import { globalMediaService } from '@/media/media.service';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
+import { TeacherShortRes } from '@repo/contracts/schemas/teacher/teacherShortResponse';
 import { TeacherGetPayload } from '@repo/db/prisma/models';
-
 export class TeacherMapper {
   static toResponse(
     teacher: TeacherGetPayload<{ include: { user: { include: { account: { include: { avatar: true } } } } } }>,
@@ -21,6 +21,20 @@ export class TeacherMapper {
 
       createdAt: teacher.createdAt.toISOString(),
       updatedAt: teacher.updatedAt.toISOString(),
+    };
+  }
+
+  static toShortRes(
+    teacher: TeacherGetPayload<{ include: { user: { include: { account: { include: { avatar: true } } } } } }>,
+  ): TeacherShortRes {
+    const avatar = globalMediaService.toMediaRes(teacher.user.account.avatar);
+
+    return {
+      id: teacher.id,
+      firstName: teacher.user.firstName,
+      lastName: teacher.user.lastName,
+      gender: teacher.user.gender,
+      avatar,
     };
   }
 }

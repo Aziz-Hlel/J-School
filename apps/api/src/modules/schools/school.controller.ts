@@ -3,10 +3,10 @@ import getUrlParam from '@/utils/getUrlParam';
 import { CreateSchoolRequestSchema } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { updateSchoolRequestSchema } from '@repo/contracts/schemas/school/updateSchoolRequest';
 import { Response } from 'express';
-import { ISchoolAppService } from './school.app.service';
+import { SchoolAppService } from './school.app.service';
 
 export class SchoolController {
-  constructor(private readonly schoolService: ISchoolAppService) {}
+  constructor(private readonly schoolService: SchoolAppService) {}
 
   create = async (req: AuthenticatedRequest, res: Response) => {
     const schema = CreateSchoolRequestSchema.parse(req.body);
@@ -40,5 +40,14 @@ export class SchoolController {
 
   delete = async (_: AuthenticatedRequest, __: Response) => {
     throw new Error('Not implemented');
+  };
+
+  selectClassrooms = async (req: AuthenticatedRequest, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const classrooms = await this.schoolService.selectClassrooms({ schoolId });
+    res.status(200).json({
+      message: 'Classrooms fetched successfully',
+      data: classrooms,
+    });
   };
 }

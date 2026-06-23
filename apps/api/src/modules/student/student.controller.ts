@@ -11,6 +11,7 @@ import { teacherCommentsQueryParams } from '@repo/contracts/schemas/TeacherComme
 import type { Request, Response } from 'express';
 import { StudentService } from './student.service';
 import { CreateStudentWithParentUseCase } from './use-case/createStudentWithParent';
+import { assignStudentToClassroomReqSchema } from '@repo/contracts/schemas/student/assignStudentToClassroomReq';
 
 export class StudentController {
   constructor(
@@ -142,6 +143,17 @@ export class StudentController {
     res.status(200).json({
       message: 'Student comments found successfully',
       ...response,
+    });
+  };
+
+  assignToClassroom = async (req: Request, res: Response) => {
+    const input = assignStudentToClassroomReqSchema.parse(req.body);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const studentId = getUrlParam(req, 'studentId', { uuid: true });
+    const response = await this.studentService.assignToClassroom({ schoolId, input, studentId });
+    res.status(200).json({
+      message: 'Student assigned to classroom successfully',
+      data: response,
     });
   };
 }

@@ -36,6 +36,8 @@ export const createRouter = (studentController: StudentController) => {
 
   router.get('/:studentId/full-details', requireAuth, asyncHandler(studentController.getFullDetails));
 
+  router.patch('/:studentId/classroom', requireAuth, asyncHandler(studentController.assignToClassroom));
+
   router.get('/:studentId', requireAuth, asyncHandler(studentController.findById));
 
   return router;
