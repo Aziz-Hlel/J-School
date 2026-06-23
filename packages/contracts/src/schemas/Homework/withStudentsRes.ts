@@ -1,4 +1,5 @@
 import type { Gender, HomeworkType } from '../../types/enums/enums';
+import type { ClassroomResponse } from '../classroom/classResponse';
 import type { MediaResponseWithOrder } from '../media/MediaResponseWithOrder';
 import type { SubjectResponse } from '../subject/subjectResponse';
 
@@ -10,6 +11,7 @@ export type HomeworkWithStudentsRes = {
   files: MediaResponseWithOrder[];
   due: string;
   subject: SubjectResponse;
+  classroom: ClassroomResponse;
   students: {
     id: string;
     firstName: {

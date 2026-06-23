@@ -443,6 +443,7 @@ export class TeacherService {
         assignment: {
           include: {
             subject: true,
+            classroom: true,
           },
         },
         studentHomeworks: {
@@ -539,15 +540,6 @@ export class TeacherService {
       include: {
         subject: true,
         classroom: true,
-        teacher: {
-          include: {
-            user: {
-              include: {
-                account: true,
-              },
-            },
-          },
-        },
       },
       orderBy: [
         {
@@ -557,7 +549,7 @@ export class TeacherService {
       ],
     });
 
-    const response = queryResult.map((assignment) => AssignemntMapper.toResponse(assignment));
+    const response = queryResult.map((assignment) => AssignemntMapper.toTeacherAssignmentsRes(assignment));
 
     return response;
   };
