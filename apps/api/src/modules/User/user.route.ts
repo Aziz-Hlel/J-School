@@ -1,9 +1,9 @@
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
+import { UserRole } from '@repo/db/prisma/enums';
 import { Router } from 'express';
 import { UserController } from './user.controller';
-import { UserRole } from '@repo/db/prisma/enums';
-import requireUserRoles from '@/middleware/requirePermission.middleware';
 
 const createUserRouter = (controller: UserController) => {
   const router = Router({ mergeParams: true });
@@ -21,6 +21,7 @@ const createUserRouter = (controller: UserController) => {
     asyncHandler(controller.getById),
   );
 
+  // * not secure , need user role or is user himself
   router.put('/:userId', requireAuth, asyncHandler(controller.update));
 
   return router;
