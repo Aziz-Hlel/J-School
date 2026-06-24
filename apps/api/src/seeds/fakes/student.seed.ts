@@ -1,8 +1,9 @@
 import { prisma } from '@/bootstrap/db.init';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { faker, fakerAR } from '@faker-js/faker';
-import { ClassGrade, Gender, StudentStatus } from '@repo/db/prisma/enums';
+import { ClassGrade, Gender, StudentStatus, VaccineStatus } from '@repo/db/prisma/enums';
 import { StudentCreateInput, StudentUncheckedCreateInput } from '@repo/db/prisma/models';
+import { genUuid } from '../helper/generateUuid';
 import { MediaSeed } from './media.seed';
 
 export class StudentSeed {
@@ -22,6 +23,30 @@ export class StudentSeed {
       schoolId: schoolId,
       gender: gender,
       status: student.status ?? faker.helpers.arrayElement(Object.values(StudentStatus)),
+      profile: {
+        connectOrCreate: {
+          where: {
+            id: student.id,
+          },
+          create: {
+            vaccine: faker.helpers.enumValue(VaccineStatus),
+            allergies: faker.lorem.sentence(),
+            healthInfo: faker.lorem.sentence(),
+            notes: faker.lorem.sentence(),
+            emergencyContacts: {
+              createMany: {
+                data: Array.from({ length: faker.number.int({ min: 1, max: 3 }) }).map((_, i) => ({
+                  id: genUuid(`${student.id}_em_${i}`),
+                  name: faker.person.firstName(),
+                  phone: faker.phone.number(),
+                  relation: faker.helpers.arrayElement(['cousin', 'uncle', 'guardian', 'step-father ex baby mama']),
+                })),
+                skipDuplicates: true,
+              },
+            },
+          },
+        },
+      },
     } satisfies StudentUncheckedCreateInput;
   };
 
@@ -42,6 +67,7 @@ export class StudentSeed {
         gender: studentPayload.gender,
         firstName_ar: studentPayload.firstName_ar,
         lastName_ar: studentPayload.lastName_ar,
+        profile: studentPayload.profile,
       },
     });
     return createdStudent;
@@ -61,6 +87,7 @@ export class StudentSeed {
         lastName_en: studentPayload.lastName_en,
         firstName_ar: studentPayload.firstName_ar,
         lastName_ar: studentPayload.lastName_ar,
+        profile: studentPayload.profile,
       },
     });
     return createdStudent;

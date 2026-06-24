@@ -15,7 +15,7 @@ model EmergencyContact {
   id String @id @default(uuid()) @db.Uuid
 
   name     String @db.VarChar(255)
-  phone    String @db.VarChar(20)
+  phone    String @db.VarChar(40)
   relation String @db.VarChar(255)
 
   profileId String         @db.Uuid
