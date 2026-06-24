@@ -56,6 +56,12 @@ export class StudentProfileRepo {
             healthInfo: input.healthInfo,
             vaccine: input.vaccine,
             notes: input.notes,
+            emergencyContacts: {
+              deleteMany: {},
+              createMany: {
+                data: input.emergencyContacts,
+              },
+            },
           },
           include: {
             emergencyContacts: true,

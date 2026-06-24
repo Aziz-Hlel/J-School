@@ -11,7 +11,7 @@ export class ClassroomManagementMapper {
   ): ClassroomSubjectsWithTeachersResponse[] {
     return assignments.map((assignment) => {
       return {
-        id: assignment.id,
+        id: assignment.subject.id,
         name: {
           en: assignment.subject.name_en,
           fr: assignment.subject.name_fr,
