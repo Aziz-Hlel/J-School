@@ -11,7 +11,7 @@ import { HomeworkMapper } from './homework.mapper';
 export class HomeworkService {
   constructor() {}
 
-  async createHomework(data: CreateHomeworkReq, schoolId: string) {
+  async create(data: CreateHomeworkReq, schoolId: string) {
     return prisma.$transaction(
       data.details.map((detail) =>
         prisma.homework.create({
