@@ -1,6 +1,6 @@
 import getUrlParam from '@/utils/getUrlParam';
-import { ParentStudentService } from './parentStudent.service';
 import { Request, Response } from 'express';
+import { ParentStudentService } from './parentStudent.service';
 
 export class ParentStudentController {
   constructor(private readonly parentStudentService: ParentStudentService) {}
@@ -10,8 +10,8 @@ export class ParentStudentController {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const studentId = getUrlParam(req, 'studentId', { uuid: true });
     const parentId = getUrlParam(req, 'parentId', { uuid: true });
-    const result = await this.parentStudentService.assignStudentToParent({ schoolId, studentId, parentId });
-    res.status(201).json(result);
+    await this.parentStudentService.assignStudentToParent({ schoolId, studentId, parentId });
+    res.sendStatus(204);
   };
 
   unassignStudentFromParent = async (req: Request, res: Response) => {
@@ -19,7 +19,7 @@ export class ParentStudentController {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const studentId = getUrlParam(req, 'studentId', { uuid: true });
     const parentId = getUrlParam(req, 'parentId', { uuid: true });
-    const result = await this.parentStudentService.unassignStudentFromParent({ schoolId, studentId, parentId });
-    res.status(201).json(result);
+    await this.parentStudentService.unassignStudentFromParent({ schoolId, studentId, parentId });
+    res.sendStatus(204);
   };
 }

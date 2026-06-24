@@ -5,10 +5,14 @@ import { UpdateSchoolRequest } from '@repo/contracts/schemas/school/updateSchool
 import { SchoolMapper } from './school.mapper';
 import { SchoolRepo } from './school.repo';
 // import { School } from '@repo/db/prisma/client';
+import { CursorMapper } from '@/helper/cursor.mapper';
 import { SelectClassroomsRes } from '@repo/contracts/schemas/classroom/SelectClassroomsRes';
 import { GetMySchoolResponse } from '@repo/contracts/schemas/school/getMySchoolResponse';
+import { SelectParentsQueryParams } from '@repo/contracts/schemas/school/selectParentsQueryParams';
 import prisma from '@repo/db';
+import { Prisma } from '@repo/db/prisma/client';
 import { OwnerService } from '../owner/owner.service';
+import { ParentMapper } from '../parent/parent.mapper';
 import { SchoolService } from './school.service';
 
 export class SchoolAppService {
@@ -98,22 +102,70 @@ export class SchoolAppService {
     return queryResponse;
   };
 
-  selectParents = async () => {
-    const queryResponse = await prisma.user.findMany({
+  selectParents = async (params: { query: SelectParentsQueryParams; schoolId: string }) => {
+    const { query, schoolId } = params;
+    const where: Prisma.ParentWhereInput = {
+      user: {
+        schoolId,
+
+        ...(query.search && {
+          OR: [
+            {
+              firstName: {
+                contains: query.search,
+              },
+            },
+            {
+              lastName: {
+                contains: query.search,
+              },
+            },
+          ],
+        }),
+      },
+    };
+
+    const queryResponse = await prisma.parent.findMany({
+      where,
       select: {
         id: true,
-
-        phone: true,
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            cin: true,
+            phone: true,
+            account: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
       },
+      cursor: query.cursor ? { id: query.cursor } : undefined,
+      take: query.limit + 1,
       orderBy: [
         {
-          firstName: 'asc',
+          user: {
+            firstName: 'asc',
+          },
         },
         {
-          lastName: 'asc',
+          user: {
+            lastName: 'asc',
+          },
         },
       ],
     });
-    return queryResponse;
+
+    const lastItem = queryResponse[query.limit];
+    const nextCursor = lastItem?.id || null;
+
+    const data = queryResponse.map(ParentMapper.toSelectParents);
+
+    const cursorResponse = CursorMapper.toCursor({ data, nextCursor });
+
+    return cursorResponse;
   };
 }

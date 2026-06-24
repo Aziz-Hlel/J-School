@@ -16,6 +16,10 @@ export const apiRoutes = {
     me: () => '/auth/me',
   },
 
+  schools: {
+    selectParent: (schoolId: string) => `/schools/${schoolId}/parents/select`,
+  },
+
   staff: {
     create: (schoolId: string) => `/schools/${schoolId}/staff`,
     update: (schoolId: string, id: string) => `/schools/${schoolId}/staff/${id}`,
@@ -29,7 +33,16 @@ export const apiRoutes = {
     update: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
     getPage: (schoolId: string) => `/schools/${schoolId}/students`,
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
+    findFullDetails: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}/full-details`,
+    assignToClassroom: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}/classroom`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
+  },
+
+  parentStudent: {
+    unassignStudentFromParent: (studentId: string, parentId: string, schoolId: string) =>
+      `/schools/${schoolId}/students/${studentId}/parents/${parentId}`,
+    assignStudentToParent: (studentId: string, parentId: string, schoolId: string) =>
+      `/schools/${schoolId}/students/${studentId}/parents/${parentId}`,
   },
 
   classrooms: {

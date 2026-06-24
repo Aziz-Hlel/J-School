@@ -1,6 +1,7 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { CreateSchoolRequestSchema } from '@repo/contracts/schemas/school/createSchoolRequest';
+import { selectParentsQueryParamsSchema } from '@repo/contracts/schemas/school/selectParentsQueryParams';
 import { updateSchoolRequestSchema } from '@repo/contracts/schemas/school/updateSchoolRequest';
 import { Response } from 'express';
 import { SchoolAppService } from './school.app.service';
@@ -48,6 +49,16 @@ export class SchoolController {
     res.status(200).json({
       message: 'Classrooms fetched successfully',
       data: classrooms,
+    });
+  };
+
+  selectParents = async (req: AuthenticatedRequest, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const query = selectParentsQueryParamsSchema.parse(req.query);
+    const parents = await this.schoolService.selectParents({ schoolId, query });
+    res.status(200).json({
+      message: 'Parents fetched successfully',
+      ...parents,
     });
   };
 }

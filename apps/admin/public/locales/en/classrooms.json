@@ -1,0 +1,12 @@
+{
+  "classroom": "classroom",
+  "grade": {
+    "KG": "KG",
+    "ONE": "One",
+    "TWO": "Two",
+    "THREE": "Three",
+    "FOUR": "Four",
+    "FIVE": "Five",
+    "SIX": "Six"
+  }
+}

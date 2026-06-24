@@ -1,59 +1,61 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
+import { parseCalendarDate } from '@/utils/dayjs';
 import { CreateHomeworkReq } from '@repo/contracts/schemas/Homework/create';
 import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/browser';
 import { HomeworkMapper } from './homework.mapper';
-import { parseCalendarDate } from '@/utils/dayjs';
 
 export class HomeworkService {
   constructor() {}
 
-  create = async (params: { schoolId: string; input: CreateHomeworkReq }) => {
-    const { schoolId, input } = params;
-    // const homework = await prisma.homework.create({
-    //   data: {
-    //     title: input.title,
-    //     content: input.content,
-    //     files: {
-    //       connect: input.files.map((id) => ({
-    //         id,
-    //       })),
-    //     },
-    //     due: input.due,
-    //     assignmentId: input.assignmentId,
-    //     schoolId: schoolId,
-    //     studentHomeworks: {
-    //       create: input.studentIds.map((studentId) => ({
-    //         studentId: studentId,
-    //       })),
-    //     },
-    //   },
-    // });
+  async createHomework(data: CreateHomeworkReq, schoolId: string) {
+    return prisma.$transaction(
+      data.details.map((detail) =>
+        prisma.homework.create({
+          data: {
+            title: data.title,
+            content: data.content,
 
-    const homework = await prisma.homework.createMany({
-      data: input.details.map((detail) => ({
-        title: input.title,
-        content: input.content,
-        files: {
-          connect: input.files.map((id) => ({
-            id,
-          })),
-        },
-        due: parseCalendarDate(detail.due),
-        assignmentId: detail.assignmentId,
-        schoolId: schoolId,
-        studentHomeworks: {
-          create: detail.studentIds.map((studentId) => ({
-            studentId: studentId,
-          })),
-        },
-      })),
-    });
-    return homework;
-  };
+            due: parseCalendarDate(detail.due),
+
+            school: {
+              connect: {
+                id: schoolId,
+              },
+            },
+
+            assignment: {
+              connect: {
+                id: detail.assignmentId,
+              },
+            },
+
+            files: {
+              connect: data.files.map((id) => ({
+                id,
+              })),
+            },
+
+            studentHomeworks: {
+              createMany: {
+                data: detail.studentIds.map((studentId) => ({
+                  studentId,
+                })),
+              },
+            },
+          },
+
+          include: {
+            files: true,
+            studentHomeworks: true,
+          },
+        }),
+      ),
+    );
+  }
 
   update = async (params: { schoolId: string; id: string; input: UpdateHomeworkReq }) => {
     const { schoolId, id, input } = params;

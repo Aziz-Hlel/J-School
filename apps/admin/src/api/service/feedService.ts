@@ -1,14 +1,14 @@
 import { apiRoutes } from '@/api/routes';
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
-import { apiService } from '../apiService';
-import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
 import type { CreateFeedReq } from '@repo/contracts/schemas/Feed/create';
+import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
 import type { UpdateFeedReq } from '@repo/contracts/schemas/Feed/update';
+import { apiService } from '../apiService';
 
 export const feedService = {
   getCursor: async (params: { schoolId: string; cursor: string | null }) =>
     apiService.getThrowable<Cursor<FeedResponse>>(apiRoutes.feed.get(params.schoolId), {
-      params: { cursor: params.cursor, limit: 1 },
+      params: { cursor: params.cursor, limit: 10 },
     }),
 
   // getById: async (schoolId: string, id: string) =>

@@ -268,6 +268,17 @@ class ApiService {
     }
   }
 
+  async patchThrowable<T>(url: string, data: unknown, config?: CustomAxiosRequestOptions): Promise<T> {
+    try {
+      const response = await this.api.patch<T>(url, data, config);
+
+      return response.data;
+    } catch (error: ApiErrorResponse | unknown) {
+      const errorResponse = this.handleApiErrorResponse(error);
+      throw errorResponse;
+    }
+  }
+
   async delete<T>(url: string, config?: CustomAxiosRequestOptions): Promise<ApiResponse<T>> {
     try {
       const response = await this.api.delete<T>(url, config);

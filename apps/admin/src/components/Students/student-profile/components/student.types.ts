@@ -1,8 +1,8 @@
-import type { Gender, Status } from '../api.types';
-import type { UserRole } from '../auth/auth.types';
-import type { ClassroomType } from '../classroom/classroom.types';
-import type { MaritalStatus } from '../parents/parent.types';
-import type { Media } from '../storage/storage.types';
+import type { Gender, StudentStatus as Status, UserRole } from '@repo/contracts/types/enums/enums';
+import type { MediaResponse as Media } from '@repo/contracts/schemas/media/MediaResponse';
+
+export type ClassroomType = 'PRESCHOOL' | 'DAYCARE' | 'PRIMARY_SCHOOL';
+export type MaritalStatus = 'SINGLE' | 'MARRIED' | 'DIVORCED' | 'WIDOWED';
 
 export type Student = {
   id: string;

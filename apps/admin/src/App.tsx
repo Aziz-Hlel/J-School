@@ -2,6 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
+import StudentProfile from './components/Students/student-profile';
 import queryClient from './config/react-qeury';
 import { AuthProvider } from './context/AuthContext';
 import { SchoolIdProvider } from './context/SchoolContext';
@@ -17,7 +18,6 @@ import Sidebar from './pages/Sidebar';
 import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
-import StudentProfile from './components/Students/student-profile';
 
 const App = () => {
   return (
@@ -41,7 +41,7 @@ const App = () => {
                           <Route path='/classrooms' element={<Classrooms />} />
                           <Route path='/students' element={<Outlet />}>
                             <Route index element={<Students />} />
-                            <Route path=':studentId' element={<StudentProfile />} />
+                            <Route path=':studentId/profile' element={<StudentProfile />} />
                           </Route>
                           <Route path='/feed' element={<Feed />} />
                           <Route path='*' element={<NotFound />} />

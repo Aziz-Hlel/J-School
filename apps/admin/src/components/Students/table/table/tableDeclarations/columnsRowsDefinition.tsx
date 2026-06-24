@@ -70,7 +70,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType, TableRowKeys>[] = [
       return (
         <RowContainer className='w-96 truncate whitespace-nowrap'>
           <Link
-            to={`/students/${row.original.uid}`}
+            to={`/students/${row.original.id}/profile`}
             className='hover:text-primary font-semibold underline-offset-4 hover:underline'
           >
             {enName}
@@ -103,7 +103,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType, TableRowKeys>[] = [
       return (
         <RowContainer className='w-96 truncate whitespace-nowrap'>
           <Link
-            to={`/students/${row.original.uid}`}
+            to={`/students/${row.original.id}/profile`}
             className='hover:text-primary font-semibold underline-offset-4 hover:underline'
           >
             {arName}

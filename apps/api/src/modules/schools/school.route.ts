@@ -1,7 +1,8 @@
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
+import requireUserRoles from '@/middleware/requirePermission.middleware';
 import requireRole from '@/middleware/requireRole.middleware';
-import { AccountRole } from '@repo/db/prisma/enums';
+import { AccountRole, UserRole } from '@repo/db/prisma/enums';
 import { Router } from 'express';
 import { SchoolController } from './school.controller';
 
@@ -20,8 +21,15 @@ export const createSchoolRoute = (controller: SchoolController) => {
   router.get(
     '/:schoolId/classrooms/select',
     requireAuth,
-    requireRole(AccountRole.ADMIN),
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(controller.selectClassrooms),
+  );
+
+  router.get(
+    '/:schoolId/parents/select',
+    requireAuth,
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(controller.selectParents),
   );
 
   return router;

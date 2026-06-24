@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { FieldGroup } from '@/components/ui/field';
 import { Spinner } from '@/components/ui/spinner';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -23,7 +23,7 @@ import FormUI from '../shared/FormUI';
 const CreateDialog = () => {
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
-  const schoolId = useAuthStore((state) => state.schoolId);
+  const schoolId = useCurrentSchoolId();
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: [TableData.MODULE_NAME, 'create'],

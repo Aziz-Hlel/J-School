@@ -1,0 +1,142 @@
+{
+  "title": "Puplis",
+  "description": "Manage Pupils",
+  "pages": {
+    "new_student": {
+      "title": "New Pupil",
+      "description": "Fill in the form with the required details below to add a new pupil"
+    },
+    "edit_student": {
+      "title": "Edit Pupil",
+      "description": "Update the details of the pupil below"
+    }
+  },
+  "table": {
+    "filter_students": "Search by student name...",
+    "view_profile": "View profile"
+  },
+  "medical_conditions": {
+    "allergy": "Allergy",
+    "vision": "Vision Impairment",
+    "hearing": "Hearing Impairment",
+    "speech": "Speech Impediments",
+    "chronic": "Chronic Illness",
+    "treatment": "Long Duration Treatment"
+  },
+  "profile": {
+    "joined": "Joined:",
+    "no_class": "No class assigned yet",
+    "quick_details": "Quick Details",
+    "parent_guardian": "Parent/Guardian",
+    "emergency_phone": "Emergency Phone",
+    "home_address": "Home Address",
+    "academic_results": {
+      "title": "Academic Results",
+      "description": "View the latest grades and performance reviews.",
+      "view_full_report": "View Full Report"
+    },
+    "tabs": {
+      "overview": {
+        "title": "Overview",
+        "heading": "Basic Information",
+        "birth_date": "Birth Date",
+        "gender": "Gender",
+        "nationality": "Nationality"
+      },
+      "parents": {
+        "title": "Parents",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "profession": "Profession",
+        "marital_status": "Marital Status"
+      },
+      "health_information": {
+        "title": "Health Information",
+        "medical_conditions": "Medical Conditions",
+        "no_conditions": "No conditions reported.",
+        "no_conditions_desc": "This pupil has no known medical conditions",
+        "vaccination_status": "Vaccination Status",
+        "some_vaccinations_incomplete": "Some vaccinations are incomplete",
+        "emergency_contacts": "Emergency Contacts",
+        "no_emergency_contact": "No emergency contact on file.",
+        "vaccination": {
+          "fully_vaccinated": "Fully Vaccinated",
+          "incomplete": "Incomplete"
+        },
+        "doctor_information": {
+          "title": "Doctor Information",
+          "name": "Doctor Name",
+          "phone": "Doctor Phone",
+          "no_doctor": "No doctor information on file."
+        },
+        "family_members": {
+          "title": "Family Members"
+        }
+      },
+      "documents": {
+        "title": "Documents",
+        "no_documents_uploaded": "No documents uploaded yet."
+      }
+    }
+  },
+  "form": {
+    "primary_details": {
+      "heading": "Primary Details",
+      "description": "Essential pupil identification information",
+      "full_name": "Full Name",
+      "gender": "Gender",
+      "birth_date": "Birth Date",
+      "nationality": "Nationality",
+      "status": "Status",
+      "parents": "Parents"
+    },
+    "academic_status": {
+      "heading": "Academic & Status",
+      "description": "Enrollment, class assignment",
+      "classroom": "Classroom",
+      "enrollment_status": "Enrollment Status"
+    },
+    "medical_information": {
+      "heading": "Medical Information",
+      "description": "Health history and vaccination records",
+      "doctor": {
+        "name": "Doctor Name",
+        "phone": "Doctor Phone"
+      },
+      "vaccination": "Vaccine Progress*",
+      "medical_conditions": {
+        "title": "Medical Conditions",
+        "add_condition": "Add Condition",
+        "condition_type": "Condition Type",
+        "details": "Details",
+        "details_placeholder": "Details about the condition..."
+      },
+      "emergency_contacts": {
+        "title": "Emergency Contacts",
+        "add_contact": "Add Contact",
+        "contact_name": "Contact Name",
+        "phone": "Phone Number"
+      }
+    },
+    "family_members": {
+      "heading": "Family Members",
+      "description": "Additional family members and their contact descriptions",
+      "add_member": "Add Family Member",
+      "relation": "Relation To The Pupil",
+      "no_family_members": "No family members added yet.",
+      "no_family_members_desc": "Add family members to keep track of emergency contacts."
+    },
+    "documents": {
+      "heading": "Documents",
+      "description": "Additional documents for the pupil",
+      "birth_certificate": {
+        "title": "Birth Certificate",
+        "description": "Upload the pupil's birth certificate"
+      },
+      "medical_record": {
+        "title": "Medical Record",
+        "description": "Upload the pupil's medical record"
+      }
+    }
+  }
+}

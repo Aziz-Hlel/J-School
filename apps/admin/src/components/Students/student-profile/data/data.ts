@@ -1,5 +1,5 @@
 import { Mars, Venus, CheckCircle2, Clock, XCircle } from 'lucide-react';
-import type { Gender, Status } from '@/api/api.types';
+import type { Gender, StudentStatus as Status } from '@repo/contracts/types/enums/enums';
 
 export const statusTypes = new Map<Status, { label: string; icon: React.ElementType; className: string }>([
   [
