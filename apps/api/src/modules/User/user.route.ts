@@ -14,12 +14,7 @@ const createUserRouter = (controller: UserController) => {
     requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(controller.create),
   );
-  router.get(
-    '/:userId',
-    requireAuth,
-    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
-    asyncHandler(controller.getById),
-  );
+  router.get('/:userId', requireAuth, asyncHandler(controller.getById));
 
   // * not secure , need user role or is user himself
   router.put('/:userId', requireAuth, asyncHandler(controller.update));

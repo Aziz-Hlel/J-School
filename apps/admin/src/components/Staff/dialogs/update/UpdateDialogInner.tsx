@@ -1,44 +1,56 @@
+import { staffService } from '@/api/service/staffService';
 import { Button } from '@/components/ui/button';
 import { DialogClose, DialogFooter } from '@/components/ui/dialog';
 import { FieldGroup } from '@/components/ui/field';
 import { Spinner } from '@/components/ui/spinner';
+import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../../context/selected-row-provider';
-import { MODULE_NAME } from '../../core/core';
-import FormUI from '../shared/FormUI';
-import type { TableRowType } from '../../core/types';
 import { operations, type schemasType } from '../../core/services';
+import type { TableRowType } from '../../core/types';
+import FormUI from '../shared/FormUI';
 
 const UpdateDialogInner = ({ selectedRow }: { selectedRow: TableRowType }) => {
   const { handleCancel } = useSelectedRow();
 
   const queryClient = useQueryClient();
+  const schoolId = useCurrentSchoolId();
+  const id = selectedRow.id;
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: operations.update.mutationKey({}),
-    mutationFn: operations.update.fn,
+    mutationFn: (data: UpdateSimpleUserRequest) => staffService.update(schoolId, id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [MODULE_NAME], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['staff'], exact: false });
       handleCancel();
     },
   });
 
-  const defaultValues = operations.update.defaultValues(selectedRow);
+  const defaultValues: UpdateSimpleUserRequest = {
+    firstName: selectedRow.firstName,
+    lastName: selectedRow.lastName,
+    gender: selectedRow.gender,
+    dateOfBirth: selectedRow.dateOfBirth,
+    address: selectedRow.address,
+    // phone: selectedRow.phone,
+    // avatarId: selectedRow.,
+  };
 
   const form = useForm<schemasType['update']>({
     resolver: zodResolver(operations.update.schema),
     defaultValues: defaultValues,
   });
 
-  const onSubmit: SubmitHandler<schemasType['update']> = async (payload) => {
+  const onSubmit: SubmitHandler<schemasType['update']> = async (data) => {
     try {
-      await mutateAsync({ id: selectedRow.id, payload });
-      toast.success('Product updated successfully');
-    } catch (error) {
-      toast.error('Failed to update product');
+      await mutateAsync(data);
+      toast.success('Staff updated successfully');
+    } catch {
+      toast.error('Failed to update staff');
     }
   };
 

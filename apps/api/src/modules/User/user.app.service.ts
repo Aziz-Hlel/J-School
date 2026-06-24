@@ -2,6 +2,8 @@ import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { AccountService } from '@/modules/accounts/account.service';
 import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
+import prisma from '@repo/db';
+import { UserMapper } from './user.mapper';
 import { UserService } from './user.service';
 
 type CreateUserParams = {
@@ -44,19 +46,18 @@ export class UserAppService {
   };
 
   getById = async ({ userId, schoolId }: { userId: string; schoolId: string }) => {
-    const user = await this.userService.findById(userId, {
-      include: { roles: true, account: true, parent: true, teacher: true },
+    const queryResult = await prisma.user.findUnique({
+      where: {
+        id: userId,
+        schoolId,
+      },
+      include: { roles: true, account: { select: { email: true, avatar: true } } },
     });
-    if (!user) {
-      throw new NotFoundError('User not found');
-    }
-    if (user.schoolId !== schoolId) {
-      throw new NotFoundError({
-        message: 'User not found',
-        internalLog: `User with id ${userId} exists but not in school ${schoolId}`,
-      });
-    }
-    return user;
+
+    if (!queryResult) throw new NotFoundError('User not found');
+
+    const userResponse = UserMapper.toUserResponseWithAvatar(queryResult);
+    return userResponse;
   };
 
   updateSimpleUser = async ({
