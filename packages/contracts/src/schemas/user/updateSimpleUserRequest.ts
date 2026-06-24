@@ -40,6 +40,8 @@ export const updateSimpleUserRequestSchema = z.object({
     .min(3, 'Address must be at least 3 characters long')
     .max(255, 'Address must be at most 255 characters long')
     .or(z.null()),
+
+  avatarId: z.uuid().nullable(),
 });
 
 export type UpdateSimpleUserRequest = z.infer<typeof updateSimpleUserRequestSchema>;

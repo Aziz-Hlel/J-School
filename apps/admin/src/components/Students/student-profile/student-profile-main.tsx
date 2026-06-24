@@ -4,15 +4,15 @@ import NotFound from '@/pages/NotFound';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-// Shadcn UI Imports
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { ParentResponse } from '@repo/contracts/schemas/parent/parentResponse';
+import type { Gender, StudentStatus, VaccineStatus } from '@repo/contracts/types/enums/enums';
 
-// Icons
 import {
   Award,
   Baby,
@@ -33,82 +33,8 @@ import {
 } from 'lucide-react';
 import AssignParent from './components/assign-parent';
 import ChangeClassrooms from './components/change-classroom';
+import EditStudent from './components/edit-student';
 import UnassignParentDialog from './components/unassign-parent-dialog';
-
-// Locally Defined Types Matching Response
-type LocalizedString = {
-  en: string;
-  ar?: string;
-  fr?: string;
-};
-
-type MediaResponse = {
-  id: string;
-  url: string;
-  key: string;
-  blurHash: string | null;
-  type: 'IMAGE' | 'VIDEO' | 'DOCUMENT';
-};
-
-export type StudentStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING' | 'EXPELLED';
-export type Gender = 'MALE' | 'FEMALE';
-export type VaccineStatus = 'NOT_VACCINATED' | 'PARTIALLY_VACCINATED' | 'FULLY_VACCINATED';
-export type ClassGrade = 'KG' | 'ONE' | 'TWO' | 'THREE' | 'FOUR' | 'FIVE' | 'SIX';
-
-export type EmergencyContactRes = {
-  name: string;
-  phone: string;
-  relation: string;
-};
-
-export type StudentProfileResponse = {
-  id: string;
-  healthInfo: string | null;
-  vaccine: VaccineStatus;
-  allergies: string | null;
-  notes: string | null;
-  emergencyContacts: EmergencyContactRes[];
-};
-
-export type ClassroomResponse = {
-  id: string;
-  name: string;
-  description: string | null;
-  grade: ClassGrade;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type ParentResponse = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string | null;
-  gender: Gender;
-  dateOfBirth: string | null;
-  phone: string | null;
-  cin: string | null;
-  address: string | null;
-  avatar: MediaResponse | null;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type StudentFullDetailsResponse = {
-  id: string;
-  uid: string | null;
-  firstName: LocalizedString;
-  lastName: LocalizedString;
-  gender: Gender;
-  dateOfBirth: string | null;
-  avatar: MediaResponse | null;
-  status: StudentStatus;
-  createdAt: string;
-  updatedAt: string;
-  profile: StudentProfileResponse | null;
-  classroom: ClassroomResponse | null;
-  parents: ParentResponse[];
-};
 
 const StudentProfileMain = ({ studentId }: { studentId: string }) => {
   const schoolId = useCurrentSchoolId();
@@ -412,14 +338,6 @@ const StudentProfileMain = ({ studentId }: { studentId: string }) => {
                     </p>
                   </div>
                 )}
-
-                <Button
-                  variant='outline'
-                  className='border-primary/20 hover:bg-primary/5 text-primary w-full rounded-xl font-semibold'
-                  onClick={() => setIsClassroomOpen(true)}
-                >
-                  Change Classroom Placement
-                </Button>
               </CardContent>
             </Card>
           </div>
@@ -666,6 +584,8 @@ const StudentProfileMain = ({ studentId }: { studentId: string }) => {
           handleCancel={() => setIsUnassignParentOpen(false)}
         />
       )}
+
+      {isEditOpen && <EditStudent setIsEditOpen={setIsEditOpen} student={student} />}
     </div>
   );
 };

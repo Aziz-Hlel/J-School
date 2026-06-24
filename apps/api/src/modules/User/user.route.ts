@@ -21,6 +21,13 @@ const createUserRouter = (controller: UserController) => {
     asyncHandler(controller.getById),
   );
 
+  router.put(
+    '/:userId',
+    requireAuth,
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(controller.update),
+  );
+
   return router;
 };
 

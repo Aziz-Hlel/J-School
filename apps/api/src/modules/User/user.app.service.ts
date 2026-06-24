@@ -1,6 +1,7 @@
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { AccountService } from '@/modules/accounts/account.service';
 import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
+import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { UserService } from './user.service';
 
 type CreateUserParams = {
@@ -56,5 +57,17 @@ export class UserAppService {
       });
     }
     return user;
+  };
+
+  updateSimpleUser = async ({
+    schoolId,
+    userId,
+    input,
+  }: {
+    schoolId: string;
+    userId: string;
+    input: UpdateSimpleUserRequest;
+  }) => {
+    return this.userService.updateSimpleUser({ schoolId, userId, input });
   };
 }

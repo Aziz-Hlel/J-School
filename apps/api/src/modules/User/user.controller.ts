@@ -1,8 +1,9 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
-import { Response } from 'express';
 import getUrlParam from '@/utils/getUrlParam';
-import { UserAppService } from './user.app.service';
 import { createSimpleUserRequestSchema } from '@repo/contracts/schemas/user/createSimpleUserRequest';
+import { updateSimpleUserRequestSchema } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
+import { Response } from 'express';
+import { UserAppService } from './user.app.service';
 
 export class UserController {
   constructor(private readonly userService: UserAppService) {}
@@ -24,7 +25,10 @@ export class UserController {
   };
 
   update = async (req: AuthenticatedRequest, res: Response) => {
-    // * not sure if you gone implment this cuz you ll propebly have separate endpoints for updating specific user based on role like parent or teacher , but again the client could call this endpoint to edit a simple user
-    throw new Error('Not implemented yet');
+    const input = updateSimpleUserRequestSchema.parse(req.body);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const userId = getUrlParam(req, 'userId', { uuid: true });
+    const result = await this.userService.updateSimpleUser({ schoolId, userId, input });
+    res.status(200).json(result);
   };
 }

@@ -116,8 +116,14 @@ export class UserRepo {
           id: userId,
         },
         data: {
-          ...input,
-          dateOfBirth: input.dateOfBirth ? new Date(input.dateOfBirth) : null,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          gender: input.gender,
+          dateOfBirth: parseCalendarDate(input.dateOfBirth),
+          phone: input.phone,
+          cin: input.cin,
+          address: input.address,
+          avatarId: input.avatarId,
         },
       });
       return user;

@@ -4,6 +4,7 @@ import { updateStaffRequestSchema } from '@repo/contracts/schemas/staff/updateSt
 import type { z } from 'zod';
 import { TableData } from './core';
 import { defaultQuery, queryParamsSchema, type TableRowType } from './types';
+import { Gender, UserRole } from '@repo/contracts/types/enums/enums';
 
 export type schemasType = {
   create: z.infer<typeof createStaffRequestSchema>;
@@ -27,17 +28,16 @@ const create = defineOperation({
   mutationKey: () => [TableData.MODULE_NAME, 'create'],
   defaultValues: () => {
     return {
-      email: '',
-      name: '',
-      phone: '',
       firstName: '',
       lastName: '',
-      gender: 'MALE' as const,
+      gender: Gender.MALE,
       dateOfBirth: null,
-      role: 'MANAGER' as const,
-      address: '',
-      password: '',
-      cin: '',
+      phone: null,
+      cin: null,
+      address: null,
+      email: '',
+      password: null,
+      role: UserRole.MANAGER,
     };
   },
 });

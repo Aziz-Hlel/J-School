@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router';
+import { Toaster } from 'sonner';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
 import StudentProfile from './components/Students/student-profile';
@@ -24,6 +25,7 @@ const App = () => {
     <>
       <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
         <QueryClientProvider client={queryClient}>
+          <Toaster />
           <NetworkStatusGuard>
             <Router>
               <ScrollToTop />
