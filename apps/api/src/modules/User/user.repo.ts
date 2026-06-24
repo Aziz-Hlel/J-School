@@ -123,7 +123,11 @@ export class UserRepo {
           phone: input.phone,
           cin: input.cin,
           address: input.address,
-          avatarId: input.avatarId,
+          account: {
+            update: {
+              avatarId: input.avatarId,
+            },
+          },
         },
       });
       return user;

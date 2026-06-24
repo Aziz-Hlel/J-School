@@ -35,8 +35,25 @@ Content-Type: application/json
 ###
 @TeacherId = {{serverLogin.response.body.data.teacher[0].id}}
 @SchoolId = {{serverLogin.response.body.data.teacher[0].school.id}}
+@UserId = {{serverLogin.response.body.data.teacher[0].userId}}
 
 
+###
+# @name updateUserProfile
+PUT {{baseUrl}}/schools/{{SchoolId}}/users/{{UserId}}
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+  "firstName": "John Profile",
+  "lastName": "Doe Profile",
+  "gender": "MALE",
+  "dateOfBirth": "1995-05-15",
+  "phone": "55123522",
+  "cin": "12345679",
+  "address": "123 Main Street, Springfield",
+  "avatarId": null
+}
 
 ###
 # @name getMe
@@ -52,13 +69,14 @@ Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 {
-  "firstName": "John Updated from teacher himself",
-  "lastName": "Doe Updated from teacher himself",
-  "gender": "FEMALE",
+  "firstName": "John Profile",
+  "lastName": "Doe Profile",
+  "gender": "MALE",
   "dateOfBirth": "1995-05-15",
-  "phone": "5551234568",
+  "phone": "55123522",
   "cin": "12345679",
-  "address": "123 Main Street, Springfield"
+  "address": "123 Main Street, Springfield",
+  "avatarId": null
 }
 
 

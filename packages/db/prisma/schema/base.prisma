@@ -8,7 +8,6 @@ enum AccountStatus {
   ACTIVE
   INACTIVE
   DISABLED
-  DELETED
 }
 
 model Account {
