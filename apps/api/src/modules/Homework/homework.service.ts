@@ -11,14 +11,15 @@ import { HomeworkMapper } from './homework.mapper';
 export class HomeworkService {
   constructor() {}
 
-  async create(data: CreateHomeworkReq, schoolId: string) {
+  create = async (params: { input: CreateHomeworkReq; schoolId: string }) => {
+    const { input, schoolId } = params;
     return prisma.$transaction(
-      data.details.map((detail) =>
+      input.details.map((detail) =>
         prisma.homework.create({
           data: {
-            title: data.title,
-            content: data.content,
-
+            title: input.title,
+            content: input.content,
+            type: input.type,
             due: parseCalendarDate(detail.due),
 
             school: {
@@ -34,7 +35,7 @@ export class HomeworkService {
             },
 
             files: {
-              connect: data.files.map((id) => ({
+              connect: input.files.map((id) => ({
                 id,
               })),
             },
@@ -55,7 +56,7 @@ export class HomeworkService {
         }),
       ),
     );
-  }
+  };
 
   update = async (params: { schoolId: string; id: string; input: UpdateHomeworkReq }) => {
     const { schoolId, id, input } = params;
