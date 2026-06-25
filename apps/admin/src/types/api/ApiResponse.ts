@@ -1,4 +1,4 @@
-import type { ApiError } from '@/Api/ApiError';
+import type { ApiError } from '@/api/ApiError';
 import z from 'zod';
 
 export type ApiSuccessResponse<T> = {

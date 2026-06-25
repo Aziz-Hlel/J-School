@@ -1,11 +1,11 @@
-import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
-import { UserService } from '../User/user.service';
-import { StaffMapper } from './staff.mapper';
 import { NotFoundError } from '@/err/service/customErrors';
-import { StaffHelper } from './staff.helper';
-import { StaffQueryParamsTypes } from '@repo/contracts/schemas/staff/staffQueryParams';
-import { Prisma } from '@repo/db/prisma/client';
 import { PageMapper } from '@/helper/page.mapper';
+import { StaffQueryParamsTypes } from '@repo/contracts/schemas/staff/staffQueryParams';
+import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
+import { Prisma } from '@repo/db/prisma/client';
+import { UserService } from '../User/user.service';
+import { StaffHelper } from './staff.helper';
+import { StaffMapper } from './staff.mapper';
 
 export class StaffService {
   constructor(
@@ -22,7 +22,7 @@ export class StaffService {
   findById = async (params: { staffId: string; schoolId: string }) => {
     const { staffId, schoolId } = params;
     const staff = await this.userService.findById(staffId, {
-      include: { roles: true, account: true },
+      include: { account: { include: { avatar: true } }, roles: true },
     });
     if (!staff) {
       throw new NotFoundError('Staff not found');

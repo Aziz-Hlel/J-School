@@ -125,7 +125,6 @@ enum UserStatus {
   ACTIVE
   INACTIVE
   DISABLED
-  DELETED
 }
 
 enum UserRole {

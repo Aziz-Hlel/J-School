@@ -1,4 +1,5 @@
 import type { Gender } from '../../types/enums/enums';
+import type { MediaResponse } from '../media/MediaResponse';
 import type { UserRoleResponse } from '../user/UserRolesResponse';
 
 export type StaffResponse = {
@@ -12,6 +13,7 @@ export type StaffResponse = {
   cin: string | null;
   address: string | null;
   roles: UserRoleResponse[];
+  avatar: MediaResponse | null;
 
   createdAt: string;
   updatedAt: string;

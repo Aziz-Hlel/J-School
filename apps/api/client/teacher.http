@@ -39,23 +39,6 @@ Content-Type: application/json
 
 
 ###
-# @name updateUserProfile
-PUT {{baseUrl}}/schools/{{SchoolId}}/users/{{UserId}}
-Content-Type: application/json
-Authorization: Bearer {{firebase_login.response.body.idToken}}
-
-{
-  "firstName": "John Profile",
-  "lastName": "Doe Profile",
-  "gender": "MALE",
-  "dateOfBirth": "1995-05-15",
-  "phone": "55123522",
-  "cin": "12345679",
-  "address": "123 Main Street, Springfield",
-  "avatarId": null
-}
-
-###
 # @name getMe
 GET {{baseUrl}}/auth/me
 Content-Type: application/json

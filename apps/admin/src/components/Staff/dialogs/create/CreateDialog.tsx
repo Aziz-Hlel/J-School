@@ -1,7 +1,3 @@
-import { useSelectedRow } from '../../context/selected-row-provider';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm, type SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogClose,
@@ -11,13 +7,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useSelectedRow } from '../../context/selected-row-provider';
 
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import { FieldGroup } from '@/components/ui/field';
+import { Spinner } from '@/components/ui/spinner';
 import { toast } from 'sonner';
 import { TableData } from '../../core/core';
-import FormUI from '../shared/FormUI';
 import { operations, type schemasType } from '../../core/services';
 
 const CreateDialog = () => {
@@ -80,13 +79,13 @@ const CreateDialog = () => {
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
-              <FormUI
+              {/* <FormUI
                 form={form}
                 initMedia={null}
                 thumbnailErrors={thumbnailErrors}
                 clearMediaErrors={clearMediaErrors}
                 handleThumbnailUpload={handleThumbnailUpload}
-              />
+              /> */}
             </FieldGroup>
           </div>
           <DialogFooter>
