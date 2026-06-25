@@ -3,6 +3,7 @@ import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { toTime } from '@/utils/dayjs';
+import { toDate } from '@/utils/toDate';
 import { FeesQueryParamsTypes } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
 import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { Page } from '@repo/contracts/schemas/page/Page';
@@ -15,8 +16,9 @@ import { StudentsQueryParamsTypes } from '@repo/contracts/schemas/student/getStu
 import type { StudentWeeklyAttendancesQueryParam } from '@repo/contracts/schemas/student/getWeeklyAttendances';
 import type { StudentWeeklyAttendanceResponse } from '@repo/contracts/schemas/student/getWeeklyAttendancesResponse';
 import { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
-import { UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudentRequest';
+import { UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudent';
 import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
+import { UpdateWithStatusStudentReq } from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
 import { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/client';
@@ -49,13 +51,45 @@ export class StudentService {
     }
   };
 
-  update = async (
-    params: { input: UpdateStudentReq & { status: StudentStatus }; studentId: string; schoolId: string },
+  update = async (params: { input: UpdateStudentReq; studentId: string; schoolId: string }) => {
+    const { input, schoolId, studentId } = params;
+    try {
+      const updatedStudent = await prisma.student.update({
+        where: { id: studentId, schoolId },
+        data: {
+          uid: input.uid,
+          firstName_en: input.firstName.en,
+          lastName_en: input.lastName.en,
+          firstName_ar: input.firstName.ar,
+          lastName_ar: input.lastName.ar,
+          gender: input.gender,
+          dateOfBirth: toDate(input.dateOfBirth),
+          avatarId: input.avatarId,
+          schoolId,
+        },
+        include: { avatar: true, profile: true },
+      });
+
+      const studentResponse = StudentMapper.toResponse(updatedStudent);
+      return studentResponse;
+    } catch (error) {
+      if (error instanceof RepoKnownErrors.ConflictError) {
+        throw new ConflictError({ message: 'Student already exists', cause: error });
+      }
+      if (error instanceof RepoKnownErrors.NotFoundError) {
+        throw new NotFoundError({ message: 'Student not found', cause: error });
+      }
+      throw error;
+    }
+  };
+
+  updateWithStatus = async (
+    params: { input: UpdateWithStatusStudentReq & { status: StudentStatus }; studentId: string; schoolId: string },
     tx?: TX,
   ) => {
     const { input, schoolId, studentId } = params;
     try {
-      const updatedStudent = await this.studentRepo.update({ input, schoolId, studentId }, tx);
+      const updatedStudent = await this.studentRepo.updateWithStatus({ input, schoolId, studentId }, tx);
       const studentResponse = StudentMapper.toResponse(updatedStudent);
       return studentResponse;
     } catch (error) {

@@ -8,6 +8,7 @@ enum AccountStatus {
   ACTIVE
   INACTIVE
   DISABLED
+  DELETED
 }
 
 model Account {
@@ -125,6 +126,7 @@ enum UserStatus {
   ACTIVE
   INACTIVE
   DISABLED
+  DELETED
 }
 
 enum UserRole {

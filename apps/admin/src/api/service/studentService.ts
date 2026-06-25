@@ -4,7 +4,7 @@ import { type CreateStudentReq } from '@repo/contracts/schemas/student/createStu
 import type { StudentFullDetailsResponse } from '@repo/contracts/schemas/student/studentFullDetails';
 import type { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
 import type { StudentWithClassroomResponse } from '@repo/contracts/schemas/student/studentWithClassroomResponse';
-import type { UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudentRequest';
+import type { UpdateWithStatusStudentReq } from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
 import { apiService } from '../apiService';
 import { apiRoutes } from '../routes';
 
@@ -20,7 +20,7 @@ export const studentService = {
   getById: async (schoolId: string, studentId: string) =>
     apiService.getThrowable<StudentResponse>(apiRoutes.student.getById(schoolId, studentId)),
 
-  update: async (schoolId: string, id: string, data: UpdateStudentReq) =>
+  update: async (schoolId: string, id: string, data: UpdateWithStatusStudentReq) =>
     apiService.putThrowable<StudentResponse>(apiRoutes.student.update(schoolId, id), data),
 
   findFullDetails: async (schoolId: string, studentId: string) =>

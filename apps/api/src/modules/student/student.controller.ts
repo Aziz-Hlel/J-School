@@ -1,17 +1,18 @@
 import getUrlParam from '@/utils/getUrlParam';
 import { feesQueryParams } from '@repo/contracts/schemas/Fees/findByStudentIdQueryParam';
 import { homeworkQueryParams } from '@repo/contracts/schemas/Homework/queryParam';
+import { assignStudentToClassroomReqSchema } from '@repo/contracts/schemas/student/assignStudentToClassroomReq';
 import { createStudentRequestSchema } from '@repo/contracts/schemas/student/createStudentRequest';
 import { studentAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getAttendances';
 import { studentsQueryParams } from '@repo/contracts/schemas/student/getStudentsQueryParams';
 import { studentWeeklyAttendanceQueryParamSchema } from '@repo/contracts/schemas/student/getWeeklyAttendances';
-import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudentRequest';
+import { updateStudentWithStatusRequestSchema } from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
 import { createStudentWithParentSchema } from '@repo/contracts/schemas/student/withParent/createWithParent';
+import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudent';
 import { teacherCommentsQueryParams } from '@repo/contracts/schemas/TeacherComments/queryParams';
 import type { Request, Response } from 'express';
 import { StudentService } from './student.service';
 import { CreateStudentWithParentUseCase } from './use-case/createStudentWithParent';
-import { assignStudentToClassroomReqSchema } from '@repo/contracts/schemas/student/assignStudentToClassroomReq';
 
 export class StudentController {
   constructor(
@@ -44,6 +45,17 @@ export class StudentController {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const studentId = getUrlParam(req, 'studentId', { uuid: true });
     const response = await this.studentService.update({ input, schoolId, studentId });
+    res.status(200).json({
+      message: 'Student updated successfully',
+      data: response,
+    });
+  };
+
+  updateStatus = async (req: Request, res: Response) => {
+    const input = updateStudentWithStatusRequestSchema.parse(req.body);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const studentId = getUrlParam(req, 'studentId', { uuid: true });
+    const response = await this.studentService.updateWithStatus({ input, schoolId, studentId });
     res.status(200).json({
       message: 'Student updated successfully',
       data: response,

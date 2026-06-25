@@ -19,6 +19,9 @@ export const createRouter = (studentController: StudentController) => {
   );
 
   router.put('/:studentId', requireAuth, asyncHandler(studentController.update));
+  router.put('/:studentId/with-status', requireAuth, asyncHandler(studentController.update));
+
+  router.put('/:studentId', requireAuth, asyncHandler(studentController.update));
 
   router.get('/', requireAuth, asyncHandler(studentController.findAll));
 

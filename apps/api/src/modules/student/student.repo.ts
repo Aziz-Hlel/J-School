@@ -5,8 +5,8 @@ import { toDate } from '@/utils/toDate';
 import { CreateStudentReq } from '@repo/contracts/schemas/student/createStudentRequest';
 import { CreateStudentWithProfileRequest } from '@repo/contracts/schemas/student/createStudentWithProfile';
 import { StudentAttendancesQueryParam } from '@repo/contracts/schemas/student/getAttendances';
-import { UpdateStudentReq } from '@repo/contracts/schemas/student/updateStudentRequest';
 import { UpdateStudentWithProfileRequest } from '@repo/contracts/schemas/student/updateStudentWithProfileRequest';
+import { UpdateWithStatusStudentReq } from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
 import { StudentStatus } from '@repo/db/prisma/enums';
 
 export class StudentRepo {
@@ -35,8 +35,8 @@ export class StudentRepo {
     }
   };
 
-  update = async (
-    params: { input: UpdateStudentReq & { status: StudentStatus }; studentId: string; schoolId: string },
+  updateWithStatus = async (
+    params: { input: UpdateWithStatusStudentReq & { status: StudentStatus }; studentId: string; schoolId: string },
     tx?: TX,
   ) => {
     try {

@@ -1,8 +1,8 @@
 import z from 'zod';
-import { updateStudentRequestSchema } from './updateStudentRequest';
 import { createStudentProfileRequestSchema } from '../studentProfile/createStudentProfileRequest';
+import { updateStudentWithStatusRequestSchema } from './updateStudentWithStatusRequest';
 
-export const updateStudentWithProfileRequestSchema = updateStudentRequestSchema.and(
+export const updateStudentWithProfileRequestSchema = updateStudentWithStatusRequestSchema.and(
   z.object({ profile: createStudentProfileRequestSchema.nullable() }),
 );
 
