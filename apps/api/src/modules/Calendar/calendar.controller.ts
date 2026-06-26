@@ -18,7 +18,7 @@ export class CalendarController {
 
   update = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
-    const id = getUrlParam(req, 'id');
+    const id = getUrlParam(req, 'calendarId');
     const input = createCalendarReqSchema.parse(req.body);
     const response = await this.service.update({ id, input, schoolId });
     res.status(200).json({
@@ -28,14 +28,14 @@ export class CalendarController {
 
   delete = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
-    const id = getUrlParam(req, 'id');
+    const id = getUrlParam(req, 'calendarId');
     await this.service.delete({ id, schoolId });
     res.send(204);
   };
 
   findById = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
-    const id = getUrlParam(req, 'id');
+    const id = getUrlParam(req, 'calendarId');
     const response = await this.service.findById({ id, schoolId });
     res.status(200).json({
       data: response,
