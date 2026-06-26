@@ -17,6 +17,10 @@ services:
 
     # command: sleep infinity
 
+    ports:
+      - 4070:4070
+      - 4071:4071
+
     networks:
       - default
 
