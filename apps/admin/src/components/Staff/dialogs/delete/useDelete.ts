@@ -1,10 +1,10 @@
+import { ApiError } from '@/api/ApiError';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import { TableData } from '../../core/core';
 import { operations } from '../../core/services';
 import type { TableRowType } from '../../core/types';
-import { ApiError } from '@/Api/ApiError';
 
 const useDelete = ({ selectedRow }: { selectedRow: TableRowType }) => {
   const queryClient = useQueryClient();

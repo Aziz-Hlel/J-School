@@ -16,7 +16,7 @@ import queryClient from '@/config/react-qeury';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { StudentFullDetailsResponse } from '@repo/contracts/schemas/student/studentFullDetails';
-import { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudentRequest';
+import { updateStudentWithStatusRequestSchema } from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
 import { Gender, StudentStatus } from '@repo/contracts/types/enums/enums';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -74,7 +74,7 @@ const EditStudent = ({
     avatarId: student.avatar?.id || null,
   };
   const form = useForm<UpdateStudentReq>({
-    resolver: zodResolver(updateStudentRequestSchema),
+    resolver: zodResolver(updateStudentWithStatusRequestSchema),
     defaultValues: defaultValues,
   });
 

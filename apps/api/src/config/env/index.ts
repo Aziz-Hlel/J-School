@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import z from 'zod';
 import devSchema from './schema.dev';
 import prodSchema from './schema.prod';
-import baseSchema from './schema.base';
 
 dotenv.config();
 

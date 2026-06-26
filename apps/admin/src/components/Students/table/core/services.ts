@@ -1,14 +1,14 @@
 import { studentService } from '@/api/service/studentService';
 import { updateStaffRequestSchema } from '@repo/contracts/schemas/staff/updateStaffRequest';
 import { createStudentRequestSchema } from '@repo/contracts/schemas/student/createStudentRequest';
-import type { updateStudentRequestSchema } from '@repo/contracts/schemas/student/updateStudentRequest';
+import type { updateStudentWithStatusRequestSchema } from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
 import type { z } from 'zod';
 import { TableData } from './core';
 import { defaultQuery, queryParamsSchema, type TableRowType } from './types';
 
 export type schemasType = {
   create: z.infer<typeof createStudentRequestSchema>;
-  update: z.infer<typeof updateStudentRequestSchema>;
+  update: z.infer<typeof updateStudentWithStatusRequestSchema>;
   delete: typeof studentService.delete;
   getPage: typeof studentService.getPage;
 };

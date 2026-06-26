@@ -1,4 +1,4 @@
-import { ApiError } from '@/Api/ApiError';
+import { ApiError } from '@/api/ApiError';
 import { parentStudentService } from '@/api/service/parentStudentService';
 import {
   AlertDialog,

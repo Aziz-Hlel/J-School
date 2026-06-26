@@ -1,0 +1,40 @@
+
+FROM node:22.14.0-alpine AS admin_build
+
+RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
+
+WORKDIR /app
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY packages/config/package.json packages/config/package.json
+COPY packages/env/package.json packages/env/package.json
+COPY packages/db/package.json packages/db/package.json
+COPY packages/contracts/package.json packages/contracts/package.json
+COPY packages/cache/package.json packages/cache/package.json
+COPY apps/admin/package.json apps/admin/package.json
+RUN pnpm install --frozen-lockfile
+
+COPY apps/admin apps/admin
+COPY packages packages
+
+ARG VITE_NODE_ENV
+ARG VITE_API_URL
+ARG VITE_FIREBASE_API_KEY
+ARG VITE_FIREBASE_AUTH_DOMAIN
+ARG VITE_FIREBASE_PROJECT_ID
+ARG VITE_FIREBASE_STORAGE_BUCKET
+ARG VITE_FIREBASE_MESSAGING_SENDER_ID
+ARG VITE_FIREBASE_APP_ID
+ARG VITE_FIREBASE_MEASUREMENT_ID
+
+WORKDIR /app/packages/db
+RUN pnpm dlx prisma generate
+
+WORKDIR /app/apps/admin
+RUN pnpm build
+
+
+FROM caddy:2.6.2-alpine
+
+COPY --from=admin_build /app/apps/admin/dist /srv/admin
+
+COPY ./proxy/Caddyfile.prod /etc/caddy/Caddyfile

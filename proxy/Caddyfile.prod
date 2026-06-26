@@ -1,0 +1,76 @@
+:4070 {
+
+    # -----------------------
+    # Well-known files
+    # -----------------------
+    # handle /.well-known/* {
+    #     root * /srv/.well-known
+    #     uri strip_prefix /.well-known
+    #     file_server
+    # }
+
+
+
+    handle /api/* {
+        reverse_proxy api:3000
+    }
+
+    # -----------------------
+    # Web SPA
+    # -----------------------
+    handle {
+        root * /srv/web
+        encode gzip
+
+        # Match direct .html requests, the root path, or paths without extensions (SPA routes)
+        @html {
+            path *.html /
+            not path *.*
+        }
+
+        # Apply no-cache headers to the matched HTML requests
+        header @html {
+            Cache-Control "no-cache, no-store, must-revalidate"
+            Pragma "no-cache"
+            Expires "0"
+        }
+
+        try_files {path} /index.html
+        file_server
+    }
+
+    log {
+        level ERROR
+        format console
+    }
+}
+
+
+
+:4071 {
+    root * /srv/admin
+    encode gzip
+
+    # Match direct .html requests, the root path, or paths without extensions (SPA routes)
+    @html {
+        path *.html /
+        not path *.*
+    }
+
+    # Apply no-cache headers to the matched HTML requests
+    header @html {
+        Cache-Control "no-cache, no-store, must-revalidate"
+        Pragma "no-cache"
+        Expires "0"
+    }
+
+
+    file_server
+    try_files {path} /index.html
+
+    log {
+		level ERROR
+        format console
+    }
+}
+

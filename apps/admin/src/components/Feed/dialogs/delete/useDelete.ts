@@ -1,3 +1,4 @@
+import { ApiError } from '@/api/ApiError';
 import { feedService } from '@/api/service/feedService';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
@@ -5,7 +6,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import { TableData } from '../../core/core';
-import { ApiError } from '@/Api/ApiError';
 
 const useDelete = ({ selectedRow }: { selectedRow: FeedResponse }) => {
   const queryClient = useQueryClient();

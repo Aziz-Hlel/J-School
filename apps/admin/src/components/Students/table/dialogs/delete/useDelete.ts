@@ -1,4 +1,4 @@
-import { ApiError } from '@/Api/ApiError';
+import { ApiError } from '@/api/ApiError';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../../context/selected-row-provider';

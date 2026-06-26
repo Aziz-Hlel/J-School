@@ -1,0 +1,16 @@
+# docker/backup/Dockerfile
+FROM alpine:latest
+
+RUN apk add --no-cache \
+    postgresql-client \
+    bash \
+    && rm -rf /var/cache/apk/*
+
+COPY ./scripts/backup.sh /backup.sh
+COPY ./scripts/restore.sh /restore.sh
+
+RUN chmod +x /backup.sh /restore.sh
+
+ENTRYPOINT ["/bin/bash"]
+
+CMD ["-c", "while true; do /backup.sh; sleep 86400; done"]

@@ -9,6 +9,9 @@ export default defineConfig({
   },
   clean: true,
   //   skipNodeModulesBundle:false,
+  // noExternal: ['@repo/contracts', '@repo/db', '@repo/cache', '@repo/env'],
+
+  noExternal: [/@repo\/.*/],
 
   unbundle: false,
 });

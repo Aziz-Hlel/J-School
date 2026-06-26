@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   status: 'idle',
   currentUser: null,
   currentRole: UserRole.DIRECTOR,
-  schoolId: 'd74178c0-70c6-43db-af1c-ce804125773d', // ! static
+  schoolId: null, // ! static
 
   bootstrap: async () => {
     set({ status: 'loading' });
@@ -71,6 +71,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
       return;
     }
     set({ status: 'authenticated', currentUser: user, currentRole: UserRole.DIRECTOR });
+
+    // ! not 100% efficace
+    const schoolId = user?.administration[0]?.school?.id;
+    if (schoolId) {
+      set({ schoolId });
+    }
     // ! change this director thing based on the last user profile role stored in localstorage
   },
 
@@ -104,8 +110,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
     const user = await fetchCurrentUser();
 
     set({ currentUser: user });
+
+    // ! not 100% efficace
+    const schoolId = user?.administration[0]?.school?.id;
+    if (schoolId) {
+      set({ schoolId });
+    }
     await jwtTokenManager.refreshAccessToken();
-    set({ status: 'authenticated', currentRole: UserRole.DIRECTOR });
+    set({ status: 'authenticated', currentRole: UserRole.DIRECTOR, schoolId });
     // ! change this director thing based on the last user profile role stored in localstorage
   },
 
@@ -122,6 +134,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
     const user = await fetchCurrentUser();
 
     set({ currentUser: user });
+
+    // ! not 100% efficace
+    const schoolId = user?.administration[0]?.school?.id;
+    if (schoolId) {
+      set({ schoolId });
+    }
     await jwtTokenManager.refreshAccessToken();
     set({ status: 'authenticated' });
   },

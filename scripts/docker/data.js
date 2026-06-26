@@ -30,6 +30,11 @@ export const ENVS_DATA = {
     composeFile: 'compose.prod.yml',
     envFile: '.env.prod',
   },
+  build: {
+    arg: 'build',
+    composeFile: 'compose.build.yml',
+    envFile: '.env.build',
+  },
 };
 
 export const ENVS_ARGS = Object.keys(ENVS_DATA);

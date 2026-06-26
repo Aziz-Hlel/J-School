@@ -7,7 +7,7 @@ const SchoolContext = createContext<string | undefined>(undefined);
 export function SchoolIdProvider() {
   const schoolId = useAuthStore((state) => state.schoolId);
 
-  if (!schoolId) return <> User still not defined when passed through UserProvider Context </>;
+  if (!schoolId) return <> SchoolId still not defined when passed through SchoolProvider Context </>;
 
   return (
     <SchoolContext.Provider value={schoolId}>

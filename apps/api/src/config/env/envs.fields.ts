@@ -88,6 +88,7 @@ export const awsStorageSchema = {
   AWS_ACCESS_KEY_ID: z.string().trim(),
   AWS_SECRET_ACCESS_KEY: z.string().trim(),
   AWS_S3_BUCKET: z.string().trim(),
+  BUCKET_PREFIX: z.string().trim(),
 };
 
 export type AwsStorageSchema = z.infer<z.ZodObject<typeof awsStorageSchema>>;

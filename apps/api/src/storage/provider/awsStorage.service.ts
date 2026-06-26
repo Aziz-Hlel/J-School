@@ -1,7 +1,7 @@
-import { PresignedUrlGenerator } from '@repo/contracts/storage/PresignedUrl';
-import { IStorageProvider } from '../interface/storage.interface';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { PresignedUrlGenerator } from '@repo/contracts/storage/PresignedUrl';
+import { IStorageProvider } from '../interface/storage.interface';
 
 interface AwsStorageConfig {
   AWS_REGION: string;
@@ -38,7 +38,15 @@ export class AwsStorageService implements IStorageProvider {
     return signedUrl;
   }
 
+  private isFakerMedia(fileKey: string): boolean {
+    return fileKey.startsWith(`http://`) || fileKey.startsWith(`https://`);
+  }
+
   getObjectUrl(fileKey: string): string {
+    if (this.isFakerMedia(fileKey)) {
+      return fileKey;
+    }
+
     return `https://${this.config.AWS_CLOUDFRONT_URL}/${fileKey}`;
   }
 }
