@@ -1,6 +1,6 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { calendarNotification } from '@/template/notification/calendar';
-import { parseCalendarDate } from '@/utils/dayjs';
+import { parseCalendarDate, parseTime } from '@/utils/dayjs';
 import { CreateCalendarReq } from '@repo/contracts/schemas/Calendar/create';
 import { CalendarQueryParams } from '@repo/contracts/schemas/Calendar/queryParam';
 import { UpdateCalendarReq } from '@repo/contracts/schemas/Calendar/update';
@@ -20,9 +20,9 @@ export class CalendarService {
         description: input.description,
         type: input.type,
         startDate: parseCalendarDate(input.startDate),
-        startTime: input.startTime,
+        startTime: parseTime(input.startTime),
         endDate: parseCalendarDate(input.endDate),
-        endTime: input.endTime,
+        endTime: parseTime(input.endTime),
       },
     });
     if (input.sendNotification) {
@@ -53,7 +53,13 @@ export class CalendarService {
         schoolId,
       },
       data: {
-        ...input,
+        title: input.title,
+        description: input.description,
+        type: input.type,
+        startDate: parseCalendarDate(input.startDate),
+        startTime: parseTime(input.startTime),
+        endDate: parseCalendarDate(input.endDate),
+        endTime: parseTime(input.endTime),
       },
     });
 
