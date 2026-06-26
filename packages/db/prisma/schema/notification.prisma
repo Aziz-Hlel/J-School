@@ -20,12 +20,12 @@ enum NotificationSourceType {
   CALENDAR
   TEACHER_COMMENT
   EXAM_SCHEDULE
-  HOMEWORK
-
   FEED
-  EXTRA_CURRICULAR // when they send a new post
-  TIMETABLE
+  HOMEWORK
+  EXTRA_CURRICULAR
+
   FEES
+  TIMETABLE // not sure bout this one
   
 }
 

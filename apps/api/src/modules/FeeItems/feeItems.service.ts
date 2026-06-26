@@ -34,6 +34,9 @@ export class FeeItemsService {
       },
     });
 
+    try {
+    } catch (error) {}
+
     const response = FeeItemsMapper.toResponse(createdFeeItem);
 
     return response;
