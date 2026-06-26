@@ -1,10 +1,13 @@
 import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalMediaService } from '@/media/media.service';
+import { globalNotificationService } from '@/modules/Notification/notification.service';
+import { extraCurricularPostNotification } from '@/template/notification/extraCurricularPost';
 import { CursorQueryParams } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import { CreatePostReq } from '@repo/contracts/schemas/extraCurricular/post/create';
 import { PostResponse } from '@repo/contracts/schemas/extraCurricular/post/postResponse';
 import { UpdatePostReq } from '@repo/contracts/schemas/extraCurricular/post/update';
 import prisma from '@repo/db';
+import { NotificationSourceType, NotificationType } from '@repo/db/prisma/browser';
 
 export class ExtraCurricularPostsService {
   create = async (params: { schoolId: string; extraCurricularId: string; post: CreatePostReq }) => {
@@ -19,6 +22,68 @@ export class ExtraCurricularPostsService {
         },
       },
     });
+
+    try {
+      const extraCurricular = await prisma.extraCurricular.findUnique({
+        where: {
+          id: extraCurricularId,
+        },
+        select: {
+          title: true,
+          id: true,
+        },
+      });
+      const activityName = extraCurricular?.title
+        ? {
+            en: extraCurricular.title.en,
+            ar: extraCurricular.title.ar,
+            fr: extraCurricular.title.fr,
+          }
+        : undefined;
+
+      const parents = await prisma.studentExtraCurricular.findMany({
+        where: {
+          extraCurricularId,
+        },
+        select: {
+          student: {
+            select: {
+              parents: {
+                select: {
+                  parent: {
+                    select: {
+                      user: {
+                        select: {
+                          account: {
+                            select: {
+                              id: true,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      await globalNotificationService.create({
+        input: {
+          schoolId,
+          sourceId: createdPost.id,
+          type: {
+            type: NotificationType.GROUP,
+            accountIds: parents.flatMap((x) => x.student.parents).map((x) => x.parent.user.account.id),
+          },
+          title: extraCurricularPostNotification.title(),
+          content: extraCurricularPostNotification.content({ activityName }),
+          sourceType: NotificationSourceType.EXTRA_CURRICULAR,
+        },
+      });
+    } catch (error) {}
     return createdPost;
   };
 
