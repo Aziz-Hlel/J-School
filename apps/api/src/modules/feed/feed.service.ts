@@ -1,13 +1,16 @@
+import { logger } from '@/bootstrap/logger.init';
 import { NotFoundError } from '@/err/service/customErrors';
 import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalMediaService } from '@/media/media.service';
+import { feedNotification } from '@/template/notification/feed';
 import type { CreateFeedReq } from '@repo/contracts/schemas/Feed/create';
 import { FeedResponse } from '@repo/contracts/schemas/Feed/response';
 import type { SyncReactionReq } from '@repo/contracts/schemas/Feed/syncReactionReq';
 import { CursorQueryParams } from '@repo/contracts/schemas/cursor/cursorQueryParams';
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import prisma from '@repo/db';
-import { MediaStatus, ReactionType } from '@repo/db/prisma/enums';
+import { MediaStatus, NotificationSourceType, NotificationType, ReactionType } from '@repo/db/prisma/enums';
+import { globalNotificationService } from '../Notification/notification.service';
 
 export class FeedService {
   create = async (params: { schoolId: string; input: CreateFeedReq }) => {
@@ -45,6 +48,23 @@ export class FeedService {
 
       const successfulCount = updateResults.count;
       const failedCount = inputMedia.length - successfulCount;
+
+      try {
+        await globalNotificationService.create({
+          input: {
+            schoolId,
+            sourceId: createdAnnouncement.id,
+            type: {
+              type: NotificationType.GLOBAL,
+            },
+            title: feedNotification.title(),
+            content: feedNotification.content(),
+            sourceType: NotificationSourceType.FEED,
+          },
+        });
+      } catch (error) {
+        logger.error(error, 'Failed to create feed notification');
+      }
 
       return { failedCount, id: createdAnnouncement.id };
     });

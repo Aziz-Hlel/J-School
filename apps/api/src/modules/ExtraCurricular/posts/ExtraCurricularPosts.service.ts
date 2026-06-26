@@ -1,3 +1,4 @@
+import { logger } from '@/bootstrap/logger.init';
 import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalMediaService } from '@/media/media.service';
 import { globalNotificationService } from '@/modules/Notification/notification.service';
@@ -83,7 +84,9 @@ export class ExtraCurricularPostsService {
           sourceType: NotificationSourceType.EXTRA_CURRICULAR,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      logger.error(error, 'Failed to create extracurricular post notification');
+    }
     return createdPost;
   };
 
