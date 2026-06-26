@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const updateExamScheduleRequestSchema = z.object({
+export const createExamScheduleRequestSchema = z.object({
   examId: z.uuid(),
   assignmentId: z.uuid(),
   date: z
@@ -16,4 +16,4 @@ export const updateExamScheduleRequestSchema = z.object({
     .or(z.null()),
 });
 
-export type UpdateExamScheduleRequest = z.infer<typeof updateExamScheduleRequestSchema>;
+export type CreateExamScheduleRequest = z.infer<typeof createExamScheduleRequestSchema>;

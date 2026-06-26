@@ -19,6 +19,7 @@ export class ClassroomTimetableService {
         classroomId,
       },
       select: {
+        id: true,
         subject: { select: { id: true, name_en: true, name_fr: true, name_ar: true } },
         teacher: { select: { id: true, user: { select: { firstName: true, lastName: true, gender: true } } } },
         timetable: {

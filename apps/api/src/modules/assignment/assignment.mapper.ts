@@ -10,6 +10,7 @@ export class AssignemntMapper {
   static toClassroomTimeTable(
     assignments: AssignmentGetPayload<{
       select: {
+        id: true;
         subject: { select: { id: true; name_en: true; name_fr: true; name_ar: true } };
         teacher: { select: { id: true; user: { select: { firstName: true; lastName: true; gender: true } } } };
         timetable: {
@@ -35,6 +36,7 @@ export class AssignemntMapper {
           day: session.day,
           startTime: toTime(session.startTime),
           endTime: toTime(session.endTime),
+          assignmentId: assignment.id,
           room: session.room,
           subject: {
             id: assignment.subject.id,

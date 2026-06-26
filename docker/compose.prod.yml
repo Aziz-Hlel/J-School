@@ -62,7 +62,7 @@ services:
     depends_on:
       - db
       - redis
-
+      
     networks:
       - default
 

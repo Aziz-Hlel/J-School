@@ -1,11 +1,13 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
+import { homeworkNotification } from '@/template/notification/homework';
 import { parseCalendarDate } from '@/utils/dayjs';
 import { CreateHomeworkReq } from '@repo/contracts/schemas/Homework/create';
 import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
-import { Prisma } from '@repo/db/prisma/browser';
+import { NotificationSourceType, NotificationType, Prisma } from '@repo/db/prisma/browser';
+import { globalNotificationService } from '../Notification/notification.service';
 import { HomeworkMapper } from './homework.mapper';
 
 export class HomeworkService {
@@ -13,49 +15,107 @@ export class HomeworkService {
 
   create = async (params: { input: CreateHomeworkReq; schoolId: string }) => {
     const { input, schoolId } = params;
-    return prisma.$transaction(
-      input.details.map((detail) =>
-        prisma.homework.create({
-          data: {
-            title: input.title,
-            content: input.content,
-            type: input.type,
-            due: parseCalendarDate(detail.due),
+    return prisma.$transaction(async (tx) => {
+      await Promise.all(
+        input.details.map(async (detail) => {
+          const homework = await tx.homework.create({
+            data: {
+              title: input.title,
+              content: input.content,
+              type: input.type,
+              due: parseCalendarDate(detail.due),
 
-            school: {
-              connect: {
-                id: schoolId,
+              school: {
+                connect: {
+                  id: schoolId,
+                },
               },
-            },
 
-            assignment: {
-              connect: {
-                id: detail.assignmentId,
+              assignment: {
+                connect: {
+                  id: detail.assignmentId,
+                },
               },
-            },
 
-            files: {
-              connect: input.files.map((id) => ({
-                id,
-              })),
-            },
-
-            studentHomeworks: {
-              createMany: {
-                data: detail.studentIds.map((studentId) => ({
-                  studentId,
+              files: {
+                connect: input.files.map((id) => ({
+                  id,
                 })),
               },
-            },
-          },
 
-          include: {
-            files: true,
-            studentHomeworks: true,
-          },
+              studentHomeworks: {
+                createMany: {
+                  data: detail.studentIds.map((studentId) => ({
+                    studentId,
+                  })),
+                },
+              },
+            },
+
+            include: {
+              files: true,
+              studentHomeworks: true,
+            },
+          });
+
+          try {
+            const parents = await prisma.studentParents.findMany({
+              where: {
+                student: {
+                  classroomId: detail.assignmentId,
+                },
+              },
+              select: {
+                parent: {
+                  select: {
+                    user: {
+                      select: {
+                        account: {
+                          select: {
+                            id: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            });
+
+            const subject = await prisma.subject.findUnique({
+              where: {
+                id: detail.assignmentId,
+              },
+              select: {
+                name_en: true,
+                name_ar: true,
+                name_fr: true,
+              },
+            });
+            const subjectNames = subject
+              ? {
+                  en: subject.name_en,
+                  ar: subject.name_ar,
+                  fr: subject.name_fr,
+                }
+              : undefined;
+            await globalNotificationService.create({
+              input: {
+                schoolId,
+                sourceId: homework.id,
+                type: {
+                  type: NotificationType.GROUP,
+                  accountIds: parents.map((x) => x.parent.user.account.id),
+                },
+                title: homeworkNotification.title(),
+                content: homeworkNotification.content({ subjectNames }),
+                sourceType: NotificationSourceType.HOMEWORK,
+              },
+            });
+          } catch (error) {}
         }),
-      ),
-    );
+      );
+    });
   };
 
   update = async (params: { schoolId: string; id: string; input: UpdateHomeworkReq }) => {

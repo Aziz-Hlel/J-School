@@ -1,3 +1,4 @@
+import { logger } from '@/bootstrap/logger.init';
 import { NotFoundError } from '@/err/service/customErrors';
 import { calendarNotification } from '@/template/notification/calendar';
 import { parseCalendarDate, parseTime } from '@/utils/dayjs';
@@ -25,19 +26,23 @@ export class CalendarService {
         endTime: parseTime(input.endTime),
       },
     });
-    if (input.sendNotification) {
-      globalNotificationService.create({
-        input: {
-          schoolId,
-          sourceId: createdCalendar.id,
-          type: {
-            type: NotificationType.GLOBAL,
+    try {
+      if (input.sendNotification) {
+        globalNotificationService.create({
+          input: {
+            schoolId,
+            sourceId: createdCalendar.id,
+            type: {
+              type: NotificationType.GLOBAL,
+            },
+            title: calendarNotification.title(),
+            content: calendarNotification.content(),
+            sourceType: NotificationSourceType.CALENDAR,
           },
-          title: calendarNotification.title(),
-          content: calendarNotification.content(),
-          sourceType: NotificationSourceType.CALENDAR,
-        },
-      });
+        });
+      }
+    } catch (error) {
+      logger.error(error, 'Failed to send notification from calendar');
     }
 
     const response = CalendarMapper.toResponse(createdCalendar);

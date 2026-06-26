@@ -1,11 +1,14 @@
+import { logger } from '@/bootstrap/logger.init';
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
+import { teacherCommentNotification } from '@/template/notification/teacherComment';
 import { CreateTeacherCommentsReq } from '@repo/contracts/schemas/TeacherComments/create';
 import type { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/TeacherComments/queryParams';
 import { ReplyToCommentReq } from '@repo/contracts/schemas/TeacherComments/replyToComment';
 import { UpdateTeacherCommentsReq } from '@repo/contracts/schemas/TeacherComments/update';
 import prisma from '@repo/db';
-import { Prisma } from '@repo/db/prisma/client';
+import { NotificationSourceType, NotificationType, Prisma } from '@repo/db/prisma/client';
+import { globalNotificationService } from '../Notification/notification.service';
 import { TeacherCommentsMapper } from './teacherComments.mapper';
 
 export class TeacherCommentsService {
@@ -15,7 +18,7 @@ export class TeacherCommentsService {
     const { schoolId, teacherId, input } = params;
 
     const queries = input.studentIds.map(async (studentId) => {
-      await prisma.teacherComment.create({
+      const createdTeacherComment = await prisma.teacherComment.create({
         data: {
           studentId,
           teacherId,
@@ -25,6 +28,55 @@ export class TeacherCommentsService {
           canParentReply: input.canParentReply,
         },
       });
+      try {
+        const teacher = await prisma.teacher.findUnique({
+          where: {
+            id: teacherId,
+          },
+          include: {
+            user: true,
+          },
+        });
+
+        const teacherFullName = teacher ? `${teacher?.user.firstName} ${teacher?.user.lastName}` : undefined;
+
+        const parentsAccountIds = await prisma.studentParents.findMany({
+          where: {
+            studentId,
+          },
+          select: {
+            parent: {
+              select: {
+                user: {
+                  select: {
+                    account: {
+                      select: {
+                        id: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        globalNotificationService.create({
+          input: {
+            schoolId,
+            sourceId: createdTeacherComment.id,
+            type: {
+              type: NotificationType.GROUP,
+              accountIds: parentsAccountIds.map((x) => x.parent.user.account.id),
+            },
+            title: teacherCommentNotification.title(),
+            content: teacherCommentNotification.content({ teacherFullName }),
+            sourceType: NotificationSourceType.TEACHER_COMMENT,
+          },
+        });
+      } catch (error) {
+        logger.error(error, 'Failed to send notification from teacherComment');
+      }
     });
     await Promise.all(queries);
     return true;

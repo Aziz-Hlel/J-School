@@ -18,6 +18,9 @@ services:
     ports:
       - 443:443
 
+    networks:
+      - default
+
     # command: sleep infinity
 
   api:
@@ -58,6 +61,10 @@ services:
       - db
       - redis
 
+    networks:
+      - default
+
+
   db:
     image: postgres:15
     environment:
@@ -67,6 +74,10 @@ services:
       POSTGRES_PORT: ${DB_PORT}
     volumes:
       - db_volume:/var/lib/postgresql/data
+
+    networks:
+      - default
+
 
   db-backup:
     build:
@@ -86,6 +97,10 @@ services:
         condition: service_started
     restart: unless-stopped
 
+    networks:
+      - default
+
+
   redis:
     image: redis:latest
     environment:
@@ -94,45 +109,15 @@ services:
       - redis_volume:/data
     command: ['redis-server', '--requirepass', '${REDIS_PASSWORD}', '--appendonly', 'yes']
 
-  # minio:
-  #   image: quay.io/minio/minio:latest
-  #   ports:
-  #     - ${MINIO_PORT}:9000
-  #     - ${MINIO_UI_PORT:?MINIO_UI_PORT is required}:9001 # Web UI
-  #   environment:
-  #     MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-  #     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-  #   volumes:
-  #     - minio_volume:/data
-  #   command: server /data --console-address ":9001"
+    networks:
+      - default
 
-  # minio-init:
-  #   image: minio/mc
-  #   depends_on:
-  #     minio:
-  #       condition: service_started
-
-  #   environment:
-  #     MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-  #     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-  #     MINIO_PORT: ${MINIO_PORT}
-  #     MINIO_BUCKET: ${MINIO_BUCKET}
-
-  #   volumes:
-  #     - ${PROJECT_ROOT}/scripts/init_minio.sh:/init_minio.sh:ro
-  #     - ${PROJECT_ROOT}/seed/minio:/seed:ro
-
-  #   entrypoint: ['/bin/sh', '/init_minio.sh']
-
-  # mailpit:
-  #   image: axllent/mailpit
-  #   restart: unless-stopped
-  #   ports:
-  #     - ${SMTP_UI_PORT:?SMTP_UI_PORT is required}:8025 # Web UI
-  #   expose:
-  #     - 1025
 
 volumes:
   db_volume:
   redis_volume:
   minio_volume:
+
+networks:
+  default:
+    name: jschool-stage-network

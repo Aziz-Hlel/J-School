@@ -42,7 +42,7 @@ export class NotificationService {
         targeting:
           input.type.type === NotificationType.GLOBAL
             ? { type: 'ALL' }
-            : { type: 'GROUP', userIds: input.type.userIds },
+            : { type: 'GROUP', userIds: input.type.accountIds },
         schedule: {
           scheduleType: 'DELAYED',
           delaySeconds: 0,

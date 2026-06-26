@@ -1,11 +1,11 @@
-import { TX } from '@/types/prisma/PrismaTransaction';
-import { AssignmentRepo } from './assignment.repo';
 import { prisma } from '@/bootstrap/db.init';
-import { Prisma } from '@repo/db/prisma/client';
 import { PrismaErrorCode } from '@/err/repo/PrismaErrorCode';
-import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
 import { NotFoundError } from '@/err/service/customErrors';
+import { TX } from '@/types/prisma/PrismaTransaction';
+import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
+import { Prisma } from '@repo/db/prisma/client';
 import { AssignemntMapper } from './assignment.mapper';
+import { AssignmentRepo } from './assignment.repo';
 
 export class AssignmentService {
   constructor(private readonly repo: AssignmentRepo) {}
@@ -88,22 +88,23 @@ export class AssignmentService {
   getClassroomTimeTable = async (params: { schoolId: string; classroomId: string }, tx?: TX) => {
     const { schoolId, classroomId } = params;
     const client = tx ?? prisma;
-    const classroom = await client.assignment.findMany({
+    const assigments = await client.assignment.findMany({
       where: {
         schoolId,
         classroomId,
       },
       select: {
+        id: true,
         subject: { select: { id: true, name_en: true, name_fr: true, name_ar: true } },
         teacher: { select: { id: true, user: { select: { firstName: true, lastName: true, gender: true } } } },
         timetable: {
-          select: { id: true, day: true, startTime: true, endTime: true },
+          select: { id: true, day: true, startTime: true, endTime: true, room: true },
           orderBy: { startTime: 'asc' },
         },
       },
     });
 
-    const timeTableResponse = AssignemntMapper.toClassroomTimeTable(classroom);
+    const timeTableResponse = AssignemntMapper.toClassroomTimeTable(assigments);
     return timeTableResponse;
   };
 }

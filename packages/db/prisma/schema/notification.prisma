@@ -20,6 +20,13 @@ enum NotificationSourceType {
   CALENDAR
   TEACHER_COMMENT
   FEED
+  EXAM_SCHEDULE
+
+  HOMEWORK
+  EXTRA_CURRICULAR // when they send a new post
+  TIMETABLE
+  FEES
+  
 }
 
 model Notification {
