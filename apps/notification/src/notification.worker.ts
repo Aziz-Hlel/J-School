@@ -22,6 +22,9 @@ export class NotificationWorker implements IWorker<NotificationJob> {
 
     worker.on('completed', (job) => {
       console.log(`✅ Job id: ${job.id} completed`);
+      console.log('job info ', job);
+      console.log('-----');
+      console.log('\n');
     });
 
     worker.on('failed', (job, err) => {

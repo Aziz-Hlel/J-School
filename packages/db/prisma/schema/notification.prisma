@@ -23,8 +23,8 @@ enum NotificationSourceType {
   FEED
   HOMEWORK
   EXTRA_CURRICULAR
-
   FEES
+
   TIMETABLE // not sure bout this one
   
 }

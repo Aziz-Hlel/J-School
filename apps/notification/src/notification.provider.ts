@@ -138,12 +138,12 @@ export class NotificationProvider implements INotificationProvider {
           // small_icon: 'ic_notification',
           // large_icon:
           //   'https://fastly.picsum.photos/id/237/200/200.jpg?hmac=zHUGikXUDyLCCmvyww1izLK3R3k8oRYBRiTizZEdyfI',
-          big_picture:
-            'https://fastly.picsum.photos/id/237/200/200.jpg?hmac=zHUGikXUDyLCCmvyww1izLK3R3k8oRYBRiTizZEdyfI',
+          // big_picture:
+          //   'https://fastly.picsum.photos/id/237/200/200.jpg?hmac=zHUGikXUDyLCCmvyww1izLK3R3k8oRYBRiTizZEdyfI',
 
-          ios_attachments: {
-            video: 'https://d23gfwidwdh7y.cloudfront.net/events/globe_test_ios_video_noti.mp4',
-          },
+          // ios_attachments: {
+          //   video: 'https://d23gfwidwdh7y.cloudfront.net/events/globe_test_ios_video_noti.mp4',
+          // },
           mutable_content: true,
         },
         {

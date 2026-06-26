@@ -1,16 +1,19 @@
+import { logger } from '@/bootstrap/logger.init';
 import { PrismaErrorCode } from '@/err/repo/PrismaErrorCode';
 import { NotFoundError } from '@/err/service/customErrors';
+import { feeItemNotification } from '@/template/notification/feeItem';
 import { toDate } from '@/utils/toDate';
 import { CreateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/create';
 import { UpdateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/update';
 import prisma from '@repo/db';
-import { Prisma } from '@repo/db/prisma/client';
+import { NotificationSourceType, NotificationType, Prisma } from '@repo/db/prisma/client';
+import { globalNotificationService } from '../Notification/notification.service';
 import { FeeItemsMapper } from './feeItems.mapper';
 
 export class FeeItemsService {
   constructor() {}
   create = async (params: { input: CreateFeeItemsReq; schoolId: string; feeId: string }) => {
-    const { input, feeId } = params;
+    const { input, feeId, schoolId } = params;
 
     const createdFeeItem = await prisma.feeItem.create({
       data: {
@@ -35,7 +38,53 @@ export class FeeItemsService {
     });
 
     try {
-    } catch (error) {}
+      const sutdentFeeQuery = await prisma.fees.findUnique({
+        where: {
+          id: feeId,
+        },
+        select: {
+          studentId: true,
+        },
+      });
+      if (!sutdentFeeQuery) throw new Error('Student id not found by fee id');
+
+      const parentAccountIds = await prisma.studentParents.findMany({
+        where: {
+          studentId: sutdentFeeQuery.studentId,
+        },
+        select: {
+          parent: {
+            select: {
+              user: {
+                select: {
+                  account: {
+                    select: {
+                      id: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      await globalNotificationService.create({
+        input: {
+          schoolId,
+          sourceId: createdFeeItem.id,
+          type: {
+            type: NotificationType.GROUP,
+            accountIds: parentAccountIds.map((x) => x.parent.user.account.id),
+          },
+          title: feeItemNotification.title(),
+          content: feeItemNotification.content(),
+          sourceType: NotificationSourceType.FEES,
+        },
+      });
+    } catch (error) {
+      logger.error(error, 'Failed to create fee item notification');
+    }
 
     const response = FeeItemsMapper.toResponse(createdFeeItem);
 
