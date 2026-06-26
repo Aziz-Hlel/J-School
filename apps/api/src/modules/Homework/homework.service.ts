@@ -59,10 +59,19 @@ export class HomeworkService {
           });
 
           try {
+            const assigmnt = await prisma.assignment.findUnique({
+              where: {
+                id: detail.assignmentId,
+              },
+              select: {
+                classroomId: true,
+              },
+            });
+            if (!assigmnt?.classroomId) throw new Error('Classroom not found');
             const parents = await prisma.studentParents.findMany({
               where: {
                 student: {
-                  classroomId: detail.assignmentId,
+                  classroomId: assigmnt.classroomId,
                 },
               },
               select: {
