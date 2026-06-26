@@ -7,7 +7,7 @@ import { TimetableService } from './timetable.service';
 export class TimetableController {
   constructor(private readonly timetableService: TimetableService) {}
 
-  async create(req: Request, res: Response) {
+  create = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const assignmentId = getUrlParam(req, 'assignmentId');
 
@@ -17,9 +17,9 @@ export class TimetableController {
       message: 'Timetable created successfully',
       data: timetableResponse,
     });
-  }
+  };
 
-  async update(req: Request, res: Response) {
+  update = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const timetableId = getUrlParam(req, 'timetableId');
 
@@ -29,9 +29,9 @@ export class TimetableController {
       message: 'Timetable updated successfully',
       data: timetableResponse,
     });
-  }
+  };
 
-  async delete(req: Request, res: Response) {
+  delete = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const timetableId = getUrlParam(req, 'timetableId');
 
@@ -39,5 +39,5 @@ export class TimetableController {
     res.status(200).json({
       message: 'Timetable deleted successfully',
     });
-  }
+  };
 }
