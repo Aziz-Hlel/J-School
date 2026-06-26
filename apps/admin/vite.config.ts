@@ -9,8 +9,8 @@ function getPort(mode: string): number | undefined {
   const NODE_ENV = env.VITE_NODE_ENV;
   if (!NODE_ENV) throw new Error(`❌ Missing required environment variable: VITE_NODE_ENV`);
 
-  if (!['dev', 'build', 'stage', 'prod'].includes(NODE_ENV))
-    throw new Error(`❌ Invalid NODE_ENV: "${NODE_ENV}". Must be one of "dev", "build", "stage", "prod"`);
+  if (!['dev', 'build', 'stage', 'production'].includes(NODE_ENV))
+    throw new Error(`❌ Invalid NODE_ENV: "${NODE_ENV}". Must be one of "dev", "build", "stage", "production"`);
 
   const value = env.VITE_ADMIN_PORT;
 
