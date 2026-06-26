@@ -8,9 +8,9 @@ export type GetClassroomTimetableResponse = Record<
     startTime: string;
     endTime: string;
     room: string | null;
-    assignmentId: string;
     subject: {
       id: string;
+      assignmentId: string;
       name: {
         en: string;
         fr: string;

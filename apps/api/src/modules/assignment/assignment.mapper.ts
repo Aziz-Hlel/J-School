@@ -36,10 +36,10 @@ export class AssignemntMapper {
           day: session.day,
           startTime: toTime(session.startTime),
           endTime: toTime(session.endTime),
-          assignmentId: assignment.id,
           room: session.room,
           subject: {
             id: assignment.subject.id,
+            assignmentId: assignment.id,
             name: {
               en: assignment.subject.name_en,
               fr: assignment.subject.name_fr,
