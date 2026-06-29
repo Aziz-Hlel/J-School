@@ -3,6 +3,7 @@ import type { MediaResponse } from '../../media/MediaResponse';
 
 export type ClassroomExamScheduleResponse = {
   id: string;
+  examId: string;
   day: string | null;
   endTime: string | null;
   startTime: string | null;

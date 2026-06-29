@@ -45,7 +45,8 @@ export class ClassroomManagementMapper {
     }>,
   ): ClassroomExamScheduleResponse {
     return {
-      id: examSchedule.exam.id,
+      id: examSchedule.id,
+      examId: examSchedule.exam.id,
       day: examSchedule.day?.toISOString() ?? null,
       startTime: toTime(examSchedule.startTime) ?? null,
       endTime: toTime(examSchedule.endTime) ?? null,
