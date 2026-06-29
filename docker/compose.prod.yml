@@ -56,8 +56,8 @@ services:
       BUCKET_PREFIX: ${BUCKET_PREFIX}
       AWS_CLOUDFRONT_URL: ${AWS_CLOUDFRONT_URL}
 
-    command: sh -c "pnpm dlx prisma migrate deploy && pnpm start"
-    # command: sleep infinity
+    # command: sh -c "pnpm dlx prisma migrate deploy && pnpm start"
+    command: sleep infinity
 
     depends_on:
       - db
