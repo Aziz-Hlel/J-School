@@ -115,4 +115,25 @@ export class ClassroomService {
     });
     return pageResponse;
   };
+
+  findAllWithStudents = async (params: { schoolId: string }) => {
+    const { schoolId } = params;
+    const query = await prisma.classroom.findMany({
+      where: {
+        schoolId,
+      },
+      orderBy: {
+        grade: 'asc',
+      },
+      include: {
+        students: {
+          include: {
+            avatar: true,
+          },
+        },
+      },
+    });
+    const response = query.map(ClassroomMapper.toClassWithStudentsSelectRes);
+    return response;
+  };
 }

@@ -53,4 +53,13 @@ export class ClassroomController {
       ...response,
     });
   };
+
+  findAllWithStudents = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const data = await this.classroomService.findAllWithStudents({ schoolId });
+    res.status(200).json({
+      message: 'Classes found successfully',
+      data,
+    });
+  };
 }
