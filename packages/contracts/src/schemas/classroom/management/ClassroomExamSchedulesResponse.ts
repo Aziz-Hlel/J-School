@@ -1,4 +1,5 @@
-import type { SubjectDomain } from '@repo/db/prisma/browser';
+import type { Gender, SubjectDomain } from '@repo/db/prisma/browser';
+import type { MediaResponse } from '../../media/MediaResponse';
 
 export type ClassroomExamScheduleResponse = {
   id: string;
@@ -19,4 +20,11 @@ export type ClassroomExamScheduleResponse = {
     };
     domain: SubjectDomain;
   };
+  teacher: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatar: MediaResponse | null;
+    gender: Gender;
+  } | null;
 };

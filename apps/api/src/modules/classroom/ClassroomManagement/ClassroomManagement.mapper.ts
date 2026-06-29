@@ -35,7 +35,14 @@ export class ClassroomManagementMapper {
   }
 
   static toExamScheduleResponse(
-    examSchedule: Prisma.ExamScheduleGetPayload<{ include: { exam: { include: { subject: true } } } }>,
+    examSchedule: Prisma.ExamScheduleGetPayload<{
+      include: {
+        exam: { include: { subject: true } };
+        assignement: {
+          include: { teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } } };
+        };
+      };
+    }>,
   ): ClassroomExamScheduleResponse {
     return {
       id: examSchedule.exam.id,
@@ -56,6 +63,15 @@ export class ClassroomManagementMapper {
         },
         domain: examSchedule.exam.subject.domain,
       },
+      teacher: examSchedule.assignement.teacher
+        ? {
+            id: examSchedule.assignement.teacher.id,
+            firstName: examSchedule.assignement.teacher.user.firstName,
+            lastName: examSchedule.assignement.teacher.user.lastName,
+            avatar: globalMediaService.toMediaRes(examSchedule.assignement.teacher.user.account.avatar),
+            gender: examSchedule.assignement.teacher.user.gender,
+          }
+        : null,
     };
   }
 }

@@ -152,6 +152,18 @@ export const teacherAssignmentSeedData = [
     classroomName: classroomsSeedData.B.name,
     grade: ClassGrade.SIX,
   },
+  {
+    teacherEmail: teacherSeedData.director1.email,
+    subjectNameEn: subjectsGradeSix.math.subject.name.en,
+    classroomName: classroomsSeedData.A.name,
+    grade: ClassGrade.SIX,
+  },
+  {
+    teacherEmail: teacherSeedData.director1.email,
+    subjectNameEn: subjectsGradeSix.science.subject.name.en,
+    classroomName: classroomsSeedData.A.name,
+    grade: ClassGrade.SIX,
+  },
 ];
 
 export const extraCurricularSeedData = {
@@ -329,6 +341,10 @@ export const extraCurricularAssignmentSeedData = [
   {
     extraCurricular: extraCurricularSeedData.english_6eme,
     teacher: teacherSeedData.teacher2,
+  },
+  {
+    extraCurricular: extraCurricularSeedData.tripHammamet,
+    teacher: teacherSeedData.teacher1,
   },
 ];
 
@@ -523,5 +539,65 @@ export const homeworkSeedData = [
 //     week:toWeekNbr(),
 //     timetable:timetableSeedData[0],
 
-//   }
 // ]
+
+type ExamScheduleSeedData = {
+  [key in ClassroomName]?: {
+    classroomName: ClassroomName;
+    examSchedules: {
+      subjectNameEn: SubjectNameEn;
+      examNameEn: string;
+      day: string;
+      startTime: string;
+      endTime: string;
+    }[];
+  };
+};
+
+export const examScheduleSeedData: ExamScheduleSeedData = {
+  A: {
+    classroomName: 'A',
+    examSchedules: [
+      {
+        subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
+        examNameEn: subjectsGradeSix.arabic.exams[0]!.name.en,
+        day: '2026-06-25',
+        startTime: '08:00',
+        endTime: '10:00',
+      },
+      {
+        subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
+        examNameEn: subjectsGradeSix.arabic.exams[1]!.name.en,
+        day: '2026-06-25',
+        startTime: '10:30',
+        endTime: '12:30',
+      },
+      {
+        subjectNameEn: subjectsGradeSix.math.subject.name.en,
+        examNameEn: subjectsGradeSix.math.exams[0]!.name.en,
+        day: '2026-06-26',
+        startTime: '13:00',
+        endTime: '15:00',
+      },
+      {
+        subjectNameEn: subjectsGradeSix.french.subject.name.en,
+        examNameEn: subjectsGradeSix.french.exams[0]!.name.en,
+        day: '2026-06-27',
+        startTime: '10:30',
+        endTime: '12:30',
+      },
+    ],
+  },
+  B: {
+    classroomName: 'B',
+    examSchedules: [
+      {
+        subjectNameEn: subjectsGradeSix.math.subject.name.en,
+        examNameEn: subjectsGradeSix.math.exams[0]!.name.en,
+        day: '2026-06-26',
+        startTime: '08:00',
+        endTime: '10:00',
+      },
+    ],
+  },
+} as const satisfies ExamScheduleSeedData;

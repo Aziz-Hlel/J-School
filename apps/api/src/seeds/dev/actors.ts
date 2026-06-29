@@ -12,6 +12,11 @@ export const userSeedData = {
     email: 'director2@fake.com',
     role: UserRole.DIRECTOR,
   },
+  director3: {
+    id: genUuid('director1'),
+    email: 'director1@fake.com',
+    role: UserRole.MANAGER,
+  },
   manager1: {
     id: genUuid('manager1'),
     email: 'manager1@fake.com',
@@ -45,6 +50,12 @@ export const userSeedData = {
 };
 
 export const teacherSeedData = {
+  director1: {
+    id: genUuid('director1'),
+    userId: '019177b5-5d7e-5297-9541-f97957e77f53',
+    email: 'director1@fake.com',
+    role: UserRole.TEACHER,
+  },
   teacher1: {
     id: genUuid('teacher1'),
     userId: genUuid('teacher1'),
@@ -78,6 +89,12 @@ export const teacherSeedData = {
 };
 
 const parentSeed = {
+  director1: {
+    id: genUuid('director1'),
+    userId: '019177b5-5d7e-5297-9541-f97957e77f53',
+    email: 'director1@fake.com',
+    role: UserRole.PARENT,
+  },
   parent1: {
     id: genUuid('parent1'),
     userId: genUuid('parent1'),
@@ -119,12 +136,20 @@ export const studentSeedData = {
 
 export const parentStudentSeedData = [
   {
+    parentId: parentSeedData.director1.id,
+    studentId: studentSeedData.student1.id,
+  },
+  {
     parentId: parentSeedData.parent1.id,
     studentId: studentSeedData.student1.id,
   },
   {
     parentId: parentSeedData.parent1.id,
     studentId: studentSeedData.student2.id,
+  },
+  {
+    parentId: parentSeedData.director1.id,
+    studentId: studentSeedData.student3.id,
   },
   {
     parentId: parentSeedData.parent2.id,

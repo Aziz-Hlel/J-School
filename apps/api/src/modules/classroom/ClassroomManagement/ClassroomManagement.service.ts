@@ -2,6 +2,7 @@ import { BadRequestError } from '@/err/service/customErrors';
 import { globalMediaService } from '@/media/media.service';
 import { StudentMapper } from '@/modules/student/student.mapper';
 import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
+import type { ClassroomExamsRes } from '@repo/contracts/schemas/classroom/management/ClassroomExamsRes';
 import type { GetClassroomAttendancesQuery } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
 import type { ClassroomAttendancesResponse } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesResponse';
 import prisma from '@repo/db';
@@ -55,6 +56,23 @@ export class ClassroomManagementService {
         exam: {
           include: {
             subject: true,
+          },
+        },
+        assignement: {
+          include: {
+            teacher: {
+              include: {
+                user: {
+                  include: {
+                    account: {
+                      include: {
+                        avatar: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -178,5 +196,41 @@ export class ClassroomManagementService {
     const studentsResponse = students.map(StudentMapper.toResponse);
 
     return studentsResponse;
+  };
+
+  selectClassroomExams = async (params: { schoolId: string; classroomId: string }) => {
+    const classroomExamQuery = await prisma.assignment.findMany({
+      where: {
+        schoolId: params.schoolId,
+        classroomId: params.classroomId,
+      },
+      include: {
+        subject: {
+          include: {
+            exams: true,
+          },
+        },
+      },
+    });
+
+    const respone: ClassroomExamsRes[] = classroomExamQuery.flatMap((assignment) =>
+      assignment.subject.exams.map((exam) => ({
+        id: exam.id,
+        assignmentId: assignment.id,
+        name: {
+          en: exam.name_en,
+          ar: exam.name_ar,
+        },
+        subject: {
+          id: assignment.subject.id,
+          name: {
+            en: assignment.subject.name_en,
+            ar: assignment.subject.name_ar,
+          },
+        },
+      })),
+    );
+
+    return respone;
   };
 }

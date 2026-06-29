@@ -58,4 +58,14 @@ export class ClassroomManagementController {
       data: students,
     });
   };
+
+  selectClassroomExams = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId');
+    const classroomId = getUrlParam(req, 'classroomId');
+    const exams = await this.classroomManagementService.selectClassroomExams({ schoolId, classroomId });
+    res.status(200).json({
+      message: 'Exams selected successfully',
+      data: exams,
+    });
+  };
 }
