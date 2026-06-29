@@ -1,11 +1,11 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { createStaffRequestSchema } from '@repo/contracts/schemas/staff/createStaffRequest';
+import { staffQueryParams } from '@repo/contracts/schemas/staff/staffQueryParams';
 import { updateStaffRequestSchema } from '@repo/contracts/schemas/staff/updateStaffRequest';
 import { Response } from 'express';
 import { CreateSimpleUserUseCase } from '../User/use-cases/createSimpleUser.use-case';
 import { StaffService } from './staff.service';
-import { staffQueryParams } from '@repo/contracts/schemas/staff/staffQueryParams';
 
 export class StaffController {
   constructor(

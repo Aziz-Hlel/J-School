@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { StaffController } from './staff.controller';
 import { asyncHandler } from '@/core/async-handler';
 import { requireAuth } from '@/middleware/requireAuth.middleware';
 import requireUserRoles from '@/middleware/requirePermission.middleware';
 import { UserRole } from '@repo/db/prisma/enums';
+import { Router } from 'express';
+import { StaffController } from './staff.controller';
 
 export const createRoute = (staffController: StaffController) => {
   const router = Router({ mergeParams: true });
