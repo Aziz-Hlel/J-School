@@ -1,3 +1,4 @@
+import { globalMediaService } from '@/media/media.service';
 import { toCalendarDate, toTime } from '@/utils/dayjs';
 import { ExamScheduleResponse } from '@repo/contracts/schemas/examSchedule/examScheduleResponse';
 import { ExamScheduleWithClassroomRes } from '@repo/contracts/schemas/examSchedule/examScheduleWithClassroomResponse';
@@ -5,7 +6,30 @@ import { ExamScheduleGetPayload } from '@repo/db/prisma/models';
 import { ClassroomMapper } from '../classroom/classroom.mapper';
 
 export class ExamScheduleMapper {
-  static examScheduleResponse(examSchedule: ExamScheduleGetPayload<{ include: { exam: true } }>): ExamScheduleResponse {
+  static examScheduleResponse(
+    examSchedule: ExamScheduleGetPayload<{
+      include: {
+        exam: true;
+        assignement: {
+          include: {
+            teacher: {
+              include: {
+                user: {
+                  include: {
+                    account: {
+                      include: {
+                        avatar: true;
+                      };
+                    };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    }>,
+  ): ExamScheduleResponse {
     return {
       id: examSchedule.id,
       day: toCalendarDate(examSchedule.day),
@@ -20,6 +44,15 @@ export class ExamScheduleMapper {
         },
         durationInMin: examSchedule.exam.durationInMin,
       },
+      teacher: examSchedule.assignement.teacher
+        ? {
+            id: examSchedule.assignement.teacher.id,
+            firstName: examSchedule.assignement.teacher.user.firstName,
+            lastName: examSchedule.assignement.teacher.user.lastName,
+            avatar: globalMediaService.toMediaRes(examSchedule.assignement.teacher.user.account.avatar),
+            gender: examSchedule.assignement.teacher.user.gender,
+          }
+        : null,
     };
   }
 

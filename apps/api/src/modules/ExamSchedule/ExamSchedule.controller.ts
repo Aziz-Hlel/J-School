@@ -22,10 +22,12 @@ export class ExamScheduleController {
 
   update = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const examScheduleId = getUrlParam(req, 'examScheduleId', { uuid: true });
     const input = updateExamScheduleRequestSchema.parse(req.body);
     const updatedExamSchedule = await this.examScheduleService.update({
       schoolId,
       input,
+      examScheduleId,
     });
 
     res.status(200).json({

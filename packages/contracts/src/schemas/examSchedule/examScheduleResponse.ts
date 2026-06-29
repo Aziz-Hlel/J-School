@@ -1,3 +1,6 @@
+import type { Gender } from '@repo/db/prisma/browser';
+import type { MediaResponse } from '../media/MediaResponse';
+
 export type ExamScheduleResponse = {
   id: string;
   day: string | null;
@@ -12,4 +15,11 @@ export type ExamScheduleResponse = {
     };
     durationInMin: number;
   };
+  teacher: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatar: MediaResponse | null;
+    gender: Gender;
+  } | null;
 };

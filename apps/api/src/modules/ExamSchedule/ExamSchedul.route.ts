@@ -15,7 +15,7 @@ export const createExamScheduleRouter = (examScheduleController: ExamScheduleCon
     asyncHandler(examScheduleController.create),
   );
   router.put(
-    '/',
+    '/:examScheduleId',
     requireAuth,
     requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(examScheduleController.update),

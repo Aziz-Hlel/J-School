@@ -1,8 +1,6 @@
 import z from 'zod';
 
 export const updateExamScheduleRequestSchema = z.object({
-  examId: z.uuid(),
-  assignmentId: z.uuid(),
   date: z
     .object({
       day: z.iso.date(),
