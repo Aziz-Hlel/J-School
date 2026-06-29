@@ -1,6 +1,7 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
 import { parseTime } from '@/utils/dayjs';
+import type { AssignStudentsToExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/assignStudentsToExtraCurricularReq';
 import type { CreateExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/createExtraCurricularRequest';
 import { ExtraCurricularResponse } from '@repo/contracts/schemas/extraCurricular/extraCurricularResponse';
 import { ExtraCurricularQueryParamsTypes } from '@repo/contracts/schemas/extraCurricular/findAllQueryParams';
@@ -170,6 +171,33 @@ export class ExtraCurricularService {
       },
       update: {},
     });
+    return extraCurricular;
+  };
+
+  assignStudents = async (params: {
+    schoolId: string;
+    extraCurricularId: string;
+    input: AssignStudentsToExtraCurricularReq;
+  }) => {
+    const { schoolId, extraCurricularId, input } = params;
+
+    const extraCurricular = await prisma.extraCurricular.update({
+      where: {
+        schoolId,
+        id: extraCurricularId,
+      },
+      data: {
+        studentExtraCurricular: {
+          set: input.studentIds.map((id) => ({
+            studentId_extraCurricularId: {
+              studentId: id,
+              extraCurricularId,
+            },
+          })),
+        },
+      },
+    });
+
     return extraCurricular;
   };
 

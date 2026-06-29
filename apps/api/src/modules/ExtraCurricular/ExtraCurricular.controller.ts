@@ -1,4 +1,5 @@
 import getUrlParam from '@/utils/getUrlParam';
+import { assignStudentsToExtraCurricularReqSchema } from '@repo/contracts/schemas/extraCurricular/assignStudentsToExtraCurricularReq';
 import { createExtraCurricularRequestSchema } from '@repo/contracts/schemas/extraCurricular/createExtraCurricularRequest';
 import { extraCurricularQueryParams } from '@repo/contracts/schemas/extraCurricular/findAllQueryParams';
 import { updateExtraCurricularReqSchema } from '@repo/contracts/schemas/extraCurricular/updateExtraCurricularReq';
@@ -66,6 +67,17 @@ export class ExtraCurricularController {
     const data = await this.extraCurricularService.assignToStudent({ schoolId, extraCurricularId, studentId });
     res.status(200).json({
       message: 'Extra curricular assigned to student successfully',
+      data,
+    });
+  };
+
+  assignStudents = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const extraCurricularId = getUrlParam(req, 'extraCurricularId', { uuid: true });
+    const input = assignStudentsToExtraCurricularReqSchema.parse(req.body);
+    const data = await this.extraCurricularService.assignStudents({ schoolId, extraCurricularId, input });
+    res.status(200).json({
+      message: 'Extra curricular assigned to students successfully',
       data,
     });
   };

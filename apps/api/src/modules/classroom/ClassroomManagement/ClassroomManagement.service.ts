@@ -1,7 +1,6 @@
 import { BadRequestError } from '@/err/service/customErrors';
 import { globalMediaService } from '@/media/media.service';
 import { StudentMapper } from '@/modules/student/student.mapper';
-import { AssignTeacherRequestInput } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
 import type { ClassroomExamsRes } from '@repo/contracts/schemas/classroom/management/ClassroomExamsRes';
 import type { GetClassroomAttendancesQuery } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
 import type { ClassroomAttendancesResponse } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesResponse';

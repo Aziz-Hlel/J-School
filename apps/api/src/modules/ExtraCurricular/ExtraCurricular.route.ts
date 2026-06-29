@@ -14,6 +14,8 @@ export const createRouter = (controller: ExtraCurricularController) => {
 
   router.post('/:extraCurricularId/students/:studentId', asyncHandler(controller.assignToStudent));
 
+  router.put('/:extraCurricularId/students', asyncHandler(controller.assignStudents));
+
   router.put('/:extraCurricularId', asyncHandler(controller.update));
 
   router.get('/', asyncHandler(controller.findAll));
