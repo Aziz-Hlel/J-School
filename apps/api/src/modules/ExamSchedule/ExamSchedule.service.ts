@@ -219,4 +219,13 @@ export class ExamScheduleService {
 
     return response;
   };
+
+  delete = async (params: { schoolId: string; examScheduleId: string }) => {
+    await prisma.examSchedule.deleteMany({
+      where: {
+        id: params.examScheduleId,
+        schoolId: params.schoolId,
+      },
+    });
+  };
 }

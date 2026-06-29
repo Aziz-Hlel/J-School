@@ -54,4 +54,12 @@ export class ExamScheduleController {
       data: examSchedules,
     });
   };
+
+  delete = async (req: Request, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const examScheduleId = getUrlParam(req, 'examScheduleId', { uuid: true });
+    await this.examScheduleService.delete({ schoolId, examScheduleId });
+
+    res.status(204).send();
+  };
 }

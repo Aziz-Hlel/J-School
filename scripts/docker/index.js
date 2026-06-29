@@ -26,7 +26,7 @@ class dockerUP {
 
     const composeFilePath = this.#DOCKER_DATA.composeFilePath;
     const envObject = this.#DOCKER_DATA.envObject;
-    const args = [...(this.isV2 ? ['compose'] : []), '-f', composeFilePath, 'up', '-d', '--build', '--force-recreate'];
+    const args = [...(this.isV2 ? ['compose'] : []), '-f', composeFilePath, 'up', '--build'];
 
     spawnSync(command, args, { stdio: 'inherit', env: envObject });
 

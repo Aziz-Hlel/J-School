@@ -30,5 +30,12 @@ export const createExamScheduleRouter = (examScheduleController: ExamScheduleCon
     asyncHandler(examScheduleController.resetAll),
   );
 
+  router.delete(
+    '/:examScheduleId',
+    requireAuth,
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(examScheduleController.delete),
+  );
+
   return router;
 };
