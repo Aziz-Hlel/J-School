@@ -1,6 +1,7 @@
 import { globalMediaService } from '@/media/media.service';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
 import { TeacherShortRes } from '@repo/contracts/schemas/teacher/teacherShortResponse';
+import { Prisma } from '@repo/db/prisma/browser';
 import { TeacherGetPayload } from '@repo/db/prisma/models';
 export class TeacherMapper {
   static toResponse(
@@ -35,6 +36,35 @@ export class TeacherMapper {
       lastName: teacher.user.lastName,
       gender: teacher.user.gender,
       avatar,
+    };
+  }
+
+  static toTeacherSelect(
+    teacher: Prisma.TeacherGetPayload<{
+      select: {
+        id: true;
+        user: {
+          select: {
+            id: true;
+            firstName: true;
+            lastName: true;
+            gender: true;
+            account: {
+              select: {
+                avatar: true;
+              };
+            };
+          };
+        };
+      };
+    }>,
+  ) {
+    return {
+      id: teacher.id,
+      firstName: teacher.user.firstName,
+      lastName: teacher.user.lastName,
+      gender: teacher.user.gender,
+      avatar: globalMediaService.toMediaRes(teacher.user.account.avatar),
     };
   }
 }

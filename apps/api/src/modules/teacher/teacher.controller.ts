@@ -4,6 +4,7 @@ import { createTeacherRequestSchema } from '@repo/contracts/schemas/teacher/crea
 import { getTeacherTimetableQuery } from '@repo/contracts/schemas/teacher/getTimetableQuery';
 import { teacherHomeworkQueryParams } from '@repo/contracts/schemas/teacher/homeworQueryParams';
 import { teacherQueryParams } from '@repo/contracts/schemas/teacher/teacherQueryParams';
+import { teacherSelectQuerySchema } from '@repo/contracts/schemas/teacher/teacherSelectQuery';
 import { updateTeacherRequestSchema } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
 import { Request, Response } from 'express';
 import { TeacherService } from './teacher.service';
@@ -140,6 +141,16 @@ export class TeacherController {
     res.status(200).json({
       message: 'Teacher assignments fetched successfully',
       data: assignments,
+    });
+  };
+
+  selectTeachers = async (req: Request, res: Response) => {
+    const query = teacherSelectQuerySchema.parse(req.query);
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const teachers = await this.teacherService.selectTeachers({ schoolId, query });
+    res.status(200).json({
+      message: 'Teachers fetched successfully',
+      ...teachers,
     });
   };
 }

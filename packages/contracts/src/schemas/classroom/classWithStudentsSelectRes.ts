@@ -1,4 +1,4 @@
-import type { ClassGrade } from '@repo/db/prisma/browser';
+import type { ClassGrade, Gender } from '@repo/db/prisma/browser';
 import type { MediaResponse } from '../media/MediaResponse';
 
 export type ClassWithStudentsSelectRes = {
@@ -15,6 +15,7 @@ export type ClassWithStudentsSelectRes = {
       en: string | null;
       ar: string | null;
     };
+    gender: Gender;
     avatar: MediaResponse | null;
   }[];
 };

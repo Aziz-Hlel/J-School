@@ -1,4 +1,5 @@
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
+import { CursorMapper } from '@/helper/cursor.mapper';
 import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { toCalendarDate, toTime } from '@/utils/dayjs';
@@ -9,6 +10,7 @@ import { TeacherHomeworkQueryParamsTypes } from '@repo/contracts/schemas/teacher
 import { TeacherFullTimetableRes } from '@repo/contracts/schemas/teacher/teacherFullTimeTableRes';
 import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
+import { TeacherSelectQuery } from '@repo/contracts/schemas/teacher/teacherSelectQuery';
 import { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
 import prisma from '@repo/db';
 import { DayOfWeek, Prisma } from '@repo/db/prisma/client';
@@ -552,5 +554,46 @@ export class TeacherService {
     const response = queryResult.map((assignment) => AssignemntMapper.toTeacherAssignmentsRes(assignment));
 
     return response;
+  };
+
+  selectTeachers = async (params: { schoolId: string; query: TeacherSelectQuery }) => {
+    const { schoolId, query } = params;
+
+    const queryResult = await prisma.teacher.findMany({
+      where: {
+        user: {
+          schoolId,
+        },
+      },
+      cursor: query.cursor ? { id: query.cursor } : undefined,
+      take: query.limit + 1,
+
+      select: {
+        id: true,
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            gender: true,
+            account: {
+              select: {
+                avatar: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const lastItem = queryResult[query.limit];
+    const nextCursor = lastItem?.id || null;
+    const teachers = queryResult.slice(0, query.limit);
+
+    const data = teachers.map(TeacherMapper.toTeacherSelect);
+
+    const cursorReponse = CursorMapper.toCursor({ data, nextCursor });
+
+    return cursorReponse;
   };
 }

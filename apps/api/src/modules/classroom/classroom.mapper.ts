@@ -40,6 +40,7 @@ export class ClassroomMapper {
           en: student.lastName_en,
           ar: student.lastName_ar,
         },
+        gender: student.gender,
         avatar: globalMediaService.toMediaRes(student.avatar),
       })),
     };
