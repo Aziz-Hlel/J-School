@@ -1,5 +1,4 @@
 import getUrlParam from '@/utils/getUrlParam';
-import { assignTeacherRequestSchema } from '@repo/contracts/schemas/assignment/assignTeacherRequest';
 import { getClassroomAttendancesQuerySchema } from '@repo/contracts/schemas/classroom/management/getClassroomAttendancesQuery';
 import { Request, Response } from 'express';
 import type { ClassroomManagementService } from './ClassroomManagement.service';
@@ -27,16 +26,16 @@ export class ClassroomManagementController {
     });
   };
 
-  assignTeacher = async (req: Request, res: Response) => {
-    const schoolId = getUrlParam(req, 'schoolId');
-    const classroomId = getUrlParam(req, 'classroomId');
-    const input = assignTeacherRequestSchema.parse(req.body);
-    const data = await this.classroomManagementService.assignTeacher({ schoolId, classroomId, input });
-    res.status(200).json({
-      message: 'Teacher assigned successfully',
-      data,
-    });
-  };
+  // assignTeacher = async (req: Request, res: Response) => {
+  //   const schoolId = getUrlParam(req, 'schoolId');
+  //   const classroomId = getUrlParam(req, 'classroomId');
+  //   const input = assignTeacherRequestSchema.parse(req.body);
+  //   const data = await this.classroomManagementService.assignTeacher({ schoolId, classroomId, input });
+  //   res.status(200).json({
+  //     message: 'Teacher assigned successfully',
+  //     data,
+  //   });
+  // };
 
   getAttendances = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');

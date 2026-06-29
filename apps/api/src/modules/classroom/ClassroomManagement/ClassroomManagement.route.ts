@@ -18,7 +18,7 @@ export const createClassroomManagementRouter = (controller: ClassroomManagementC
   router.get('/students', requireAuth, requireUserInSchool, asyncHandler(controller.getStudents));
 
   // ? Bullshit
-  router.post('/assign-teacher', requireAuth, requireUserInSchool, asyncHandler(controller.assignTeacher));
+  // router.post('/assign-teacher', requireAuth, requireUserInSchool, asyncHandler(controller.assignTeacher));
 
   // * removed to support null assigned classrooms
   // router.post('/assign-student', requireAuth, requireUserInSchool, asyncHandler(controller.assignStudent));

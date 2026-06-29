@@ -83,22 +83,22 @@ export class ClassroomManagementService {
     return response;
   };
 
-  assignTeacher = async (params: { schoolId: string; classroomId: string; input: AssignTeacherRequestInput }) => {
-    const { schoolId, classroomId, input } = params;
-    const assignment = await prisma.assignment.update({
-      where: {
-        schoolId_classroomId_subjectId: {
-          schoolId,
-          classroomId,
-          subjectId: input.subjectId,
-        },
-      },
-      data: {
-        teacherId: input.teacherId,
-      },
-    });
-    return assignment;
-  };
+  // assignTeacher = async (params: { schoolId: string; classroomId: string; input: AssignTeacherRequestInput }) => {
+  //   const { schoolId, classroomId, input } = params;
+  //   const assignment = await prisma.assignment.update({
+  //     where: {
+  //       schoolId_classroomId_subjectId: {
+  //         schoolId,
+  //         classroomId,
+  //         subjectId: input.subjectId,
+  //       },
+  //     },
+  //     data: {
+  //       teacherId: input.teacherId,
+  //     },
+  //   });
+  //   return assignment;
+  // };
 
   getAttendances = async (params: {
     schoolId: string;
