@@ -559,12 +559,20 @@ export class TeacherService {
   selectTeachers = async (params: { schoolId: string; query: TeacherSelectQuery }) => {
     const { schoolId, query } = params;
 
-    const queryResult = await prisma.teacher.findMany({
-      where: {
-        user: {
-          schoolId,
-        },
+    const where: Prisma.TeacherWhereInput = {
+      user: {
+        schoolId,
+        ...(query.search && {
+          OR: [
+            { firstName: { contains: query.search, mode: 'insensitive' } },
+            { firstName: { contains: query.search, mode: 'insensitive' } },
+          ],
+        }),
       },
+    };
+
+    const queryResult = await prisma.teacher.findMany({
+      where,
       cursor: query.cursor ? { id: query.cursor } : undefined,
       take: query.limit + 1,
 
