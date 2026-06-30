@@ -234,4 +234,14 @@ export class SchoolAppService {
 
     return pageResponse;
   };
+
+  deleteTeacherComments = async (params: { teacherCommentId: string; schoolId: string }) => {
+    const { teacherCommentId, schoolId } = params;
+    await prisma.teacherComment.deleteMany({
+      where: {
+        id: teacherCommentId,
+        schoolId,
+      },
+    });
+  };
 }

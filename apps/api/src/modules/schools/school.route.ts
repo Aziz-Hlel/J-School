@@ -24,6 +24,13 @@ export const createSchoolRoute = (controller: SchoolController) => {
 
   router.put('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.update));
 
+  router.delete(
+    '/:schoolId/teacher-comments/:teacherCommentId',
+    requireAuth,
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(controller.deleteTeacherComment),
+  );
+
   router.delete('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.delete));
 
   router.get(

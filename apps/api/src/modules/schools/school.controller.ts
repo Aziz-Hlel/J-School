@@ -72,4 +72,11 @@ export class SchoolController {
       ...teacherComments,
     });
   };
+
+  deleteTeacherComment = async (req: AuthenticatedRequest, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const teacherCommentId = getUrlParam(req, 'teacherCommentId', { uuid: true });
+    await this.schoolService.deleteTeacherComments({ schoolId, teacherCommentId });
+    res.status(204).send();
+  };
 }
