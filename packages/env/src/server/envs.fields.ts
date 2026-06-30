@@ -82,7 +82,7 @@ export const corsSchema = {
 
 export type CorsSchema = z.infer<z.ZodObject<typeof corsSchema>>;
 
-// AWS
+// AWS STORAGE
 export const awsStorageSchema = {
   AWS_REGION: z.string().trim(),
   AWS_ACCESS_KEY_ID: z.string().trim(),
@@ -96,6 +96,16 @@ export type AwsStorageSchema = z.infer<z.ZodObject<typeof awsStorageSchema>>;
 export const cdnSchema = {
   AWS_CLOUDFRONT_URL: z.string().trim(),
 };
+
+// AWS Bedrock
+export const awsBedrockSchema = {
+  AWS_BEDROCK_REGION: z.string().trim(),
+  AWS_BEDROCK_ACCESS_KEY_ID: z.string().trim(),
+  AWS_BEDROCK_SECRET_ACCESS_KEY: z.string().trim(),
+  AWS_BEDROCK_MODEL_ID: z.string().trim(),
+};
+
+export type AwsBedrockSchema = z.infer<z.ZodObject<typeof awsBedrockSchema>>;
 
 export type CdnSchema = z.infer<z.ZodObject<typeof cdnSchema>>;
 

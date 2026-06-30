@@ -8,6 +8,7 @@
     "./cache": "./src/cache.ts",
     "./server": "./src/server.ts",
     "./notification": "./src/notification.ts",
+    "./ocr": "./src/ocr.ts",
     "./web": "./src/web.ts"
   },
   "dependencies": {

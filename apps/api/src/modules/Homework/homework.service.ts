@@ -2,8 +2,8 @@ import { NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
 import { homeworkNotification } from '@/template/notification/homework';
 import { parseCalendarDate } from '@/utils/dayjs';
+import { AdminHomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/adminQueryParam';
 import { CreateHomeworkReq } from '@repo/contracts/schemas/Homework/create';
-import { HomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/queryParam';
 import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
 import { NotificationSourceType, NotificationType, Prisma } from '@repo/db/prisma/browser';
@@ -181,7 +181,7 @@ export class HomeworkService {
     return homework;
   };
 
-  find = async (params: { schoolId: string; query: HomeworkQueryParamsTypes['Query'] }) => {
+  find = async (params: { schoolId: string; query: AdminHomeworkQueryParamsTypes['Query'] }) => {
     const { schoolId, query } = params;
 
     const skip = (query.page - 1) * query.size;
@@ -190,6 +190,24 @@ export class HomeworkService {
     const where: Prisma.HomeworkWhereInput = {
       schoolId: schoolId,
     };
+
+    if (query.classroomId) {
+      where.studentHomeworks = {
+        some: {
+          ...(query.classroomId && {
+            student: {
+              classroomId: query.classroomId,
+            },
+          }),
+        },
+      };
+    }
+
+    if (query.teacherId) {
+      where.assignment = {
+        teacherId: query.teacherId,
+      };
+    }
 
     const orderBy: Prisma.HomeworkOrderByWithRelationInput = {
       due: 'desc',
