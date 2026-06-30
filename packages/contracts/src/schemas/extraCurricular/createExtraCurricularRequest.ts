@@ -1,5 +1,6 @@
 import z from 'zod';
 import { globalExtraCurricular } from '../shared/extraCurricular.schema';
+import { SessionType } from '@repo/db/prisma/browser';
 
 export const createExtraCurricularRequestSchema = z
   .object({
@@ -15,13 +16,13 @@ export const createExtraCurricularRequestSchema = z
   .and(
     z.discriminatedUnion('type', [
       z.object({
-        type: z.literal('WEEKLY'),
+        type: z.literal(SessionType.WEEKLY),
         dayOfWeek: globalExtraCurricular.dayOfWeek,
         startTime: globalExtraCurricular.startTime,
         endTime: globalExtraCurricular.endTime,
       }),
       z.object({
-        type: z.literal('SPECIAL'),
+        type: z.literal(SessionType.SPECIAL),
         date: globalExtraCurricular.date,
         startTime: globalExtraCurricular.startTime,
         endTime: globalExtraCurricular.endTime,

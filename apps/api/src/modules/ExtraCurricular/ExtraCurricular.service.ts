@@ -193,6 +193,7 @@ export class ExtraCurricularService {
             studentId_extraCurricularId: {
               studentId: id,
               extraCurricularId,
+              schoolId,
             },
           })),
         },
