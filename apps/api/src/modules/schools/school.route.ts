@@ -12,6 +12,14 @@ export const createSchoolRoute = (controller: SchoolController) => {
 
   router.get('/', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getPage));
   router.get('/me', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getMySchool));
+
+  router.get(
+    '/:schoolId/teacher-comments',
+    requireAuth,
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
+    asyncHandler(controller.findTeacherComments),
+  );
+
   router.get('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.getById));
 
   router.put('/:schoolId', requireAuth, requireRole(AccountRole.ADMIN), asyncHandler(controller.update));

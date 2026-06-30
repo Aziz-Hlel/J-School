@@ -571,7 +571,7 @@ export class TeacherService {
       },
     };
 
-    const queryResult = await prisma.teacher.findMany({
+    const queryResult = prisma.teacher.findMany({
       where,
       cursor: query.cursor ? { id: query.cursor } : undefined,
       take: query.limit + 1,
@@ -594,13 +594,17 @@ export class TeacherService {
       },
     });
 
-    const lastItem = queryResult[query.limit];
+    const countQuery = prisma.teacher.count({ where });
+
+    const [content, totalElements] = await Promise.all([queryResult, countQuery]);
+
+    const lastItem = content[query.limit];
     const nextCursor = lastItem?.id || null;
-    const teachers = queryResult.slice(0, query.limit);
+    const teachers = content.slice(0, query.limit);
 
     const data = teachers.map(TeacherMapper.toTeacherSelect);
 
-    const cursorReponse = CursorMapper.toCursor({ data, nextCursor });
+    const cursorReponse = CursorMapper.toCursorWithTotalElements({ data, nextCursor, totalElements });
 
     return cursorReponse;
   };

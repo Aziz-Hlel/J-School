@@ -6,13 +6,16 @@ import { SchoolMapper } from './school.mapper';
 import { SchoolRepo } from './school.repo';
 // import { School } from '@repo/db/prisma/client';
 import { CursorMapper } from '@/helper/cursor.mapper';
+import { PageMapper } from '@/helper/page.mapper';
 import { SelectClassroomsRes } from '@repo/contracts/schemas/classroom/SelectClassroomsRes';
+import type { AdminTeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/school/adminTeacherCommentsQuery';
 import { GetMySchoolResponse } from '@repo/contracts/schemas/school/getMySchoolResponse';
 import { SelectParentsQueryParams } from '@repo/contracts/schemas/school/selectParentsQueryParams';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/client';
 import { OwnerService } from '../owner/owner.service';
 import { ParentMapper } from '../parent/parent.mapper';
+import { TeacherCommentsMapper } from '../TeacherComments/teacherComments.mapper';
 import { SchoolService } from './school.service';
 
 export class SchoolAppService {
@@ -169,5 +172,66 @@ export class SchoolAppService {
     return cursorResponse;
   };
 
-  // findExtra
+  findTeacherComments = async (params: { query: AdminTeacherCommentsQueryParamsTypes['Query']; schoolId: string }) => {
+    const { query, schoolId } = params;
+
+    const skip = (query.page - 1) * query.size;
+    const take = query.size;
+
+    const where: Prisma.TeacherCommentWhereInput = {
+      schoolId,
+    };
+
+    if (query.teacherId) {
+      where.teacherId = query.teacherId;
+    }
+
+    if (query.studentId) {
+      where.studentId = query.studentId;
+    }
+
+    const orderBy: Prisma.TeacherCommentOrderByWithRelationInput = {
+      createdAt: 'desc',
+    };
+
+    const queryResponse = prisma.teacherComment.findMany({
+      skip,
+      take,
+      where,
+      orderBy,
+      include: {
+        student: {
+          include: {
+            avatar: true,
+          },
+        },
+        teacher: {
+          include: {
+            user: {
+              select: {
+                account: { select: { avatar: true } },
+                firstName: true,
+                lastName: true,
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const count = prisma.teacherComment.count({ where });
+
+    const [content, totalElements] = await Promise.all([queryResponse, count]);
+
+    const dataResponse = content.map(TeacherCommentsMapper.toResponse);
+
+    const pageResponse = PageMapper.toPage({
+      data: dataResponse,
+      pagination: query,
+      totalElements: totalElements,
+    });
+
+    return pageResponse;
+  };
 }

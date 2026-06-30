@@ -1,5 +1,6 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
+import { adminTeacherCommentsQueryParams } from '@repo/contracts/schemas/school/adminTeacherCommentsQuery';
 import { CreateSchoolRequestSchema } from '@repo/contracts/schemas/school/createSchoolRequest';
 import { selectParentsQueryParamsSchema } from '@repo/contracts/schemas/school/selectParentsQueryParams';
 import { updateSchoolRequestSchema } from '@repo/contracts/schemas/school/updateSchoolRequest';
@@ -59,6 +60,16 @@ export class SchoolController {
     res.status(200).json({
       message: 'Parents fetched successfully',
       ...parents,
+    });
+  };
+
+  findTeacherComments = async (req: AuthenticatedRequest, res: Response) => {
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const query = adminTeacherCommentsQueryParams.schema.parse(req.query);
+    const teacherComments = await this.schoolService.findTeacherComments({ schoolId, query });
+    res.status(200).json({
+      message: 'Teacher comments fetched successfully',
+      ...teacherComments,
     });
   };
 }
