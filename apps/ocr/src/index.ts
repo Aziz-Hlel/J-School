@@ -1,6 +1,5 @@
 import OcrModule from './ocr/ocr.module';
 
-console.log('dirrab l env', process.env);
 const init = async () => {
   const { worker } = OcrModule();
 

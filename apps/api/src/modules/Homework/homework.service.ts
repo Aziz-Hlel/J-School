@@ -1,5 +1,6 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
+import { globalOcrQueue } from '@/mq/ocr.queue';
 import { homeworkNotification } from '@/template/notification/homework';
 import { parseCalendarDate } from '@/utils/dayjs';
 import { AdminHomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/adminQueryParam';
@@ -57,6 +58,8 @@ export class HomeworkService {
               studentHomeworks: true,
             },
           });
+
+          globalOcrQueue.add({ payload: { homeworkId: homework.id } });
 
           try {
             const assigmnt = await prisma.assignment.findUnique({
