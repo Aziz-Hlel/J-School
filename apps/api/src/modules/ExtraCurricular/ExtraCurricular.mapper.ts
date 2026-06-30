@@ -22,7 +22,7 @@ export class ExtraCurricularMapper {
       },
       session: {
         day: input.session?.day ?? null,
-        date: input.session?.startTime ? toCalendarDate(input.session.date) : null,
+        date: input.session?.date ? toCalendarDate(input.session.date) : null,
         startTime: input.session?.startTime ? toTime(input.session.startTime) : null,
         endTime: input.session?.endTime ? toTime(input.session.endTime) : null,
         type: input.session?.type ?? null,

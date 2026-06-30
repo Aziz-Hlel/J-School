@@ -1,5 +1,5 @@
 import z from 'zod';
-import { DayOfWeek, ClassGrade } from '../../types/enums/enums';
+import { ClassGrade, DayOfWeek } from '../../types/enums/enums';
 
 export const globalExtraCurricular = {
   title: {
@@ -11,4 +11,5 @@ export const globalExtraCurricular = {
   dayOfWeek: z.enum(DayOfWeek),
   startTime: z.iso.time(),
   endTime: z.iso.time().or(z.null()),
+  date: z.iso.date(),
 };

@@ -27,8 +27,6 @@ model ExtraCurricular {
 
   title Name?
 
-  grade ClassGrade
-
   session Session?
 
   posts Post[]
@@ -44,7 +42,6 @@ model ExtraCurricular {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([schoolId, grade])
   @@map("extraCurriculars")
 }
 
@@ -78,9 +75,9 @@ model Session {
   type SessionType
 
   day       DayOfWeek?
-  date      DateTime? @db.Date
-  startTime DateTime  @db.Time
-  endTime   DateTime? @db.Time
+  date      DateTime?  @db.Date
+  startTime DateTime   @db.Time
+  endTime   DateTime?  @db.Time
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

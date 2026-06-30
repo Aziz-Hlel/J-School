@@ -170,17 +170,14 @@ export const extraCurricularSeedData = {
   mat_6eme: {
     id: genUuid('mat_6eme'),
     name: 'Etud Mat',
-    grade: ClassGrade.SIX,
   },
   english_6eme: {
     id: genUuid('english_6eme'),
     name: 'Etud English',
-    grade: ClassGrade.SIX,
   },
   tripHammamet: {
     id: genUuid('tripHammamet'),
     name: 'Trip Hammamet',
-    grade: ClassGrade.SIX,
   },
 };
 

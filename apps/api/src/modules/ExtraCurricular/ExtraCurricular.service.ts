@@ -1,6 +1,6 @@
 import { NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
-import { parseTime } from '@/utils/dayjs';
+import { parseCalendarDate, parseTime } from '@/utils/dayjs';
 import type { AssignStudentsToExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/assignStudentsToExtraCurricularReq';
 import type { CreateExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/createExtraCurricularRequest';
 import { ExtraCurricularResponse } from '@repo/contracts/schemas/extraCurricular/extraCurricularResponse';
@@ -8,8 +8,7 @@ import { ExtraCurricularQueryParamsTypes } from '@repo/contracts/schemas/extraCu
 import type { UpdateExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/updateExtraCurricularReq';
 import { Page } from '@repo/contracts/schemas/page/Page';
 import prisma from '@repo/db';
-import { Prisma } from '@repo/db/prisma/client';
-import { SessionType } from '@repo/db/prisma/enums';
+import { Prisma, SessionType } from '@repo/db/prisma/client';
 import { StudentMapper } from '../student/student.mapper';
 import { ExtraCurricularMapper } from './ExtraCurricular.mapper';
 
@@ -27,11 +26,11 @@ export class ExtraCurricularService {
               ar: input.title.ar,
             },
           },
-          grade: input.grade,
           session: {
             create: {
-              type: SessionType.WEEKLY,
-              day: input.dayOfWeek,
+              type: input.type,
+              day: input.type === SessionType.WEEKLY ? input.dayOfWeek : null,
+              date: input.type === SessionType.SPECIAL ? parseCalendarDate(input.date) : null,
               startTime: parseTime(input.startTime),
               endTime: parseTime(input.endTime),
             },
@@ -63,9 +62,11 @@ export class ExtraCurricularService {
         },
         session: {
           update: {
-            day: input.dayOfWeek,
-            startTime: input.startTime ? parseTime(input.startTime) : undefined,
-            endTime: input.endTime ? parseTime(input.endTime) : undefined,
+            type: input.type,
+            day: input.type === SessionType.WEEKLY ? input.dayOfWeek : null,
+            date: input.type === SessionType.SPECIAL ? parseCalendarDate(input.date) : null,
+            startTime: parseTime(input.startTime),
+            endTime: parseTime(input.endTime),
           },
         },
       },
