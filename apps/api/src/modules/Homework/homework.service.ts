@@ -223,11 +223,16 @@ export class HomeworkService {
       orderBy,
       include: {
         files: true,
+        studentHomeworks: {
+          include: {
+            student: true,
+          },
+        },
         assignment: {
           include: {
-            classroom: true,
-            subject: true,
             teacher: { include: { user: { include: { account: { include: { avatar: true } } } } } },
+            subject: true,
+            classroom: true,
           },
         },
       },
@@ -239,7 +244,7 @@ export class HomeworkService {
 
     const [content, totalElements] = await Promise.all([queryResponse, count]);
 
-    const dataResponse = content.map((homework) => HomeworkMapper.toResponse(homework));
+    const dataResponse = content.map((homework) => HomeworkMapper.toResWithTeacherAndStudents(homework));
 
     const pageResponse = PageMapper.toPage({
       data: dataResponse,
@@ -269,7 +274,7 @@ export class HomeworkService {
       },
     });
     if (!homework) throw new NotFoundError('Homework not found');
-    const result = HomeworkMapper.toResponse(homework);
+    const result = HomeworkMapper.toResponseWithTeacher(homework);
     return result;
   };
 }

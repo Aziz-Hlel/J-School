@@ -501,7 +501,7 @@ export class StudentService {
 
     const [content, totalElements] = await Promise.all([queryResponse, count]);
 
-    const dataResponse = content.map((homework) => HomeworkMapper.toResponse(homework));
+    const dataResponse = content.map((homework) => HomeworkMapper.toResponseWithTeacher(homework));
 
     const pageResponse = PageMapper.toPage({
       data: dataResponse,
