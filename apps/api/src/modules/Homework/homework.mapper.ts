@@ -116,6 +116,7 @@ export class HomeworkMapper {
     const subjectResponse = SubjectMapper.toResponse(homework.assignment.subject);
     const filesResponse = homework.files.map((f) => globalMediaService.toMediaResWithOrder(f));
     const teacherAvatar = globalMediaService.toMediaRes(homework.assignment.teacher?.user?.account?.avatar ?? null);
+    const classroomResponse = ClassroomMapper.toResponse(homework.assignment.classroom);
 
     return {
       id: homework.id,
@@ -125,6 +126,7 @@ export class HomeworkMapper {
       files: filesResponse,
       due: toCalendarDate(homework.due),
       subject: subjectResponse,
+      classroom: classroomResponse,
       teacher: homework.assignment.teacher
         ? {
             id: homework.assignment.teacher.id,

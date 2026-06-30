@@ -59,9 +59,8 @@ export class HomeworkService {
             },
           });
 
-          globalOcrQueue.add({ payload: { homeworkId: homework.id } });
-
           try {
+            globalOcrQueue.add({ payload: { homeworkId: homework.id } });
             const assigmnt = await prisma.assignment.findUnique({
               where: {
                 id: detail.assignmentId,

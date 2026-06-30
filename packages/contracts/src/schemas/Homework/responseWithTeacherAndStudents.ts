@@ -1,4 +1,5 @@
 import type { Gender, HomeworkType } from '../../types/enums/enums';
+import type { ClassroomResponse } from '../classroom/classResponse';
 import type { MediaResponse } from '../media/MediaResponse';
 import type { MediaResponseWithOrder } from '../media/MediaResponseWithOrder';
 import type { SubjectResponse } from '../subject/subjectResponse';
@@ -11,6 +12,14 @@ export type HomeworkWithTeacherAndStudents = {
   files: MediaResponseWithOrder[];
   due: string;
   subject: SubjectResponse;
+  classroom: ClassroomResponse;
+  teacher: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    gender: Gender;
+    avatar: MediaResponse | null;
+  } | null;
   students: {
     id: string;
     firstName: {
@@ -23,11 +32,4 @@ export type HomeworkWithTeacherAndStudents = {
     };
     gender: Gender;
   }[];
-  teacher: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    gender: Gender;
-    avatar: MediaResponse | null;
-  } | null;
 };
