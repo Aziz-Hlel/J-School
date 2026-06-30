@@ -1,9 +1,9 @@
-import type { Request, Response } from 'express';
-import { HomeworkService } from './homework.service';
 import getUrlParam from '@/utils/getUrlParam';
 import { createHomeworkReqSchema } from '@repo/contracts/schemas/Homework/create';
+import { adminHomeworkQueryParams } from '@repo/contracts/schemas/Homework/adminQueryParam';
 import { updateHomeworkReqSchema } from '@repo/contracts/schemas/Homework/update';
-import { homeworkQueryParams } from '@repo/contracts/schemas/Homework/queryParam';
+import type { Request, Response } from 'express';
+import { HomeworkService } from './homework.service';
 
 export class HomeworkController {
   constructor(private readonly service: HomeworkService) {}
@@ -39,7 +39,7 @@ export class HomeworkController {
 
   find = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
-    const query = homeworkQueryParams.schema.parse(req.query);
+    const query = adminHomeworkQueryParams.schema.parse(req.query);
     const result = await this.service.find({ schoolId, query });
     res.status(200).json(result);
   };

@@ -4,6 +4,7 @@ import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import type { OcrJob } from '@repo/contracts/jobs/ocrJob';
 import prisma from '@repo/db';
 import { MediaType } from '@repo/db/prisma/browser';
+import type { OcrProvider } from './ocr.provider';
 
 interface AwsStorageConfig {
   AWS_REGION: string;
@@ -12,7 +13,7 @@ interface AwsStorageConfig {
   AWS_S3_BUCKET: string;
 }
 
-class AwsStorageService {
+export class AwsStorageService {
   client: S3Client;
   config: AwsStorageConfig;
 
@@ -44,7 +45,10 @@ class AwsStorageService {
 }
 
 export class OcrService {
-  constructor(private readonly storageService: AwsStorageService) {}
+  constructor(
+    private readonly storageService: AwsStorageService,
+    private readonly ocrProvider: OcrProvider,
+  ) {}
 
   fetchHomework = async (homeworkId: string) => {
     const homework = await prisma.homework.findUniqueOrThrow({
@@ -88,5 +92,8 @@ export class OcrService {
         },
       ],
     };
+
+    console.log('body = ', body);
+    const res = await this.ocrProvider.invokeOcr({ body });
   };
 }

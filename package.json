@@ -39,6 +39,8 @@
     "db:reset": "pnpm --filter @repo/db db:reset",
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api dev",
+    "dev:notification": "pnpm --filter notification dev",
+    "dev:ocr": "pnpm --filter ocr dev",
     "docker:local": "node scripts/docker/index.js local",
     "docker:dev": "node scripts/docker/index.js dev",
     "docker:build": "node scripts/docker/index.js build",
