@@ -191,7 +191,8 @@ export class ExtraCurricularService {
         studentExtraCurricular: {
           deleteMany: {},
           createMany: {
-            data: input.studentIds.map((studentId) => ({ studentId, schoolId, extraCurricularId })),
+            data: input.studentIds.map((studentId) => ({ studentId, schoolId })),
+            skipDuplicates: true,
           },
         },
       },
