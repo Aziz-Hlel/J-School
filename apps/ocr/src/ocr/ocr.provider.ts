@@ -35,7 +35,7 @@ export class OcrProvider {
     if (!aiTextText) {
       throw new Error('Could not extract text content from Bedrock response envelope.');
     }
-    console.log(aiTextText);
+    console.log('ai response : ', aiTextText);
     // // 3. Clean out markdown fences if Claude ignored your system instructions
     // const cleanedJsonString = aiTextText
     //   .replace(/^```json\s*/i, '') // Removes leading ```json
