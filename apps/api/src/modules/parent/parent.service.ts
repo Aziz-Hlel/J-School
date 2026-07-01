@@ -1,6 +1,9 @@
 import { RepoKnownErrors } from '@/err/repo/DbError';
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
+import { PageMapper } from '@/helper/page.mapper';
 import { TX } from '@/types/prisma/PrismaTransaction';
+import { Page } from '@repo/contracts/schemas/page/Page';
+import { ParentResponse } from '@repo/contracts/schemas/parent/parentResponse';
 import { ParentsQueryParamsTypes } from '@repo/contracts/schemas/parent/queryParams';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/client';
@@ -84,7 +87,10 @@ export class ParentService {
     return response;
   };
 
-  findAll = async (params: { queryParams: ParentsQueryParamsTypes['Query']; schoolId: string }) => {
+  findAll = async (params: {
+    queryParams: ParentsQueryParamsTypes['Query'];
+    schoolId: string;
+  }): Promise<Page<ParentResponse>> => {
     const { queryParams, schoolId } = params;
 
     const skip = (queryParams.page - 1) * queryParams.size;
@@ -123,7 +129,12 @@ export class ParentService {
     const [queryResult, totalElements] = await Promise.all([query, count]);
 
     const parentRepsonse = queryResult.map((parent) => ParentMapper.toParentResponse(parent));
+    const pageResponse = PageMapper.toPage<ParentResponse>({
+      data: parentRepsonse,
+      totalElements,
+      pagination: queryParams,
+    });
 
-    return { content: parentRepsonse, totalElements };
+    return pageResponse;
   };
 }

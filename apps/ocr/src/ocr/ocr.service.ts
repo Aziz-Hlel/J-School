@@ -3,7 +3,6 @@ import { OCR_PROMPT } from '@/prompts/ocr';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import type { OcrJob } from '@repo/contracts/jobs/ocrJob';
 import prisma from '@repo/db';
-import { MediaType } from '@repo/db/prisma/browser';
 import type { OcrProvider } from './ocr.provider';
 
 interface AwsStorageConfig {
@@ -36,7 +35,6 @@ export class AwsStorageService {
   }
 
   getMediaBuffer = async (key: string): Promise<Buffer> => {
-    console.log('rab om l key : ', key);
     const res = await this.client.send(new GetObjectCommand({ Bucket: this.config.AWS_S3_BUCKET, Key: key }));
     const stream = res.Body as NodeJS.ReadableStream;
     const chunks: Buffer[] = [];
@@ -95,7 +93,15 @@ export class OcrService {
       ],
     };
 
-    console.log('body = ', body);
-    const res = await this.ocrProvider.invokeOcr({ body });
+    const jsonRes = await this.ocrProvider.invokeOcr({ body });
+
+    await prisma.homework.update({
+      where: {
+        id: payload.homeworkId,
+      },
+      data: {
+        extractedText: jsonRes,
+      },
+    });
   };
 }

@@ -20,6 +20,8 @@ model Homework {
 
   due DateTime @db.Date
 
+  extractedText Json?
+
   schoolId String @db.Uuid
   school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
