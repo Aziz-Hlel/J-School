@@ -51,4 +51,4 @@ export class CacheService {
   }
 }
 
-export const cacheService = new CacheService();
+export const globalCacheService = new CacheService();

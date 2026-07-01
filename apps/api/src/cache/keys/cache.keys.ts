@@ -27,4 +27,9 @@ export const RedisKeys = {
         .filter(Boolean)
         .join(':'),
   },
+
+  homeworkChatbot: {
+    pattern: () => 'homework:chatbot:*',
+    genKey: (accountId: string, homeworkId: string) => `homework:chatbot:${accountId}:${homeworkId}`,
+  },
 };

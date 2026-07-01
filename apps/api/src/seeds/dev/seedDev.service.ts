@@ -265,7 +265,6 @@ export class SeedDevService implements ISeed {
           schoolId,
           id: extraCurricularSeed.id,
           name: extraCurricularSeed.name,
-          grade: extraCurricularSeed.grade,
         });
       }),
     );

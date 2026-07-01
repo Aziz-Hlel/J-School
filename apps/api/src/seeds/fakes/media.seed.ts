@@ -1,8 +1,8 @@
 import { prisma } from '@/bootstrap/db.init';
-import { MediaStatus, MediaType } from '@repo/db/prisma/enums';
-import { MediaCreateInput } from '@repo/db/prisma/models';
 import { TX } from '@/types/prisma/PrismaTransaction';
 import { faker } from '@faker-js/faker';
+import { MediaStatus, MediaType } from '@repo/db/prisma/enums';
+import { MediaCreateInput } from '@repo/db/prisma/models';
 
 export class MediaSeed {
   private readonly VideosPlacholderUrls = [
@@ -66,3 +66,21 @@ export class MediaSeed {
     return createdMedia;
   };
 }
+
+const globalMediaSeed = new MediaSeed();
+
+const seedHomeworks = [
+  { baseName: 'homework1', key: 'homework/homework1.jpg', mimeType: 'image/jpeg' },
+  { baseName: 'homework2', key: 'homework/homework2.jpg', mimeType: 'image/jpeg' },
+  { baseName: 'homework3', key: 'homework/homework3.jpg', mimeType: 'image/jpeg' },
+  { baseName: 'homework4', key: 'homework/homework4.jpg', mimeType: 'image/jpeg' },
+];
+
+const createdHomeworks = await Promise.all(
+  seedHomeworks.map((homework) => globalMediaSeed.run({ media: { ...homework, type: MediaType.IMAGE } })),
+);
+
+console.log(
+  'ids : ',
+  createdHomeworks.map((homework) => homework.id),
+);

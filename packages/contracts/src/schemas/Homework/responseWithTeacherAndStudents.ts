@@ -6,6 +6,7 @@ import type { SubjectResponse } from '../subject/subjectResponse';
 
 export type HomeworkWithTeacherAndStudents = {
   id: string;
+  assignementId: string;
   title: string | null;
   type: HomeworkType;
   content: string | null;

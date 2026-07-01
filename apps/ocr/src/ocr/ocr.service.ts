@@ -26,14 +26,17 @@ export class AwsStorageService {
     };
     this.client = new S3Client({
       region: this.config.AWS_REGION,
+      endpoint: `http://localhost:9997/`,
       credentials: {
         accessKeyId: this.config.AWS_ACCESS_KEY_ID,
         secretAccessKey: this.config.AWS_SECRET_ACCESS_KEY,
       },
+      forcePathStyle: true,
     });
   }
 
   getMediaBuffer = async (key: string): Promise<Buffer> => {
+    console.log('rab om l key : ', key);
     const res = await this.client.send(new GetObjectCommand({ Bucket: this.config.AWS_S3_BUCKET, Key: key }));
     const stream = res.Body as NodeJS.ReadableStream;
     const chunks: Buffer[] = [];
@@ -71,7 +74,7 @@ export class OcrService {
     const contentBlock: { type: string; source: { type: string; media_type?: string; data: string } }[] =
       await Promise.all(
         homework.files.map(async (file) => {
-          const type = MediaType.DOCUMENT ? 'document' : 'image';
+          const type = 'image';
           const buffer = await this.storageService.getMediaBuffer(file.key);
           return {
             type,

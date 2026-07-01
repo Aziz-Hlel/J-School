@@ -1,9 +1,8 @@
 import prisma from '@repo/db';
-import { ClassGrade } from '@repo/db/prisma/enums';
 
 export class ExtracurricularSeed {
-  run = async (params: { id: string; schoolId: string; name: string; grade: ClassGrade }) => {
-    const { id, schoolId, name, grade } = params;
+  run = async (params: { id: string; schoolId: string; name: string }) => {
+    const { id, schoolId, name } = params;
 
     await prisma.extraCurricular.upsert({
       where: { id },
@@ -17,7 +16,6 @@ export class ExtracurricularSeed {
             ar: name,
           },
         },
-        grade,
       },
       update: {},
     });

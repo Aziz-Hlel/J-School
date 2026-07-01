@@ -91,7 +91,7 @@ export const teacherSeedData = {
 const parentSeed = {
   director1: {
     id: genUuid('director1'),
-    userId: '019177b5-5d7e-5297-9541-f97957e77f53',
+    userId: genUuid('director1'),
     email: 'director1@fake.com',
     role: UserRole.PARENT,
   },

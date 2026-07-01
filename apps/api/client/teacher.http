@@ -96,11 +96,12 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
     "content": "Homework 1 content",
     "due": "2022-01-01",
     "type": "STANDARD",
-    "files":[],
+    "files":   [
+  "f214dea5-8b07-480c-8cba-89ea09797ce2"],
     "details": [
         {
             "due": "2022-01-01",
-            "assignmentId": "00260a53-a03e-4875-a619-0a78a5d87581",
+            "assignmentId": "33ad73b3-e6b6-4b0a-a589-46304f24c23d",
             "studentIds": []
             
         }

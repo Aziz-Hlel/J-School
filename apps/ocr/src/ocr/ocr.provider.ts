@@ -25,12 +25,11 @@ export class OcrProvider {
     });
     const response = await this.client.send(invokeCommand);
 
-    const rawResponseBody = Buffer.from(response.body).toString('utf-8');
-    const parsedResponse = JSON.parse(rawResponseBody);
-
+    // const rawResponseBody = Buffer.from(response.body).toString('utf-8');
+    const parsedResponse = JSON.parse(new TextDecoder('utf-8').decode(response.body));
     // 2. Extract Claude's actual text output from the Bedrock payload wrapper
     // (For Claude on Bedrock, it usually lives under completion OR content depending on your SDK flavor)
-    let aiTextText = parsedResponse.completion || parsedResponse.content?.[0]?.text || '';
+    let aiTextText = parsedResponse;
 
     if (!aiTextText) {
       throw new Error('Could not extract text content from Bedrock response envelope.');

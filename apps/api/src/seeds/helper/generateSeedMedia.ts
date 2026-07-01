@@ -51,4 +51,9 @@ const generateSeedMedia = (props: { prefix: string; baseName: string } | { key: 
   };
 };
 
+export const h1 = generateSeedMedia({ prefix: 'homework1', baseName: 'homework1.jpg' });
+export const h2 = generateSeedMedia({ prefix: 'homework2', baseName: 'homework2.jpg' });
+export const h3 = generateSeedMedia({ prefix: 'homework3', baseName: 'homework3.jpg' });
+export const h4 = generateSeedMedia({ prefix: 'homework4', baseName: 'homework4.jpg' });
+
 export default generateSeedMedia;
