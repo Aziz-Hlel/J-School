@@ -27,7 +27,6 @@ export class OcrQueue implements IOcrQueue {
   }
 
   add = async ({ payload }: AddOcrJobProps) => {
-    console.log('added');
     await this.queue.add(QUEUE_NAMES.ocr, payload);
   };
 }

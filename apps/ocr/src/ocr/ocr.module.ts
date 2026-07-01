@@ -7,6 +7,7 @@ const OcrModule = () => {
   const ocrProvider = new OcrProvider();
   const ocrService = new OcrService(storageService, ocrProvider);
   const worker = new OcrWorker(ocrService);
+  worker.createWorker();
 
   return {
     worker,

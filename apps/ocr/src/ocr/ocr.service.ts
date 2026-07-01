@@ -51,6 +51,7 @@ export class OcrService {
   ) {}
 
   fetchHomework = async (homeworkId: string) => {
+    console.log('id :', homeworkId);
     const homework = await prisma.homework.findUniqueOrThrow({
       where: {
         id: homeworkId,
@@ -67,19 +68,17 @@ export class OcrService {
   processHomework = async (payload: OcrJob) => {
     const homework = await this.fetchHomework(payload.homeworkId);
 
-    const contentBlock: {
-      type: string;
-      source: { type: string; media_type?: string; data: Buffer<ArrayBufferLike> };
-    }[] = [];
-
-    homework.files.forEach(async (file) => {
-      const type = MediaType.DOCUMENT ? 'document' : 'image';
-      const buffer = await this.storageService.getMediaBuffer(file.key);
-      contentBlock.push({
-        type,
-        source: { type: 'base64', media_type: file.mimeType, data: buffer },
-      });
-    });
+    const contentBlock: { type: string; source: { type: string; media_type?: string; data: string } }[] =
+      await Promise.all(
+        homework.files.map(async (file) => {
+          const type = MediaType.DOCUMENT ? 'document' : 'image';
+          const buffer = await this.storageService.getMediaBuffer(file.key);
+          return {
+            type,
+            source: { type: 'base64', media_type: file.mimeType, data: buffer.toString('base64') },
+          };
+        }),
+      );
 
     const body = {
       anthropic_version: 'bedrock-2023-05-31',
@@ -88,7 +87,7 @@ export class OcrService {
       messages: [
         {
           role: 'user',
-          content: [contentBlock, { type: 'text', text: 'Extract all exercises from this homework as JSON.' }],
+          content: [...contentBlock, { type: 'text', text: 'Extract all exercises from this homework as JSON.' }],
         },
       ],
     };

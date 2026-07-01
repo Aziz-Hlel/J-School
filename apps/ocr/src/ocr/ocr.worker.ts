@@ -6,8 +6,8 @@ import { Job, Worker } from 'bullmq';
 import type { OcrService } from './ocr.service';
 
 export class OcrWorker implements IWorker<OcrJob> {
-  constructor(private readonly ocrService: OcrService) {}
   private readonly workers: Worker<OcrJob>[] = [];
+  constructor(private readonly ocrService: OcrService) {}
 
   handleJob = async (job: Job<OcrJob>) => await this.ocrService.processHomework(job.data);
 
@@ -15,6 +15,10 @@ export class OcrWorker implements IWorker<OcrJob> {
     const redisClient = await getRedisClient();
     const worker = new Worker(QUEUE_NAMES.ocr, this.handleJob, {
       connection: redisClient,
+    });
+
+    worker.on('active', (job) => {
+      console.log(`🚀 Job ${job.id} started`);
     });
 
     worker.on('completed', (job) => {

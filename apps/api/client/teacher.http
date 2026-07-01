@@ -84,3 +84,25 @@ Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
  
+
+###
+# @name addHomework
+POST {{baseUrl}}/schools/{{SchoolId}}/homework
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "title": "Homework 1",
+    "content": "Homework 1 content",
+    "due": "2022-01-01",
+    "type": "STANDARD",
+    "files":[],
+    "details": [
+        {
+            "due": "2022-01-01",
+            "assignmentId": "00260a53-a03e-4875-a619-0a78a5d87581",
+            "studentIds": []
+            
+        }
+    ]
+}
