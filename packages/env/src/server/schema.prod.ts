@@ -1,7 +1,7 @@
-import baseSchema from './schema.base';
-import { prodEnvs } from './NodeEnvs';
-import { awsStorageSchema, cdnSchema, corsSchema } from './envs.fields';
 import z from 'zod';
+import { prodEnvs } from './NodeEnvs';
+import { awsBedrockSchema, awsStorageSchema, cdnSchema, corsSchema } from './envs.fields';
+import baseSchema from './schema.base';
 
 const prodSchema = baseSchema.extend({
   NODE_ENV: z.enum(prodEnvs),
@@ -11,6 +11,8 @@ const prodSchema = baseSchema.extend({
 
   // CDN
   ...cdnSchema,
+
+  ...awsBedrockSchema,
 
   // CORS
   ...corsSchema,

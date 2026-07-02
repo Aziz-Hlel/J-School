@@ -96,8 +96,7 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
     "content": "Homework 1 content",
     "due": "2022-01-01",
     "type": "STANDARD",
-    "files":   [
-  "f214dea5-8b07-480c-8cba-89ea09797ce2"],
+    "files":   ["f214dea5-8b07-480c-8cba-89ea09797ce2"],
     "details": [
         {
             "due": "2022-01-01",
@@ -106,4 +105,17 @@ Authorization: Bearer {{firebase_login.response.body.idToken}}
             
         }
     ]
+}
+
+
+
+
+###
+# @name sendMessage
+POST {{baseUrl}}/schools/{{SchoolId}}/homework/{{addHomework.response.body.data[0].id}}/messages
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}
+
+{
+    "content": "idk can you tell me "
 }

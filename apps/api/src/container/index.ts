@@ -7,6 +7,7 @@ import { ExtraCurricularModule } from '@/modules/ExtraCurricular/ExtraCurricular
 import { ExtraCurricularPostsModule } from '@/modules/ExtraCurricular/posts/ExtraCurricularPosts.module';
 import { FeeItemsModule } from '@/modules/FeeItems/feeItems.module';
 import { FeesModule } from '@/modules/Fees/fees.module';
+import { HomeworkChatbotModule } from '@/modules/Homework/chatbot/homeworkChatbot.module';
 import { HomeworkModule } from '@/modules/Homework/homework.module';
 import { MobileModule } from '@/modules/Mobile/mobile.module';
 import { NotificationModule } from '@/modules/Notification/notification.module';
@@ -152,6 +153,9 @@ const { teacherCommentsRouter } = TeacherCommentsModule();
 // * HOMEWORK
 const { homeworkRouter } = HomeworkModule();
 
+// * HOMEWORK CHATBOT
+const { homeworkChatbotRouter } = HomeworkChatbotModule();
+
 // * AFTERCARE
 const { aftercareRouter } = AftercareModule();
 
@@ -250,6 +254,7 @@ export const container: { router: Router; resource: string }[] = [
   { router: feesRouter, resource: 'schools/:schoolId/fees' },
   { router: feeItemsRouter, resource: 'schools/:schoolId/fees/:feeId/items' },
   { router: homeworkRouter, resource: 'schools/:schoolId/homework' },
+  { router: homeworkChatbotRouter, resource: 'schools/:schoolId/homework/:homeworkId/messages' },
   { router: teacherCommentsRouter, resource: 'schools/:schoolId/teachers/:teacherId/comments' },
   { router: aftercareRouter, resource: 'schools/:schoolId/aftercares' },
   { router: calendarRouter, resource: 'schools/:schoolId/calendars' },

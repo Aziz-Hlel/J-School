@@ -1,3 +1,4 @@
+import { logger } from '@/bootstrap/logger.init';
 import { NotFoundError } from '@/err/service/customErrors';
 import { PageMapper } from '@/helper/page.mapper';
 import { globalOcrQueue } from '@/mq/ocr.queue';
@@ -17,7 +18,7 @@ export class HomeworkService {
   create = async (params: { input: CreateHomeworkReq; schoolId: string }) => {
     const { input, schoolId } = params;
     return prisma.$transaction(async (tx) => {
-      await Promise.all(
+      return await Promise.all(
         input.details.map(async (detail) => {
           const homework = await tx.homework.create({
             data: {
@@ -123,7 +124,10 @@ export class HomeworkService {
                 sourceType: NotificationSourceType.HOMEWORK,
               },
             });
-          } catch (error) {}
+          } catch (error) {
+            logger.error(error, 'Failed to send homework notification');
+          }
+          return { id: homework.id };
         }),
       );
     });

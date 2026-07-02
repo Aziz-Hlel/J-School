@@ -92,7 +92,6 @@ export class OcrService {
         },
       ],
     };
-
     const jsonRes = await this.ocrProvider.invokeOcr({ body });
 
     await prisma.homework.update({

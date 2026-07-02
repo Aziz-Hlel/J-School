@@ -41,7 +41,6 @@ export class OcrProvider {
       return jsonRes;
     } catch (error) {
       console.log('failed to json parse llm response : ', aiTextText);
-      throw error;
     }
   };
 }

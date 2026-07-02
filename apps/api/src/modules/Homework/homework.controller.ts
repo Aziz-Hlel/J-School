@@ -1,6 +1,6 @@
 import getUrlParam from '@/utils/getUrlParam';
-import { createHomeworkReqSchema } from '@repo/contracts/schemas/Homework/create';
 import { adminHomeworkQueryParams } from '@repo/contracts/schemas/Homework/adminQueryParam';
+import { createHomeworkReqSchema } from '@repo/contracts/schemas/Homework/create';
 import { updateHomeworkReqSchema } from '@repo/contracts/schemas/Homework/update';
 import type { Request, Response } from 'express';
 import { HomeworkService } from './homework.service';
@@ -12,7 +12,7 @@ export class HomeworkController {
     const input = createHomeworkReqSchema.parse(req.body);
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const result = await this.service.create({ schoolId, input });
-    res.status(201).json(result);
+    res.status(201).json({ data: result });
   };
 
   update = async (req: Request, res: Response) => {
