@@ -40,4 +40,12 @@ export class HomeworkChatbotService {
     globalCacheService.set({ key, value: JSON.stringify(messages), ttlSeconds: 60 * 60 * 24 });
     return response;
   };
+
+  findHistory = async (params: { homeworkId: string; accountId: string }) => {
+    const { homeworkId, accountId } = params;
+    const key = RedisKeys.homeworkChatbot.genKey(accountId, homeworkId);
+    const rawHistory = await globalCacheService.get({ key });
+    const messages = rawHistory ? JSON.parse(rawHistory) : [];
+    return messages;
+  };
 }

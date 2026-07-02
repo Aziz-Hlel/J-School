@@ -6,8 +6,6 @@ import { HomeworkChatbotController } from './homeworkChatbot.controller';
 export const createRouter = (controller: HomeworkChatbotController) => {
   const router = Router({ mergeParams: true });
   router.post('/', requireAuth, asyncHandler(controller.sendMessage));
-  router.put('/:homeworkChatbotId', requireAuth, asyncHandler(controller.update));
-  router.delete('/:homeworkChatbotId', requireAuth, asyncHandler(controller.delete));
-  router.get('/:homeworkChatbotId', requireAuth, asyncHandler(controller.findById));
+  router.get('/', requireAuth, asyncHandler(controller.findHistory));
   return router;
 };

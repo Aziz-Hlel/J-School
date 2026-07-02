@@ -117,5 +117,12 @@ Content-Type: application/json
 Authorization: Bearer {{firebase_login.response.body.idToken}}
 
 {
-    "content": "idk can you tell me "
+    "content": "yes plz "
 }
+
+
+###
+# @name getHistory
+GET {{baseUrl}}/schools/{{SchoolId}}/homework/{{addHomework.response.body.data[0].id}}/messages/
+Content-Type: application/json
+Authorization: Bearer {{firebase_login.response.body.idToken}}

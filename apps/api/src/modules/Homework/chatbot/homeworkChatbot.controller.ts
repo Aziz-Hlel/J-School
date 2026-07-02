@@ -1,7 +1,7 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { sendHomeworkMessageSchema } from '@repo/contracts/schemas/Homework/chatbot/sendMessageReq';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 import { HomeworkChatbotService } from './homeworkChatbot.service';
 
 export class HomeworkChatbotController {
@@ -22,11 +22,14 @@ export class HomeworkChatbotController {
     res.json({ data: response });
   };
 
-  create = async (req: Request, res: Response) => {};
+  findHistory = async (req: AuthenticatedRequest, res: Response) => {
+    const homeworkId = getUrlParam(req, 'homeworkId');
+    const accountId = req.token.claims.accountId;
+    const response = await this.service.findHistory({
+      homeworkId,
+      accountId,
+    });
 
-  update = async (req: Request, res: Response) => {};
-
-  delete = async (req: Request, res: Response) => {};
-
-  findById = async (req: Request, res: Response) => {};
+    res.json({ data: response });
+  };
 }
