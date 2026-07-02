@@ -5,6 +5,7 @@ import { CreateNotificationInternal } from '@repo/contracts/schemas/Notification
 import type { NotificationCountCursorSchema } from '@repo/contracts/schemas/Notification2/notificationCountQueryParam';
 import { NotificationCountRes } from '@repo/contracts/schemas/Notification2/notificationCountRespose';
 import { NotificationCursorSchema } from '@repo/contracts/schemas/Notification2/notificationQueryParam';
+import { NotificationMarkAsReadSchema } from '@repo/contracts/schemas/Notification2/notificationReadSchema';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/browser';
 import { NotificationScheduleType, NotificationType } from '@repo/db/prisma/enums';
@@ -140,6 +141,7 @@ export class NotificationService {
 
     const where: Prisma.NotificationWhereInput = {
       schoolId,
+
       userNotifications: {
         some: {
           userId: user.id,
@@ -166,6 +168,40 @@ export class NotificationService {
     }));
 
     return response;
+  };
+
+  markAsRead = async (params: { input: NotificationMarkAsReadSchema; schoolId: string; accountId: string }) => {
+    const { input, schoolId, accountId } = params;
+    const user = await prisma.user.findUnique({
+      where: {
+        accountId_schoolId: {
+          accountId,
+          schoolId,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (!user) throw new NotFoundError('User not found');
+
+    await prisma.userNotification.updateMany({
+      where: {
+        userId: user.id,
+        isRead: false,
+        notification: {
+          schoolId,
+          sourceType: input.type,
+          ...(input.studentId && { students: { some: { id: input.studentId } } }),
+          ...(input.role && {
+            OR: [{ role: input.role }, { role: null }],
+          }),
+        },
+      },
+      data: {
+        isRead: true,
+      },
+    });
   };
 }
 
