@@ -24,4 +24,6 @@ export class NotificationMapper {
       updatedAt: notification.updatedAt.toISOString(),
     };
   }
+
+  static toCountResponse = () => {};
 }

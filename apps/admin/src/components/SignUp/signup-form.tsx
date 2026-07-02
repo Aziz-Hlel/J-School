@@ -20,7 +20,6 @@ export function SignupForm() {
           <h1 className='text-2xl font-bold'>Create your account</h1>
           <p className='text-muted-foreground text-sm text-balance'>Fill in the form below to create your account</p>
         </div>
-
         <Controller
           name='email'
           control={form.control}

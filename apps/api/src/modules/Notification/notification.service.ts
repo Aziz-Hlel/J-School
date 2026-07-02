@@ -1,6 +1,9 @@
+import { NotFoundError } from '@/err/service/customErrors';
 import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalNotificationQueue } from '@/mq/notification.queue';
 import { CreateNotificationInternal } from '@repo/contracts/schemas/Notification2/create.internal';
+import type { NotificationCountCursorSchema } from '@repo/contracts/schemas/Notification2/notificationCountQueryParam';
+import { NotificationCountRes } from '@repo/contracts/schemas/Notification2/notificationCountRespose';
 import { NotificationCursorSchema } from '@repo/contracts/schemas/Notification2/notificationQueryParam';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/browser';
@@ -61,14 +64,37 @@ export class NotificationService {
 
   update = async () => {};
   delete = async () => {};
-  find = async (params: { schoolId: string; cursorParam: NotificationCursorSchema }) => {
-    const { schoolId, cursorParam } = params;
+  find = async (params: { schoolId: string; cursorParam: NotificationCursorSchema; accountId: string }) => {
+    const { schoolId, cursorParam, accountId } = params;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        accountId_schoolId: {
+          accountId,
+          schoolId,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (!user) throw new NotFoundError('User not found');
 
     const where: Prisma.NotificationWhereInput = {
       schoolId,
       ...(cursorParam.studentId && { students: { some: { id: cursorParam.studentId } } }),
       ...(cursorParam.role && {
-        OR: [{ role: cursorParam.role }, { role: null }],
+        OR: [
+          { role: cursorParam.role },
+          { role: null },
+          {
+            userNotifications: {
+              some: {
+                userId: user.id,
+              },
+            },
+          },
+        ],
       }),
     };
 
@@ -93,6 +119,52 @@ export class NotificationService {
       data: dataResponse,
       nextCursor,
     });
+    return response;
+  };
+
+  getCount = async (params: { schoolId: string; cursorParam: NotificationCountCursorSchema; accountId: string }) => {
+    const { schoolId, cursorParam, accountId } = params;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        accountId_schoolId: {
+          accountId,
+          schoolId,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (!user) throw new NotFoundError('User not found');
+
+    const where: Prisma.NotificationWhereInput = {
+      schoolId,
+      userNotifications: {
+        some: {
+          userId: user.id,
+          isRead: false,
+        },
+      },
+      ...(cursorParam.studentId && { students: { some: { id: cursorParam.studentId } } }),
+      ...(cursorParam.role && {
+        OR: [{ role: cursorParam.role }, { role: null }],
+      }),
+    };
+
+    const countsBySourceType = await prisma.notification.groupBy({
+      by: ['sourceType'],
+      where,
+      _count: {
+        sourceType: true,
+      },
+    });
+
+    const response: NotificationCountRes[] = countsBySourceType.map((item) => ({
+      sourceType: item.sourceType,
+      count: item._count.sourceType,
+    }));
+
     return response;
   };
 }

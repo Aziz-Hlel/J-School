@@ -41,7 +41,7 @@ model Notification {
   schoolId String @db.Uuid
   school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  role      UserRole?
+  role     UserRole?
   students Student[]
 
   // translations      NotificationTranslation[]
@@ -80,4 +80,5 @@ model UserNotification {
   isRead Boolean @default(false)
 
   @@unique([userId, notificationId])
+  @@index([userId, notificationId, isRead])
 }

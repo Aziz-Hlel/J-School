@@ -6,5 +6,6 @@ import { NotificationController } from './notification.controller';
 export const createRouter = (controller: NotificationController) => {
   const router = Router({ mergeParams: true });
   router.get('/', requireAuth, asyncHandler(controller.find));
+  router.get('/count', requireAuth, asyncHandler(controller.getCount));
   return router;
 };
