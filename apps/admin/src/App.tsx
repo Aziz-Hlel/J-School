@@ -10,6 +10,7 @@ import { SchoolIdProvider } from './context/SchoolContext';
 import { UserSessionProvider } from './context/UserContext';
 import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
 import NetworkStatusGuard from './guard/NetworkStatusGuard';
+import OnboardingSchoolCompleted from './guard/OnboardingSchoolCompleted';
 import { ThemeProvider } from './lib/theme-provider';
 import Classrooms from './pages/Classrooms';
 import Feed from './pages/Feed';
@@ -35,22 +36,25 @@ const App = () => {
                   <Route path='/signup' element={<SignupPage />} />
                   <Route element={<AuthenticatedRoutes />}>
                     <Route element={<UserSessionProvider />}>
-                      <Route element={<SchoolIdProvider />}>
-                        <Route element={<Sidebar dir={'ltr'} />}>
-                          <Route path='/' element={<Homepage />} />
+                      <Route element={<OnboardingSchoolCompleted />}>
+                        <Route element={<SchoolIdProvider />}>
+                          <Route element={<Sidebar dir={'ltr'} />}>
+                            <Route path='/' element={<Homepage />} />
 
-                          <Route path='/staff' element={<Staff />} />
-                          <Route path='/classrooms' element={<Classrooms />} />
-                          <Route path='/students' element={<Outlet />}>
-                            <Route index element={<Students />} />
-                            <Route path=':studentId/profile' element={<StudentProfile />} />
+                            <Route path='/staff' element={<Staff />} />
+                            <Route path='/classrooms' element={<Classrooms />} />
+                            <Route path='/students' element={<Outlet />}>
+                              <Route index element={<Students />} />
+                              <Route path=':studentId/profile' element={<StudentProfile />} />
+                            </Route>
+                            <Route path='/feed' element={<Feed />} />
                           </Route>
-                          <Route path='/feed' element={<Feed />} />
-                          <Route path='*' element={<NotFound />} />
                         </Route>
                       </Route>
                     </Route>
                   </Route>
+
+                  <Route path='*' element={<NotFound />} />
                 </Routes>
               </AuthProvider>
             </Router>

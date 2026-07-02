@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { OwnerAppService } from './owner.app.service';
-import { createOwnerRequestSchema } from '@repo/contracts/schemas/owner/createOwnerRequest';
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
+import { createOwnerRequestSchema } from '@repo/contracts/schemas/owner/createOwnerRequest';
+import { Response } from 'express';
+import { OwnerAppService } from './owner.app.service';
 
 export class OwnerController {
   constructor(private readonly ownerService: OwnerAppService) {}

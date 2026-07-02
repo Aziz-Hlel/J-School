@@ -123,8 +123,8 @@ export class NotificationService {
     return response;
   };
 
-  getCount = async (params: { schoolId: string; cursorParam: NotificationCountCursorSchema; accountId: string }) => {
-    const { schoolId, cursorParam, accountId } = params;
+  getCount = async (params: { schoolId: string; queryParam: NotificationCountCursorSchema; accountId: string }) => {
+    const { schoolId, queryParam, accountId } = params;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -148,9 +148,9 @@ export class NotificationService {
           isRead: false,
         },
       },
-      ...(cursorParam.studentId && { students: { some: { id: cursorParam.studentId } } }),
-      ...(cursorParam.role && {
-        OR: [{ role: cursorParam.role }, { role: null }],
+      ...(queryParam.studentId && { students: { some: { id: queryParam.studentId } } }),
+      ...(queryParam.role && {
+        OR: [{ role: queryParam.role }, { role: null }],
       }),
     };
 

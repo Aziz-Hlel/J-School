@@ -31,7 +31,7 @@ export class NotificationController {
     const schoolId = getUrlParam(req, 'schoolId');
     const cursorParam = notificationCountCursorSchema.parse(req.query);
     const accountId = req.token.claims.accountId;
-    const response = await this.service.getCount({ cursorParam, schoolId, accountId });
+    const response = await this.service.getCount({ queryParam: cursorParam, schoolId, accountId });
     res.json({ data: response });
   };
 

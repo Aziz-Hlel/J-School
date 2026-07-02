@@ -58,6 +58,7 @@ export type AdministrationWorkspace =
       userId: string;
       firstName: string;
       lastName: string;
+      role: AdministrationRole;
       school: SchoolResponse & {
         role: AdministrationRole;
       };
@@ -66,6 +67,7 @@ export type AdministrationWorkspace =
       id: string;
       firstName: string;
       lastName: string;
+      role: 'OWNER';
       school:
         | (SchoolResponse & {
             role: 'OWNER';

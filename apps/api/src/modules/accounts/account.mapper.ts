@@ -72,6 +72,7 @@ export class AccountMapper {
       userId: user.id as any, // ! just add it to bypass compilation eror look into it afterwards
       firstName: user.firstName,
       lastName: user.lastName,
+      role: role,
       school: {
         id: user.school.id,
         slug: user.school.slug,
@@ -120,6 +121,7 @@ export class AccountMapper {
         id: account.owner.id,
         firstName: account.owner.firstName,
         lastName: account.owner.lastName,
+        role: 'OWNER',
         school: account.owner.school
           ? {
               id: account.owner.school.id,
