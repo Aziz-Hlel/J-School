@@ -1,5 +1,4 @@
 import { AccountGetPayload, AccountInclude } from '@repo/db/prisma/models';
-// * fix the erros above, i think you should use other types since those are from files not recommened to import from , not sure though
 type AccountIncludeConstraint = AccountInclude;
 
 export const accountInclude = {

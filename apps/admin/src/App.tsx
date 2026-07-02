@@ -10,7 +10,7 @@ import { SchoolIdProvider } from './context/SchoolContext';
 import { UserSessionProvider } from './context/UserContext';
 import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
 import NetworkStatusGuard from './guard/NetworkStatusGuard';
-import OnboardingSchoolCompleted from './guard/OnboardingSchoolCompleted';
+import OnboardingOwnerAndSchoolCompleted from './guard/OnboardingSchoolCompleted';
 import { ThemeProvider } from './lib/theme-provider';
 import Classrooms from './pages/Classrooms';
 import Feed from './pages/Feed';
@@ -36,7 +36,7 @@ const App = () => {
                   <Route path='/signup' element={<SignupPage />} />
                   <Route element={<AuthenticatedRoutes />}>
                     <Route element={<UserSessionProvider />}>
-                      <Route element={<OnboardingSchoolCompleted />}>
+                      <Route element={<OnboardingOwnerAndSchoolCompleted />}>
                         <Route element={<SchoolIdProvider />}>
                           <Route element={<Sidebar dir={'ltr'} />}>
                             <Route path='/' element={<Homepage />} />
