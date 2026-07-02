@@ -7,5 +7,6 @@ export const createRouter = (controller: NotificationController) => {
   const router = Router({ mergeParams: true });
   router.get('/', requireAuth, asyncHandler(controller.find));
   router.get('/count', requireAuth, asyncHandler(controller.getCount));
+  router.post('/read', requireAuth, asyncHandler(controller.markAsRead));
   return router;
 };
