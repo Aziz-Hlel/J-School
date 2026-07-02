@@ -1,24 +1,26 @@
 import getUrlParam from '@/utils/getUrlParam';
-import { createNotification2ReqSchema } from '@repo/contracts/schemas/Notification2/create.req';
+import { notificationCursorSchema } from '@repo/contracts/schemas/Notification2/notificationQueryParam';
 import type { Request, Response } from 'express';
 import { NotificationService } from './notification.service';
 
 export class NotificationController {
   constructor(private readonly service: NotificationService) {}
 
-  create = async (req: Request, res: Response) => {
+  // create = async (req: Request, res: Response) => {
+  //   const schoolId = getUrlParam(req, 'schoolId');
+  //   const input = createNotification2ReqSchema.parse(req.body);
+
+  //   await this.service.create({ input: { ...input, schoolId } });
+  //   res.status(201).json({
+  //     message: 'created successfully',
+  //   });
+  // };
+
+  find = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
-    const input = createNotification2ReqSchema.parse(req.body);
+    const cursorParam = notificationCursorSchema.parse(req.query);
 
-    await this.service.create({ input: { ...input, schoolId } });
-    res.status(201).json({
-      message: 'created successfully',
-    });
+    const response = await this.service.find({ cursorParam, schoolId });
+    res.json({ data: response });
   };
-
-  update = async (req: Request, res: Response) => {};
-
-  delete = async (req: Request, res: Response) => {};
-
-  findById = async (req: Request, res: Response) => {};
 }

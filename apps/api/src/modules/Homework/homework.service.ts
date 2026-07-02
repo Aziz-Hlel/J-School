@@ -8,7 +8,7 @@ import { AdminHomeworkQueryParamsTypes } from '@repo/contracts/schemas/Homework/
 import { CreateHomeworkReq } from '@repo/contracts/schemas/Homework/create';
 import { UpdateHomeworkReq } from '@repo/contracts/schemas/Homework/update';
 import prisma from '@repo/db';
-import { NotificationSourceType, NotificationType, Prisma } from '@repo/db/prisma/browser';
+import { NotificationSourceType, NotificationType, Prisma, UserRole } from '@repo/db/prisma/browser';
 import { globalNotificationService } from '../Notification/notification.service';
 import { HomeworkMapper } from './homework.mapper';
 
@@ -122,6 +122,8 @@ export class HomeworkService {
                 title: homeworkNotification.title(),
                 content: homeworkNotification.content({ subjectNames }),
                 sourceType: NotificationSourceType.HOMEWORK,
+                studentIds: detail.studentIds,
+                userRole: UserRole.PARENT,
               },
             });
           } catch (error) {

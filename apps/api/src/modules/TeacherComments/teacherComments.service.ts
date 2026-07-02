@@ -7,7 +7,7 @@ import type { TeacherCommentsQueryParamsTypes } from '@repo/contracts/schemas/Te
 import { ReplyToCommentReq } from '@repo/contracts/schemas/TeacherComments/replyToComment';
 import { UpdateTeacherCommentsReq } from '@repo/contracts/schemas/TeacherComments/update';
 import prisma from '@repo/db';
-import { NotificationSourceType, NotificationType, Prisma } from '@repo/db/prisma/client';
+import { NotificationSourceType, NotificationType, Prisma, UserRole } from '@repo/db/prisma/client';
 import { globalNotificationService } from '../Notification/notification.service';
 import { TeacherCommentsMapper } from './teacherComments.mapper';
 
@@ -72,6 +72,8 @@ export class TeacherCommentsService {
             title: teacherCommentNotification.title(),
             content: teacherCommentNotification.content({ teacherFullName }),
             sourceType: NotificationSourceType.TEACHER_COMMENT,
+            userRole: UserRole.PARENT,
+            studentIds: [studentId],
           },
         });
       } catch (error) {

@@ -6,7 +6,7 @@ import { CreateCalendarReq } from '@repo/contracts/schemas/Calendar/create';
 import { CalendarQueryParams } from '@repo/contracts/schemas/Calendar/queryParam';
 import { UpdateCalendarReq } from '@repo/contracts/schemas/Calendar/update';
 import prisma from '@repo/db';
-import { NotificationSourceType, NotificationType } from '@repo/db/prisma/enums';
+import { NotificationSourceType, NotificationType, UserRole } from '@repo/db/prisma/enums';
 import { globalNotificationService } from '../Notification/notification.service';
 import { CalendarMapper } from './calendar.mapper';
 
@@ -38,6 +38,8 @@ export class CalendarService {
             title: calendarNotification.title(),
             content: calendarNotification.content(),
             sourceType: NotificationSourceType.CALENDAR,
+            userRole: UserRole.PARENT,
+            studentIds: [],
           },
         });
       }

@@ -7,7 +7,7 @@ export default function SignupPage() {
       <div className='flex flex-col gap-4 p-6 md:p-10'>
         <div className='flex justify-center gap-2 md:justify-start'>
           <a href='#' className='flex items-center gap-2 font-medium'>
-            <div className='flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground'>
+            <div className='bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md'>
               <GalleryVerticalEnd className='size-4' />
             </div>
             Acme Inc.
@@ -19,11 +19,11 @@ export default function SignupPage() {
           </div>
         </div>
       </div>
-      <div className='relative hidden bg-muted lg:block'>
+      <div className='bg-muted relative hidden lg:block'>
         <img
-          src='/placeholder.svg'
+          src='/app_logo.png'
           alt='Image'
-          className='absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale'
+          className='absolute inset-0 h-full w-full object-cover dark:brightness-75'
         />
       </div>
     </div>

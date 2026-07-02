@@ -1,7 +1,11 @@
+import { CursorMapper } from '@/helper/cursor.mapper';
 import { globalNotificationQueue } from '@/mq/notification.queue';
 import { CreateNotificationInternal } from '@repo/contracts/schemas/Notification2/create.internal';
+import { NotificationCursorSchema } from '@repo/contracts/schemas/Notification2/notificationQueryParam';
 import prisma from '@repo/db';
+import { Prisma } from '@repo/db/prisma/browser';
 import { NotificationScheduleType, NotificationType } from '@repo/db/prisma/enums';
+import { NotificationMapper } from './notification.mapper';
 
 export class NotificationService {
   constructor() {}
@@ -29,6 +33,10 @@ export class NotificationService {
         schoolId: input.schoolId,
         scheduleType: NotificationScheduleType.IMMEDIATE,
         sourceType: input.sourceType,
+        role: input.userRole,
+        students: {
+          connect: input.studentIds?.map((studentId) => ({ id: studentId })),
+        },
       },
     });
 
@@ -50,9 +58,43 @@ export class NotificationService {
       },
     });
   };
+
   update = async () => {};
   delete = async () => {};
-  find = async () => {};
+  find = async (params: { schoolId: string; cursorParam: NotificationCursorSchema }) => {
+    const { schoolId, cursorParam } = params;
+
+    const where: Prisma.NotificationWhereInput = {
+      schoolId,
+      ...(cursorParam.studentId && { students: { some: { id: cursorParam.studentId } } }),
+      ...(cursorParam.role && {
+        OR: [{ role: cursorParam.role }, { role: null }],
+      }),
+    };
+
+    const queryResponse = await prisma.notification.findMany({
+      where,
+      cursor: cursorParam.cursor ? { id: cursorParam.cursor } : undefined,
+      take: cursorParam.limit + 1,
+      skip: cursorParam.cursor ? 1 : 0,
+      include: {
+        title: true,
+        content: true,
+      },
+    });
+
+    const lastItem = queryResponse[cursorParam.limit];
+    const nextCursor = lastItem?.id || null;
+    const notifications = queryResponse.slice(0, cursorParam.limit);
+
+    const dataResponse = notifications.map(NotificationMapper.toResponse);
+
+    const response = CursorMapper.toCursor({
+      data: dataResponse,
+      nextCursor,
+    });
+    return response;
+  };
 }
 
 export const globalNotificationService = new NotificationService();

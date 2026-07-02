@@ -4,7 +4,7 @@ import { parseCalendarDate, parseTime } from '@/utils/dayjs';
 import { CreateExamScheduleRequest } from '@repo/contracts/schemas/examSchedule/createExamScheduleRequest';
 import type { UpdateExamScheduleRequest } from '@repo/contracts/schemas/examSchedule/updateExamScheduleRequest';
 import prisma from '@repo/db';
-import { NotificationSourceType, NotificationType } from '@repo/db/prisma/browser';
+import { NotificationSourceType, NotificationType, UserRole } from '@repo/db/prisma/browser';
 import { globalNotificationService } from '../Notification/notification.service';
 import { ExamScheduleMapper } from './ExamSchedule.mapper';
 
@@ -61,6 +61,7 @@ export class ExamScheduleService {
           },
         },
         select: {
+          id: true,
           parent: {
             select: {
               user: {
@@ -88,6 +89,8 @@ export class ExamScheduleService {
           title: examScheduleNotification.title(),
           content: examScheduleNotification.content({ examNames }),
           sourceType: NotificationSourceType.EXAM_SCHEDULE,
+          userRole: UserRole.PARENT,
+          studentIds: parentIdQueryResult.map((x) => x.id),
         },
       });
     } catch (error) {

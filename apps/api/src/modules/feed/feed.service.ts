@@ -60,6 +60,8 @@ export class FeedService {
             title: feedNotification.title(),
             content: feedNotification.content(),
             sourceType: NotificationSourceType.FEED,
+            userRole: null,
+            studentIds: [],
           },
         });
       } catch (error) {

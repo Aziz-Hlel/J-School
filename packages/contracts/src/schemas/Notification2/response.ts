@@ -1,6 +1,23 @@
-import z from 'zod';
-export const notification2ResponseSchema = z.object({
-  //TODO: define schema
-});
+import type { NotificationSourceType, NotificationType } from '@repo/db/prisma/client';
 
-export type Notification2Response = z.infer<typeof notification2ResponseSchema>;
+export type NotificationClientResponse = {
+  id: string;
+
+  title: {
+    en: string;
+    fr: string;
+    ar: string;
+  };
+  content: {
+    en: string;
+    fr: string;
+    ar: string;
+  };
+
+  type: NotificationType;
+  sourceType: NotificationSourceType;
+  sourceId: string | null;
+
+  createdAt: string;
+  updatedAt: string;
+};

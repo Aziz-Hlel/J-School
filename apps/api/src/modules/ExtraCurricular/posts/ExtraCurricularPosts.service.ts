@@ -8,7 +8,7 @@ import { CreatePostReq } from '@repo/contracts/schemas/extraCurricular/post/crea
 import { PostResponse } from '@repo/contracts/schemas/extraCurricular/post/postResponse';
 import { UpdatePostReq } from '@repo/contracts/schemas/extraCurricular/post/update';
 import prisma from '@repo/db';
-import { NotificationSourceType, NotificationType } from '@repo/db/prisma/browser';
+import { NotificationSourceType, NotificationType, UserRole } from '@repo/db/prisma/browser';
 
 export class ExtraCurricularPostsService {
   create = async (params: { schoolId: string; extraCurricularId: string; post: CreatePostReq }) => {
@@ -49,6 +49,7 @@ export class ExtraCurricularPostsService {
         select: {
           student: {
             select: {
+              id: true,
               parents: {
                 select: {
                   parent: {
@@ -71,6 +72,8 @@ export class ExtraCurricularPostsService {
         },
       });
 
+      const studentIds = parents.map((x) => x.student.id);
+
       await globalNotificationService.create({
         input: {
           schoolId,
@@ -82,6 +85,8 @@ export class ExtraCurricularPostsService {
           title: extraCurricularPostNotification.title(),
           content: extraCurricularPostNotification.content({ activityName }),
           sourceType: NotificationSourceType.EXTRA_CURRICULAR,
+          userRole: UserRole.PARENT,
+          studentIds,
         },
       });
     } catch (error) {

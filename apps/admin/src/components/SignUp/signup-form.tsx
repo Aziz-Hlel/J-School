@@ -1,16 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import useLoginWithGoogle from '@/hooks/use-login-with-google';
 import { cn } from '@/lib/utils';
 import { Controller } from 'react-hook-form';
-import { Link } from 'react-router';
 import { Spinner } from '../ui/spinner';
 import useSignUpForm from './use-signUp-form';
 
 export function SignupForm() {
   const { form, onSubmit } = useSignUpForm();
-  const { loginWithGoogle } = useLoginWithGoogle(form as any); // *
+  // const { loginWithGoogle } = useLoginWithGoogle(form as any); // *
 
   const formId = 'sign-up-form';
   const isFormSubmitting = form.formState.isSubmitting;
@@ -18,9 +16,9 @@ export function SignupForm() {
   return (
     <form className={cn('flex flex-col gap-6')} id={formId} onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
-        <div className='flex flex-col items-center gap-1 text-nowrap text-center'>
+        <div className='flex flex-col items-center gap-1 text-center text-nowrap'>
           <h1 className='text-2xl font-bold'>Create your account</h1>
-          <p className='text-balance text-sm text-muted-foreground'>Fill in the form below to create your account</p>
+          <p className='text-muted-foreground text-sm text-balance'>Fill in the form below to create your account</p>
         </div>
 
         <Controller
@@ -76,7 +74,7 @@ export function SignupForm() {
             )}
           </Button>
         </Field>
-        <FieldSeparator>Or continue with</FieldSeparator>
+        {/* <FieldSeparator>Or continue with</FieldSeparator>
         <Field>
           <Button variant='outline' type='button' onClick={loginWithGoogle}>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
@@ -90,7 +88,7 @@ export function SignupForm() {
           <FieldDescription className='px-6 text-center'>
             Already have an account? <Link to='/signin'>Sign in</Link>
           </FieldDescription>
-        </Field>
+        </Field> */}
       </FieldGroup>
     </form>
   );

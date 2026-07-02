@@ -6,7 +6,7 @@ import { toDate } from '@/utils/toDate';
 import { CreateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/create';
 import { UpdateFeeItemsReq } from '@repo/contracts/schemas/FeeItems/update';
 import prisma from '@repo/db';
-import { NotificationSourceType, NotificationType, Prisma } from '@repo/db/prisma/client';
+import { NotificationSourceType, NotificationType, Prisma, UserRole } from '@repo/db/prisma/client';
 import { globalNotificationService } from '../Notification/notification.service';
 import { FeeItemsMapper } from './feeItems.mapper';
 
@@ -80,6 +80,8 @@ export class FeeItemsService {
           title: feeItemNotification.title(),
           content: feeItemNotification.content(),
           sourceType: NotificationSourceType.FEES,
+          userRole: UserRole.PARENT,
+          studentIds: [sutdentFeeQuery.studentId],
         },
       });
     } catch (error) {

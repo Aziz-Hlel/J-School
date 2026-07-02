@@ -11,6 +11,17 @@ export class HomeworkChatbotService {
   delete = async () => {};
   find = async () => {};
 
+  getMessages = (rawHistory: unknown) => {
+    try {
+      if (!rawHistory || typeof rawHistory !== 'string') return [];
+      const parsed = JSON.parse(rawHistory);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
   sendMessage = async (params: {
     homeworkId: string;
     schoolId: string;
@@ -20,7 +31,7 @@ export class HomeworkChatbotService {
     const { homeworkId, schoolId, accountId, input } = params;
     const key = RedisKeys.homeworkChatbot.genKey(accountId, homeworkId);
     const rawHistory = await globalCacheService.get({ key });
-    const messages = rawHistory ? JSON.parse(rawHistory) : [];
+    const messages = this.getMessages(rawHistory);
 
     messages.push({ role: 'user', content: input.content });
 
@@ -45,7 +56,7 @@ export class HomeworkChatbotService {
     const { homeworkId, accountId } = params;
     const key = RedisKeys.homeworkChatbot.genKey(accountId, homeworkId);
     const rawHistory = await globalCacheService.get({ key });
-    const messages = rawHistory ? JSON.parse(rawHistory) : [];
+    const messages = this.getMessages(rawHistory);
     return messages;
   };
 }
