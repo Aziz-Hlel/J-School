@@ -16,30 +16,15 @@ import queryClient from '@/config/react-qeury';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { StudentFullDetailsResponse } from '@repo/contracts/schemas/student/studentFullDetails';
-import { updateStudentWithStatusRequestSchema } from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
+import {
+  updateStudentWithStatusRequestSchema,
+  type UpdateWithStatusStudentReq,
+} from '@repo/contracts/schemas/student/updateStudentWithStatusRequest';
 import { Gender, StudentStatus } from '@repo/contracts/types/enums/enums';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-
-type UpdateStudentReq = {
-  uid: string | null;
-  dateOfBirth: string | null;
-  avatarId: string | null;
-  gender: 'MALE' | 'FEMALE';
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING' | 'EXPELLED';
-} & {
-  firstName: {
-    en: string | null;
-    ar: string | null;
-  };
-} & {
-  lastName: {
-    en: string | null;
-    ar: string | null;
-  };
-};
 
 const EditStudent = ({
   setIsEditOpen,
@@ -51,14 +36,14 @@ const EditStudent = ({
   const schoolId = useCurrentSchoolId();
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['students', student.id, 'update'],
-    mutationFn: (payload: UpdateStudentReq) => studentService.update(schoolId, student.id, payload),
+    mutationFn: (payload: UpdateWithStatusStudentReq) => studentService.updateWithStatus(schoolId, student.id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'], exact: false });
       setIsEditOpen(false);
     },
   });
 
-  const defaultValues: UpdateStudentReq = {
+  const defaultValues: UpdateWithStatusStudentReq = {
     uid: student.uid,
     dateOfBirth: student.dateOfBirth,
     gender: student.gender,
@@ -73,12 +58,12 @@ const EditStudent = ({
     },
     avatarId: student.avatar?.id || null,
   };
-  const form = useForm<UpdateStudentReq>({
+  const form = useForm<UpdateWithStatusStudentReq>({
     resolver: zodResolver(updateStudentWithStatusRequestSchema),
     defaultValues: defaultValues,
   });
 
-  const handleUpdateStudent = async (data: UpdateStudentReq) => {
+  const handleUpdateStudent = async (data: UpdateWithStatusStudentReq) => {
     try {
       await mutateAsync(data);
       toast.success('Student updated successfully');

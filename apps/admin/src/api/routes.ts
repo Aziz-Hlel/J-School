@@ -31,6 +31,7 @@ export const apiRoutes = {
   student: {
     create: (schoolId: string) => `/schools/${schoolId}/students`,
     update: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
+    updateWithStatus: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}/with-status`,
     getPage: (schoolId: string) => `/schools/${schoolId}/students`,
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
     findFullDetails: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}/full-details`,
@@ -58,5 +59,9 @@ export const apiRoutes = {
     create: (schoolId: string) => `/schools/${schoolId}/feed`,
     update: (schoolId: string, id: string) => `/schools/${schoolId}/feed/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/feed/${id}`,
+  },
+
+  owner: {
+    create: () => `/owners`,
   },
 };

@@ -20,8 +20,8 @@ export const studentService = {
   getById: async (schoolId: string, studentId: string) =>
     apiService.getThrowable<StudentResponse>(apiRoutes.student.getById(schoolId, studentId)),
 
-  update: async (schoolId: string, id: string, data: UpdateWithStatusStudentReq) =>
-    apiService.putThrowable<StudentResponse>(apiRoutes.student.update(schoolId, id), data),
+  updateWithStatus: async (schoolId: string, id: string, data: UpdateWithStatusStudentReq) =>
+    apiService.putThrowable<StudentResponse>(apiRoutes.student.updateWithStatus(schoolId, id), data),
 
   findFullDetails: async (schoolId: string, studentId: string) =>
     apiService.getThrowable<{ data: StudentFullDetailsResponse }>(

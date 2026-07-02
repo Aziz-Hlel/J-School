@@ -44,7 +44,7 @@ const create = defineOperation({
 });
 
 const update = defineOperation({
-  fn: studentService.update,
+  fn: studentService.updateWithStatus,
   schema: updateStaffRequestSchema,
   mutationKey: () => [TableData.MODULE_NAME, 'update'],
   defaultValues: (moduleInstance: TableRowType) => ({
