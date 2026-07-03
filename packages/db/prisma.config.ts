@@ -18,11 +18,10 @@
 // });
 
 import 'dotenv/config';
-import { defineConfig } from 'prisma/config';
 
 const DATABASE_URL = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 console.log(DATABASE_URL);
-export default defineConfig({
+export default {
   schema: 'prisma/',
   migrations: {
     path: 'prisma/migrations',
@@ -30,4 +29,4 @@ export default defineConfig({
   datasource: {
     url: DATABASE_URL,
   },
-});
+};

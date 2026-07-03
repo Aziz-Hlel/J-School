@@ -51,7 +51,6 @@ export class OcrService {
   ) {}
 
   fetchHomework = async (homeworkId: string) => {
-    console.log('id :', homeworkId);
     const homework = await prisma.homework.findUniqueOrThrow({
       where: {
         id: homeworkId,
