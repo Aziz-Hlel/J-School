@@ -17,7 +17,9 @@ export const apiRoutes = {
   },
 
   schools: {
+    create: () => `/schools`,
     selectParent: (schoolId: string) => `/schools/${schoolId}/parents/select`,
+    selectClassrooms: (schoolId: string) => `/schools/${schoolId}/classrooms/select`,
   },
 
   staff: {

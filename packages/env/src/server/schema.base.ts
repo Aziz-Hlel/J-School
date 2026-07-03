@@ -15,7 +15,7 @@ const baseSchema = z.object({
   ...redisSchema,
 
   // SMTP
-  ...smtpSchema,
+  // ...smtpSchema,
 
   // APP VERSIONS
   ...mobileVersionsSchema,

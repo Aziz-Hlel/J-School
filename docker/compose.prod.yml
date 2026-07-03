@@ -24,7 +24,6 @@ services:
     networks:
       - default
 
-
   api:
     build:
       context: ${PROJECT_ROOT}
@@ -56,13 +55,18 @@ services:
       BUCKET_PREFIX: ${BUCKET_PREFIX}
       AWS_CLOUDFRONT_URL: ${AWS_CLOUDFRONT_URL}
 
+      AWS_BEDROCK_REGION: ${AWS_BEDROCK_REGION}
+      AWS_BEDROCK_ACCESS_KEY_ID: ${AWS_BEDROCK_ACCESS_KEY_ID}
+      AWS_BEDROCK_SECRET_ACCESS_KEY: ${AWS_BEDROCK_SECRET_ACCESS_KEY}
+      AWS_BEDROCK_MODEL_ID: ${AWS_BEDROCK_MODEL_ID}
+
     command: sh -c "pnpm dlx prisma migrate deploy && pnpm start"
     # command: sleep infinity
 
     depends_on:
       - db
       - redis
-      
+
     networks:
       - default
 
@@ -78,7 +82,6 @@ services:
 
     networks:
       - default
-
 
   db-backup:
     build:

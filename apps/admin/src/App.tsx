@@ -41,7 +41,7 @@ const App = () => {
                         // ? ask for coriosity if this okay to do
                         <Route path='on-boarding' element={<Outlet />}>
                           <Route path='profile' element={<SchoolBoarding />} />
-                          <Route path='staff' element={<SchoolBoarding />} />
+                          <Route path='school' element={<SchoolBoarding />} />
                         </Route>
                         <Route element={<SchoolIdProvider />}>
                           <Route element={<Sidebar dir={'ltr'} />}>
