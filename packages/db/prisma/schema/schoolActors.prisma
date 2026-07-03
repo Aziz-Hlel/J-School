@@ -83,7 +83,6 @@ model Student {
   updatedAt DateTime @updatedAt
 
   @@unique([avatarId])
-  @@unique([schoolId, uid])
   @@map("students")
 }
 

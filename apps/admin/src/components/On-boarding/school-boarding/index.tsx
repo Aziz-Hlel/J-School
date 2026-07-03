@@ -1,10 +1,12 @@
-import { ownerService } from '@/api/service/ownerService';
+import schoolService from '@/api/service/schoolService';
+import ImageUpload from '@/components/custom/ImageUpload/comp/ImageUpload';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
+import { useAuthStore } from '@/store/useAuthStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CreateSchoolRequestSchema,
@@ -18,13 +20,16 @@ import { toast } from 'sonner';
 const SchoolBoardingIndex = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const bootstrap = useAuthStore((s) => s.bootstrap);
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['school-onboarding', 'create'],
-    mutationFn: ownerService.create,
-    onSuccess: () => {
+    mutationFn: schoolService.create,
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['school-onboarding'], exact: false });
-      navigate('/on-boarding/school');
+      queryClient.invalidateQueries({ queryKey: ['school'], exact: false });
+      await bootstrap();
+      navigate('/');
     },
   });
 
@@ -39,16 +44,26 @@ const SchoolBoardingIndex = () => {
       phone: '',
       website: '',
       description: '',
+      logoId: '',
     },
   });
 
   const onSubmit: SubmitHandler<CreateSchoolRequest> = async (data) => {
     try {
-      await mutateAsync({ data });
-      toast.success(`Owner created successfully`);
+      await mutateAsync(data);
+      toast.success(`School created successfully`);
     } catch {
-      toast.error(`Failed to create owner`);
+      toast.error(`Failed to create school`);
     }
+  };
+
+  const thumbnailErrors = [form.formState.errors.logoId?.message];
+  const clearMediaErrors = () => {
+    form.clearErrors('logoId');
+  };
+
+  const handleThumbnailUpload = (newMediaId: string | null) => {
+    form.setValue('logoId', newMediaId ?? null, newMediaId ? { shouldDirty: true, shouldValidate: true } : undefined);
   };
 
   return (
@@ -63,6 +78,13 @@ const SchoolBoardingIndex = () => {
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <FieldGroup>
+              <ImageUpload
+                initMedia={null}
+                mediaErrors={thumbnailErrors}
+                clearMediaErrors={clearMediaErrors}
+                handleMediaUpload={handleThumbnailUpload}
+              />
+
               {/* Name (English) */}
               <Controller
                 name='nameEn'
@@ -123,7 +145,7 @@ const SchoolBoardingIndex = () => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='email'>Email Address</FieldLabel>
+                    <FieldLabel htmlFor='email'>School Email Address</FieldLabel>
                     <Input
                       {...field}
                       type='email'
@@ -142,7 +164,7 @@ const SchoolBoardingIndex = () => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='address'>Address</FieldLabel>
+                    <FieldLabel htmlFor='address'>School Address</FieldLabel>
                     <Input
                       {...field}
                       value={field.value ?? ''}
@@ -161,7 +183,7 @@ const SchoolBoardingIndex = () => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='phone'>Phone Number</FieldLabel>
+                    <FieldLabel htmlFor='phone'>School Phone Number</FieldLabel>
                     <Input {...field} id='phone' aria-invalid={fieldState.invalid} placeholder='Phone Number' />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>

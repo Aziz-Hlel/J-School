@@ -1,6 +1,7 @@
 import { authService } from '@/api/service/authService';
 import { jwtTokenManager } from '@/api/token/JwtTokenManager.class';
 import type { FirebaseSignInRequestDto } from '@/types/auth/SignInRequestDto';
+import type { FirebaseSignUpRequestSchema } from '@/types/auth/SignUpRequestDto';
 import type { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
 import { UserRole } from '@repo/contracts/types/enums/enums';
 import { create } from 'zustand';
@@ -35,6 +36,16 @@ const loginFunc = async (payload: FirebaseSignInRequestDto) => {
     return response.success ? response.data.data : null;
   } catch (error) {
     console.log('something went wrong while logging in', error);
+    return null;
+  }
+};
+
+const signupFunc = async (payload: FirebaseSignUpRequestSchema) => {
+  try {
+    const response = await authService.signUp(payload);
+    return response.success ? response.data.data : null;
+  } catch (error) {
+    console.log('something went wrong while signing up', error);
     return null;
   }
 };
@@ -83,7 +94,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   register: async (payload: FirebaseSignInRequestDto) => {
     set({ status: 'loading' });
 
-    const signUpResponse = await loginFunc(payload);
+    const signUpResponse = await signupFunc(payload);
 
     if (!signUpResponse) {
       set({ status: 'unauthenticated' });

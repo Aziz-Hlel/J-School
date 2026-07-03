@@ -3,7 +3,7 @@ import type { FirebaseSignInRequestDto } from '@/types/auth/SignInRequestDto';
 import type { SignInResponseDto } from '@/types/auth/SignInResponseDto';
 import type { FirebaseSignUpRequestSchema } from '@/types/auth/SignUpRequestDto';
 import type { SignUpResponseDto } from '@/types/auth/SignUpResponseDto';
-import type { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
+import type { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
 import { apiService } from '../apiService';
 import { apiRoutes } from '../routes';
 
@@ -14,7 +14,7 @@ export interface IauthService {
 
   oAuthSignIn: (payload: FirebaseSignInRequestDto) => Promise<ApiResponse<SignInResponseDto>>;
 
-  me: () => Promise<ApiResponse<{ data: UserProfileResponse }>>;
+  me: () => Promise<ApiResponse<{ data: AuthResponse }>>;
 }
 
 export const authService: IauthService = {

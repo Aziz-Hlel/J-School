@@ -20,7 +20,7 @@ const useLoginWithGoogle = (form: UseFormReturn<{ email: string; password: strin
 
     await oAuthSignIn({ token: idToken });
 
-    navigate('/profile');
+    navigate('/');
   };
 
   return { loginWithGoogle };

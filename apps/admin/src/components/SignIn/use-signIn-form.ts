@@ -36,7 +36,7 @@ const useSignInForm = () => {
       //   throw new Error('Failed to sign in with backend');
       // }
 
-      navigate('/profile');
+      navigate('/');
     } catch (error) {
       console.log(error);
     }

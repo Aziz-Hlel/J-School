@@ -29,7 +29,7 @@ const useSignUpForm = () => {
       // !
       // if (signUpResponse.success === false) throw new Error('Failed to create user with backend');
 
-      navigate('/profile');
+      navigate('/on-boarding/profile');
     } catch (error) {
       console.log(error);
     }

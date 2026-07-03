@@ -5,11 +5,12 @@ const OnboardingOwnerAndSchoolCompleted = () => {
   const user = useUser();
 
   if (user.account.role === 'ADMIN') {
-    const ownerDetails = user.administration.find((adminnistration) => adminnistration.school?.role === 'OWNER');
+    const ownerDetails = user.administration.find((adminnistration) => adminnistration.role === 'OWNER');
+    console.log('ownerdetails , ', ownerDetails);
 
     if (!ownerDetails) return <Navigate to='/on-boarding/profile' replace />;
 
-    if (!ownerDetails.school) return <Navigate to='/on-boarding/profile' replace />;
+    if (!ownerDetails.school) return <Navigate to='/on-boarding/school' replace />;
   }
 
   return <Outlet />;

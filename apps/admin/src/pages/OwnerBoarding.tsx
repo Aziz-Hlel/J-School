@@ -1,5 +1,5 @@
 import OwnerBoardingIndex from '@/components/On-boarding/owner-boarding';
 
-const OwnerBoardingPage = () => <OwnerBoardingIndex />;
+const OwnerBoarding = () => <OwnerBoardingIndex />;
 
-export default OwnerBoardingPage;
+export default OwnerBoarding;

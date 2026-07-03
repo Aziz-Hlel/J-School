@@ -1,15 +1,11 @@
-import schoolService from '@/api/service/schoolService';
+import { ownerService } from '@/api/service/ownerService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  CreateSchoolRequestSchema,
-  type CreateSchoolRequest,
-} from '@repo/contracts/schemas/school/createSchoolRequest';
+import { createOwnerRequestSchema, type CreateOwnerRequest } from '@repo/contracts/schemas/owner/createOwnerRequest';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -20,34 +16,29 @@ const OwnerBoardingIndex = () => {
   const navigate = useNavigate();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['school-onboarding', 'create'],
-    mutationFn: schoolService.create,
+    mutationKey: ['owner-onboarding', 'create'],
+    mutationFn: ownerService.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['school-onboarding'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['owner-onboarding'], exact: false });
       navigate('/on-boarding/school');
     },
   });
 
-  const form = useForm<CreateSchoolRequest>({
-    resolver: zodResolver(CreateSchoolRequestSchema),
+  const form = useForm<CreateOwnerRequest>({
+    resolver: zodResolver(createOwnerRequestSchema),
     defaultValues: {
-      nameEn: '',
-      nameFr: '',
-      nameAr: '',
-      email: '',
-      address: '',
+      firstName: '',
+      lastName: '',
       phone: '',
-      website: '',
-      description: '',
     },
   });
 
-  const onSubmit: SubmitHandler<CreateSchoolRequest> = async (data) => {
+  const onSubmit: SubmitHandler<CreateOwnerRequest> = async (data) => {
     try {
-      await mutateAsync(data);
-      toast.success(`School created successfully`);
+      await mutateAsync({ data });
+      toast.success(`Owner created successfully`);
     } catch {
-      toast.error(`Failed to create school`);
+      toast.error(`Failed to create owner`);
     }
   };
 
@@ -55,161 +46,59 @@ const OwnerBoardingIndex = () => {
     <div className='bg-background flex min-h-screen items-center justify-center p-4 sm:p-6 lg:p-8'>
       <Card className='border-border/40 w-full max-w-xl border shadow-lg'>
         <CardHeader className='space-y-1'>
-          <CardTitle className='text-center text-2xl font-bold tracking-tight sm:text-left'>Create School</CardTitle>
+          <CardTitle className='text-center text-2xl font-bold tracking-tight sm:text-left'>
+            School's Owner Details
+          </CardTitle>
           <CardDescription className='text-center sm:text-left'>
-            Please enter the school's details to initialize the school setup.
+            Please enter your details to initialize the school setup.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <FieldGroup>
-              {/* Name (English) */}
-              <Controller
-                name='nameEn'
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='nameEn'>Name (English)</FieldLabel>
-                    <Input
-                      {...field}
-                      id='nameEn'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='School Name in English'
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              {/* Name (French) */}
-              <Controller
-                name='nameFr'
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='nameFr'>Name (French)</FieldLabel>
-                    <Input
-                      {...field}
-                      id='nameFr'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='School Name in French'
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              {/* Name (Arabic) */}
-              <Controller
-                name='nameAr'
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='nameAr'>Name (Arabic)</FieldLabel>
-                    <Input
-                      {...field}
-                      id='nameAr'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='School Name in Arabic'
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              {/* Email */}
-              <Controller
-                name='email'
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='email'>Email Address</FieldLabel>
-                    <Input
-                      {...field}
-                      type='email'
-                      id='email'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='contact@school.com'
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              {/* Address */}
-              <Controller
-                name='address'
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='address'>Address</FieldLabel>
-                    <Input
-                      {...field}
-                      value={field.value ?? ''}
-                      id='address'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='School Street Address'
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              {/* Phone */}
+              <Field>
+                <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
+                <Controller
+                  name='firstName'
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <Input id='firstName' {...field} placeholder='First Name' />
+                      <FieldError />
+                    </>
+                  )}
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
+                <Controller
+                  name='lastName'
+                  control={form.control}
+                  render={({ field }) => (
+                    <>
+                      <Input id='lastName' {...field} placeholder='Last Name' />
+                      <FieldError />
+                    </>
+                  )}
+                />
+              </Field>
+            </FieldGroup>
+            <Field>
+              <FieldLabel htmlFor='phone'>Phone</FieldLabel>
               <Controller
                 name='phone'
                 control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='phone'>Phone Number</FieldLabel>
-                    <Input {...field} id='phone' aria-invalid={fieldState.invalid} placeholder='Phone Number' />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
+                render={({ field }) => (
+                  <>
+                    <Input id='phone' {...field} placeholder='Phone' />
+                    <FieldError />
+                  </>
                 )}
               />
-
-              {/* Website */}
-              <Controller
-                name='website'
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='website'>Website URL</FieldLabel>
-                    <Input
-                      {...field}
-                      value={field.value ?? ''}
-                      id='website'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='https://school.com'
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              {/* Description */}
-              <Controller
-                name='description'
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='description'>Description</FieldLabel>
-                    <Textarea
-                      {...field}
-                      value={field.value ?? ''}
-                      id='description'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='A short description of the school'
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-            </FieldGroup>
-
+            </Field>
             <Button type='submit' className='w-full' disabled={isPending}>
               {isPending ? <Spinner className='mr-2 h-4 w-4' /> : null}
-              Create School
+              Continue
             </Button>
           </form>
         </CardContent>

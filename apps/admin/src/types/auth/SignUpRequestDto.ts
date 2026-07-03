@@ -16,10 +16,7 @@ export const singUpSchema = z
   });
 
 export const firebaseSingUpSchema = z.object({
-  idToken: z
-    .string({ message: 'Invalid idToken' })
-    .trim()
-    .max(255, { message: 'Email is too long, max 255 characters' }),
+  token: z.string({ message: 'Invalid idToken' }),
 });
 
 export type SignUpRequestSchema = z.infer<typeof singUpSchema>;

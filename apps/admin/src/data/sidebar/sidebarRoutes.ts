@@ -1,14 +1,5 @@
 import { UserRole } from '@repo/contracts/types/enums/enums';
-import {
-  BellRing,
-  DoorClosed,
-  GraduationCap,
-  LayoutDashboard,
-  Newspaper,
-  Package,
-  Settings2,
-  UserCogIcon,
-} from 'lucide-react';
+import { DoorClosed, GraduationCap, LayoutDashboard, Newspaper, Settings2, UserCogIcon } from 'lucide-react';
 
 export type NavRoute = {
   title: string;
@@ -66,27 +57,6 @@ const navRoutes: NavRoute[] = [
     title: 'Feed',
     url: '/feed',
     icon: Newspaper,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Products',
-    url: '/products',
-    icon: Package,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Notification',
-    url: '/notification',
-    icon: BellRing,
-    isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
-  {
-    title: 'Products2',
-    url: '/products2',
-    icon: Package,
     isActive: true,
     roles: [UserRole.DIRECTOR, UserRole.MANAGER],
   },

@@ -16,6 +16,7 @@ import Classrooms from './pages/Classrooms';
 import Feed from './pages/Feed';
 import Homepage from './pages/Homepage';
 import NotFound from './pages/NotFound';
+import OwnerBoarding from './pages/OwnerBoarding';
 import SchoolBoarding from './pages/SchoolBoarding';
 import Sidebar from './pages/Sidebar';
 import SignupPage from './pages/SignUp';
@@ -37,12 +38,13 @@ const App = () => {
                   <Route path='/signup' element={<SignupPage />} />
                   <Route element={<AuthenticatedRoutes />}>
                     <Route element={<UserSessionProvider />}>
+                      <Route path='/on-boarding' element={<Outlet />}>
+                        <Route path='profile' element={<OwnerBoarding />} />
+                        <Route path='school' element={<SchoolBoarding />} />
+                      </Route>
+
                       <Route element={<OnboardingOwnerAndSchoolCompleted />}>
                         // ? ask for coriosity if this okay to do
-                        <Route path='on-boarding' element={<Outlet />}>
-                          <Route path='profile' element={<SchoolBoarding />} />
-                          <Route path='school' element={<SchoolBoarding />} />
-                        </Route>
                         <Route element={<SchoolIdProvider />}>
                           <Route element={<Sidebar dir={'ltr'} />}>
                             <Route path='/' element={<Homepage />} />

@@ -10,8 +10,8 @@ export const apiRoutes = {
   },
 
   auth: {
-    signIn: () => '/auth/sign-in',
-    signUp: () => '/auth/sign-up',
+    signIn: () => '/auth/password',
+    signUp: () => '/accounts/admin',
     oAuthSignIn: () => '/auth/provider',
     me: () => '/auth/me',
   },

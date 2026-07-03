@@ -1,3 +1,3 @@
-import type { UserProfileResponse } from '@repo/contracts/schemas/profile/UserProfileResponse';
+import type { AuthResponse } from '@repo/contracts/schemas/auth/authResponse';
 
-export type SignInResponseDto = { data: UserProfileResponse };
+export type SignInResponseDto = { data: AuthResponse };
