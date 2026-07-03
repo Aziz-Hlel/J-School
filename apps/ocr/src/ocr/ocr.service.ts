@@ -25,7 +25,6 @@ export class AwsStorageService {
     };
     this.client = new S3Client({
       region: this.config.AWS_REGION,
-      endpoint: `http://localhost:9997/`,
       credentials: {
         accessKeyId: this.config.AWS_ACCESS_KEY_ID,
         secretAccessKey: this.config.AWS_SECRET_ACCESS_KEY,
