@@ -59,7 +59,7 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
     defaultValues: defaultValues,
   });
 
-  const handleUpdateStudent = async (data: CreateStudentReq) => {
+  const handleCreateStudent = async (data: CreateStudentReq) => {
     try {
       await mutateAsync(data);
       toast.success('Student updated successfully');
@@ -92,7 +92,7 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
             </DialogTitle>
             <DialogDescription>Add new student.</DialogDescription>
           </DialogHeader>
-          <form onSubmit={form.handleSubmit(handleUpdateStudent)} className='flex min-h-0 flex-1 flex-col'>
+          <form onSubmit={form.handleSubmit(handleCreateStudent)} className='flex min-h-0 flex-1 flex-col'>
             <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
               <FieldGroup>
                 <ImageUpload
@@ -248,10 +248,10 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                 {isPending ? (
                   <>
                     <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                    Updating...
+                    creating...
                   </>
                 ) : (
-                  'Update Student Record'
+                  'Create Student Record'
                 )}
               </Button>
             </DialogFooter>

@@ -83,20 +83,19 @@ export class NotificationService {
 
     const where: Prisma.NotificationWhereInput = {
       schoolId,
-      ...(cursorParam.studentId && { students: { some: { id: cursorParam.studentId } } }),
-      ...(cursorParam.role && {
-        OR: [
-          { role: cursorParam.role },
-          { role: null },
-          {
-            userNotifications: {
-              some: {
-                userId: user.id,
-              },
-            },
-          },
-        ],
-      }),
+
+      OR: [
+        { type: NotificationType.GLOBAL },
+        {
+          role: cursorParam.role,
+          ...(cursorParam.studentId && { students: { some: { id: cursorParam.studentId } } }),
+          // userNotifications: {
+          //   some: {
+          //     userId: user.id,
+          //   },
+          // },
+        },
+      ],
     };
 
     const queryResponse = await prisma.notification.findMany({
