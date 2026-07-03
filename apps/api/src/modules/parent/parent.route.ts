@@ -29,6 +29,13 @@ const createParentRouter = (controller: ParentController) => {
     asyncHandler(controller.findById),
   );
 
+  router.put(
+    '/:parentId',
+    requireAuth,
+    requireUserPermissionOrIsParentChild([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(controller.update),
+  );
+
   return router;
 };
 

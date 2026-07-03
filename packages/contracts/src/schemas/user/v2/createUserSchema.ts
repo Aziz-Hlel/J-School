@@ -48,8 +48,7 @@ export const createUserV2Schema = z.object({
     .string()
     .trim()
     .min(8, 'Password must be at least 8 characters long')
-    .max(255, 'Password must be at most 255 characters long')
-    .or(z.null()),
+    .max(255, 'Password must be at most 255 characters long'),
 });
 
 export type CreateUserV2 = z.infer<typeof createUserV2Schema>;

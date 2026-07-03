@@ -25,7 +25,7 @@ export default function ImageCropperCom({
   return (
     <div className='relative mr-auto flex h-full w-full flex-col items-center justify-center'>
       <div className='mb-1 w-full text-left text-sm font-semibold'>Thumbnail</div>
-      <div className='mb-4 w-full text-left text-sm font-light text-gray-600'>Crop Image to 9:16</div>
+      <div className='mb-4 w-full text-left text-sm font-light text-gray-600'>Crop Image to 1:1</div>
 
       <div className='h-full w-full rounded-lg border border-dashed border-black p-2'>
         <div className='relative h-68 w-full'>
@@ -34,7 +34,7 @@ export default function ImageCropperCom({
               image={imgUrl}
               crop={crop}
               zoom={zoom}
-              aspect={9 / 16}
+              aspect={1 / 1}
               onCropChange={onCropChange}
               onCropComplete={onCropComplete}
               classes={{

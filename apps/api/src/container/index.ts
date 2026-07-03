@@ -93,7 +93,12 @@ const { teacherRouter } = TeacherModule({ createSimpleUserUseCase, userService }
 const { parentStudentRouter, parentStudentService } = parentStudentModule();
 
 // * PARENT
-const { parentService, parentRepo, parentRouter } = ParentModule({ accountService, userRoleService, userService });
+const { parentService, parentRepo, parentRouter } = ParentModule({
+  accountService,
+  userRoleService,
+  userService,
+  createSimpleUserUseCase,
+});
 
 // * STUDENT
 const { studentRouter } = StudentModule({

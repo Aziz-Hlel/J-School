@@ -1,5 +1,14 @@
 import { UserRole } from '@repo/contracts/types/enums/enums';
-import { DoorClosed, GraduationCap, LayoutDashboard, Newspaper, Settings2, UserCogIcon } from 'lucide-react';
+import {
+  DoorClosed,
+  GraduationCap,
+  LayoutDashboard,
+  Newspaper,
+  Settings2,
+  SquareUserRound,
+  UserCogIcon,
+  UsersRound,
+} from 'lucide-react';
 
 export type NavRoute = {
   title: string;
@@ -36,6 +45,20 @@ const navRoutes: NavRoute[] = [
     title: 'Staff',
     url: '/staff',
     icon: UserCogIcon,
+    isActive: true,
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  },
+  {
+    title: 'Teachers',
+    url: '/teachers',
+    icon: SquareUserRound,
+    isActive: true,
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  },
+  {
+    title: 'Parents',
+    url: '/parents',
+    icon: UsersRound,
     isActive: true,
     roles: [UserRole.DIRECTOR, UserRole.MANAGER],
   },

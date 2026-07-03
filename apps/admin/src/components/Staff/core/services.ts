@@ -1,10 +1,10 @@
 import { staffService } from '@/api/service/staffService';
 import { createStaffRequestSchema } from '@repo/contracts/schemas/staff/createStaffRequest';
 import { updateStaffRequestSchema } from '@repo/contracts/schemas/staff/updateStaffRequest';
+import { Gender, UserRole } from '@repo/contracts/types/enums/enums';
 import type { z } from 'zod';
 import { TableData } from './core';
 import { defaultQuery, queryParamsSchema, type TableRowType } from './types';
-import { Gender, UserRole } from '@repo/contracts/types/enums/enums';
 
 export type schemasType = {
   create: z.infer<typeof createStaffRequestSchema>;
@@ -36,8 +36,9 @@ const create = defineOperation({
       cin: null,
       address: null,
       email: '',
-      password: null,
+      password: '',
       role: UserRole.MANAGER,
+      avatarId: null,
     };
   },
 });
@@ -55,6 +56,7 @@ const update = defineOperation({
     address: moduleInstance.address,
     cin: moduleInstance.cin,
     phone: moduleInstance.phone,
+    avatarId: moduleInstance.avatar?.id ?? null,
   }),
 });
 

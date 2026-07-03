@@ -5,14 +5,19 @@ import { TX } from '@/types/prisma/PrismaTransaction';
 import { Page } from '@repo/contracts/schemas/page/Page';
 import { ParentResponse } from '@repo/contracts/schemas/parent/parentResponse';
 import { ParentsQueryParamsTypes } from '@repo/contracts/schemas/parent/queryParams';
+import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import prisma from '@repo/db';
 import { Prisma } from '@repo/db/prisma/client';
+import { UserService } from '../User/user.service';
 import includeUserAndAvatar from './includes/includeUserAndAvatar';
 import { ParentMapper } from './parent.mapper';
 import { ParentRepo } from './parent.repo';
 
 export class ParentService {
-  constructor(private readonly parentRepo: ParentRepo) {}
+  constructor(
+    private readonly parentRepo: ParentRepo,
+    private readonly userService: UserService,
+  ) {}
 
   create = async (params: { userId: string; schoolId: string }, tx?: TX) => {
     try {
@@ -46,19 +51,25 @@ export class ParentService {
     }
   };
 
-  update = async (
-    params: { input: { emergencyPhone: string | null }; parentId: string; schoolId: string },
-    tx?: TX,
-  ) => {
-    try {
-      const updatedParent = await this.parentRepo.update(params, tx);
-      return updatedParent;
-    } catch (error) {
-      if (error instanceof RepoKnownErrors.NotFoundError) {
-        throw new NotFoundError({ message: 'Parent not found', cause: error });
-      }
-      throw error;
-    }
+  update = async (params: { input: UpdateSimpleUserRequest; parentId: string; schoolId: string }) => {
+    const { input, parentId, schoolId } = params;
+    console.log('parent id ', parentId);
+    const parent = await prisma.parent.findUnique({
+      where: {
+        id: parentId,
+      },
+      select: {
+        user: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    console.log('parnt : ', parent);
+    if (!parent) throw new NotFoundError({ message: 'Parent not found' });
+    const updatedUser = await this.userService.updateSimpleUser({ input, userId: parent.user.id, schoolId });
+    return updatedUser;
   };
 
   getByIdAndSchoolId = async (params: { parentId: string; schoolId: string }, tx?: TX) => {

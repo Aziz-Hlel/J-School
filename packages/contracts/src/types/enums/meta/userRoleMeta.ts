@@ -57,4 +57,10 @@ export const userRolesStaffSimple = userRolesStaff.filter(
   (role) => ROLE_METADATA[role].type === 'STAFF' && !ROLE_METADATA[role].hasExtendedTable,
 );
 
+export const staffRoles = Object.fromEntries(
+  Object.values(ROLE_METADATA)
+    .filter((r) => r.type === 'STAFF')
+    .map((r) => [r.name, r.name]),
+) as Record<UserRole, UserRole>;
+
 export type UserRoleStaffSimple = (typeof userRolesStaffSimple)[number];

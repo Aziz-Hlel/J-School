@@ -41,6 +41,22 @@ export const apiRoutes = {
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
   },
 
+  teacher: {
+    create: (schoolId: string) => `/schools/${schoolId}/teachers`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}`,
+    getPage: (schoolId: string) => `/schools/${schoolId}/teachers`,
+    getById: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}`,
+  },
+
+  parent: {
+    create: (schoolId: string) => `/schools/${schoolId}/parents`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/parents/${id}`,
+    getPage: (schoolId: string) => `/schools/${schoolId}/parents`,
+    getById: (schoolId: string, id: string) => `/schools/${schoolId}/parents/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/parents/${id}`,
+  },
+
   parentStudent: {
     unassignStudentFromParent: (studentId: string, parentId: string, schoolId: string) =>
       `/schools/${schoolId}/students/${studentId}/parents/${parentId}`,

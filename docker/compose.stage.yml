@@ -54,8 +54,49 @@ services:
       BUCKET_PREFIX: ${BUCKET_PREFIX}
       AWS_CLOUDFRONT_URL: ${AWS_CLOUDFRONT_URL}
 
+      AWS_BEDROCK_REGION: ${AWS_BEDROCK_REGION}
+      AWS_BEDROCK_ACCESS_KEY_ID: ${AWS_BEDROCK_ACCESS_KEY_ID}
+      AWS_BEDROCK_SECRET_ACCESS_KEY: ${AWS_BEDROCK_SECRET_ACCESS_KEY}
+      AWS_BEDROCK_MODEL_ID: ${AWS_BEDROCK_MODEL_ID}
+
     command: sh -c "pnpm dlx prisma migrate deploy && pnpm start"
     # command: sleep infinity
+
+    depends_on:
+      - db
+      - redis
+
+    networks:
+      - default
+
+  ocr:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile: docker/stage/Dockerfile.ocr
+
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: ${DB_PORT}
+
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+      AWS_REGION: ${AWS_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+
+      AWS_BEDROCK_REGION: ${AWS_BEDROCK_REGION}
+      AWS_BEDROCK_ACCESS_KEY_ID: ${AWS_BEDROCK_ACCESS_KEY_ID}
+      AWS_BEDROCK_SECRET_ACCESS_KEY: ${AWS_BEDROCK_SECRET_ACCESS_KEY}
+      AWS_BEDROCK_MODEL_ID: ${AWS_BEDROCK_MODEL_ID}
+
+    command: pnpm start
 
     depends_on:
       - db
@@ -78,7 +119,6 @@ services:
     networks:
       - default
 
-
   db-backup:
     build:
       context: ${PROJECT_ROOT}
@@ -100,7 +140,6 @@ services:
     networks:
       - default
 
-
   redis:
     image: redis:latest
     environment:
@@ -111,7 +150,6 @@ services:
 
     networks:
       - default
-
 
 volumes:
   db_volume:

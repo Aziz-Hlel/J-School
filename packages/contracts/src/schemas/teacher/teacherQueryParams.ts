@@ -1,7 +1,7 @@
 import z from 'zod';
+import { Gender } from '../../types/enums/enums';
 import { baseQueryParamsSchema, csvEnumArray } from '../helper/queryParams';
 import type { TeacherResponse } from './teacherResponse';
-import { Gender } from '../../types/enums/enums';
 
 type TableRowType = TeacherResponse;
 type TableRowKeys = keyof TableRowType;
@@ -34,6 +34,8 @@ export const teacherQueryParams = {
 };
 
 export type TeacherQueryParamsTypes = {
+  TableRow: TableRowType;
+  TableKeys: TableRowKeys;
   Query: QueryType;
   SortableFields: (typeof teacherQueryParams.sortableFields)[number];
   FilterableFields: (typeof teacherQueryParams.filterableFields)[number];

@@ -22,7 +22,7 @@ export const createSimpleUserRequestSchema = z.object({
 
   role: z.enum(userRolesSimple),
 
-  password: globalAccountSchema.password.or(z.null()),
+  password: globalAccountSchema.password,
 });
 
 export type CreateSimpleUserRequest = z.infer<typeof createSimpleUserRequestSchema>;

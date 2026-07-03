@@ -17,11 +17,13 @@ import Feed from './pages/Feed';
 import Homepage from './pages/Homepage';
 import NotFound from './pages/NotFound';
 import OwnerBoarding from './pages/OwnerBoarding';
+import Parents from './pages/Parents';
 import SchoolBoarding from './pages/SchoolBoarding';
 import Sidebar from './pages/Sidebar';
 import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
+import Teachers from './pages/teachers';
 
 const App = () => {
   return (
@@ -49,11 +51,14 @@ const App = () => {
                           <Route element={<Sidebar dir={'ltr'} />}>
                             <Route path='/' element={<Homepage />} />
                             <Route path='/staff' element={<Staff />} />
-                            <Route path='/classrooms' element={<Classrooms />} />
+                            <Route path='/teachers' element={<Teachers />} />
+                            <Route path='/parents' element={<Parents />} />
+
                             <Route path='/students' element={<Outlet />}>
                               <Route index element={<Students />} />
                               <Route path=':studentId/profile' element={<StudentProfile />} />
                             </Route>
+                            <Route path='/classrooms' element={<Classrooms />} />
                             <Route path='/feed' element={<Feed />} />
                           </Route>
                         </Route>
