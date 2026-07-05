@@ -2,6 +2,7 @@ import { FeesResponse } from '@repo/contracts/schemas/Fees/response';
 import { FeeItemStatus } from '@repo/db/prisma/client';
 import { FeesGetPayload } from '@repo/db/prisma/models';
 import { FeeItemsMapper } from '../FeeItems/feeItems.mapper';
+import { toCalendarDate } from '@/utils/dayjs';
 
 export class FeesMapper {
   static toResponse = (
@@ -22,8 +23,8 @@ export class FeesMapper {
       id: data.id,
       name: data.name,
       studentId: data.studentId,
-      startDate: data.startDate.toISOString(),
-      endDate: data.endDate.toISOString(),
+      startDate: toCalendarDate(data.startDate),
+      endDate: toCalendarDate(data.endDate),
       status: feeStatus,
       items: feeItemsResponse,
       createdAt: data.createdAt.toISOString(),

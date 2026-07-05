@@ -39,6 +39,7 @@ export const apiRoutes = {
     findFullDetails: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}/full-details`,
     assignToClassroom: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}/classroom`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}`,
+    getFees: (schoolId: string, id: string) => `/schools/${schoolId}/students/${id}/fees`,
   },
 
   teacher: {
@@ -70,6 +71,18 @@ export const apiRoutes = {
     getPage: (schoolId: string) => `/schools/${schoolId}/classrooms`,
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
+  },
+
+  fees: {
+    create: (schoolId: string) => `/schools/${schoolId}/fees`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/fees/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/fees/${id}`,
+    items: {
+      create: (schoolId: string, feeId: string) => `/schools/${schoolId}/fees/${feeId}/items`,
+      update: (schoolId: string, feeId: string, id: string) => `/schools/${schoolId}/fees/${feeId}/items/${id}`,
+      delete: (schoolId: string, feeId: string, id: string) => `/schools/${schoolId}/fees/${feeId}/items/${id}`,
+      getAll: (schoolId: string, feeId: string) => `/schools/${schoolId}/fees/${feeId}/items`,
+    },
   },
 
   feed: {

@@ -24,6 +24,10 @@ import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
 import Teachers from './pages/teachers';
+import StudentOverview from './components/Students/student-profile/layout/OverviewPage/StudentOverview';
+import StudentParents from './components/Students/student-profile/layout/ParentsPage/StudentParents';
+import StudentHealth from './components/Students/student-profile/layout/HealthPage/StudentHealth';
+import StudentFees from './components/Students/student-profile/layout/FeesPage/StudentFees';
 
 const App = () => {
   return (
@@ -56,7 +60,12 @@ const App = () => {
 
                             <Route path='/students' element={<Outlet />}>
                               <Route index element={<Students />} />
-                              <Route path=':studentId/profile' element={<StudentProfile />} />
+                              <Route path=':studentId/profile' element={<StudentProfile />}>
+                                <Route index path='overview' element={<StudentOverview />} />
+                                <Route path='parents' element={<StudentParents />} />
+                                <Route path='health' element={<StudentHealth />} />
+                                <Route path='fees' element={<StudentFees />} />
+                              </Route>
                             </Route>
                             <Route path='/classrooms' element={<Classrooms />} />
                             <Route path='/feed' element={<Feed />} />

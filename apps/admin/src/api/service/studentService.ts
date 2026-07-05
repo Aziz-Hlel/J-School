@@ -1,3 +1,4 @@
+import type { FeesResponse } from '@repo/contracts/schemas/Fees/response';
 import type { Page } from '@repo/contracts/schemas/page/Page';
 import type { AssignStudentToClassroomReq } from '@repo/contracts/schemas/student/assignStudentToClassroomReq';
 import { type CreateStudentReq } from '@repo/contracts/schemas/student/createStudentRequest';
@@ -33,4 +34,7 @@ export const studentService = {
 
   assignToClassroom: async (schoolId: string, studentId: string, data: AssignStudentToClassroomReq) =>
     apiService.patchThrowable<StudentResponse>(apiRoutes.student.assignToClassroom(schoolId, studentId), data),
+
+  getFees: async (schoolId: string, studentId: string) =>
+    apiService.getThrowable<{ data: FeesResponse[] }>(apiRoutes.student.getFees(schoolId, studentId)),
 };
