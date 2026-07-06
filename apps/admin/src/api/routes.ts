@@ -71,6 +71,9 @@ export const apiRoutes = {
     getPage: (schoolId: string) => `/schools/${schoolId}/classrooms`,
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
+    timetable: {
+      get: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/timetable`,
+    },
   },
 
   fees: {
@@ -90,6 +93,18 @@ export const apiRoutes = {
     create: (schoolId: string) => `/schools/${schoolId}/feed`,
     update: (schoolId: string, id: string) => `/schools/${schoolId}/feed/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/feed/${id}`,
+  },
+
+  calendar: {
+    get: (schoolId: string) => `/schools/${schoolId}/calendars`,
+    create: (schoolId: string) => `/schools/${schoolId}/calendars`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/calendars/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/calendars/${id}`,
+  },
+
+  attendance: {
+    sync: (schoolId: string) => `/schools/${schoolId}/attendances`,
+    get: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/attendances`,
   },
 
   owner: {

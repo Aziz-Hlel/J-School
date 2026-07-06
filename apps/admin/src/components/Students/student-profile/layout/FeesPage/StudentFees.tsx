@@ -114,7 +114,7 @@ const StudentFees = () => {
         <Separator className='bg-slate-100 dark:bg-zinc-800' />
 
         <div className='max-h-[calc(100vh-280px)] space-y-3 overflow-y-auto pr-1'>
-          {fees.length === 0 ? (
+          {fees === null || fees.length === 0 ? (
             <div className='flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 px-4 py-12 text-center dark:border-zinc-800'>
               <CreditCard className='text-muted-foreground/50 mb-3 h-10 w-10' />
               <p className='text-sm font-semibold text-slate-800 dark:text-slate-200'>No Fees Found</p>

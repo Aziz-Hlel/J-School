@@ -9,7 +9,7 @@ export const createCalendarReqSchema = z.object({
   startTime: globalCalendarSchema.startTime,
   endDate: globalCalendarSchema.endDate,
   endTime: globalCalendarSchema.endTime,
-  sendNotification: z.boolean().default(false).catch(false),
+  sendNotification: z.boolean().catch(false),
 });
 
 export type CreateCalendarReq = z.infer<typeof createCalendarReqSchema>;

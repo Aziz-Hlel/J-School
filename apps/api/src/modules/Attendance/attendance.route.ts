@@ -9,6 +9,11 @@ export const createRouter = (controller: AttendanceController) => {
   const router = Router({ mergeParams: true });
 
   // * missing a validation if the teacher assigned to the assignment to which the session belongs to
-  router.post('/', requireAuth, requireUserRoles([UserRole.TEACHER]), asyncHandler(controller.sync));
+  router.post(
+    '/',
+    requireAuth,
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER]),
+    asyncHandler(controller.sync),
+  );
   return router;
 };

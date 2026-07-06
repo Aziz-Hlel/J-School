@@ -1,4 +1,6 @@
 import { apiRoutes } from '@/api/routes';
+import type { ApiRes } from '@/types/api/ApiResponse2';
+import type { GetClassroomTimetableResponse } from '@repo/contracts/schemas/assignment/getClassroomTimetableResponse';
 import type { ClassroomResponse } from '@repo/contracts/schemas/classroom/classResponse';
 import type { CreateClassroomRequest as CreateClassroomReq } from '@repo/contracts/schemas/classroom/createClassRequest';
 import type { UpdateClassroomRequest as UpdateClassroomReq } from '@repo/contracts/schemas/classroom/updateClassRequest';
@@ -22,4 +24,9 @@ export const classroomsService = {
 
   delete: async (params: { schoolId: string; id: string }) =>
     apiService.deleteThrowable<void>(apiRoutes.classrooms.delete(params.schoolId, params.id)),
+
+  getClassroomTimetable: async (params: { schoolId: string; classroomId: string }) =>
+    apiService.getThrowable<ApiRes<GetClassroomTimetableResponse>>(
+      apiRoutes.classrooms.timetable.get(params.schoolId, params.classroomId),
+    ),
 };

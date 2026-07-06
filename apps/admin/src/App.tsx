@@ -4,6 +4,10 @@ import { Toaster } from 'sonner';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
 import StudentProfile from './components/Students/student-profile';
+import StudentFees from './components/Students/student-profile/layout/FeesPage/StudentFees';
+import StudentHealth from './components/Students/student-profile/layout/HealthPage/StudentHealth';
+import StudentOverview from './components/Students/student-profile/layout/OverviewPage/StudentOverview';
+import StudentParents from './components/Students/student-profile/layout/ParentsPage/StudentParents';
 import queryClient from './config/react-qeury';
 import { AuthProvider } from './context/AuthContext';
 import { SchoolIdProvider } from './context/SchoolContext';
@@ -12,6 +16,9 @@ import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
 import NetworkStatusGuard from './guard/NetworkStatusGuard';
 import OnboardingOwnerAndSchoolCompleted from './guard/OnboardingSchoolCompleted';
 import { ThemeProvider } from './lib/theme-provider';
+import AssignmentsPage from './pages/Assignments';
+import Attendance from './pages/Attendance';
+import Calendar from './pages/Calendar';
 import Classrooms from './pages/Classrooms';
 import Feed from './pages/Feed';
 import Homepage from './pages/Homepage';
@@ -24,10 +31,6 @@ import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
 import Teachers from './pages/teachers';
-import StudentOverview from './components/Students/student-profile/layout/OverviewPage/StudentOverview';
-import StudentParents from './components/Students/student-profile/layout/ParentsPage/StudentParents';
-import StudentHealth from './components/Students/student-profile/layout/HealthPage/StudentHealth';
-import StudentFees from './components/Students/student-profile/layout/FeesPage/StudentFees';
 
 const App = () => {
   return (
@@ -68,6 +71,9 @@ const App = () => {
                               </Route>
                             </Route>
                             <Route path='/classrooms' element={<Classrooms />} />
+                            <Route path='/assignments' element={<AssignmentsPage />} />
+                            <Route path='/attendances' element={<Attendance />} />
+                            <Route path='/calendar' element={<Calendar />} />
                             <Route path='/feed' element={<Feed />} />
                           </Route>
                         </Route>

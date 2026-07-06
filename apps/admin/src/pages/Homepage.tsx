@@ -1,18 +1,5 @@
-import { Button } from '@/components/ui/button';
-import { createClassroomReqSchema } from '@repo/contracts/schemas/classroom/createClassRequest';
-
 const Homepage = () => {
-  const data = createClassroomReqSchema.parse({
-    name: 'Classroom 1',
-    description: 'Classroom 1 description',
-    grade: 'KG',
-  });
-  return (
-    <div className=' '>
-      <div className='text-9xl'>Hompage {data.name}</div>
-      <Button className=' '>Button</Button>
-    </div>
-  );
+  return <div className='flex h-full items-center justify-center text-9xl'>Hompage</div>;
 };
 
 export default Homepage;
