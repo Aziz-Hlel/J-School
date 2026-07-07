@@ -20,6 +20,7 @@ import AssignmentsPage from './pages/Assignments';
 import Attendance from './pages/Attendance';
 import Calendar from './pages/Calendar';
 import Classrooms from './pages/Classrooms';
+import ExamSchedule from './pages/ExamSchedule';
 import Feed from './pages/Feed';
 import Homepage from './pages/Homepage';
 import NotFound from './pages/NotFound';
@@ -31,6 +32,7 @@ import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
 import Teachers from './pages/teachers';
+import Timetable from './pages/Timetable';
 
 const App = () => {
   return (
@@ -72,6 +74,8 @@ const App = () => {
                             </Route>
                             <Route path='/classrooms' element={<Classrooms />} />
                             <Route path='/assignments' element={<AssignmentsPage />} />
+                            <Route path='/timetable' element={<Timetable />} />
+                            <Route path='/exams' element={<ExamSchedule />} />
                             <Route path='/attendances' element={<Attendance />} />
                             <Route path='/calendar' element={<Calendar />} />
                             <Route path='/feed' element={<Feed />} />

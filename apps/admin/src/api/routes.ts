@@ -48,6 +48,7 @@ export const apiRoutes = {
     getPage: (schoolId: string) => `/schools/${schoolId}/teachers`,
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}`,
+    selectTeacher: (schoolId: string) => `/schools/${schoolId}/teachers/select`,
   },
 
   parent: {
@@ -72,8 +73,30 @@ export const apiRoutes = {
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/classrooms/${id}`,
     timetable: {
-      get: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/timetable`,
+      create: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/timetable`,
+      getWeekly: (schoolId: string, classroomId: string) =>
+        `/schools/${schoolId}/classrooms/${classroomId}/timetable/weekly`,
+      delete: (schoolId: string, classroomId: string, timetableId: string) =>
+        `/schools/${schoolId}/classrooms/${classroomId}/timetable/${timetableId}`,
     },
+    exams: {
+      get: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/exams`,
+      update: (schoolId: string, classroomId: string, examId: string) =>
+        `/schools/${schoolId}/classrooms/${classroomId}/exams/${examId}`,
+      delete: (schoolId: string, classroomId: string, examId: string) =>
+        `/schools/${schoolId}/classrooms/${classroomId}/exams/${examId}`,
+    },
+    subjects: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/subjects`,
+  },
+
+  assignments: {
+    assignTeacher: (schoolId: string, assignmentId: string) =>
+      `/schools/${schoolId}/assignments/${assignmentId}/teacher`,
+  },
+
+  examSchedules: {
+    create: (schoolId: string) => `/schools/${schoolId}/exam-schedules`,
+    update: (schoolId: string, examScheduleId: string) => `/schools/${schoolId}/exam-schedules/${examScheduleId}`,
   },
 
   fees: {

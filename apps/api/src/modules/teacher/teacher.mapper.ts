@@ -58,7 +58,7 @@ export class TeacherMapper {
         };
       };
     }>,
-  ) {
+  ): TeacherShortRes {
     return {
       id: teacher.id,
       firstName: teacher.user.firstName,

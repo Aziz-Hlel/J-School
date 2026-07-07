@@ -16,7 +16,7 @@ export class ClassroomTimetableController {
     });
   };
 
-  async create(req: Request, res: Response) {
+  create = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const classroomId = getUrlParam(req, 'classroomId');
 
@@ -26,9 +26,9 @@ export class ClassroomTimetableController {
       message: 'Timetable created successfully',
       data: timetableResponse,
     });
-  }
+  };
 
-  async update(req: Request, res: Response) {
+  update = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const timetableId = getUrlParam(req, 'timetableId');
 
@@ -38,9 +38,9 @@ export class ClassroomTimetableController {
       message: 'Timetable updated successfully',
       data: timetableResponse,
     });
-  }
+  };
 
-  async delete(req: Request, res: Response) {
+  delete = async (req: Request, res: Response) => {
     const schoolId = getUrlParam(req, 'schoolId');
     const timetableId = getUrlParam(req, 'timetableId');
 
@@ -48,5 +48,5 @@ export class ClassroomTimetableController {
     res.status(200).json({
       message: 'Timetable deleted successfully',
     });
-  }
+  };
 }

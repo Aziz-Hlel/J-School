@@ -13,7 +13,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { CalendarResponse } from '@repo/contracts/schemas/Calendar/response';
 import { updateCalendarReqSchema, type UpdateCalendarReq } from '@repo/contracts/schemas/Calendar/update';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -27,17 +26,14 @@ const CALENDAR_SESSION_TYPES = ['PUBLIC_HOLIDAY', 'SCHOOL_HOLIDAY', 'TRIP', 'EVE
 
 const EditCalendar = ({
   calendar,
-  open: controlledOpen,
-  onOpenChange: controlledOnOpenChange,
+  open,
+  onOpenChange,
 }: {
   calendar: CalendarResponse;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) => {
   const schoolId = useCurrentSchoolId();
-  const [internalOpen, setInternalOpen] = useState(false);
-  const isOpen = controlledOpen ?? internalOpen;
-  const setIsOpen = controlledOnOpenChange ?? setInternalOpen;
 
   const form = useForm<UpdateCalendarReq>({
     resolver: zodResolver(updateCalendarReqSchema),
@@ -60,7 +56,7 @@ const EditCalendar = ({
         queryKey: ['calendar'],
         exact: false,
       });
-      setIsOpen(false);
+      onOpenChange(false);
       form.reset();
     },
   });
@@ -75,7 +71,7 @@ const EditCalendar = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='rounded-2xl sm:max-w-106.25'>
         <DialogHeader>
           <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>Edit calendar</DialogTitle>
@@ -201,7 +197,7 @@ const EditCalendar = ({
           </FieldGroup>
 
           <DialogFooter className='gap-2 pt-4 sm:gap-0'>
-            <Button type='button' variant='outline' onClick={() => setIsOpen(false)}>
+            <Button type='button' variant='outline' onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
             <Button type='submit' disabled={isPending}>

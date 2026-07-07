@@ -3,6 +3,7 @@ import type { SelectClassroomsRes } from '@repo/contracts/schemas/classroom/Sele
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import type { CreateSchoolRequest } from '@repo/contracts/schemas/school/createSchoolRequest';
 import type { SelectParentsRes } from '@repo/contracts/schemas/school/selectParentsResponse';
+import type { TeacherShortRes } from '@repo/contracts/schemas/teacher/teacherShortResponse';
 import { apiService } from '../apiService';
 import { apiRoutes } from '../routes';
 
@@ -15,6 +16,11 @@ const schoolService = {
   selectParents: async (params: { schoolId: string; cursor: string | null }) =>
     await apiService.getThrowable<Cursor<SelectParentsRes>>(apiRoutes.schools.selectParent(params.schoolId), {
       params: { cursor: params.cursor, limit: 10 },
+    }),
+
+  selectTeachers: async (params: { schoolId: string }) =>
+    await apiService.getThrowable<Cursor<TeacherShortRes>>(apiRoutes.teacher.selectTeacher(params.schoolId), {
+      params: { cursor: undefined, limit: 100 },
     }),
 };
 
