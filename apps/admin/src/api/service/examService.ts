@@ -9,4 +9,7 @@ export const examSchedulesService = {
 
   update: (params: { schoolId: string; examScheduleId: string; data: UpdateExamScheduleRequest }) =>
     apiService.putThrowable(apiRoutes.examSchedules.update(params.schoolId, params.examScheduleId), params.data),
+
+  delete: (params: { schoolId: string; examScheduleId: string }) =>
+    apiService.deleteThrowable(apiRoutes.examSchedules.delete(params.schoolId, params.examScheduleId)),
 };

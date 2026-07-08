@@ -15,7 +15,7 @@ import {
 import type { ClassroomSubjectsWithTeachersResponse } from '@repo/contracts/schemas/classroom/management/ClassroomSubjectsWithTeachers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Clock, GraduationCap, Layers } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const DOMAIN_COLORS: Record<string, string> = {
@@ -77,6 +77,11 @@ const EditAssignment = ({
     }
   };
 
+  const teacherId = useWatch({
+    control: form.control,
+    name: 'teacherId',
+  });
+
   return (
     <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
       <DialogContent className='gap-0 overflow-hidden p-0 sm:max-w-md'>
@@ -117,14 +122,14 @@ const EditAssignment = ({
               <FieldLabel className='text-sm font-medium'>Teacher</FieldLabel>
               <Select
                 name='teacherId'
-                value={form.watch('teacherId') ?? undefined}
-                onValueChange={(value) => form.setValue('teacherId', value === undefined ? null : value)}
+                value={teacherId ?? undefined}
+                onValueChange={(value) => form.setValue('teacherId', value === 'none' ? null : value)}
               >
                 <SelectTrigger className='mt-1.5'>
                   <SelectValue placeholder='Select a teacher…' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={undefined}>
+                  <SelectItem value={'none'}>
                     <span className='text-muted-foreground'>No teacher</span>
                   </SelectItem>
                   {teachersSelect.map((teacher) => (

@@ -71,31 +71,31 @@ export class CreateClassroomUseCase {
           message: 'Failed to create class',
           internalLog: 'No assignments found for the given class, assignments did not propegated as expected',
         });
-      const examSchedules = assignments.flatMap((assignment) =>
-        assignment.subject.exams.map((exam) => ({
-          schoolId,
-          assignementId: assignment.id,
-          examId: exam.id,
-        })),
-      );
-      if (examSchedules.length === 0)
-        throw new BadRequestError({
-          message: 'Failed to create class',
-          internalLog:
-            'No exam schedules found for the given class, exams instances for assignments did not propegated as expected',
-        });
+      // const examSchedules = assignments.flatMap((assignment) =>
+      //   assignment.subject.exams.map((exam) => ({
+      //     schoolId,
+      //     assignementId: assignment.id,
+      //     examId: exam.id,
+      //   })),
+      // );
+      // if (examSchedules.length === 0)
+      //   throw new BadRequestError({
+      //     message: 'Failed to create class',
+      //     internalLog:
+      //       'No exam schedules found for the given class, exams instances for assignments did not propegated as expected',
+      //   });
 
-      try {
-        await tx.examSchedule.createMany({
-          data: examSchedules,
-        });
-      } catch (error) {
-        throw new BadRequestError({
-          message: 'Failed to create class',
-          cause: error,
-          internalLog: 'Failed to create exam schedules',
-        });
-      }
+      // try {
+      //   await tx.examSchedule.createMany({
+      //     data: examSchedules,
+      //   });
+      // } catch (error) {
+      //   throw new BadRequestError({
+      //     message: 'Failed to create class',
+      //     cause: error,
+      //     internalLog: 'Failed to create exam schedules',
+      //   });
+      // }
       const classResponse = ClassroomMapper.toResponse(createdClass);
       return classResponse;
     });

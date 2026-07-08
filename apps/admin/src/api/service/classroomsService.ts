@@ -4,12 +4,13 @@ import type { GetClassroomTimetableResponse } from '@repo/contracts/schemas/assi
 import type { ClassroomResponse } from '@repo/contracts/schemas/classroom/classResponse';
 import type { CreateClassroomRequest as CreateClassroomReq } from '@repo/contracts/schemas/classroom/createClassRequest';
 import type { ClassroomExamScheduleResponse } from '@repo/contracts/schemas/classroom/management/ClassroomExamSchedulesResponse';
+import type { ClassroomExamsRes } from '@repo/contracts/schemas/classroom/management/ClassroomExamsRes';
 import type { ClassroomSubjectsWithTeachersResponse } from '@repo/contracts/schemas/classroom/management/ClassroomSubjectsWithTeachers';
 import type { CreateClassroomTimetableReq } from '@repo/contracts/schemas/classroom/timeTable/createTimetableRequest2';
 import type { UpdateClassroomRequest as UpdateClassroomReq } from '@repo/contracts/schemas/classroom/updateClassRequest';
+import type { UpdateExamScheduleRequest } from '@repo/contracts/schemas/examSchedule/updateExamScheduleRequest';
 import type { Page } from '@repo/contracts/schemas/page/Page';
 import { apiService } from '../apiService';
-import type { UpdateExamScheduleRequest } from '@repo/contracts/schemas/examSchedule/updateExamScheduleRequest';
 
 export const classroomsService = {
   getPage: async (schoolId: string, searchParams: { [k: string]: string | number | Array<string> }) =>
@@ -56,10 +57,9 @@ export const classroomsService = {
         apiRoutes.classrooms.exams.get(params.schoolId, params.classroomId),
       ),
 
-    create: async (params: { schoolId: string; classroomId: string; data: CreateClassroomExamScheduleReq }) =>
-      apiService.postThrowable<ApiRes<ClassroomExamScheduleResponse[]>>(
-        apiRoutes.classrooms.exams.create(params.schoolId, params.classroomId),
-        params.data,
+    select: async (params: { schoolId: string; classroomId: string }) =>
+      apiService.getThrowable<ApiRes<ClassroomExamsRes[]>>(
+        apiRoutes.classrooms.exams.select(params.schoolId, params.classroomId),
       ),
 
     update: async (params: {

@@ -85,6 +85,7 @@ export const apiRoutes = {
         `/schools/${schoolId}/classrooms/${classroomId}/exams/${examId}`,
       delete: (schoolId: string, classroomId: string, examId: string) =>
         `/schools/${schoolId}/classrooms/${classroomId}/exams/${examId}`,
+      select: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/exams/select`,
     },
     subjects: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/subjects`,
   },
@@ -97,6 +98,7 @@ export const apiRoutes = {
   examSchedules: {
     create: (schoolId: string) => `/schools/${schoolId}/exam-schedules`,
     update: (schoolId: string, examScheduleId: string) => `/schools/${schoolId}/exam-schedules/${examScheduleId}`,
+    delete: (schoolId: string, examScheduleId: string) => `/schools/${schoolId}/exam-schedules/${examScheduleId}`,
   },
 
   fees: {

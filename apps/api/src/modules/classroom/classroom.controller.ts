@@ -24,7 +24,6 @@ export class ClassroomController {
 
   update = async (req: Request, res: Response) => {
     const input = updateClassroomReqSchema.parse(req.body, {});
-    console.log(input);
     const classroomId = getUrlParam(req, 'classroomId', { uuid: true });
     const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
     const data = await this.classroomService.update({ input, classroomId, schoolId });
