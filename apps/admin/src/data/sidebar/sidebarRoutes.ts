@@ -110,6 +110,13 @@ const navRoutes: NavRoute[] = [
     roles: [UserRole.DIRECTOR, UserRole.MANAGER],
   },
   {
+    title: 'Extracurriculars',
+    url: '/extracurriculars',
+    icon: ListCheck,
+    isActive: true,
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  },
+  {
     title: 'Calendar',
     url: '/calendar',
     icon: Calendar,

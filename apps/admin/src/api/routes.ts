@@ -91,8 +91,8 @@ export const apiRoutes = {
   },
 
   assignments: {
-    assignTeacher: (schoolId: string, assignmentId: string) =>
-      `/schools/${schoolId}/assignments/${assignmentId}/teacher`,
+    assignTeacher: (schoolId: string, classroomId: string, assignmentId: string) =>
+      `/schools/${schoolId}/classrooms/${classroomId}/assignments/${assignmentId}/teacher`,
   },
 
   examSchedules: {
@@ -101,6 +101,17 @@ export const apiRoutes = {
     delete: (schoolId: string, examScheduleId: string) => `/schools/${schoolId}/exam-schedules/${examScheduleId}`,
   },
 
+  extracurriculars: {
+    create: (schoolId: string) => `/schools/${schoolId}/extra-curriculars`,
+    update: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}`,
+    delete: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}`,
+    getPage: (schoolId: string) => `/schools/${schoolId}/extra-curriculars`,
+    get: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}`,
+    getStudents: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}/students`,
+    post: {
+      getCursor: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}/posts`,
+    },
+  },
   fees: {
     create: (schoolId: string) => `/schools/${schoolId}/fees`,
     update: (schoolId: string, id: string) => `/schools/${schoolId}/fees/${id}`,

@@ -6,11 +6,12 @@ import { GraduationCap, ShieldAlert, User } from 'lucide-react';
 import { useParams } from 'react-router';
 
 const StudentOverview = () => {
-  const { studentId } = useParams();
+  const { studentId: id } = useParams();
+  const studentId = id!;
   const schoolId = useCurrentSchoolId();
 
   // Primary TanStack Query
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['students', studentId, 'full-details'],
     queryFn: () => studentService.findFullDetails(schoolId, studentId),
     enabled: !!studentId,
@@ -30,6 +31,9 @@ const StudentOverview = () => {
       return dateStr;
     }
   };
+
+  if (isLoading) return <div className='text-muted-foreground py-8 text-sm'>Loading Student profile ...</div>;
+  if (!student) return <div className='text-muted-foreground py-8 text-sm'>Student not found.</div>;
 
   return (
     <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>

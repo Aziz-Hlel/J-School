@@ -1,7 +1,7 @@
 import z from 'zod';
+import { ClassGrade } from '../../types/enums/enums';
 import { baseQueryParamsSchema, csvEnumArray } from '../helper/queryParams';
 import type { ExtraCurricularResponse } from './extraCurricularResponse';
-import { ClassGrade } from '../../types/enums/enums';
 
 type TableRowType = ExtraCurricularResponse;
 type TableRowKeys = keyof TableRowType;
@@ -35,6 +35,8 @@ export const extraCurricularQueryParams = {
 
 export type ExtraCurricularQueryParamsTypes = {
   Query: QueryType;
+  TableRowType: TableRowType;
+  TableRowKeys: TableRowKeys;
   SortableFields: (typeof extraCurricularQueryParams.sortableFields)[number];
   FilterableFields: (typeof extraCurricularQueryParams.filterableFields)[number];
 };

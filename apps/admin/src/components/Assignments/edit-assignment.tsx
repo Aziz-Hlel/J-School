@@ -54,9 +54,9 @@ const EditAssignment = ({
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['attendances', classroomId, 'subjects', 'update'],
     mutationFn: (payload: AssignTeacherRequestInput) =>
-      assignmentService.assignTeacher(schoolId, subject.assignmentId, payload),
+      assignmentService.assignTeacher(schoolId, classroomId, subject.assignmentId, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['attendances'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['classrooms', classroomId, 'subjects'], exact: false });
       setIsEditOpen(false);
     },
   });

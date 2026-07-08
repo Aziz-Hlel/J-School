@@ -1,6 +1,8 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router';
 import { Toaster } from 'sonner';
+import ExtracurricularOverview from './components/Extracurriculars/Overview';
+import ExtraCurricularProfile from './components/Extracurriculars/Overview/extra-curricular-profile';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
 import StudentProfile from './components/Students/student-profile';
@@ -21,6 +23,7 @@ import Attendance from './pages/Attendance';
 import Calendar from './pages/Calendar';
 import Classrooms from './pages/Classrooms';
 import ExamSchedule from './pages/ExamSchedule';
+import Extracurriculars from './pages/Extracurriculars';
 import Feed from './pages/Feed';
 import Homepage from './pages/Homepage';
 import NotFound from './pages/NotFound';
@@ -33,6 +36,7 @@ import Staff from './pages/Staff';
 import Students from './pages/Students';
 import Teachers from './pages/teachers';
 import Timetable from './pages/Timetable';
+import ExtraCurricularFeed from './components/Extracurriculars/Overview/feed/FeedArea';
 
 const App = () => {
   return (
@@ -77,6 +81,13 @@ const App = () => {
                             <Route path='/timetable' element={<Timetable />} />
                             <Route path='/exams' element={<ExamSchedule />} />
                             <Route path='/attendances' element={<Attendance />} />
+                            <Route path='/extracurriculars' element={<Outlet />}>
+                              <Route index element={<Extracurriculars />} />
+                              <Route path=':extraCurricularId' element={<ExtracurricularOverview />}>
+                                <Route index path='overview' element={<ExtraCurricularProfile />} />
+                                <Route path='feed' element={<ExtraCurricularFeed />} />
+                              </Route>
+                            </Route>
                             <Route path='/calendar' element={<Calendar />} />
                             <Route path='/feed' element={<Feed />} />
                           </Route>
