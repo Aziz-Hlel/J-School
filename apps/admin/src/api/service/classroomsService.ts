@@ -10,6 +10,7 @@ import type { CreateClassroomTimetableReq } from '@repo/contracts/schemas/classr
 import type { UpdateClassroomRequest as UpdateClassroomReq } from '@repo/contracts/schemas/classroom/updateClassRequest';
 import type { UpdateExamScheduleRequest } from '@repo/contracts/schemas/examSchedule/updateExamScheduleRequest';
 import type { Page } from '@repo/contracts/schemas/page/Page';
+import type { StudentResponse } from '@repo/contracts/schemas/student/studentResponse';
 import { apiService } from '../apiService';
 
 export const classroomsService = {
@@ -49,6 +50,11 @@ export const classroomsService = {
   deleteTimetable: async (params: { schoolId: string; classroomId: string; timetableId: string }) =>
     apiService.deleteThrowable<ApiRes<GetClassroomTimetableResponse>>(
       apiRoutes.classrooms.timetable.delete(params.schoolId, params.classroomId, params.timetableId),
+    ),
+
+  getStudents: async (params: { schoolId: string; classroomId: string }) =>
+    apiService.getThrowable<ApiRes<StudentResponse[]>>(
+      apiRoutes.classrooms.students(params.schoolId, params.classroomId),
     ),
 
   exams: {

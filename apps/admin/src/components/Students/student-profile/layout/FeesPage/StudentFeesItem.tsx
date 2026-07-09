@@ -106,7 +106,7 @@ const StudentFeesItem = ({ fee, studentId }: StudentFeesItemProps) => {
                 className='inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-400'
               >
                 <Lock className='h-2.5 w-2.5' />
-                Locked
+                Fully Paid
               </span>
             )}
           </div>
@@ -116,14 +116,12 @@ const StudentFeesItem = ({ fee, studentId }: StudentFeesItemProps) => {
           </p>
         </div>
 
-        {!isLocked && (
-          <AddFeeItem studentId={studentId} feeId={fee.id}>
-            <Button size='sm' className='bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 rounded-xl'>
-              <Plus className='h-4 w-4' />
-              Add Item
-            </Button>
-          </AddFeeItem>
-        )}
+        <AddFeeItem studentId={studentId} feeId={fee.id}>
+          <Button size='sm' className='bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 rounded-xl'>
+            <Plus className='h-4 w-4' />
+            Add Item
+          </Button>
+        </AddFeeItem>
       </div>
 
       <Separator className='bg-slate-100 dark:bg-zinc-800' />
@@ -137,13 +135,12 @@ const StudentFeesItem = ({ fee, studentId }: StudentFeesItemProps) => {
             <p className='text-muted-foreground mt-1 mb-4 max-w-48 text-xs'>
               This fee cycle has no items. Add one to get started.
             </p>
-            {!isLocked && (
-              <AddFeeItem studentId={studentId} feeId={fee.id}>
-                <Button variant='outline' size='sm' className='rounded-xl text-xs'>
-                  Add First Item
-                </Button>
-              </AddFeeItem>
-            )}
+
+            <AddFeeItem studentId={studentId} feeId={fee.id}>
+              <Button variant='outline' size='sm' className='rounded-xl text-xs'>
+                Add First Item
+              </Button>
+            </AddFeeItem>
           </div>
         ) : (
           items.map((item) => {
@@ -176,28 +173,26 @@ const StudentFeesItem = ({ fee, studentId }: StudentFeesItemProps) => {
                 </div>
 
                 {/* Action buttons */}
-                {!isLocked && (
-                  <div className='mt-3 flex items-center justify-end gap-2 border-t border-slate-100 pt-2.5 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 dark:border-zinc-900'>
-                    <Button
-                      size='sm'
-                      variant='ghost'
-                      className='text-muted-foreground h-7 gap-1 rounded-md px-2 text-xs hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-900/20'
-                      onClick={(e) => handleOpenDelete(item, e)}
-                    >
-                      <Trash className='h-3 w-3' />
-                      Delete
-                    </Button>
-                    <Button
-                      size='sm'
-                      variant='ghost'
-                      className='text-muted-foreground h-7 gap-1 rounded-md px-2 text-xs hover:text-slate-800 dark:hover:text-slate-200'
-                      onClick={(e) => handleOpenEdit(item, e)}
-                    >
-                      <Pencil className='h-3 w-3' />
-                      Edit
-                    </Button>
-                  </div>
-                )}
+                <div className='mt-3 flex items-center justify-end gap-2 border-t border-slate-100 pt-2.5 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 dark:border-zinc-900'>
+                  <Button
+                    size='sm'
+                    variant='ghost'
+                    className='text-muted-foreground h-7 gap-1 rounded-md px-2 text-xs hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-900/20'
+                    onClick={(e) => handleOpenDelete(item, e)}
+                  >
+                    <Trash className='h-3 w-3' />
+                    Delete
+                  </Button>
+                  <Button
+                    size='sm'
+                    variant='ghost'
+                    className='text-muted-foreground h-7 gap-1 rounded-md px-2 text-xs hover:text-slate-800 dark:hover:text-slate-200'
+                    onClick={(e) => handleOpenEdit(item, e)}
+                  >
+                    <Pencil className='h-3 w-3' />
+                    Edit
+                  </Button>
+                </div>
               </div>
             );
           })

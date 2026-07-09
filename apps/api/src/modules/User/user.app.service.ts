@@ -2,7 +2,10 @@ import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { AccountService } from '@/modules/accounts/account.service';
 import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
+import { UpdateUserRolesReq } from '@repo/contracts/schemas/user/updateUserRolesReq';
+import { UserRoleResponse } from '@repo/contracts/schemas/user/UserRolesResponse';
 import prisma from '@repo/db';
+import { UserRole } from '@repo/db/prisma/enums';
 import { UserMapper } from './user.mapper';
 import { UserService } from './user.service';
 
@@ -70,5 +73,55 @@ export class UserAppService {
     input: UpdateSimpleUserRequest;
   }) => {
     return this.userService.updateSimpleUser({ schoolId, userId, input });
+  };
+
+  getUserRoles = async (userId: string) => {
+    const roles = await prisma.userRoles.findMany({
+      where: { userId },
+    });
+
+    const rolesResponse: UserRoleResponse[] = roles.map((role) => ({
+      id: role.id,
+      role: role.role,
+      createdAt: role.createdAt.toISOString(),
+    }));
+
+    return rolesResponse;
+  };
+
+  updateUserRoles = async (params: { userId: string; input: UpdateUserRolesReq }) => {
+    const { userId, input } = params;
+
+    const userRoles = await prisma.userRoles.findMany({
+      where: { userId },
+    });
+
+    const currentUserRoles = userRoles.map((r) => r.role);
+
+    const rolesToAdd = input.roles.filter((role) => !currentUserRoles.includes(role));
+    const rolesToDelete = currentUserRoles.filter((userRole) => !input.roles.includes(userRole));
+
+    await prisma.$transaction(async (tx) => {
+      if (rolesToDelete.includes(UserRole.TEACHER)) {
+        await tx.teacher.delete({
+          where: {
+            userId: userId,
+          },
+        });
+      }
+      if (rolesToDelete.includes(UserRole.PARENT)) {
+        await tx.parent.delete({
+          where: {
+            userId: userId,
+          },
+        });
+      }
+      await prisma.userRoles.createMany({
+        data: rolesToAdd.map((role) => ({ userId, role })),
+      });
+      await prisma.userRoles.deleteMany({
+        where: { userId, role: { in: rolesToDelete.map((role) => role) } },
+      });
+    });
   };
 }

@@ -10,6 +10,7 @@ export class TeacherMapper {
     const avatar = globalMediaService.toMediaRes(teacher.user.account.avatar);
     return {
       id: teacher.id,
+      userId: teacher.userId,
       firstName: teacher.user.firstName,
       lastName: teacher.user.lastName,
       email: teacher.user.account.email,

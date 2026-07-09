@@ -10,6 +10,7 @@ export class ParentMapper {
     const avatar = globalMediaService.toMediaRes(parent.user.account.avatar);
     return {
       id: parent.id,
+      userId: parent.userId,
       firstName: parent.user.firstName,
       lastName: parent.user.lastName,
       email: parent.user.account.email,

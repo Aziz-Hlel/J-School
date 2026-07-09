@@ -79,6 +79,7 @@ export const apiRoutes = {
       delete: (schoolId: string, classroomId: string, timetableId: string) =>
         `/schools/${schoolId}/classrooms/${classroomId}/timetable/${timetableId}`,
     },
+    students: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/students`,
     exams: {
       get: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/exams`,
       update: (schoolId: string, classroomId: string, examId: string) =>
@@ -152,6 +153,10 @@ export const apiRoutes = {
     getPage: (schoolId: string) => `/schools/${schoolId}/teacher-comments`,
     delete: (schoolId: string, teacherId: string, commentId: string) =>
       `/schools/${schoolId}/teachers/${teacherId}/comments/${commentId}`,
+  },
+
+  user: {
+    getUserRoles: (userId: string) => `/users/${userId}/roles`,
   },
 
   owner: {

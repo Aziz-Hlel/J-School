@@ -19,6 +19,9 @@ const createUserRouter = (controller: UserController) => {
   // * not secure , need user role or is user himself
   router.put('/:userId', requireAuth, asyncHandler(controller.update));
 
+  router.get('/:userId/roles', requireAuth, asyncHandler(controller.getUserRoles));
+  router.put('/:userId/roles', requireAuth, asyncHandler(controller.updateUserRoles));
+
   return router;
 };
 

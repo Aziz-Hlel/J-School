@@ -2,6 +2,7 @@ import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { createSimpleUserRequestSchema } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 import { updateSimpleUserRequestSchema } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
+import { updateUserRolesReqSchema } from '@repo/contracts/schemas/user/updateUserRolesReq';
 import { Response } from 'express';
 import { UserAppService } from './user.app.service';
 
@@ -30,5 +31,24 @@ export class UserController {
     const userId = getUrlParam(req, 'userId', { uuid: true });
     const result = await this.userService.updateSimpleUser({ schoolId, userId, input });
     res.status(200).json(result);
+  };
+
+  getUserRoles = async (req: AuthenticatedRequest, res: Response) => {
+    const userId = getUrlParam(req, 'userId', { uuid: true });
+    const result = await this.userService.getUserRoles(userId);
+    res.status(200).json({
+      message: 'User roles fetched successfully',
+      data: result,
+    });
+  };
+
+  updateUserRoles = async (req: AuthenticatedRequest, res: Response) => {
+    const userId = getUrlParam(req, 'userId', { uuid: true });
+    const input = updateUserRolesReqSchema.parse(req.body);
+    const result = await this.userService.updateUserRoles({ userId, input });
+    res.status(200).json({
+      message: 'User roles updated successfully',
+      data: result,
+    });
   };
 }

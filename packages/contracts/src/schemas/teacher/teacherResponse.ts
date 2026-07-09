@@ -3,6 +3,7 @@ import type { MediaResponse } from '../media/MediaResponse';
 
 export type TeacherResponse = {
   id: string;
+  userId: string;
   firstName: string;
   lastName: string;
   email: string | null;
