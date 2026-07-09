@@ -13,7 +13,7 @@ const ExtraCurricularHeader = () => {
   const extraCurricularId = id!;
   // Primary TanStack Query
   const { data, isError, isPending } = useQuery({
-    queryKey: ['extraCurriculars', extraCurricularId],
+    queryKey: ['extra-curriculars', extraCurricularId],
     queryFn: () => extraCurricularService.get(schoolId, extraCurricularId),
   });
   const extraCurricular = data?.data ?? null;

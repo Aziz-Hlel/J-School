@@ -2,7 +2,9 @@ import type { ApiRes } from '@/types/api/ApiResponse2';
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import type { CreateExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/createExtraCurricularRequest';
 import type { ExtraCurricularResponse } from '@repo/contracts/schemas/extraCurricular/extraCurricularResponse';
+import type { CreatePostReq } from '@repo/contracts/schemas/extraCurricular/post/create';
 import type { PostResponse } from '@repo/contracts/schemas/extraCurricular/post/postResponse';
+import type { UpdatePostReq } from '@repo/contracts/schemas/extraCurricular/post/update';
 import type { UpdateExtraCurricularReq } from '@repo/contracts/schemas/extraCurricular/updateExtraCurricularReq';
 import type { Page } from '@repo/contracts/schemas/page/Page';
 import type { StudentWithClassroomResponse } from '@repo/contracts/schemas/student/studentWithClassroomResponse';
@@ -39,6 +41,22 @@ export const extraCurricularService = {
         {
           params: { cursor: params.cursor, limit: 10 },
         },
+      ),
+
+    create: (params: { schoolId: string; extraCurricularId: string; data: CreatePostReq }) =>
+      apiService.postThrowable<ApiRes<PostResponse>>(
+        apiRoutes.extracurriculars.post.create(params.schoolId, params.extraCurricularId),
+        params.data,
+      ),
+
+    update: async (params: { schoolId: string; extraCurricularId: string; postId: string; data: UpdatePostReq }) =>
+      apiService.putThrowable<ApiRes<PostResponse>>(
+        apiRoutes.extracurriculars.post.update(params.schoolId, params.extraCurricularId, params.postId),
+        params.data,
+      ),
+    delete: async (params: { schoolId: string; extraCurricularId: string; postId: string }) =>
+      apiService.deleteThrowable<ApiRes<void>>(
+        apiRoutes.extracurriculars.post.delete(params.schoolId, params.extraCurricularId, params.postId),
       ),
   },
 };

@@ -110,6 +110,11 @@ export const apiRoutes = {
     getStudents: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}/students`,
     post: {
       getCursor: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}/posts`,
+      create: (schoolId: string, id: string) => `/schools/${schoolId}/extra-curriculars/${id}/posts`,
+      update: (schoolId: string, extracurricilarId: string, postId: string) =>
+        `/schools/${schoolId}/extra-curriculars/${extracurricilarId}/posts/${postId}`,
+      delete: (schoolId: string, extracurricilarId: string, postId: string) =>
+        `/schools/${schoolId}/extra-curriculars/${extracurricilarId}/posts/${postId}`,
     },
   },
   fees: {
@@ -141,6 +146,12 @@ export const apiRoutes = {
   attendance: {
     sync: (schoolId: string) => `/schools/${schoolId}/attendances`,
     get: (schoolId: string, classroomId: string) => `/schools/${schoolId}/classrooms/${classroomId}/attendances`,
+  },
+
+  teacherComments: {
+    getPage: (schoolId: string) => `/schools/${schoolId}/teacher-comments`,
+    delete: (schoolId: string, teacherId: string, commentId: string) =>
+      `/schools/${schoolId}/teachers/${teacherId}/comments/${commentId}`,
   },
 
   owner: {

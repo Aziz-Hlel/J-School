@@ -1,4 +1,5 @@
 import { extraCurricularService } from '@/api/service/extracurricularsService';
+import { Button } from '@/components/ui/button';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import type { Cursor } from '@repo/contracts/schemas/cursor/cursorResponse';
 import type { PostResponse } from '@repo/contracts/schemas/extraCurricular/post/postResponse';
@@ -7,6 +8,7 @@ import { Loader2 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router';
 import FeedCard from './FeedCard';
+import CreateFeed from './dialogs/CreateFeed';
 
 const ExtraCurricularFeed = () => {
   const schoolId = useCurrentSchoolId();
@@ -24,7 +26,7 @@ const ExtraCurricularFeed = () => {
     string[],
     string | null
   >({
-    queryKey: ['extra-curricular', extraCurricularId, 'feed'],
+    queryKey: ['extra-curriculars', extraCurricularId, 'posts'],
     initialPageParam: null,
 
     queryFn: ({ pageParam }) =>
@@ -63,6 +65,13 @@ const ExtraCurricularFeed = () => {
 
   return (
     <div className='mx-auto flex w-full flex-col items-center gap-6 p-6'>
+      <div className='flex w-full flex-row items-center justify-end'>
+        <CreateFeed>
+          <Button className='border-border hover:border-primary/50 cursor-pointer items-center gap-3 rounded-xl border p-4 transition-all duration-200'>
+            <span>Create Post</span>
+          </Button>
+        </CreateFeed>
+      </div>
       {posts.map((post) => (
         <FeedCard key={post.id} {...post} />
       ))}

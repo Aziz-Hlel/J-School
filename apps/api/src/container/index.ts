@@ -54,6 +54,7 @@ import { SchoolSeed } from '@/seeds/fakes/school.seed';
 import { StudentSeed } from '@/seeds/fakes/student.seed';
 import { SubjectAndExamsSeed2 } from '@/seeds/fakes/subject.seed2';
 import { TeacherSeed } from '@/seeds/fakes/teacher.seed';
+import { TeacherCommentSeed } from '@/seeds/fakes/teacherComment.seed';
 import { TimetableSeed } from '@/seeds/fakes/timtable.seed';
 import { UserRolesSeed } from '@/seeds/fakes/userRoles.seed';
 import { UserSeed } from '@/seeds/fakes/users.fake';
@@ -200,6 +201,7 @@ const postSeed = new PostSeed();
 const feeSeed = new FeeSeed();
 const feeItemSeed = new FeeItemSeed();
 const homeworkSeed = new HomeworkSeed();
+const teacherCommentsSeed = new TeacherCommentSeed();
 
 const mediaSeed2 = new MediaSeedV2();
 
@@ -226,6 +228,7 @@ const seedDevService = new SeedDevService(
   feeSeed,
   feeItemSeed,
   homeworkSeed,
+  teacherCommentsSeed,
 );
 
 seedDevService.run();

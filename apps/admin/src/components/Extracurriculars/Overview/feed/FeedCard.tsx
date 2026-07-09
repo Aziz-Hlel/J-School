@@ -11,6 +11,8 @@ import type { PostResponse } from '@repo/contracts/schemas/extraCurricular/post/
 import dayjs from 'dayjs';
 import { MoreVertical, SquarePen, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import DeletePost from './dialogs/DeletePost';
+import UpdateExtraCurPost from './dialogs/UpdateFeed';
 
 const FeedCard = (params: PostResponse) => {
   const { createdAt, content, media = [] } = params;
@@ -20,6 +22,7 @@ const FeedCard = (params: PostResponse) => {
 
   const [isEdit, setIsEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<PostResponse | null>(null);
 
   return (
     <Card className='w-full max-w-2xl overflow-hidden rounded-xl'>
@@ -49,6 +52,7 @@ const FeedCard = (params: PostResponse) => {
             <DropdownMenuContent align='end' className='w-36'>
               <DropdownMenuItem
                 onClick={() => {
+                  setSelectedPost(params);
                   setIsEdit(true);
                 }}
               >
@@ -57,6 +61,7 @@ const FeedCard = (params: PostResponse) => {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
+                  setSelectedPost(params);
                   setIsDelete(true);
                 }}
                 className='text-destructive focus:text-destructive'
@@ -102,6 +107,8 @@ const FeedCard = (params: PostResponse) => {
             </div>
           </div>
         )}
+        {isEdit && selectedPost && <UpdateExtraCurPost handleCancel={() => setIsEdit(false)} post={selectedPost} />}
+        {isDelete && selectedPost && <DeletePost setIsDeleteOpen={() => setIsDelete(false)} postId={selectedPost.id} />}
       </CardContent>
     </Card>
   );

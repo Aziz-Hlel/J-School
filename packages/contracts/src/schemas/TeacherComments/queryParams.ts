@@ -34,6 +34,8 @@ export const teacherCommentsQueryParams = {
 
 export type TeacherCommentsQueryParamsTypes = {
   Query: QueryType;
+  TableRowType: TableRowType;
+  TableRowKeys: TableRowKeys;
   SortableFields: (typeof teacherCommentsQueryParams.sortableFields)[number];
   FilterableFields: (typeof teacherCommentsQueryParams.filterableFields)[number];
 };

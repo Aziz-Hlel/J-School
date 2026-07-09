@@ -1,39 +1,38 @@
-import { feedService } from '@/api/service/feedService';
+import { extraCurricularService } from '@/api/service/extracurricularsService';
 import { MultiFileUpload, type FileUploadItem } from '@/components/custom/MultiFileUpload';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import queryClient from '@/config/react-qeury';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createPostReqSchema, type CreatePostReq } from '@repo/contracts/schemas/extraCurricular/post/create';
+import { type CreatePostReq } from '@repo/contracts/schemas/extraCurricular/post/create';
 import type { PostResponse } from '@repo/contracts/schemas/extraCurricular/post/postResponse';
-import { type CreateFeedReq } from '@repo/contracts/schemas/Feed/create';
+import { updatePostReqSchema, type UpdatePostReq } from '@repo/contracts/schemas/extraCurricular/post/update';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import { toast } from 'sonner';
 
-const UpdateFeed = ({ feed, handleCancel }: { feed: PostResponse; handleCancel: () => void }) => {
+const UpdateExtraCurPost = ({ post, handleCancel }: { post: PostResponse; handleCancel: () => void }) => {
   const schoolId = useCurrentSchoolId();
   const { extraCurricularId: id } = useParams();
   const extraCurricularId = id!;
-  const form = useForm<CreatePostReq>({
-    resolver: zodResolver(createPostReqSchema),
+  const form = useForm<UpdatePostReq>({
+    resolver: zodResolver(updatePostReqSchema),
     defaultValues: {
-      content: feed.content,
-      mediaIds: feed.media.map((m) => m.id),
+      content: post.content,
+      mediaIds: post.media.map((m) => m.id),
     },
   });
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['feed', 'update'],
-    mutationFn: feedService.update,
+    mutationKey: ['extra-curriculars', extraCurricularId, 'posts', post.id, 'update'],
+    mutationFn: extraCurricularService.post.update,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['extraCurricular', extraCurricularId, 'feed'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['extra-curriculars', extraCurricularId, 'posts'], exact: false });
       form.reset();
       handleCancel();
     },
@@ -46,24 +45,19 @@ const UpdateFeed = ({ feed, handleCancel }: { feed: PostResponse; handleCancel: 
     }
   };
 
-  const dialogIsOpen = dialogState.openDialog === 'edit';
-
-  const defaultMedias =
-    dialogState.openDialog === 'edit'
-      ? dialogState.selectedRow.media.map((media) => ({
-          id: media.id,
-          status: 'completed' as const,
-          serverId: media.id,
-          file: {
-            id: media.id,
-            name: '',
-            size: 100,
-            type: 'image/jpeg',
-            url: media.url,
-          },
-          preview: media.url,
-        }))
-      : [];
+  const defaultMedias = post.media.map((media) => ({
+    id: media.id,
+    status: 'completed' as const,
+    serverId: media.id,
+    file: {
+      id: media.id,
+      name: '',
+      size: 100,
+      type: 'image/jpeg',
+      url: media.url,
+    },
+    preview: media.url,
+  }));
 
   const [uploadFiles, setUploadFiles] = useState<FileUploadItem[]>(defaultMedias);
 
@@ -71,43 +65,30 @@ const UpdateFeed = ({ feed, handleCancel }: { feed: PostResponse; handleCancel: 
     const medias = uploadFiles
       .filter((f) => f.status === 'completed' && f.serverId)
       .map((f, i) => ({ id: f.serverId, order: i + 1 }));
-    form.setValue('media', medias, { shouldDirty: true });
+    form.setValue(
+      'mediaIds',
+      medias.filter((m) => !!m.id).map((m) => m.id!),
+      { shouldDirty: true },
+    );
   };
 
-  const onSubmit = async (data: CreateFeedReq) => {
+  const onSubmit = async (data: CreatePostReq) => {
     try {
-      if (dialogState.openDialog === 'edit') {
-        await mutateAsync({ schoolId, data, id: dialogState.selectedRow.id });
-        toast.success(`Feed updated successfully`);
-      }
+      await mutateAsync({ schoolId, data, extraCurricularId: extraCurricularId, postId: post.id });
+      toast.success(`Feed updated successfully`);
     } catch {
       toast.error(`Failed to update feed`);
     }
   };
   return (
-    <Dialog open={dialogIsOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button>Create Feed</Button>
-      </DialogTrigger>
+    <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent className='scrollbar flex max-h-[calc(100dvh-4rem)] scrollbar-thumb-zinc-700 scrollbar-track-zinc-200 flex-col overflow-y-auto sm:max-w-106.25'>
         <DialogHeader>
-          <DialogTitle>Create a New Feed</DialogTitle>
+          <DialogTitle>Update Feed</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
           <Controller
-            name='title'
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={`title-input`}>Title</FieldLabel>
-                <Input {...field} id={`title-input`} aria-invalid={fieldState.invalid} placeholder='Title' />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-
-          <Controller
-            name='description'
+            name='content'
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -116,6 +97,7 @@ const UpdateFeed = ({ feed, handleCancel }: { feed: PostResponse; handleCancel: 
                   {...field}
                   id={`description-input`}
                   aria-invalid={fieldState.invalid}
+                  value={field.value ?? ''}
                   placeholder='Description'
                 />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -130,7 +112,7 @@ const UpdateFeed = ({ feed, handleCancel }: { feed: PostResponse; handleCancel: 
               Cancel
             </Button>
             <Button type='submit' onClickCapture={setMedia} disabled={isPending}>
-              {isPending ? 'Creating...' : 'Create'}
+              {isPending ? 'Updating...' : 'Update'}
             </Button>
           </DialogFooter>
         </form>
@@ -139,4 +121,4 @@ const UpdateFeed = ({ feed, handleCancel }: { feed: PostResponse; handleCancel: 
   );
 };
 
-export default UpdateFeed;
+export default UpdateExtraCurPost;

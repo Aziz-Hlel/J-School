@@ -24,7 +24,7 @@ const ExtraCurricularProfile = () => {
   const extraCurricularId = id!;
 
   const { data, isError, isPending } = useQuery({
-    queryKey: ['extraCurriculars', extraCurricularId],
+    queryKey: ['extra-curriculars', extraCurricularId],
     queryFn: () => extraCurricularService.get(schoolId, extraCurricularId),
   });
   const extraCurricular = data?.data ?? null;
@@ -34,7 +34,7 @@ const ExtraCurricularProfile = () => {
     isError: studentsIsError,
     isPending: studentsIsPending,
   } = useQuery({
-    queryKey: ['extraCurriculars', extraCurricularId, 'students'],
+    queryKey: ['extra-curriculars', extraCurricularId, 'students'],
     queryFn: () => extraCurricularService.getStudents(schoolId, extraCurricularId),
   });
   const students = studentsData?.data ?? [];

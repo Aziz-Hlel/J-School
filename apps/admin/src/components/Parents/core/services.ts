@@ -45,7 +45,7 @@ const create = defineOperation({
 const update = defineOperation({
   fn: parentService.update,
   schema: updateParentReqSchema,
-  mutationKey: () => [TableData.MODULE_NAME, 'update'],
+  mutationKey: ({ id }: { id: string }) => [TableData.MODULE_NAME, 'update', id],
   defaultValues: (moduleInstance: TableRowType) => ({
     firstName: moduleInstance.firstName,
     lastName: moduleInstance.lastName,

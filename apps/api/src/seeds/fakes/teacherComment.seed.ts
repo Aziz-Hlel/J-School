@@ -11,12 +11,14 @@ export class TeacherCommentSeed {
     parentReply?: string;
   }): Promise<void> => {
     const { schoolId, id, studentId, teacherId, title, content, parentReply } = params;
+    console.log('id = ', id);
     await prisma.teacherComment.upsert({
       where: {
         id,
       },
       update: {},
       create: {
+        id,
         schoolId,
         studentId,
         teacherId,

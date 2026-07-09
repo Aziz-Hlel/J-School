@@ -20,6 +20,7 @@ import { SchoolSeed } from '../fakes/school.seed';
 import { StudentSeed } from '../fakes/student.seed';
 import { SubjectAndExamsSeed2 } from '../fakes/subject.seed2';
 import { TeacherSeed } from '../fakes/teacher.seed';
+import { TeacherCommentSeed } from '../fakes/teacherComment.seed';
 import { TimetableSeed } from '../fakes/timtable.seed';
 import { UserSeed } from '../fakes/users.fake';
 import ISeed from '../ISeed';
@@ -38,6 +39,7 @@ import {
   studentClassroomAssignmentSeedData,
   subjectsWithExamsSeedData,
   teacherAssignmentSeedData,
+  teacherCommentsSeedData,
   timeTableSeedData,
 } from './dataV2';
 import { feeItemsSeedData, feesSeedData } from './feeItems.seed.data';
@@ -68,6 +70,7 @@ export class SeedDevService implements ISeed {
     private readonly feeSeed: FeeSeed,
     private readonly feeItemSeed: FeeItemSeed,
     private readonly homeworkSeed: HomeworkSeed,
+    private readonly teacherCommentsSeed: TeacherCommentSeed,
   ) {}
 
   private seedAccounts = async () => {
@@ -378,21 +381,21 @@ export class SeedDevService implements ISeed {
     );
   };
 
-  // private seedTeacherComments = async ({ schoolId }: { schoolId: string }) => {
-  //   await Promise.all(
-  //     teacherCommentsSeedData.map(async (teacherComment) => {
-  //       await this.teacherCommentSeed.run({
-  //         schoolId,
-  //         id: teacherComment.id,
-  //         studentId: teacherComment.student.id,
-  //         teacherId: teacherComment.teacher.id,
-  //         title: teacherComment.title,
-  //         content: teacherComment.content,
-  //         parentReply: teacherComment.parentReply,
-  //       });
-  //     }),
-  //   );
-  // };
+  private seedTeacherComments = async ({ schoolId }: { schoolId: string }) => {
+    await Promise.all(
+      teacherCommentsSeedData.map(async (teacherComment) => {
+        await this.teacherCommentsSeed.run({
+          schoolId,
+          id: teacherComment.id,
+          studentId: teacherComment.student.id,
+          teacherId: teacherComment.teacher.id,
+          title: teacherComment.title,
+          content: teacherComment.content,
+          parentReply: teacherComment.parentReply,
+        });
+      }),
+    );
+  };
 
   run = async () => {
     data.forEach(async (tenant) => {
@@ -445,6 +448,8 @@ export class SeedDevService implements ISeed {
       await this.seedFeeItems({ schoolId: school.id });
 
       await this.seedHomework({ schoolId: school.id });
+
+      await this.seedTeacherComments({ schoolId: school.id });
 
       // tenant.users.forEach(async (userInfo) => {
       //   const { account } = await this.accountSeed.run({

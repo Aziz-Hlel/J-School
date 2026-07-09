@@ -3,6 +3,7 @@ import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router';
 import { Toaster } from 'sonner';
 import ExtracurricularOverview from './components/Extracurriculars/Overview';
 import ExtraCurricularProfile from './components/Extracurriculars/Overview/extra-curricular-profile';
+import ExtraCurricularFeed from './components/Extracurriculars/Overview/feed/FeedArea';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
 import StudentProfile from './components/Students/student-profile';
@@ -34,9 +35,9 @@ import Sidebar from './pages/Sidebar';
 import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
+import TeacherComments from './pages/TeacherComments';
 import Teachers from './pages/teachers';
 import Timetable from './pages/Timetable';
-import ExtraCurricularFeed from './components/Extracurriculars/Overview/feed/FeedArea';
 
 const App = () => {
   return (
@@ -89,6 +90,8 @@ const App = () => {
                               </Route>
                             </Route>
                             <Route path='/calendar' element={<Calendar />} />
+                            <Route path='/teacher-comments' element={<TeacherComments />} />
+
                             <Route path='/feed' element={<Feed />} />
                           </Route>
                         </Route>
