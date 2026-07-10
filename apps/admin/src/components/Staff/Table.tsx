@@ -1,10 +1,11 @@
+import SelectRoles from '@/shared/select-roles/select-roles';
 import { Table, TableBody } from '../ui/table';
-import TableHeaders from './table/tableComposites/TableHeaders';
-import { DataTableToolbar } from './table/toolBar/DataTableToolbar';
-import { DataTablePagination } from './table/pagination/Pagination';
 import { type TableRowType } from './core/types';
-import useMyTable from './use-my-table';
+import { DataTablePagination } from './table/pagination/Pagination';
+import TableHeaders from './table/tableComposites/TableHeaders';
 import TableBodyContent from './table/TableMainComp/TableBodyContent';
+import { DataTableToolbar } from './table/toolBar/DataTableToolbar';
+import useMyTable from './use-my-table';
 
 const MainTable = () => {
   const { table, pageSize, isLoading } = useMyTable();
@@ -22,6 +23,8 @@ const MainTable = () => {
           </Table>
         </div>
         <div>
+          <SelectRoles />
+
           <DataTablePagination table={table} className='mt-auto' />
         </div>
       </div>

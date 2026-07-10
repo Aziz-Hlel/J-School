@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-import { AccountRole } from '@repo/db/prisma/enums';
-import getUrlParam from '@/utils/getUrlParam';
-import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import { ConflictError } from '@/err/service/customErrors';
+import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
+import getUrlParam from '@/utils/getUrlParam';
 import prisma from '@repo/db';
+import { AccountRole } from '@repo/db/prisma/enums';
+import { NextFunction, Request, Response } from 'express';
 
 const requireUserInSchool = async (req: Request, _: Response, next: NextFunction) => {
   const token = (req as AuthenticatedRequest).token;
@@ -21,14 +21,22 @@ const requireUserInSchool = async (req: Request, _: Response, next: NextFunction
     select: { id: true },
   });
 
-  if (!user) {
-    throw new ConflictError({
-      message: 'User not authorized',
-      internalLog: `Account with id ${accountId} does not exist in school with id ${schoolId}`,
-    });
-  }
+  if (user) return next();
 
-  return next();
+  const isOwner = await prisma.school.findUnique({
+    where: {
+      ownerId: accountId,
+      id: schoolId,
+    },
+    select: { id: true },
+  });
+
+  if (isOwner) return next();
+
+  throw new ConflictError({
+    message: 'User not authorized',
+    internalLog: `Account with id ${accountId} does not exist in school with id ${schoolId}`,
+  });
 };
 
 export default requireUserInSchool;

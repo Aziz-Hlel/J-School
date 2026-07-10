@@ -1,8 +1,4 @@
-import { EllipsisVertical, Trash2, SquarePen } from 'lucide-react';
-import React, { Fragment } from 'react';
-import type { TableRowType } from '../../core/types';
-import type { Row } from '@tanstack/react-table';
-import { useSelectedRow } from '../../context/selected-row-provider';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +6,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useSetUserIdStore } from '@/shared/select-roles/select-roles-store';
+import type { Row } from '@tanstack/react-table';
+import { EllipsisVertical, Pencil, SquarePen } from 'lucide-react';
+import React, { Fragment } from 'react';
+import { useSelectedRow } from '../../context/selected-row-provider';
+import type { TableRowType } from '../../core/types';
 import RowContainer from '../ContainerComp/RowContainer';
-import { Button } from '@/components/ui/button';
 
 type RowAction = {
   key: 'edit' | 'delete' | 'feature';
@@ -29,6 +30,7 @@ type RowActionState = {
 
 const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
   const { handleDialogStateChange } = useSelectedRow();
+  const setUserRole = useSetUserIdStore();
 
   const getActionState = (): RowActionState => {
     return {
@@ -56,12 +58,12 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     //   },
     // },
     {
-      key: 'delete',
-      label: 'Delete',
-      icon: <Trash2 size={16} className='text-red-500' />,
+      key: 'edit-roles',
+      label: 'Edit Roles',
+      icon: <Pencil size={16} className='text-amber-500' />,
       isVisible: true,
       onClick: () => {
-        handleDialogStateChange({ openDialog: 'delete', selectedRow: row.original });
+        setUserRole(row.original.id);
       },
     },
   ].map((action) => ({

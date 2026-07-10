@@ -51,4 +51,14 @@ export class UserController {
       data: result,
     });
   };
+
+  deleteUser = async (req: AuthenticatedRequest, res: Response) => {
+    const userId = getUrlParam(req, 'userId', { uuid: true });
+    const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
+    const result = await this.userService.deleteUser({ userId, schoolId });
+    res.status(200).json({
+      message: 'User deleted successfully',
+      data: result,
+    });
+  };
 }

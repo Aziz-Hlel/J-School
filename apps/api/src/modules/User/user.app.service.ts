@@ -76,10 +76,11 @@ export class UserAppService {
   };
 
   getUserRoles = async (userId: string) => {
+    console.log('rab id ,', userId);
     const roles = await prisma.userRoles.findMany({
       where: { userId },
     });
-
+    console.log('rab roles', roles.toString());
     const rolesResponse: UserRoleResponse[] = roles.map((role) => ({
       id: role.id,
       role: role.role,
@@ -109,6 +110,13 @@ export class UserAppService {
           },
         });
       }
+      if (rolesToAdd.includes(UserRole.TEACHER)) {
+        await tx.teacher.create({
+          data: {
+            userId: userId,
+          },
+        });
+      }
       if (rolesToDelete.includes(UserRole.PARENT)) {
         await tx.parent.delete({
           where: {
@@ -116,6 +124,14 @@ export class UserAppService {
           },
         });
       }
+      if (rolesToAdd.includes(UserRole.PARENT)) {
+        await tx.parent.create({
+          data: {
+            userId: userId,
+          },
+        });
+      }
+
       await prisma.userRoles.createMany({
         data: rolesToAdd.map((role) => ({ userId, role })),
       });
@@ -123,5 +139,10 @@ export class UserAppService {
         where: { userId, role: { in: rolesToDelete.map((role) => role) } },
       });
     });
+  };
+
+  deleteUser = async ({ userId, schoolId }: { userId: string; schoolId: string }) => {
+    await prisma.user.delete({ where: { id: userId, schoolId } });
+    return true;
   };
 }

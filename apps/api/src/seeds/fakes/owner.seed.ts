@@ -5,6 +5,7 @@ export class OwnerSeed {
   constructor(private readonly ownerService: OwnerService) {}
 
   run = async ({ accountId }: { accountId: string }) => {
+    console.log('rab om l owner', accountId);
     const result = await this.ownerService.findOrCreateOwner({
       schema: {
         firstName: faker.person.firstName(),

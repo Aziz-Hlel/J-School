@@ -5,12 +5,11 @@ import {
   Clipboard,
   DoorClosed,
   GraduationCap,
-  LayoutDashboard,
   ListCheck,
   Newspaper,
+  NotebookPen,
   Paperclip,
   ScrollText,
-  Settings2,
   SquareUserRound,
   UserCogIcon,
   UsersRound,
@@ -26,27 +25,27 @@ export type NavRoute = {
 };
 
 const navRoutes: NavRoute[] = [
-  {
-    title: 'Dashboard',
-    url: '/dashboard',
-    icon: LayoutDashboard,
-    isActive: true,
-    items: [
-      {
-        title: 'Overview',
-        url: '/dashboard/overview',
-        isActive: true,
-        roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-      },
-      {
-        title: 'Stats',
-        url: '/dashboard/stats',
-        isActive: false,
-        roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-      },
-    ],
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
+  // {
+  //   title: 'Dashboard',
+  //   url: '/dashboard',
+  //   icon: LayoutDashboard,
+  //   isActive: true,
+  //   items: [
+  //     {
+  //       title: 'Overview',
+  //       url: '/dashboard/overview',
+  //       isActive: true,
+  //       roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  //     },
+  //     {
+  //       title: 'Stats',
+  //       url: '/dashboard/stats',
+  //       isActive: false,
+  //       roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  //     },
+  //   ],
+  //   roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  // },
   {
     title: 'Staff',
     url: '/staff',
@@ -125,6 +124,13 @@ const navRoutes: NavRoute[] = [
     roles: [UserRole.DIRECTOR, UserRole.MANAGER],
   },
   {
+    title: 'Homeworks',
+    url: '/homeworks',
+    icon: NotebookPen,
+    isActive: true,
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  },
+  {
     title: 'Calendar',
     url: '/calendar',
     icon: Calendar,
@@ -138,21 +144,21 @@ const navRoutes: NavRoute[] = [
     isActive: true,
     roles: [UserRole.DIRECTOR, UserRole.MANAGER],
   },
-  {
-    title: 'Settings',
-    url: '/settings',
-    icon: Settings2,
-    isActive: true,
-    items: [
-      {
-        title: 'Profile',
-        url: '/settings/profile',
-        isActive: true,
-        roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-      },
-    ],
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
-  },
+  // {
+  //   title: 'Settings',
+  //   url: '/settings',
+  //   icon: Settings2,
+  //   isActive: true,
+  //   items: [
+  //     {
+  //       title: 'Profile',
+  //       url: '/settings/profile',
+  //       isActive: true,
+  //       roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  //     },
+  //   ],
+  //   roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+  // },
 ];
 
 export default navRoutes;

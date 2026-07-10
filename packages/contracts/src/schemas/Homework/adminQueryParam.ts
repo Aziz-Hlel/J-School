@@ -36,6 +36,8 @@ export const adminHomeworkQueryParams = {
 };
 
 export type AdminHomeworkQueryParamsTypes = {
+  TableRowType: TableRowType;
+  TableRowKeys: TableRowKeys;
   Query: QueryType;
   SortableFields: (typeof adminHomeworkQueryParams.sortableFields)[number];
   FilterableFields: (typeof adminHomeworkQueryParams.filterableFields)[number];

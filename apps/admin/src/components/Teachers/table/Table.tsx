@@ -1,4 +1,5 @@
 import { Table, TableBody } from '@/components/ui/table';
+import SelectRoles from '@/shared/select-roles/select-roles';
 import { type TableRowType } from './core/types';
 import { DataTablePagination } from './table/pagination/Pagination';
 import TableHeaders from './table/tableComposites/TableHeaders';
@@ -23,6 +24,8 @@ const MainTable = () => {
           </Table>
         </div>
         <div>
+          <SelectRoles />
+
           <DataTablePagination table={table} className='mt-auto' />
         </div>
       </div>

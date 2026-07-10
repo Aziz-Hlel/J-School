@@ -6,8 +6,9 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useSetUserIdStore } from '@/shared/select-roles/select-roles-store';
 import type { Row } from '@tanstack/react-table';
-import { EllipsisVertical, SquarePen, Trash2 } from 'lucide-react';
+import { EllipsisVertical, Pencil, SquarePen } from 'lucide-react';
 import React, { Fragment } from 'react';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import type { TableRowType } from '../../core/types';
@@ -29,6 +30,7 @@ type RowActionState = {
 
 const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
   const { handleDialogStateChange } = useSelectedRow();
+  const setUserRole = useSetUserIdStore();
 
   const getActionState = (): RowActionState => {
     return {
@@ -45,6 +47,15 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
       isPermitted: true,
       onClick: () => handleDialogStateChange({ openDialog: 'edit', selectedRow: row.original }),
     },
+    {
+      key: 'edit-roles',
+      label: 'Edit Roles',
+      icon: <Pencil size={16} className='text-amber-500' />,
+      isPermitted: true,
+      onClick: () => {
+        setUserRole(row.original.userId);
+      },
+    },
     // {
     //   key: 'feature',
     //   label: row.original.isFeatured ? 'Unfeature' : 'Feature',
@@ -55,15 +66,6 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     //     handleDialogChange('feature');
     //   },
     // },
-    {
-      key: 'delete',
-      label: 'Delete',
-      icon: <Trash2 size={16} className='text-red-500' />,
-      isVisible: true,
-      onClick: () => {
-        handleDialogStateChange({ openDialog: 'delete', selectedRow: row.original });
-      },
-    },
   ].map((action) => ({
     ...action,
     ...getActionState(),

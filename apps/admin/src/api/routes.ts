@@ -156,8 +156,14 @@ export const apiRoutes = {
   },
 
   user: {
-    getUserRoles: (userId: string) => `/users/${userId}/roles`,
-    updateUserRoles: (userId: string) => `/users/${userId}/roles`,
+    getUserRoles: (schoolId: string, userId: string) => `/schools/${schoolId}/users/${userId}/roles`,
+    updateUserRoles: (schoolId: string, userId: string) => `/schools/${schoolId}/users/${userId}/roles`,
+    deleteUser: (schoolId: string, userId: string) => `/schools/${schoolId}/users/${userId}`,
+  },
+
+  homework: {
+    getPage: (schoolId: string) => `/schools/${schoolId}/homework`,
+    delete: (schoolId: string, homeworkId: string) => `/schools/${schoolId}/homework/${homeworkId}`,
   },
 
   owner: {

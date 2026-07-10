@@ -1,14 +1,14 @@
-import { UserRepo } from './user.repo';
+import { RepoKnownErrors } from '@/err/repo/DbError';
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
 import { TX } from '@/types/prisma/PrismaTransaction';
+import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
+import { userRolesStaff } from '@repo/contracts/types/enums/meta/userRoleMeta';
+import prisma from '@repo/db';
+import { Prisma } from '@repo/db/prisma/client';
 import { UserInclude } from '@repo/db/prisma/models';
 import { CreateUserInput } from './types/createUserInput';
-import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
-import { RepoKnownErrors } from '@/err/repo/DbError';
-import { Prisma } from '@repo/db/prisma/client';
-import prisma from '@repo/db';
-import { userRolesStaff } from '@repo/contracts/types/enums/meta/userRoleMeta';
+import { UserRepo } from './user.repo';
 
 export class UserService {
   constructor(private readonly userRepo: UserRepo) {}

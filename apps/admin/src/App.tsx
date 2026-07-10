@@ -26,7 +26,6 @@ import Classrooms from './pages/Classrooms';
 import ExamSchedule from './pages/ExamSchedule';
 import Extracurriculars from './pages/Extracurriculars';
 import Feed from './pages/Feed';
-import Homepage from './pages/Homepage';
 import NotFound from './pages/NotFound';
 import OwnerBoarding from './pages/OwnerBoarding';
 import Parents from './pages/Parents';
@@ -38,11 +37,12 @@ import Students from './pages/Students';
 import TeacherComments from './pages/TeacherComments';
 import Teachers from './pages/teachers';
 import Timetable from './pages/Timetable';
+import Homework from './pages/Homework';
 
 const App = () => {
   return (
     <>
-      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+      <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
         <QueryClientProvider client={queryClient}>
           <Toaster />
           <NetworkStatusGuard>
@@ -63,7 +63,7 @@ const App = () => {
                         // ? ask for coriosity if this okay to do
                         <Route element={<SchoolIdProvider />}>
                           <Route element={<Sidebar dir={'ltr'} />}>
-                            <Route path='/' element={<Homepage />} />
+                            <Route path='/' element={<Staff />} />
                             <Route path='/staff' element={<Staff />} />
                             <Route path='/teachers' element={<Teachers />} />
                             <Route path='/parents' element={<Parents />} />
@@ -82,6 +82,7 @@ const App = () => {
                             <Route path='/timetable' element={<Timetable />} />
                             <Route path='/exams' element={<ExamSchedule />} />
                             <Route path='/attendances' element={<Attendance />} />
+                            <Route path='/homeworks' element={<Homework />} />
                             <Route path='/extracurriculars' element={<Outlet />}>
                               <Route index element={<Extracurriculars />} />
                               <Route path=':extraCurricularId' element={<ExtracurricularOverview />}>

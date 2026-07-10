@@ -41,12 +41,7 @@ export const schoolWorkspace = {
 
 export type SchoolWorkspace = (typeof schoolWorkspace)[keyof typeof schoolWorkspace];
 
-export const administrationRoles = [
-  UserRole.DIRECTOR,
-  UserRole.MANAGER,
-  UserRole.NURSE,
-  UserRole.DRIVER,
-] as const satisfies readonly UserRole[];
+export const administrationRoles = [UserRole.DIRECTOR, UserRole.MANAGER] as const satisfies readonly UserRole[];
 
 export const administrationRolesSet = new Set(administrationRoles);
 
