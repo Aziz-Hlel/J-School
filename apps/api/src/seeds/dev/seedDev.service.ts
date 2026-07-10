@@ -79,14 +79,12 @@ export class SeedDevService implements ISeed {
       ...Object.values(parentSeedData),
       ...Object.values(teacherSeedData),
     ];
-    await Promise.all(
-      actorsList.map(async (actor) => {
-        await this.accountSeed.run({
-          email: actor.email,
-          accountRole: AccountRole.USER,
-        });
-      }),
-    );
+    for (const actor of actorsList) {
+      await this.accountSeed.run({
+        email: actor.email,
+        accountRole: AccountRole.USER,
+      });
+    }
   };
 
   private seedUsers = async ({ schoolId }: { schoolId: string }) => {
@@ -95,11 +93,9 @@ export class SeedDevService implements ISeed {
       ...Object.values(parentSeedData),
       ...Object.values(teacherSeedData),
     ];
-    await Promise.all(
-      usersList.map(async (user) => {
-        await this.userSeed.runV2({ accountEmail: user.email, schoolId, userId: user.id });
-      }),
-    );
+    for (const user of usersList) {
+      await this.userSeed.runV2({ accountEmail: user.email, schoolId, userId: user.id });
+    }
   };
 
   private seedUserRoles = async () => {

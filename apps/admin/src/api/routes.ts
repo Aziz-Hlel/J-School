@@ -157,6 +157,7 @@ export const apiRoutes = {
 
   user: {
     getUserRoles: (userId: string) => `/users/${userId}/roles`,
+    updateUserRoles: (userId: string) => `/users/${userId}/roles`,
   },
 
   owner: {

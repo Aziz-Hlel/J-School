@@ -29,16 +29,16 @@ export const ROLE_METADATA = {
     hasExtendedTable: true,
     type: 'PARENT',
   },
-  [UserRole.NURSE]: {
-    name: 'NURSE',
-    hasExtendedTable: false,
-    type: 'STAFF',
-  },
-  [UserRole.DRIVER]: {
-    name: 'DRIVER',
-    hasExtendedTable: false,
-    type: 'STAFF',
-  },
+  // [UserRole.NURSE]: {
+  //   name: 'NURSE',
+  //   hasExtendedTable: false,
+  //   type: 'STAFF',
+  // },
+  // [UserRole.DRIVER]: {
+  //   name: 'DRIVER',
+  //   hasExtendedTable: false,
+  //   type: 'STAFF',
+  // },
 } as const satisfies RoleMetadata;
 
 export const userRolesSimple = Object.values(ROLE_METADATA)

@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { UserRole } from '@repo/contracts/types/enums/enums';
 import { useQuery } from '@tanstack/react-query';
 import { useSelectRolesStore, useSetUserId } from './select-roles-store';
+import queryClient from '@/config/react-qeury';
 
 const SelectRoles = () => {
   const userId = useSelectRolesStore((state) => state.userId);
@@ -31,9 +32,18 @@ const SelectRoles = () => {
 
   const allRoles = UserRole;
 
-  const handleAddRole = (role: UserRole) => {};
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ['user', userId, 'roles'],
+    mutationFn: (payload: UpdateUserRolesReq) => userService.updateUserRoles(userId, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', userId, 'roles'], exact: false });
+      setUserId(null);
+    },
+  });
 
-  const handleRemoveRole = (role: UserRole) => {};
+  const handleDeleteAccount = () => {};
+
+  const onUpdateRoleSubmit = () => {};
 
   return (
     <Dialog open={isOpen} onOpenChange={handleCancel}>
@@ -57,10 +67,16 @@ const SelectRoles = () => {
           >
             Cancel
           </Button>
-          <Button className='bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl' onClick={handleUpdate}>
+          <Button
+            className='bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl'
+            onClick={handleDeleteAccount}
+          >
             Delete Acccount
           </Button>
-          <Button className='bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl' onClick={handleUpdate}>
+          <Button
+            className='bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl'
+            onClick={onUpdateRoleSubmit}
+          >
             Confirm
           </Button>
         </DialogFooter>

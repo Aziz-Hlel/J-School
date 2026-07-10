@@ -27,26 +27,26 @@ export const userSeedData = {
     email: 'manager2@fake.com',
     role: UserRole.MANAGER,
   },
-  nurse1: {
-    id: genUuid('nurse1'),
-    email: 'nurse1@fake.com',
-    role: UserRole.NURSE,
-  },
-  nurse2: {
-    id: genUuid('nurse2'),
-    email: 'nurse2@fake.com',
-    role: UserRole.NURSE,
-  },
-  driver1: {
-    id: genUuid('driver1'),
-    email: 'driver1@fake.com',
-    role: UserRole.DRIVER,
-  },
-  driver2: {
-    id: genUuid('driver2'),
-    email: 'driver2@fake.com',
-    role: UserRole.DRIVER,
-  },
+  // nurse1: {
+  //   id: genUuid('nurse1'),
+  //   email: 'nurse1@fake.com',
+  //   role: UserRole.NURSE,
+  // },
+  // nurse2: {
+  //   id: genUuid('nurse2'),
+  //   email: 'nurse2@fake.com',
+  //   role: UserRole.NURSE,
+  // },
+  // driver1: {
+  //   id: genUuid('driver1'),
+  //   email: 'driver1@fake.com',
+  //   role: UserRole.DRIVER,
+  // },
+  // driver2: {
+  //   id: genUuid('driver2'),
+  //   email: 'driver2@fake.com',
+  //   role: UserRole.DRIVER,
+  // },
 };
 
 export const teacherSeedData = {

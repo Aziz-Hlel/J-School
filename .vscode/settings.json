@@ -19,8 +19,8 @@
   "git.autofetch": true,
 
   // ts-go settings
-  "typescript.experimental.useTsgo": true,
-  "js/ts.experimental.useTsgo": true,
+  "typescript.experimental.useTsgo": false,
+  "js/ts.experimental.useTsgo": false,
 
   // ts Version
   "js/ts.tsdk.path": "node_modules\\typescript\\lib",

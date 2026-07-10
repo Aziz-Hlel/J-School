@@ -134,8 +134,6 @@ enum UserRole {
   MANAGER
   TEACHER
   PARENT
-  NURSE
-  DRIVER
 }
 
 model UserRoles {
