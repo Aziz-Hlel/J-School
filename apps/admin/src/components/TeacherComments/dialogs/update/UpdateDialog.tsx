@@ -12,71 +12,61 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { useSelectedRow } from '../../context/selected-row-provider';
 
-import { staffService } from '@/api/service/staffService';
-import ImageUpload from '@/components/custom/ImageUpload/comp/ImageUpload';
-import SelectForm from '@/components/custom/SelectForm/SelectForm';
+import { teacherService } from '@/api/service/teachersService';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
-import { updateStaffRequestSchema, type UpdateStaffRequest } from '@repo/contracts/schemas/staff/updateStaffRequest';
-import { Gender } from '@repo/contracts/types/enums/enums';
+import {
+  updateTeacherCommentsReqSchema,
+  type UpdateTeacherCommentsReq,
+} from '@repo/contracts/schemas/TeacherComments/update';
 import { toast } from 'sonner';
 
-const UpdateStaff = () => {
+const UpdateTeacherComment = () => {
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['staff', 'update'],
-    mutationFn: staffService.update,
+    mutationKey: ['teachers', 'comments', 'update'],
+    mutationFn: teacherService.updateComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['staff'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['teachers', 'comments'], exact: false });
       form.reset();
       handleCancel();
     },
   });
 
-  const form = useForm<UpdateStaffRequest>({
-    resolver: zodResolver(updateStaffRequestSchema),
+  const form = useForm<UpdateTeacherCommentsReq>({
+    resolver: zodResolver(updateTeacherCommentsReqSchema),
     defaultValues:
       dialogState.openDialog === 'edit'
         ? {
-            firstName: dialogState.selectedRow.firstName || '',
-            lastName: dialogState.selectedRow.lastName || '',
-            gender: dialogState.selectedRow.gender || Gender.MALE,
-            dateOfBirth: dialogState.selectedRow.dateOfBirth,
-            phone: dialogState.selectedRow.phone || null,
-            cin: dialogState.selectedRow.cin || null,
-            address: dialogState.selectedRow.address || null,
-            avatarId: dialogState.selectedRow.avatar?.id || null,
+            title: dialogState.selectedRow.title,
+            content: dialogState.selectedRow.content,
+            canParentReply: dialogState.selectedRow.canParentReply,
           }
         : undefined,
   });
 
   const isEdit = dialogState.openDialog === 'edit';
   const selectedRow = isEdit ? dialogState.selectedRow : null;
+  const student = selectedRow?.student;
 
-  const onSubmit: SubmitHandler<UpdateStaffRequest> = async (data) => {
+  const onSubmit: SubmitHandler<UpdateTeacherCommentsReq> = async (data) => {
     try {
       if (isEdit && selectedRow) {
-        await mutateAsync({ data, schoolId, id: selectedRow.id });
+        await mutateAsync({ schoolId, teacherId: selectedRow.teacher.id, commentId: selectedRow.id, payload: data });
       }
-      toast.success(`Staff updated successfully`);
+      toast.success(`Teacher comment updated successfully`);
     } catch {
-      toast.error(`Failed to update staff`);
+      toast.error(`Failed to update teacher comment`);
     }
-  };
-
-  const thumbnailErrors = [form.formState.errors.avatarId?.message];
-  const clearMediaErrors = () => {
-    form.clearErrors('avatarId');
-  };
-
-  const handleThumbnailUpload = (newMediaId: string | null) => {
-    form.setValue('avatarId', newMediaId ?? null, newMediaId ? { shouldDirty: true, shouldValidate: true } : undefined);
   };
 
   return (
@@ -84,145 +74,94 @@ const UpdateStaff = () => {
       <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-120'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle>Edit staff</DialogTitle>
-            <DialogDescription>Update the details of the staff member</DialogDescription>
+            <DialogTitle>Edit teacher comment</DialogTitle>
+            <DialogDescription>Update the details of the teacher comment</DialogDescription>
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
-              {/* First Name & Last Name */}
-              <ImageUpload
-                initMedia={selectedRow?.avatar ?? null}
-                mediaErrors={thumbnailErrors}
-                clearMediaErrors={clearMediaErrors}
-                handleMediaUpload={handleThumbnailUpload}
-              />
-              <div className='grid grid-cols-2 gap-4'>
-                <Controller
-                  name='firstName'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? undefined}
-                        id='firstName'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='First Name'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='lastName'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? undefined}
-                        id='lastName'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='Last Name'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
+              {/* Student Info Display */}
+              {student && (
+                <Card className='mb-4'>
+                  <CardContent className='flex items-center gap-4 p-4'>
+                    <Avatar className='size-12'>
+                      <AvatarImage src={student.avatar?.url} alt={`${student.firstName.en} ${student.lastName.en}`} />
+                      <AvatarFallback>
+                        {student.firstName.en?.charAt(0)}
+                        {student.lastName.en?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className='space-y-1'>
+                      <p className='text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400'>
+                        Selected Student
+                      </p>
+                      <div className='text-sm font-medium text-slate-800 dark:text-slate-100'>
+                        <span className='font-bold'>EN:</span> {student.firstName.en} {student.lastName.en}
+                      </div>
+                      {student.firstName.ar && (
+                        <div className='text-sm font-medium text-slate-800 dark:text-slate-100' dir='rtl'>
+                          <span className='font-bold' dir='ltr'>
+                            AR:
+                          </span>{' '}
+                          {student.firstName.ar} {student.lastName.ar}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
-              {/* Gender */}
-              <div className='grid grid-cols-2 gap-4'>
-                <Controller
-                  name='gender'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='gender'>Gender</FieldLabel>
-                      <SelectForm field={field} options={Gender} placeholder='Select gender' label='Gender' />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='phone'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='phone'>Phone</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(e.target.value || null)}
-                        id='phone'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='Phone Number'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
-
-              {/* Date of Birth & CIN */}
-              <div className='grid grid-cols-2 gap-4'>
-                <Controller
-                  name='dateOfBirth'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='dateOfBirth'>Date of Birth</FieldLabel>
-                      <Input
-                        type='date'
-                        {...field}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(e.target.value || null)}
-                        id='dateOfBirth'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='YYYY-MM-DD'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='cin'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='cin'>CIN</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(e.target.value || null)}
-                        id='cin'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='CIN'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
-
-              {/* Address */}
+              {/* Title */}
               <Controller
-                name='address'
+                name='title'
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='address'>Address</FieldLabel>
-                    <Input
-                      {...field}
-                      value={field.value ?? ''}
-                      onChange={(e) => field.onChange(e.target.value || null)}
-                      id='address'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='Address'
-                    />
+                    <FieldLabel htmlFor='title'>Title</FieldLabel>
+                    <Input {...field} id='title' aria-invalid={fieldState.invalid} placeholder='Title' />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+
+              {/* Content */}
+              <Controller
+                name='content'
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor='content'>Content</FieldLabel>
+                    <Textarea {...field} id='content' aria-invalid={fieldState.invalid} placeholder='Content' />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+
+              {/* Can Parent Reply */}
+              <Controller
+                name='canParentReply'
+                control={form.control}
+                disabled
+                render={({ field }) => (
+                  <Field
+                    orientation='horizontal'
+                    className='flex items-center justify-between rounded-lg border p-3 shadow-sm'
+                  >
+                    <div className='space-y-0.5'>
+                      <FieldLabel htmlFor='canParentReply' className='text-sm font-medium'>
+                        Can Parent Reply
+                      </FieldLabel>
+                      <p className='text-xs text-slate-500 dark:text-slate-400'>
+                        Allow parents to comment or reply to this teacher comment.
+                      </p>
+                    </div>
+                    <input
+                      type='checkbox'
+                      id='canParentReply'
+                      disabled
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                      className='h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500'
+                    />
                   </Field>
                 )}
               />
@@ -244,4 +183,4 @@ const UpdateStaff = () => {
   );
 };
 
-export default UpdateStaff;
+export default UpdateTeacherComment;

@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { Row } from '@tanstack/react-table';
-import { EllipsisVertical, Trash2 } from 'lucide-react';
+import { EllipsisVertical, SquarePen, Trash2 } from 'lucide-react';
 import React, { Fragment } from 'react';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import type { TableRowType } from '../../core/types';
@@ -38,13 +38,13 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
   };
 
   const actions: RowAction[] = [
-    // {
-    //   key: 'edit',
-    //   label: 'Edit',
-    //   icon: <SquarePen size={16} className='text-green-500' />,
-    //   isPermitted: true,
-    //   onClick: () => handleDialogStateChange({ openDialog: 'edit', selectedRow: row.original }),
-    // },
+    {
+      key: 'edit',
+      label: 'Edit',
+      icon: <SquarePen size={16} className='text-green-500' />,
+      isPermitted: true,
+      onClick: () => handleDialogStateChange({ openDialog: 'edit', selectedRow: row.original }),
+    },
     // {
     //   key: 'feature',
     //   label: row.original.isFeatured ? 'Unfeature' : 'Feature',

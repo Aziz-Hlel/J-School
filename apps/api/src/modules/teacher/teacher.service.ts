@@ -7,6 +7,7 @@ import { Page } from '@repo/contracts/schemas/page/Page';
 import { MyCommentsQueryParamsTypes } from '@repo/contracts/schemas/teacher/commentsQueryParams';
 import type { TeacherTimetableRes } from '@repo/contracts/schemas/teacher/getTimetableResponse';
 import { TeacherHomeworkQueryParamsTypes } from '@repo/contracts/schemas/teacher/homeworQueryParams';
+import type { TeacherExtraCurricularResponse } from '@repo/contracts/schemas/teacher/teacherExtraCurricularResponse';
 import { TeacherFullTimetableRes } from '@repo/contracts/schemas/teacher/teacherFullTimeTableRes';
 import type { TeacherQueryParamsTypes } from '@repo/contracts/schemas/teacher/teacherQueryParams';
 import { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
@@ -321,7 +322,7 @@ export class TeacherService {
       orderBy: [{ session: { day: 'asc' } }, { session: { startTime: 'asc' } }],
     });
 
-    const response = extracurriculars.map((entry) => ({
+    const response: TeacherExtraCurricularResponse[] = extracurriculars.map((entry) => ({
       id: entry.id,
       title: {
         en: entry.title?.en ?? '', // *

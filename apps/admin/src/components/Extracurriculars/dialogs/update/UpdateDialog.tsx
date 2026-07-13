@@ -19,7 +19,15 @@ import SelectForm from '@/components/custom/SelectForm/SelectForm';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import {
@@ -37,6 +45,8 @@ const UpdateDialog = () => {
 
   const isEdit = dialogState.openDialog === 'edit';
   const selectedRow = isEdit ? dialogState.selectedRow : null;
+
+  if (!selectedRow) throw new Error('Selected row not found');
 
   const { data: teachersData } = useQuery({
     queryKey: ['teachers', 'select', schoolId],
@@ -60,15 +70,22 @@ const UpdateDialog = () => {
     shouldUnregister: true,
     defaultValues: {
       title: {
-        en: '',
-        fr: '',
-        ar: '',
+        en: selectedRow.title?.en ?? '',
+        fr: selectedRow.title?.fr ?? '',
+        ar: selectedRow.title?.ar ?? '',
       },
-      type: SessionType.WEEKLY,
-      dayOfWeek: DayOfWeek.MONDAY,
-      startTime: '',
-      endTime: null,
-      teacherId: null,
+      startTime: selectedRow.session.startTime ?? '',
+      endTime: selectedRow.session.endTime ?? null,
+      teacherId: selectedRow.teacher?.id ?? null,
+      ...(selectedRow.session.type === SessionType.SPECIAL
+        ? {
+            type: SessionType.SPECIAL,
+            date: selectedRow.session.date ?? '',
+          }
+        : {
+            type: SessionType.WEEKLY,
+            dayOfWeek: selectedRow.session.day ?? DayOfWeek.MONDAY,
+          }),
     },
   });
 
@@ -273,7 +290,27 @@ const UpdateDialog = () => {
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                       <FieldLabel htmlFor='dayOfWeek'>Day of week</FieldLabel>
-                      <SelectForm field={field} options={DayOfWeek} placeholder='Select day' label='Day of week' />
+                      {/* <SelectForm field={field} options={DayOfWeek} placeholder='Select day' label='Day of week' /> */}
+
+                      <Select {...field} onValueChange={field.onChange}>
+                        <SelectTrigger className='w-45'>
+                          <SelectValue placeholder='Select day' />
+                        </SelectTrigger>
+
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Day of week</SelectLabel>
+
+                            {Object.entries(DayOfWeek).map(([key, value]) => {
+                              return (
+                                <SelectItem key={key} value={key}>
+                                  {value}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}

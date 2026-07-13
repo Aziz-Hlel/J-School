@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import ExtracurricularOverview from './components/Extracurriculars/Overview';
 import ExtraCurricularProfile from './components/Extracurriculars/Overview/extra-curricular-profile';
 import ExtraCurricularFeed from './components/Extracurriculars/Overview/feed/FeedArea';
+import TeacherExtraCurricularDisplay from './components/Extracurriculars/teacher/TeacherDisplay';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
 import StudentProfile from './components/Students/student-profile';
@@ -35,7 +36,7 @@ import Sidebar from './pages/Sidebar';
 import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
-import TeacherComments from './pages/TeacherComments';
+import AdminTeacherComments from './pages/AdminTeacherComments';
 import Teachers from './pages/teachers';
 import Timetable from './pages/Timetable';
 
@@ -89,9 +90,15 @@ const App = () => {
                                 <Route index path='overview' element={<ExtraCurricularProfile />} />
                                 <Route path='feed' element={<ExtraCurricularFeed />} />
                               </Route>
+
+                              <Route path='teacher/:extraCurricularId' element={<TeacherExtraCurricularDisplay />}>
+                                <Route index path='overview' element={<ExtraCurricularProfile />} />
+                                <Route path='feed' element={<ExtraCurricularFeed />} />
+                              </Route>
                             </Route>
+
                             <Route path='/calendar' element={<Calendar />} />
-                            <Route path='/teacher-comments' element={<TeacherComments />} />
+                            <Route path='/teacher-comments' element={<AdminTeacherComments />} />
 
                             <Route path='/feed' element={<Feed />} />
                           </Route>

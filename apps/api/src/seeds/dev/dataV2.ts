@@ -469,7 +469,7 @@ export const teacherCommentsSeedData = [
     title: 'Excellent work',
     content: 'Excellent work on this assignment!',
     parentReply: 'Thank you for your feedback!',
-    teacher: teacherSeedData.teacher1,
+    teacher: teacherSeedData.director1,
     student: studentSeedData.student1,
   },
   {
@@ -477,7 +477,7 @@ export const teacherCommentsSeedData = [
     title: 'Keep up the great effort',
     content: 'Keep up the great effort!',
     parentReply: 'Thank you for your feedback!',
-    teacher: teacherSeedData.teacher2,
+    teacher: teacherSeedData.director1,
     student: studentSeedData.student1,
   },
   {
@@ -485,7 +485,7 @@ export const teacherCommentsSeedData = [
     title: 'Good understanding',
     content: 'Good understanding of the material.',
     parentReply: 'Thank you for your feedback!',
-    teacher: teacherSeedData.teacher3,
+    teacher: teacherSeedData.director1,
     student: studentSeedData.student1,
   },
   {
@@ -493,7 +493,7 @@ export const teacherCommentsSeedData = [
     title: 'Needs improvement',
     content: 'Needs improvement in the calculation part.',
     parentReply: 'Thank you for your feedback!',
-    teacher: teacherSeedData.teacher4,
+    teacher: teacherSeedData.director1,
     student: studentSeedData.student1,
   },
   {
@@ -501,7 +501,7 @@ export const teacherCommentsSeedData = [
     title: 'Excellent analysis',
     content: 'Excellent analysis!',
     parentReply: 'Thank you for your feedback!',
-    teacher: teacherSeedData.teacher5,
+    teacher: teacherSeedData.teacher1,
     student: studentSeedData.student1,
   },
 ];

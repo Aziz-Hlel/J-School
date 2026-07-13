@@ -1,6 +1,5 @@
 import { attendanceService } from '@/api/service/attendanceService';
-import { classroomsService } from '@/api/service/classroomsService';
-import schoolService from '@/api/service/schoolService';
+import { teacherService } from '@/api/service/teachersService';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +13,8 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
-import type { GetClassroomTimetableResponse } from '@repo/contracts/schemas/assignment/getClassroomTimetableResponse';
+import { useGetCurrentProfile } from '@/store/useAuthStore';
+import type { TeacherFullTimetableRes } from '@repo/contracts/schemas/teacher/teacherFullTimeTableRes';
 import { toWeekNbr } from '@repo/contracts/schemas/utils/getWeekNbr';
 import { AttendanceStatus, DayOfWeek } from '@repo/contracts/types/enums/enums';
 import { useQuery } from '@tanstack/react-query';
@@ -103,14 +103,14 @@ const StatPill = ({
 };
 
 const EmptyState = () => (
-  <div className='flex h-full min-h-[300px] flex-col items-center justify-center gap-3 text-center'>
+  <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
     <div className='flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800'>
       <Users className='h-6 w-6 text-slate-400' />
     </div>
     <div>
       <p className='text-sm font-medium text-slate-600 dark:text-slate-300'>No data to display</p>
       <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>
-        Select a classroom, session and week on the left to load attendance records.
+        Select a session and week on the left to load attendance records.
       </p>
     </div>
   </div>
@@ -135,7 +135,7 @@ const LoadingSkeleton = () => (
 );
 
 const ErrorState = () => (
-  <div className='flex h-full min-h-[300px] flex-col items-center justify-center gap-3 text-center'>
+  <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
     <div className='flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/50'>
       <span className='text-2xl'>⚠️</span>
     </div>
@@ -147,7 +147,7 @@ const ErrorState = () => (
 );
 
 const NoDataState = () => (
-  <div className='flex h-full min-h-[300px] flex-col items-center justify-center gap-3 text-center'>
+  <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
     <div className='flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800'>
       <CalendarDays className='h-6 w-6 text-slate-400' />
     </div>
@@ -160,8 +160,10 @@ const NoDataState = () => (
 
 // ─── main component ──────────────────────────────────────────────────────────
 
-const AttendanceOverview = () => {
+const TeacherAttendanceOverview = () => {
   const schoolId = useCurrentSchoolId();
+  const teacherProfile = useGetCurrentProfile();
+  const teacherId = teacherProfile!.id;
 
   const [currentWeek, setCurrentWeek] = useState<{ startDate: Date; endDate: Date }>({
     startDate: getRecentMonday().toDate(),
@@ -169,27 +171,17 @@ const AttendanceOverview = () => {
   });
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [classroomId, setClassroomId] = useState<string | null>(null);
   const [timetableId, setTimetableId] = useState<string | null>(null);
 
   const week = toWeekNbr(currentWeek.startDate);
 
-  // ── classrooms ──────────────────────────────────────────────────────────────
-  const { data: classroomsData } = useQuery({
-    queryKey: ['classrooms', 'select'],
-    queryFn: () => schoolService.selectClassrooms({ schoolId }),
-  });
-  const classrooms = classroomsData?.data ?? [];
-
   // ── timetable ───────────────────────────────────────────────────────────────
-  const { data: timetableData, isFetching: isTimetableFetching } = useQuery({
-    queryKey: ['classrooms', classroomId, 'timetable'],
-    queryFn: async () =>
-      classroomId ? await classroomsService.getClassroomTimetable({ schoolId, classroomId }) : undefined,
-    enabled: !!classroomId,
+  const { data: teacherTimetableData, isFetching: isTimetableFetching } = useQuery({
+    queryKey: ['teachers', teacherId, 'timetable'],
+    queryFn: async () => teacherService.getTimetable(schoolId, teacherId),
   });
 
-  const classroomTimetables: GetClassroomTimetableResponse = timetableData?.data ?? {
+  const teacherTimetable: TeacherFullTimetableRes = teacherTimetableData?.data ?? {
     [DayOfWeek.MONDAY]: [],
     [DayOfWeek.TUESDAY]: [],
     [DayOfWeek.WEDNESDAY]: [],
@@ -198,6 +190,10 @@ const AttendanceOverview = () => {
     [DayOfWeek.SATURDAY]: [],
     [DayOfWeek.SUNDAY]: [],
   };
+
+  const allSessions = DAY_ORDER.flatMap((day) => (teacherTimetable[day] ?? []).map((session) => ({ ...session, day })));
+  const selectedSession = allSessions.find((s) => s.id === timetableId);
+  const classroomId = selectedSession?.classroom.id ?? null;
 
   // ── attendances ─────────────────────────────────────────────────────────────
   const {
@@ -230,12 +226,6 @@ const AttendanceOverview = () => {
   const isCurrentWeek = dayjs(currentWeek.startDate).isSame(getRecentMonday(), 'day');
 
   // ── derived values ──────────────────────────────────────────────────────────
-  const allSessions = DAY_ORDER.flatMap((day) =>
-    (classroomTimetables[day] ?? []).map((session) => ({ ...session, day })),
-  );
-  const selectedSession = allSessions.find((s) => s.id === timetableId);
-  const selectedClassroom = classrooms.find((c) => c.id === classroomId);
-
   const presentCount = attendances.filter((a) => a.attendance?.status === AttendanceStatus.PRESENT).length;
   const absentCount = attendances.filter((a) => a.attendance?.status === AttendanceStatus.ABSENT).length;
   const lateCount = attendances.filter((a) => a.attendance?.status === AttendanceStatus.LATE).length;
@@ -251,61 +241,27 @@ const AttendanceOverview = () => {
           <div>
             <h2 className='text-base font-semibold text-slate-800 dark:text-slate-100'>Filters</h2>
             <p className='mt-0.5 text-xs text-slate-500 dark:text-slate-400'>
-              Select a classroom, session and week to load attendance.
+              Select a session and week to load attendance.
             </p>
           </div>
 
-          {/* 1 · Classroom */}
-          <div className='flex flex-col gap-2'>
-            <label className='flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400'>
-              <Users className='h-3.5 w-3.5' />
-              Classroom
-            </label>
-            <Select
-              value={classroomId ?? ''}
-              onValueChange={(val) => {
-                setClassroomId(val);
-                setTimetableId(null);
-              }}
-            >
-              <SelectTrigger className='h-9 text-sm'>
-                <SelectValue placeholder='Choose a classroom…' />
-              </SelectTrigger>
-              <SelectContent>
-                {classrooms.length === 0 ? (
-                  <div className='px-3 py-2 text-xs text-slate-400'>No classrooms found</div>
-                ) : (
-                  classrooms.map((cls) => (
-                    <SelectItem key={cls.id} value={cls.id}>
-                      {cls.name}
-                    </SelectItem>
-                  ))
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* 2 · Timetable Session */}
+          {/* 1 · Timetable Session */}
           <div className='flex flex-col gap-2'>
             <label className='flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400'>
               <BookOpen className='h-3.5 w-3.5' />
               Session
             </label>
-            <Select
-              value={timetableId ?? ''}
-              onValueChange={setTimetableId}
-              disabled={!classroomId || isTimetableFetching}
-            >
+            <Select value={timetableId ?? ''} onValueChange={setTimetableId} disabled={isTimetableFetching}>
               <SelectTrigger className='h-9 text-sm'>
                 {isTimetableFetching ? (
                   <span className='text-slate-400'>Loading…</span>
                 ) : (
-                  <SelectValue placeholder={classroomId ? 'Choose a session…' : 'Select classroom first'} />
+                  <SelectValue placeholder='Choose a session…' />
                 )}
               </SelectTrigger>
               <SelectContent>
                 {DAY_ORDER.map((day) => {
-                  const sessions = classroomTimetables[day] ?? [];
+                  const sessions = teacherTimetable[day] ?? [];
                   if (sessions.length === 0) return null;
                   return (
                     <SelectGroup key={day}>
@@ -317,6 +273,10 @@ const AttendanceOverview = () => {
                             <span>
                               {session.startTime} – {session.endTime}
                               <span className='ml-1.5 text-slate-500'>· {session.subject.name.en}</span>
+                              <span className='ml-1.5 text-slate-400'>
+                                · {session.classroom.name}
+                                {session.classroom.grade ? ` (${session.classroom.grade})` : ''}
+                              </span>
                             </span>
                           </span>
                         </SelectItem>
@@ -324,14 +284,14 @@ const AttendanceOverview = () => {
                     </SelectGroup>
                   );
                 })}
-                {allSessions.length === 0 && classroomId && !isTimetableFetching && (
+                {allSessions.length === 0 && !isTimetableFetching && (
                   <div className='px-3 py-2 text-xs text-slate-400'>No sessions found</div>
                 )}
               </SelectContent>
             </Select>
           </div>
 
-          {/* 3 · Week Picker */}
+          {/* 2 · Week Picker */}
           <div className='flex flex-col gap-2'>
             <label className='flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400'>
               <CalendarDays className='h-3.5 w-3.5' />
@@ -379,11 +339,10 @@ const AttendanceOverview = () => {
               <p className='text-slate-500 dark:text-slate-400'>
                 {DAY_LABELS[selectedSession.day]} · {selectedSession.startTime} – {selectedSession.endTime}
               </p>
-              {selectedSession.teacher && (
-                <p className='mt-1 text-slate-500 dark:text-slate-400'>
-                  {selectedSession.teacher.firstName} {selectedSession.teacher.lastName}
-                </p>
-              )}
+              <p className='mt-1 text-slate-500 dark:text-slate-400'>
+                {selectedSession.classroom.name}
+                {selectedSession.classroom.grade ? ` · Grade ${selectedSession.classroom.grade}` : ''}
+              </p>
               {selectedSession.room && (
                 <p className='text-slate-400 dark:text-slate-500'>Room {selectedSession.room}</p>
               )}
@@ -397,12 +356,13 @@ const AttendanceOverview = () => {
           <div className='flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800'>
             <div>
               <h1 className='text-base font-semibold text-slate-800 dark:text-slate-100'>
-                {selectedClassroom ? `${selectedClassroom.name} — Attendance` : 'Attendance'}
+                {selectedSession ? `${selectedSession.classroom.name} — Attendance` : 'Attendance'}
               </h1>
               {selectedSession && (
                 <p className='text-xs text-slate-500 dark:text-slate-400'>
                   {DAY_LABELS[selectedSession.day]} · {selectedSession.startTime}–{selectedSession.endTime} ·{' '}
-                  {selectedSession.subject.name.en} · Week {week}
+                  {selectedSession.subject.name.en}
+                  {selectedSession.classroom.grade ? ` · Grade ${selectedSession.classroom.grade}` : ''} · Week {week}
                 </p>
               )}
             </div>
@@ -513,4 +473,4 @@ const AttendanceOverview = () => {
   );
 };
 
-export default AttendanceOverview;
+export default TeacherAttendanceOverview;

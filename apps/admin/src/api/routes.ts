@@ -51,6 +51,13 @@ export const apiRoutes = {
     selectTeacher: (schoolId: string) => `/schools/${schoolId}/teachers/select`,
     getTimetable: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/timetable/weekly`,
     getExams: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/exam-schedules`,
+    assignments: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/assignments`,
+    getExtraCurricular: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/extra-curriculars`,
+    getComments: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/comments`,
+    createComment: (schoolId: string, teacherId: string) => `/schools/${schoolId}/teachers/${teacherId}/comments`,
+    updateComment: (schoolId: string, teacherId: string, commentId: string) =>
+      `/schools/${schoolId}/teachers/${teacherId}/comments/${commentId}`,
+    getClassrooms: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/classrooms`,
   },
 
   parent: {

@@ -6,6 +6,7 @@ import { Gender, UserRole } from '@repo/contracts/types/enums/enums';
 import type { z } from 'zod';
 import { TableData } from './core';
 import { defaultQuery, queryParamsSchema, type TableRowType } from './types';
+import { teacherService } from '@/api/service/teachersService';
 
 export type schemasType = {
   create: z.infer<typeof createStaffRequestSchema>;
@@ -57,7 +58,7 @@ const deleteOperation = {
 };
 
 const getPage = defineOperation({
-  fn: teacherCommentsService.getPage,
+  fn: teacherService.getComments,
   mutationKey: () => [TableData.MODULE_NAME, 'getPage'],
   schema: queryParamsSchema,
   defaultValues: () => defaultQuery,

@@ -33,6 +33,8 @@ export const myCommentsQueryParams = {
 };
 
 export type MyCommentsQueryParamsTypes = {
+  TableRowType: TableRowType;
+  TableRowKeys: TableRowKeys;
   Query: QueryType;
   SortableFields: (typeof myCommentsQueryParams.sortableFields)[number];
   FilterableFields: (typeof myCommentsQueryParams.filterableFields)[number];

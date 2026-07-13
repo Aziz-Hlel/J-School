@@ -7,8 +7,8 @@ const DialogContainer = () => {
   const { dialogState } = useSelectedRow();
   return (
     <>
-      {dialogState.openDialog === 'edit' && <UpdateDialog />}
       {dialogState.openDialog === 'add' && <CreateDialog />}
+      {dialogState.openDialog === 'edit' && <UpdateDialog />}
       {dialogState.openDialog === 'delete' && <DeleteDialog />}
     </>
   );

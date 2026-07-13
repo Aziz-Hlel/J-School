@@ -12,251 +12,153 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { useSelectedRow } from '../../context/selected-row-provider';
 
-import { ApiError } from '@/api/ApiError';
-import { staffService } from '@/api/service/staffService';
-import SelectForm from '@/components/custom/SelectForm/SelectForm';
+import { teacherService } from '@/api/service/teachersService';
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
-import { createStaffRequestSchema, type CreateStaffRequest } from '@repo/contracts/schemas/staff/createStaffRequest';
-import { Gender } from '@repo/contracts/types/enums/enums';
-import { staffRoles } from '@repo/contracts/types/enums/meta/userRoleMeta';
+import { useGetCurrentProfile } from '@/store/useAuthStore';
+import {
+  createTeacherCommentsReqSchema,
+  type CreateTeacherCommentsReq,
+} from '@repo/contracts/schemas/TeacherComments/create';
 import { toast } from 'sonner';
+import SelectStudents from './select-students';
 
 const CreateDialog = () => {
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
+  const currentProfile = useGetCurrentProfile();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['staff', 'create'],
-    mutationFn: staffService.create,
+    mutationKey: ['teachers', 'comments', 'update'],
+    mutationFn: teacherService.createComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['staff'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['teachers', 'comments'], exact: false });
       form.reset();
       handleCancel();
     },
   });
 
-  const form = useForm<CreateStaffRequest>({
-    resolver: zodResolver(createStaffRequestSchema),
+  const form = useForm<CreateTeacherCommentsReq>({
+    resolver: zodResolver(createTeacherCommentsReqSchema),
   });
 
-  const onOpenChange = (open: boolean) => {
-    if (!open) {
-      form.reset();
-      handleCancel();
-    }
-  };
-
-  const onSubmit: SubmitHandler<CreateStaffRequest> = async (data) => {
+  const onSubmit: SubmitHandler<CreateTeacherCommentsReq> = async (data) => {
     try {
-      await mutateAsync({ data, schoolId });
-      toast.success(`Staff created successfully`);
-    } catch (error) {
-      if (error instanceof ApiError && error.status === 409) {
-        form.setError('email', { message: 'Email already exists' });
-        return;
-      }
-      toast.error(`Failed to create staff`);
+      await mutateAsync({ schoolId, teacherId: currentProfile!.id, payload: data });
+      toast.success(`Teacher comment added successfully`);
+    } catch {
+      toast.error(`Failed to add teacher comment`);
     }
   };
-
-  const dialogIsOpen = dialogState.openDialog === 'add';
 
   return (
-    <Dialog onOpenChange={onOpenChange} open={dialogIsOpen}>
+    <Dialog onOpenChange={handleCancel} open={dialogState.openDialog === 'add'}>
       <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-120'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle>Create new staff</DialogTitle>
-            <DialogDescription>Add a new staff member to your school</DialogDescription>
+            <DialogTitle>Edit teacher comment</DialogTitle>
+            <DialogDescription>Update the details of the teacher comment</DialogDescription>
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
-              {/* First Name & Last Name */}
-              <div className='grid grid-cols-2 gap-4'>
-                <Controller
-                  name='firstName'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? undefined}
-                        id='firstName'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='First Name'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='lastName'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? undefined}
-                        id='lastName'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='Last Name'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
-
-              {/* Gender & Role */}
-              <div className='grid grid-cols-2 gap-4'>
-                <Controller
-                  name='gender'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='gender'>Gender</FieldLabel>
-                      <SelectForm field={field} options={Gender} placeholder='Select gender' label='Gender' />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='role'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='role'>Role</FieldLabel>
-                      <SelectForm field={field} options={staffRoles} placeholder='Select role' label='Role' />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
-
-              {/* Email & Phone */}
-              <div className='grid grid-cols-2 gap-4'>
-                <Controller
-                  name='email'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='email'>Email</FieldLabel>
-                      <Input
-                        {...field}
-                        type='email'
-                        value={field.value ?? undefined}
-                        id='email'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='Email Address'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='phone'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='phone'>Phone</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(e.target.value || null)}
-                        id='phone'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='Phone Number'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
-
-              {/* Date of Birth & CIN */}
-              <div className='grid grid-cols-2 gap-4'>
-                <Controller
-                  name='dateOfBirth'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='dateOfBirth'>Date of Birth</FieldLabel>
-                      <Input
-                        type='date'
-                        {...field}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(e.target.value || null)}
-                        id='dateOfBirth'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='YYYY-MM-DD'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='cin'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='cin'>CIN</FieldLabel>
-                      <Input
-                        {...field}
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(e.target.value || null)}
-                        id='cin'
-                        aria-invalid={fieldState.invalid}
-                        placeholder='CIN'
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </Field>
-                  )}
-                />
-              </div>
-
-              {/* Address */}
+              {/* Student Info Display
+              {student && (
+                <Card className='mb-4'>
+                  <CardContent className='flex items-center gap-4 p-4'>
+                    <Avatar className='size-12'>
+                      <AvatarImage src={student.avatar?.url} alt={`${student.firstName.en} ${student.lastName.en}`} />
+                      <AvatarFallback>
+                        {student.firstName.en?.charAt(0)}
+                        {student.lastName.en?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className='space-y-1'>
+                      <p className='text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400'>
+                        Selected Student
+                      </p>
+                      <div className='text-sm font-medium text-slate-800 dark:text-slate-100'>
+                        <span className='font-bold'>EN:</span> {student.firstName.en} {student.lastName.en}
+                      </div>
+                      {student.firstName.ar && (
+                        <div className='text-sm font-medium text-slate-800 dark:text-slate-100' dir='rtl'>
+                          <span className='font-bold' dir='ltr'>
+                            AR:
+                          </span>{' '}
+                          {student.firstName.ar} {student.lastName.ar}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )} */}
+              {/* Title */}
               <Controller
-                name='address'
+                name='title'
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='address'>Address</FieldLabel>
-                    <Input
-                      {...field}
-                      value={field.value ?? ''}
-                      onChange={(e) => field.onChange(e.target.value || null)}
-                      id='address'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='Address'
-                    />
+                    <FieldLabel htmlFor='title'>Title</FieldLabel>
+                    <Input {...field} id='title' aria-invalid={fieldState.invalid} placeholder='Title' />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
-
-              {/* Password */}
+              {/* Content */}
               <Controller
-                name='password'
+                name='content'
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='password'>Password</FieldLabel>
-                    <Input
-                      {...field}
-                      type='password'
-                      value={field.value ?? ''}
-                      onChange={(e) => field.onChange(e.target.value || null)}
-                      id='password'
-                      aria-invalid={fieldState.invalid}
-                      placeholder='Leave blank for auto-generated password or type to set one'
+                    <FieldLabel htmlFor='content'>Content</FieldLabel>
+                    <Textarea {...field} id='content' aria-invalid={fieldState.invalid} placeholder='Content' />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              {/* Can Parent Reply */}
+              <Controller
+                name='canParentReply'
+                control={form.control}
+                render={({ field }) => (
+                  <Field
+                    orientation='horizontal'
+                    className='flex items-center justify-between rounded-lg border p-3 shadow-sm'
+                  >
+                    <div className='space-y-0.5'>
+                      <FieldLabel htmlFor='canParentReply' className='text-sm font-medium'>
+                        Can Parent Reply
+                      </FieldLabel>
+                      <p className='text-xs text-slate-500 dark:text-slate-400'>
+                        Allow parents to comment or reply to this teacher comment.
+                      </p>
+                    </div>
+                    <input
+                      type='checkbox'
+                      id='canParentReply'
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                      className='h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500'
                     />
+                  </Field>
+                )}
+              />
+              {/* Content */}
+              <Controller
+                name='studentIds'
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor='studentIds'>Select Students</FieldLabel>
+                    <SelectStudents onSelect={field.onChange} initialSelectedStudents={[]}>
+                      <Button type='button' variant={'outline'}>
+                        Select Students
+                      </Button>
+                    </SelectStudents>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
@@ -270,7 +172,7 @@ const CreateDialog = () => {
               </Button>
             </DialogClose>
             <Button type='submit' className='w-28' disabled={isPending}>
-              {isPending ? <Spinner /> : <span>Create Staff</span>}
+              {isPending ? <Spinner /> : <span>Save changes</span>}
             </Button>
           </DialogFooter>
         </form>
