@@ -1,5 +1,8 @@
+import type { ApiRes } from '@/types/api/ApiResponse2';
+import type { ExamScheduleWithClassroomRes } from '@repo/contracts/schemas/examSchedule/examScheduleWithClassroomResponse';
 import type { Page } from '@repo/contracts/schemas/page/Page';
 import type { CreateTeacherRequest } from '@repo/contracts/schemas/teacher/createTeacherRequest';
+import type { TeacherFullTimetableRes } from '@repo/contracts/schemas/teacher/teacherFullTimeTableRes';
 import type { TeacherResponse } from '@repo/contracts/schemas/teacher/teacherResponse';
 import type { UpdateTeacherRequest } from '@repo/contracts/schemas/teacher/updateTeacherRequest';
 import { apiService } from '../apiService';
@@ -22,4 +25,10 @@ export const teacherService = {
 
   delete: async (params: { schoolId: string; id: string }) =>
     apiService.deleteThrowable(apiRoutes.teacher.delete(params.schoolId, params.id)),
+
+  getTimetable: async (schoolId: string, id: string) =>
+    apiService.getThrowable<ApiRes<TeacherFullTimetableRes>>(apiRoutes.teacher.getTimetable(schoolId, id)),
+
+  getExams: async (schoolId: string, id: string) =>
+    apiService.getThrowable<ApiRes<ExamScheduleWithClassroomRes[]>>(apiRoutes.teacher.getExams(schoolId, id)),
 };

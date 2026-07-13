@@ -26,6 +26,7 @@ import Classrooms from './pages/Classrooms';
 import ExamSchedule from './pages/ExamSchedule';
 import Extracurriculars from './pages/Extracurriculars';
 import Feed from './pages/Feed';
+import Homework from './pages/Homework';
 import NotFound from './pages/NotFound';
 import OwnerBoarding from './pages/OwnerBoarding';
 import Parents from './pages/Parents';
@@ -37,12 +38,11 @@ import Students from './pages/Students';
 import TeacherComments from './pages/TeacherComments';
 import Teachers from './pages/teachers';
 import Timetable from './pages/Timetable';
-import Homework from './pages/Homework';
 
 const App = () => {
   return (
     <>
-      <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
+      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
         <QueryClientProvider client={queryClient}>
           <Toaster />
           <NetworkStatusGuard>
@@ -71,7 +71,7 @@ const App = () => {
                             <Route path='/students' element={<Outlet />}>
                               <Route index element={<Students />} />
                               <Route path=':studentId/profile' element={<StudentProfile />}>
-                                <Route index path='overview' element={<StudentOverview />} />
+                                <Route index element={<StudentOverview />} />
                                 <Route path='parents' element={<StudentParents />} />
                                 <Route path='health' element={<StudentHealth />} />
                                 <Route path='fees' element={<StudentFees />} />

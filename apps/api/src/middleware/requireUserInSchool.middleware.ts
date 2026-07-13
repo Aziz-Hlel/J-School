@@ -10,7 +10,6 @@ const requireUserInSchool = async (req: Request, _: Response, next: NextFunction
   if (token.claims.accountRole === AccountRole.SUPER_ADMIN) {
     return next();
   }
-
   const schoolId = getUrlParam(req, 'schoolId', { uuid: true });
   const accountId = token.claims.accountId;
 
@@ -25,8 +24,10 @@ const requireUserInSchool = async (req: Request, _: Response, next: NextFunction
 
   const isOwner = await prisma.school.findUnique({
     where: {
-      ownerId: accountId,
       id: schoolId,
+      owner: {
+        accountId,
+      },
     },
     select: { id: true },
   });

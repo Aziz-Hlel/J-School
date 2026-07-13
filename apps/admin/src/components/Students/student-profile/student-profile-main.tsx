@@ -185,7 +185,7 @@ const StudentProfileMain = ({ studentId }: { studentId: string }) => {
       <Tabs defaultValue='overview' className='w-full'>
         <div className='mb-6 flex items-center justify-between border-b border-slate-200 pb-2 dark:border-zinc-800'>
           <TabsList className='h-auto gap-6 bg-transparent p-0'>
-            <Link to={`/students/${studentId}/profile/overview`}>
+            <Link to={`/students/${studentId}/profile`}>
               <TabsTrigger
                 value='overview'
                 className='data-[state=active]:border-primary data-[state=active]:text-primary rounded-none border-b-2 border-transparent bg-transparent px-1 pt-2 pb-3 text-sm font-semibold text-slate-500 shadow-none transition-all hover:text-slate-800 dark:hover:text-slate-200'

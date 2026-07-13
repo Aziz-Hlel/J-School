@@ -93,14 +93,14 @@ const navRoutes: NavRoute[] = [
     url: '/timetable',
     icon: CalendarDays,
     isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER],
   },
   {
     title: 'Exams',
     url: '/exams',
     icon: ScrollText,
     isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER],
   },
   {
     title: 'Attendance',
@@ -135,7 +135,7 @@ const navRoutes: NavRoute[] = [
     url: '/calendar',
     icon: Calendar,
     isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER],
   },
   {
     title: 'Feed',

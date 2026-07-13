@@ -49,6 +49,8 @@ export const apiRoutes = {
     getById: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}`,
     delete: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}`,
     selectTeacher: (schoolId: string) => `/schools/${schoolId}/teachers/select`,
+    getTimetable: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/timetable/weekly`,
+    getExams: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/exam-schedules`,
   },
 
   parent: {

@@ -190,7 +190,7 @@ const ExamCard = ({ exam, onEdit, onDelete }: ExamCardProps) => {
   );
 };
 
-const ExamScheduleOverview = () => {
+const AdminExamScheduleOverview = () => {
   const schoolId = useCurrentSchoolId();
 
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -377,4 +377,4 @@ const ExamScheduleOverview = () => {
   );
 };
 
-export default ExamScheduleOverview;
+export default AdminExamScheduleOverview;

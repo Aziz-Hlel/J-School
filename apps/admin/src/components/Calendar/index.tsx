@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
+import { useIsCurrentUserAdmin } from '@/hooks/useIsCurrentUserAdmin';
 import type { CalendarQueryParams } from '@repo/contracts/schemas/Calendar/queryParam';
 import type { CalendarResponse } from '@repo/contracts/schemas/Calendar/response';
 import { useQuery } from '@tanstack/react-query';
@@ -120,6 +121,7 @@ function EventCard({
     ? dayjs(event.startDate).format('D MMM YYYY')
     : `${dayjs(event.startDate).format('D MMM')} – ${dayjs(event.endDate).format('D MMM YYYY')}`;
 
+  const isAdmin = useIsCurrentUserAdmin();
   return (
     <div className='group border-border bg-card hover:border-primary/30 flex items-start gap-3 rounded-xl border p-4 shadow-sm transition-all duration-200 hover:shadow-md'>
       {/* colour stripe */}
@@ -128,26 +130,28 @@ function EventCard({
       <div className='min-w-0 flex-1'>
         <div className='flex items-start justify-between gap-2'>
           <p className='text-foreground truncate text-sm font-semibold'>{event.title}</p>
-          <div className='flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100'>
-            <Button
-              variant='ghost'
-              size='icon'
-              className='text-muted-foreground hover:text-foreground h-7 w-7'
-              onClick={() => onEdit(event)}
-              aria-label='Edit event'
-            >
-              <Pencil className='h-3.5 w-3.5' />
-            </Button>
-            <Button
-              variant='ghost'
-              size='icon'
-              className='text-muted-foreground hover:text-destructive h-7 w-7'
-              onClick={() => onDelete(event)}
-              aria-label='Delete event'
-            >
-              <Trash2 className='h-3.5 w-3.5' />
-            </Button>
-          </div>
+          {isAdmin && (
+            <div className='flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100'>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='text-muted-foreground hover:text-foreground h-7 w-7'
+                onClick={() => onEdit(event)}
+                aria-label='Edit event'
+              >
+                <Pencil className='h-3.5 w-3.5' />
+              </Button>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='text-muted-foreground hover:text-destructive h-7 w-7'
+                onClick={() => onDelete(event)}
+                aria-label='Delete event'
+              >
+                <Trash2 className='h-3.5 w-3.5' />
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className='mt-1.5 flex flex-wrap items-center gap-2'>
@@ -254,6 +258,7 @@ const CalendarIndex = () => {
   const [currentMonth, setCurrentMonth] = useState<CalendarQueryParams>(getCurrentMonthRange());
   const [selectedDay, setSelectedDay] = useState<dayjs.Dayjs | null>(null);
 
+  const isAdmin = useIsCurrentUserAdmin();
   // Edit / Delete state
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -321,12 +326,14 @@ const CalendarIndex = () => {
             </div>
           </div>
 
-          <AddCalendar>
-            <Button id='add-calendar-btn' className='gap-2 shadow-sm'>
-              <Plus className='h-4 w-4' />
-              Add Event
-            </Button>
-          </AddCalendar>
+          {isAdmin && (
+            <AddCalendar>
+              <Button id='add-calendar-btn' className='gap-2 shadow-sm'>
+                <Plus className='h-4 w-4' />
+                Add Event
+              </Button>
+            </AddCalendar>
+          )}
         </div>
 
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]'>
@@ -459,12 +466,14 @@ const CalendarIndex = () => {
                 <p className='text-muted-foreground/70 text-xs'>
                   {selectedDay ? 'Nothing scheduled for this day.' : 'No events this month. Add one to get started.'}
                 </p>
-                <AddCalendar>
-                  <Button variant='outline' size='sm' className='mt-1 gap-1.5'>
-                    <Plus className='h-3.5 w-3.5' />
-                    Add Event
-                  </Button>
-                </AddCalendar>
+                {isAdmin && (
+                  <AddCalendar>
+                    <Button variant='outline' size='sm' className='mt-1 gap-1.5'>
+                      <Plus className='h-3.5 w-3.5' />
+                      Add Event
+                    </Button>
+                  </AddCalendar>
+                )}
               </div>
             ) : (
               <div className='flex flex-col gap-3 overflow-y-auto pr-0.5' style={{ maxHeight: '620px' }}>
