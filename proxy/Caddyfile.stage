@@ -1,8 +1,15 @@
 # -----------------------
 # Admin Panel
 # -----------------------
-https://admin.localhost {
-    tls internal # for local development only
+http://admin.localhost, https://admin.localhost {
+    # If the user typed https://, redirect them to http://
+    @https {
+        protocol https
+    }
+    redir @https http://{host}{uri} permanent
+
+    # Required so Caddy can temporarily accept the port 443 connection to redirect it
+    tls internal 
 
     root * /srv/admin
     encode gzip
@@ -15,8 +22,18 @@ https://admin.localhost {
     }
 }
 
-https://web.localhost {
-    tls internal
+# -----------------------
+# Web / API Proxy
+# -----------------------
+http://web.localhost, https://web.localhost {
+    # If the user typed https://, redirect them to http://
+    @https {
+        protocol https
+    }
+    redir @https http://{host}{uri} permanent
+
+    # Required so Caddy can temporarily accept the port 443 connection to redirect it
+    tls internal 
 
     # -----------------------
     # API proxy

@@ -70,6 +70,26 @@ services:
     networks:
       - default
 
+  notification:
+    build:
+      context: ${PROJECT_ROOT}
+      dockerfile: docker/stage/Dockerfile.notification
+
+    environment:
+      ONE_SIGNAL_APP_SECRET: ${ONE_SIGNAL_APP_SECRET}
+      ONE_SIGNAL_APP_ID: ${ONE_SIGNAL_APP_ID}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+
+    command: pnpm start
+
+    depends_on:
+      - redis
+
+    networks:
+      - default
+
   ocr:
     build:
       context: ${PROJECT_ROOT}

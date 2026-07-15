@@ -71,11 +71,11 @@ export const corsSchema = {
     .transform((origins) => origins.split(','))
     .refine(
       (origins) => {
-        const regexOrigins = /^https:\/\/([a-z0-9-]+\.)+[a-z]{2,}$/i;
+        const regexOrigins = /^https?:\/\/([a-z0-9-]+\.)+[a-z]{2,}$/i;
         return origins.every((origin) => regexOrigins.test(origin));
       },
       {
-        error: 'ALLOWED_ORIGIN_PATTERNS is invalid, it must follow "https://domain.com,https://domain.com"',
+        error: 'ALLOWED_ORIGIN_PATTERNS is invalid, it must follow "http://domain.com,https://domain.com"',
       },
     ),
 };
