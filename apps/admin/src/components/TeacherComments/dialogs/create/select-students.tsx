@@ -8,7 +8,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -25,12 +24,11 @@ import { useState } from 'react';
 
 interface SelectStudentsProps {
   children: React.ReactNode;
-  onSelect?: (students: StudentResponse[]) => void;
+  onSelect?: (students: string[]) => void;
   initialSelectedStudents?: StudentResponse[];
-  trigger?: React.ReactNode;
 }
 
-const SelectStudents = ({ children, onSelect, initialSelectedStudents = [], trigger }: SelectStudentsProps) => {
+const SelectStudents = ({ children, onSelect, initialSelectedStudents = [] }: SelectStudentsProps) => {
   const schoolId = useCurrentSchoolId();
   const currentProfile = useGetCurrentProfile();
   const [open, setOpen] = useState(false);
@@ -91,7 +89,7 @@ const SelectStudents = ({ children, onSelect, initialSelectedStudents = [], trig
 
   const handleSave = () => {
     if (onSelect) {
-      onSelect(selectedStudents);
+      onSelect(selectedStudents.map((s) => s.id));
     }
     setOpen(false);
   };
@@ -110,7 +108,7 @@ const SelectStudents = ({ children, onSelect, initialSelectedStudents = [], trig
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='bg-background flex h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border p-0 shadow-2xl'>
+      <DialogContent className='bg-background flex h-[85vh] min-w-6xl flex-col overflow-hidden rounded-xl border p-0 shadow-2xl'>
         <DialogHeader className='border-b px-6 pt-6 pb-4'>
           <DialogTitle className='flex items-center gap-2 text-xl font-bold'>
             <Users className='text-primary h-5 w-5' />
@@ -228,7 +226,7 @@ const SelectStudents = ({ children, onSelect, initialSelectedStudents = [], trig
                               : 'border-muted-foreground/30'
                           }`}
                         >
-                          {isSelected && <Check className='h-3 w-3 stroke-[3]' />}
+                          {isSelected && <Check className='h-3 w-3 stroke-3' />}
                         </div>
                       </div>
                     );
@@ -302,7 +300,7 @@ const SelectStudents = ({ children, onSelect, initialSelectedStudents = [], trig
                           <div>
                             <p className='text-xs leading-none font-semibold'>{getStudentName(student)}</p>
                             <span className='text-muted-foreground mt-0.5 inline-block text-[9px]'>
-                              {student.id.substring(0, 8)}
+                              {`${student.firstName.ar} ${student.lastName.ar}`}
                             </span>
                           </div>
                         </div>
@@ -322,15 +320,15 @@ const SelectStudents = ({ children, onSelect, initialSelectedStudents = [], trig
             </div>
           </div>
         </div>
+        <>
+          <Button variant='outline' onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave} disabled={selectedStudents.length === 0} className='sm:ml-2'>
+            Confirm Selection ({selectedStudents.length})
+          </Button>
+        </>
       </DialogContent>
-      <DialogFooter className='bg-muted/30 gap-2 border-t px-6 py-4 sm:gap-0'>
-        <Button variant='outline' onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-        <Button onClick={handleSave} disabled={selectedStudents.length === 0} className='sm:ml-2'>
-          Confirm Selection ({selectedStudents.length})
-        </Button>
-      </DialogFooter>
     </Dialog>
   );
 };

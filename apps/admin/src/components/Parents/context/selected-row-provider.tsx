@@ -1,14 +1,14 @@
 import { createContext, useContext, useState } from 'react';
 import type { TableRowType } from '../core/types';
 
-export type TableDialogType = 'add' | 'edit' | 'delete' | null;
+export type TableDialogType = 'add' | 'edit' | 'delete' | 'change-password' | null;
 
 export type DialogState =
   | {
       openDialog: 'add' | null;
     }
   | {
-      openDialog: 'edit' | 'delete';
+      openDialog: 'edit' | 'delete' | 'change-password';
       selectedRow: TableRowType;
     };
 

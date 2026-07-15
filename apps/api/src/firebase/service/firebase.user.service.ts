@@ -141,6 +141,17 @@ class FirebaseUserService {
       nextPageToken = result.pageToken;
     } while (nextPageToken);
   };
+
+  updateUserPassword = async (authId: string, newPassword: string) => {
+    try {
+      await this.firebaseSession.updateUser(authId, { password: newPassword });
+    } catch (error: unknown) {
+      if (isFirebaseError(error)) handleFirebaseError(error);
+
+      logger.error(error, 'Unexpected updateUserPassword error:');
+      throw error;
+    }
+  };
 }
 
 export const firebaseUserService = new FirebaseUserService();

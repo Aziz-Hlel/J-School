@@ -20,6 +20,7 @@ import AuthenticatedRoutes from './guard/AuthenticatedRoutes';
 import NetworkStatusGuard from './guard/NetworkStatusGuard';
 import OnboardingOwnerAndSchoolCompleted from './guard/OnboardingSchoolCompleted';
 import { ThemeProvider } from './lib/theme-provider';
+import AdminTeacherComments from './pages/AdminTeacherComments';
 import AssignmentsPage from './pages/Assignments';
 import Attendance from './pages/Attendance';
 import Calendar from './pages/Calendar';
@@ -36,7 +37,6 @@ import Sidebar from './pages/Sidebar';
 import SignupPage from './pages/SignUp';
 import Staff from './pages/Staff';
 import Students from './pages/Students';
-import AdminTeacherComments from './pages/AdminTeacherComments';
 import Teachers from './pages/teachers';
 import Timetable from './pages/Timetable';
 

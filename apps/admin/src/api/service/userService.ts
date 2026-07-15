@@ -1,4 +1,5 @@
 import type { ApiRes } from '@/types/api/ApiResponse2';
+import type { UpdatePasswordRequest } from '@repo/contracts/schemas/user/updatePassword';
 import type { UpdateUserRolesReq } from '@repo/contracts/schemas/user/updateUserRolesReq';
 import type { UserRoleResponse } from '@repo/contracts/schemas/user/UserRolesResponse';
 import { apiService } from '../apiService';
@@ -13,6 +14,16 @@ const userService = {
 
   deleteUser: async ({ userId, schoolId }: { userId: string; schoolId: string }) =>
     apiService.deleteThrowable<ApiRes<void>>(apiRoutes.user.deleteUser(schoolId, userId)),
+
+  updatePassword: async ({
+    userId,
+    schoolId,
+    input,
+  }: {
+    userId: string;
+    schoolId: string;
+    input: UpdatePasswordRequest;
+  }) => apiService.patchThrowable<ApiRes<void>>(apiRoutes.user.updatePassword(schoolId, userId), input),
 };
 
 export default userService;

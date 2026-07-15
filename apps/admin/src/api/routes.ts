@@ -58,6 +58,7 @@ export const apiRoutes = {
     updateComment: (schoolId: string, teacherId: string, commentId: string) =>
       `/schools/${schoolId}/teachers/${teacherId}/comments/${commentId}`,
     getClassrooms: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/classrooms`,
+    getHomework: (schoolId: string, id: string) => `/schools/${schoolId}/teachers/${id}/homeworks`,
   },
 
   parent: {
@@ -168,11 +169,13 @@ export const apiRoutes = {
     getUserRoles: (schoolId: string, userId: string) => `/schools/${schoolId}/users/${userId}/roles`,
     updateUserRoles: (schoolId: string, userId: string) => `/schools/${schoolId}/users/${userId}/roles`,
     deleteUser: (schoolId: string, userId: string) => `/schools/${schoolId}/users/${userId}`,
+    updatePassword: (schoolId: string, userId: string) => `/schools/${schoolId}/users/${userId}/password`,
   },
 
   homework: {
     getPage: (schoolId: string) => `/schools/${schoolId}/homework`,
     delete: (schoolId: string, homeworkId: string) => `/schools/${schoolId}/homework/${homeworkId}`,
+    create: (schoolId: string) => `/schools/${schoolId}/homework`,
   },
 
   owner: {

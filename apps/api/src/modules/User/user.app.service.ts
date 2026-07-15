@@ -1,6 +1,8 @@
 import { ConflictError, NotFoundError } from '@/err/service/customErrors';
+import { firebaseUserService } from '@/firebase/service/firebase.user.service';
 import { AccountService } from '@/modules/accounts/account.service';
 import { CreateSimpleUserRequest } from '@repo/contracts/schemas/user/createSimpleUserRequest';
+import { UpdatePasswordRequest } from '@repo/contracts/schemas/user/updatePassword';
 import { UpdateSimpleUserRequest } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { UpdateUserRolesReq } from '@repo/contracts/schemas/user/updateUserRolesReq';
 import { UserRoleResponse } from '@repo/contracts/schemas/user/UserRolesResponse';
@@ -143,6 +145,19 @@ export class UserAppService {
 
   deleteUser = async ({ userId, schoolId }: { userId: string; schoolId: string }) => {
     await prisma.user.delete({ where: { id: userId, schoolId } });
+    return true;
+  };
+
+  updatePassword = async ({ userId, input }: { userId: string; input: UpdatePasswordRequest }) => {
+    const userAuthIdQuery = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { account: { select: { authId: true } } },
+    });
+
+    if (!userAuthIdQuery?.account?.authId) throw new NotFoundError('User not found');
+
+    const authId = userAuthIdQuery.account.authId;
+    await firebaseUserService.updateUserPassword(authId, input.password);
     return true;
   };
 }

@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useSetUserIdStore } from '@/shared/select-roles/select-roles-store';
 import type { Row } from '@tanstack/react-table';
-import { EllipsisVertical, Pencil, SquarePen } from 'lucide-react';
+import { EllipsisVertical, LockKeyhole, Pencil, SquarePen } from 'lucide-react';
 import React, { Fragment } from 'react';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import type { TableRowType } from '../../core/types';
@@ -57,6 +57,13 @@ const ActionsColumn = ({ row }: { row: Row<TableRowType> }) => {
     //     handleDialogChange('feature');
     //   },
     // },
+    {
+      key: 'change-password',
+      label: 'Change Password',
+      icon: <LockKeyhole size={16} className='text-primary' />,
+      isPermitted: true,
+      onClick: () => handleDialogStateChange({ openDialog: 'change-password', selectedRow: row.original }),
+    },
     {
       key: 'edit-roles',
       label: 'Edit Roles',

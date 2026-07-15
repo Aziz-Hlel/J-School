@@ -141,13 +141,13 @@ export const timeTableSeedData: TimeTableSeedData = {
 
 export const teacherAssignmentSeedData = [
   {
-    teacherEmail: teacherSeedData.teacher1.email,
+    teacherEmail: teacherSeedData.director1.email,
     subjectNameEn: subjectsGradeSix.arabic.subject.name.en,
     classroomName: classroomsSeedData.A.name,
     grade: ClassGrade.SIX,
   },
   {
-    teacherEmail: teacherSeedData.teacher2.email,
+    teacherEmail: teacherSeedData.director1.email,
     subjectNameEn: subjectsGradeSix.french.subject.name.en,
     classroomName: classroomsSeedData.B.name,
     grade: ClassGrade.SIX,

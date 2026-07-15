@@ -12,6 +12,7 @@ import type { UpdateTeacherCommentsReq } from '@repo/contracts/schemas/TeacherCo
 import { apiService } from '../apiService';
 
 import type { ClassroomResponse } from '@repo/contracts/schemas/classroom/classResponse';
+import type { HomeworkWithStudentsRes } from '@repo/contracts/schemas/Homework/withStudentsRes';
 import type { TeacherCommentsResponse } from '@repo/contracts/schemas/TeacherComments/response';
 import { apiRoutes } from '../routes';
 
@@ -40,7 +41,7 @@ export const teacherService = {
     apiService.getThrowable<ApiRes<ExamScheduleWithClassroomRes[]>>(apiRoutes.teacher.getExams(schoolId, id)),
 
   assignments: async (schoolId: string, id: string) =>
-    apiService.getThrowable<ApiRes<TeacherAssignmentRes[]>>(apiRoutes.teacher.getExams(schoolId, id)),
+    apiService.getThrowable<ApiRes<TeacherAssignmentRes[]>>(apiRoutes.teacher.assignments(schoolId, id)),
 
   getExtraCurricular: async (schoolId: string, id: string) =>
     apiService.getThrowable<ApiRes<TeacherExtraCurricularResponse[]>>(
@@ -68,4 +69,9 @@ export const teacherService = {
 
   createComment: async (params: { schoolId: string; teacherId: string; payload: CreateTeacherCommentsReq }) =>
     apiService.postThrowable<void>(apiRoutes.teacher.createComment(params.schoolId, params.teacherId), params.payload),
+
+  getHomework: async (schoolId: string, id: string, searchParams: { [k: string]: string | number | Array<string> }) =>
+    apiService.getThrowable<Page<HomeworkWithStudentsRes>>(apiRoutes.teacher.getHomework(schoolId, id), {
+      params: searchParams,
+    }),
 };

@@ -128,7 +128,7 @@ const navRoutes: NavRoute[] = [
     url: '/homeworks',
     icon: NotebookPen,
     isActive: true,
-    roles: [UserRole.DIRECTOR, UserRole.MANAGER],
+    roles: [UserRole.DIRECTOR, UserRole.MANAGER, UserRole.TEACHER],
   },
   {
     title: 'Calendar',

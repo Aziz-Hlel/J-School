@@ -14,13 +14,18 @@ const createUserRouter = (controller: UserController) => {
     requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
     asyncHandler(controller.create),
   );
+  router.get('/:userId/roles', requireAuth, asyncHandler(controller.getUserRoles));
   router.get('/:userId', requireAuth, asyncHandler(controller.getById));
 
-  // * not secure , need user role or is user himself
+  router.put('/:userId/roles', requireAuth, asyncHandler(controller.updateUserRoles));
   router.put('/:userId', requireAuth, asyncHandler(controller.update));
 
-  router.get('/:userId/roles', requireAuth, asyncHandler(controller.getUserRoles));
-  router.put('/:userId/roles', requireAuth, asyncHandler(controller.updateUserRoles));
+  router.patch(
+    '/:userId/password',
+    requireAuth,
+    requireUserRoles([UserRole.DIRECTOR, UserRole.MANAGER]),
+    asyncHandler(controller.updatePassword),
+  );
 
   router.delete(
     '/:userId',

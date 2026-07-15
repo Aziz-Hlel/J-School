@@ -2,15 +2,7 @@ import { extraCurricularService } from '@/api/service/extracurricularsService';
 import { teacherService } from '@/api/service/teachersService';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { useGetCurrentProfile } from '@/store/useAuthStore';
@@ -68,21 +60,23 @@ const TeacherExtraCurricularHeader = () => {
                 setCurrentExraId(value);
                 navigate(`/extracurriculars/teacher/${currentExtraId}/overview`);
               }}
-              value={currentExtraId || undefined}
+              value={currentExtraId ?? undefined}
             >
               <SelectTrigger className='w-full max-w-48'>
                 <SelectValue placeholder='Select an extracurricular' />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Extra Curricular</SelectLabel>
-                  {!isLoading &&
-                    teacherExtraCurricular.map((extraCurricular) => (
+                {teacherExtraCurricular.length === 0 ? (
+                  <div className='text-muted-foreground px-2 py-4 text-sm'>No extracurriculars found</div>
+                ) : (
+                  <SelectGroup>
+                    {teacherExtraCurricular.map((extraCurricular) => (
                       <SelectItem key={extraCurricular.id} value={extraCurricular.id}>
-                        {extraCurricular.title.fr || extraCurricular.title.en}/ {extraCurricular.title.ar}
+                        {extraCurricular.title.fr || extraCurricular.title.en} / {extraCurricular.title.ar}
                       </SelectItem>
                     ))}
-                </SelectGroup>
+                  </SelectGroup>
+                )}
               </SelectContent>
             </Select>
 

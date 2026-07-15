@@ -34,10 +34,10 @@ const CreateDialog = () => {
   const currentProfile = useGetCurrentProfile();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationKey: ['teachers', 'comments', 'update'],
+    mutationKey: ['teacher-comment', 'update'],
     mutationFn: teacherService.createComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['teachers', 'comments'], exact: false });
+      queryClient.invalidateQueries({ queryKey: ['teacher-comment'], exact: false });
       form.reset();
       handleCancel();
     },
@@ -66,36 +66,6 @@ const CreateDialog = () => {
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
-              {/* Student Info Display
-              {student && (
-                <Card className='mb-4'>
-                  <CardContent className='flex items-center gap-4 p-4'>
-                    <Avatar className='size-12'>
-                      <AvatarImage src={student.avatar?.url} alt={`${student.firstName.en} ${student.lastName.en}`} />
-                      <AvatarFallback>
-                        {student.firstName.en?.charAt(0)}
-                        {student.lastName.en?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className='space-y-1'>
-                      <p className='text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400'>
-                        Selected Student
-                      </p>
-                      <div className='text-sm font-medium text-slate-800 dark:text-slate-100'>
-                        <span className='font-bold'>EN:</span> {student.firstName.en} {student.lastName.en}
-                      </div>
-                      {student.firstName.ar && (
-                        <div className='text-sm font-medium text-slate-800 dark:text-slate-100' dir='rtl'>
-                          <span className='font-bold' dir='ltr'>
-                            AR:
-                          </span>{' '}
-                          {student.firstName.ar} {student.lastName.ar}
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              )} */}
               {/* Title */}
               <Controller
                 name='title'
@@ -165,7 +135,7 @@ const CreateDialog = () => {
               />
             </FieldGroup>
           </div>
-          <DialogFooter>
+          <DialogFooter className=''>
             <DialogClose asChild>
               <Button variant='outline' onClick={handleCancel}>
                 Cancel

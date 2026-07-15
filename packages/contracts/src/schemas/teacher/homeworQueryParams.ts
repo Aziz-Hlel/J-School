@@ -1,8 +1,8 @@
 import z from 'zod';
 import { baseQueryParamsSchema } from '../helper/queryParams';
-import type { HomeworkResponse } from '../Homework/response';
+import type { HomeworkWithStudentsRes } from '../Homework/withStudentsRes';
 
-type TableRowType = HomeworkResponse;
+type TableRowType = HomeworkWithStudentsRes;
 type TableRowKeys = keyof TableRowType;
 
 const sortableFields = ['due'] as const satisfies TableRowKeys[];
@@ -37,6 +37,8 @@ export const teacherHomeworkQueryParams = {
 
 export type TeacherHomeworkQueryParamsTypes = {
   Query: QueryType;
+  TableRowType: TableRowType;
+  TableRowKeys: TableRowKeys;
   SortableFields: (typeof teacherHomeworkQueryParams.sortableFields)[number];
   FilterableFields: (typeof teacherHomeworkQueryParams.filterableFields)[number];
 };

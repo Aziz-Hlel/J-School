@@ -1,6 +1,7 @@
 import { AuthenticatedRequest } from '@/types/auth/AuthenticatedRequest';
 import getUrlParam from '@/utils/getUrlParam';
 import { createSimpleUserRequestSchema } from '@repo/contracts/schemas/user/createSimpleUserRequest';
+import { updatePasswordRequestSchema } from '@repo/contracts/schemas/user/updatePassword';
 import { updateSimpleUserRequestSchema } from '@repo/contracts/schemas/user/updateSimpleUserRequest';
 import { updateUserRolesReqSchema } from '@repo/contracts/schemas/user/updateUserRolesReq';
 import { Response } from 'express';
@@ -60,5 +61,12 @@ export class UserController {
       message: 'User deleted successfully',
       data: result,
     });
+  };
+
+  updatePassword = async (req: AuthenticatedRequest, res: Response) => {
+    const userId = getUrlParam(req, 'userId', { uuid: true });
+    const input = updatePasswordRequestSchema.parse(req.body);
+    await this.userService.updatePassword({ userId, input });
+    res.status(204).send();
   };
 }
