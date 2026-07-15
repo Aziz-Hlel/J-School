@@ -116,7 +116,7 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     cell: ({ getValue }) => {
       const roles = getValue<TableRowType['roles']>();
       return (
-        <RowContainer className='w-96 truncate whitespace-nowrap'>
+        <RowContainer className='w-96 items-start truncate whitespace-nowrap'>
           {roles.map((userRole) => (
             <RolesComponent key={userRole.id} value={userRole.role} />
           ))}

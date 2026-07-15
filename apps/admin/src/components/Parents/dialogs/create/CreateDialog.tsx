@@ -241,7 +241,7 @@ const CreateDialog = () => {
                       onChange={(e) => field.onChange(e.target.value || null)}
                       id='password'
                       aria-invalid={fieldState.invalid}
-                      placeholder='Leave blank for auto-generated password or type to set one'
+                      placeholder='Password'
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>

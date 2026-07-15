@@ -4,6 +4,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } fr
 import { NavUser } from './nav-footer';
 import { NavBarHeader } from './nav-header';
 import { NavMain } from './nav-main';
+import ChangeLanguageSisplay from './change-language-display';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -15,6 +16,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain />
       </SidebarContent>
       <SidebarFooter>
+        <ChangeLanguageSisplay />
         <NavUser />
       </SidebarFooter>
       <SidebarRail />

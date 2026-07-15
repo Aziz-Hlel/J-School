@@ -5,6 +5,7 @@ import ExtracurricularOverview from './components/Extracurriculars/Overview';
 import ExtraCurricularProfile from './components/Extracurriculars/Overview/extra-curricular-profile';
 import ExtraCurricularFeed from './components/Extracurriculars/Overview/feed/FeedArea';
 import TeacherExtraCurricularDisplay from './components/Extracurriculars/teacher/TeacherDisplay';
+import InitLanguage from './components/helpers/InitLanguage';
 import { ScrollToTop } from './components/helpers/ScrollToTop';
 import SignIn from './components/SignIn/SignIn';
 import StudentProfile from './components/Students/student-profile';
@@ -49,67 +50,69 @@ const App = () => {
           <NetworkStatusGuard>
             <Router>
               <ScrollToTop />
-              <AuthProvider>
-                <Routes>
-                  <Route path='/signin' element={<SignIn />} />
-                  <Route path='/signup' element={<SignupPage />} />
-                  <Route element={<AuthenticatedRoutes />}>
-                    <Route element={<UserSessionProvider />}>
-                      <Route path='/on-boarding' element={<Outlet />}>
-                        <Route path='profile' element={<OwnerBoarding />} />
-                        <Route path='school' element={<SchoolBoarding />} />
-                      </Route>
+              <InitLanguage>
+                <AuthProvider>
+                  <Routes>
+                    <Route path='/signin' element={<SignIn />} />
+                    <Route path='/signup' element={<SignupPage />} />
+                    <Route element={<AuthenticatedRoutes />}>
+                      <Route element={<UserSessionProvider />}>
+                        <Route path='/on-boarding' element={<Outlet />}>
+                          <Route path='profile' element={<OwnerBoarding />} />
+                          <Route path='school' element={<SchoolBoarding />} />
+                        </Route>
 
-                      <Route element={<OnboardingOwnerAndSchoolCompleted />}>
-                        // ? ask for coriosity if this okay to do
-                        <Route element={<SchoolIdProvider />}>
-                          <Route element={<Sidebar dir={'ltr'} />}>
-                            <Route path='/' element={<Staff />} />
-                            <Route path='/staff' element={<Staff />} />
-                            <Route path='/teachers' element={<Teachers />} />
-                            <Route path='/parents' element={<Parents />} />
+                        <Route element={<OnboardingOwnerAndSchoolCompleted />}>
+                          // ? ask for coriosity if this okay to do
+                          <Route element={<SchoolIdProvider />}>
+                            <Route element={<Sidebar dir={'ltr'} />}>
+                              <Route path='/' element={<Staff />} />
+                              <Route path='/staff' element={<Staff />} />
+                              <Route path='/teachers' element={<Teachers />} />
+                              <Route path='/parents' element={<Parents />} />
 
-                            <Route path='/students' element={<Outlet />}>
-                              <Route index element={<Students />} />
-                              <Route path=':studentId/profile' element={<StudentProfile />}>
-                                <Route index element={<StudentOverview />} />
-                                <Route path='parents' element={<StudentParents />} />
-                                <Route path='health' element={<StudentHealth />} />
-                                <Route path='fees' element={<StudentFees />} />
+                              <Route path='/students' element={<Outlet />}>
+                                <Route index element={<Students />} />
+                                <Route path=':studentId/profile' element={<StudentProfile />}>
+                                  <Route index element={<StudentOverview />} />
+                                  <Route path='parents' element={<StudentParents />} />
+                                  <Route path='health' element={<StudentHealth />} />
+                                  <Route path='fees' element={<StudentFees />} />
+                                </Route>
                               </Route>
+                              <Route path='/classrooms' element={<Classrooms />} />
+                              <Route path='/assignments' element={<AssignmentsPage />} />
+                              <Route path='/timetable' element={<Timetable />} />
+                              <Route path='/exams' element={<ExamSchedule />} />
+                              <Route path='/attendances' element={<Attendance />} />
+                              <Route path='/homeworks' element={<Homework />} />
+                              <Route path='/extracurriculars' element={<Outlet />}>
+                                <Route index element={<Extracurriculars />} />
+                                <Route path=':extraCurricularId' element={<ExtracurricularOverview />}>
+                                  <Route index path='overview' element={<ExtraCurricularProfile />} />
+                                  <Route path='feed' element={<ExtraCurricularFeed />} />
+                                </Route>
+
+                                <Route path='teacher/:extraCurricularId' element={<TeacherExtraCurricularDisplay />}>
+                                  <Route index path='overview' element={<ExtraCurricularProfile />} />
+                                  <Route path='feed' element={<ExtraCurricularFeed />} />
+                                </Route>
+                              </Route>
+
+                              <Route path='/calendar' element={<Calendar />} />
+                              <Route path='/teacher-comments' element={<AdminTeacherComments />} />
+
+                              <Route path='/feed' element={<Feed />} />
                             </Route>
-                            <Route path='/classrooms' element={<Classrooms />} />
-                            <Route path='/assignments' element={<AssignmentsPage />} />
-                            <Route path='/timetable' element={<Timetable />} />
-                            <Route path='/exams' element={<ExamSchedule />} />
-                            <Route path='/attendances' element={<Attendance />} />
-                            <Route path='/homeworks' element={<Homework />} />
-                            <Route path='/extracurriculars' element={<Outlet />}>
-                              <Route index element={<Extracurriculars />} />
-                              <Route path=':extraCurricularId' element={<ExtracurricularOverview />}>
-                                <Route index path='overview' element={<ExtraCurricularProfile />} />
-                                <Route path='feed' element={<ExtraCurricularFeed />} />
-                              </Route>
-
-                              <Route path='teacher/:extraCurricularId' element={<TeacherExtraCurricularDisplay />}>
-                                <Route index path='overview' element={<ExtraCurricularProfile />} />
-                                <Route path='feed' element={<ExtraCurricularFeed />} />
-                              </Route>
-                            </Route>
-
-                            <Route path='/calendar' element={<Calendar />} />
-                            <Route path='/teacher-comments' element={<AdminTeacherComments />} />
-
-                            <Route path='/feed' element={<Feed />} />
                           </Route>
                         </Route>
                       </Route>
                     </Route>
-                  </Route>
 
-                  <Route path='*' element={<NotFound />} />
-                </Routes>
-              </AuthProvider>
+                    <Route path='*' element={<NotFound />} />
+                  </Routes>
+                </AuthProvider>
+              </InitLanguage>
             </Router>
           </NetworkStatusGuard>
         </QueryClientProvider>

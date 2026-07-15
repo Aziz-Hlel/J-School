@@ -11,12 +11,6 @@ export interface INavbarHeader {
   plan: string;
 }
 
-const navbarHeader: INavbarHeader = {
-  name: 'Acme Corp',
-  logo: GalleryVerticalEnd,
-  plan: 'Enterprise',
-};
-
 const roleLogoMapper: Record<UserRole, React.ElementType> = {
   [UserRole.DIRECTOR]: UserStar,
   [UserRole.MANAGER]: UserCog,

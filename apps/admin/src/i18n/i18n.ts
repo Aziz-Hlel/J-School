@@ -9,7 +9,7 @@ i18n
   .use(LanguageDetector) // Detects user language
   .use(initReactI18next) // Passes i18n instance to react-i18next
   .init({
-    supportedLngs: ['en', 'fr', 'ar'],
+    supportedLngs: ['en', 'fr'],
     fallbackLng: 'en',
 
     defaultNS: 'common',
@@ -22,7 +22,7 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    ns: ['common', 'students', 'classrooms'] as const,
+    ns: ['common', 'students', 'classrooms', 'enums'] as const,
 
     // detection: {
     //   order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],

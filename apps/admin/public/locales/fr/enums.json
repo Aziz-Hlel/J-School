@@ -1,0 +1,157 @@
+{
+  "SessionType": {
+    "WEEKLY": "Hebdomadaire",
+    "SPECIAL": "Spécial"
+  },
+  "ReactionType": {
+    "LIKE": "J'aime",
+    "HEART": "Cœur"
+  },
+  "AccountRole": {
+    "USER": "Utilisateur",
+    "ADMIN": "Administrateur",
+    "SUPER_ADMIN": "Super Administrateur"
+  },
+  "AccountStatus": {
+    "ACTIVE": "Actif",
+    "INACTIVE": "Inactif",
+    "DISABLED": "Désactivé",
+    "DELETED": "Supprimé"
+  },
+  "SchoolPlan": {
+    "FREE": "Gratuit",
+    "PRO": "Pro",
+    "ENTERPRISE": "Entreprise"
+  },
+  "SchoolStatus": {
+    "ACTIVE": "Actif",
+    "PENDING": "En attente",
+    "SUSPENDED": "Suspendu",
+    "DELETED": "Supprimé"
+  },
+  "UserStatus": {
+    "ACTIVE": "Actif",
+    "INACTIVE": "Inactif",
+    "DISABLED": "Désactivé",
+    "DELETED": "Supprimé"
+  },
+  "UserRole": {
+    "DIRECTOR": "Directeur",
+    "MANAGER": "Responsable",
+    "TEACHER": "Enseignant",
+    "PARENT": "Parent"
+  },
+  "CalendarSessionType": {
+    "PUBLIC_HOLIDAY": "Jour férié",
+    "SCHOOL_HOLIDAY": "Vacances scolaires",
+    "TRIP": "Voyage",
+    "EVENT": "Événement",
+    "OTHER": "Autre"
+  },
+  "ClassGrade": {
+    "KG": "Maternelle",
+    "ONE": "CP",
+    "TWO": "CE1",
+    "THREE": "CE2",
+    "FOUR": "CM1",
+    "FIVE": "CM2",
+    "SIX": "6ème"
+  },
+  "FeeItemStatus": {
+    "PAID": "Payé",
+    "UNPAID": "Impayé",
+    "PARTIALLY_PAID": "Partiellement payé"
+  },
+  "PaymentMethod": {
+    "CASH": "Espèces",
+    "CREDIT": "Crédit",
+    "CHEQUE": "Chèque",
+    "TRANSFER": "Virement bancaire",
+    "OTHER": "Autre"
+  },
+  "HomeworkType": {
+    "STANDARD": "Standard",
+    "AI": "Généré par IA"
+  },
+  "MediaStatus": {
+    "PENDING": "En attente",
+    "CONFIRMED": "Confirmé",
+    "DELETED": "Supprimé",
+    "FAILED": "Échoué"
+  },
+  "MediaType": {
+    "IMAGE": "Image",
+    "VIDEO": "Vidéo",
+    "DOCUMENT": "Document"
+  },
+  "NotificationScheduleType": {
+    "IMMEDIATE": "Immédiat",
+    "SCHEDULED": "Programmé",
+    "DELAYED": "Différé"
+  },
+  "NotificationLanguage": {
+    "en": "Anglais",
+    "ar": "Arabe",
+    "fr": "Français"
+  },
+  "NotificationType": {
+    "GLOBAL": "Global",
+    "GROUP": "Groupe",
+    "PRIVATE": "Privé"
+  },
+  "NotificationSourceType": {
+    "CALENDAR": "Calendrier",
+    "TEACHER_COMMENT": "Commentaire de l'enseignant",
+    "EXAM_SCHEDULE": "Planning d'examen",
+    "FEED": "Fil d'actualité",
+    "HOMEWORK": "Devoir",
+    "EXTRA_CURRICULAR": "Extra-scolaire",
+    "FEES": "Frais",
+    "TIMETABLE": "Emploi du temps"
+  },
+  "Gender": {
+    "MALE": "Masculin",
+    "FEMALE": "Féminin"
+  },
+  "DayOfWeek": {
+    "MONDAY": "Lundi",
+    "TUESDAY": "Mardi",
+    "WEDNESDAY": "Mercredi",
+    "THURSDAY": "Jeudi",
+    "FRIDAY": "Vendredi",
+    "SATURDAY": "Samedi",
+    "SUNDAY": "Dimanche"
+  },
+  "StudentStatus": {
+    "ACTIVE": "Actif",
+    "INACTIVE": "Inactif",
+    "PENDING": "En attente",
+    "EXPELLED": "Exclu"
+  },
+  "VaccineStatus": {
+    "NOT_VACCINATED": "Non vacciné",
+    "PARTIALLY_VACCINATED": "Partiellement vacciné",
+    "FULLY_VACCINATED": "Entièrement vacciné"
+  },
+  "Semester": {
+    "FIRST": "Premier semestre",
+    "SECOND": "Deuxième semestre",
+    "THIRD": "Troisième semestre"
+  },
+  "SubjectDomain": {
+    "ARABIC_LANGUAGE": "Langue arabe",
+    "SCIENCE_TECHNOLOGY": "Sciences et technologie",
+    "SOCIAL_EDUCATION": "Éducation sociale",
+    "ART_EDUCATION": "Éducation artistique",
+    "PHYSICAL_EDUCATION": "Éducation physique",
+    "FRENCH_LANGUAGE": "Langue française",
+    "ENGLISH_LANGUAGE": "Langue anglaise"
+  },
+  "AttendanceStatus": {
+    "PRESENT": "Présent",
+    "ABSENT": "Absent",
+    "LATE": "En retard",
+    "EXCUSED": "Excusé",
+    "EXCLUDED": "Exclu"
+  }
+}
