@@ -80,6 +80,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   assignCurrentProfile: (user: AuthResponse) => {
     const administration = user.administration[0];
     const teacher = user.teacher[0];
+
+    // if(user.account.role==='ADMIN') {
+    //   if
+    // }
     if (administration && administration.school?.id) {
       const role = administration.role === 'OWNER' ? 'DIRECTOR' : administration.role; // !
       if (ENV.VITE_NODE_ENV !== 'production') console.log('// ! got role as owner but changed it to DIRECTOR');
@@ -92,6 +96,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       });
     } else if (teacher) {
       set({ status: 'authenticated', currentUser: user, currentProfile: teacher, schoolId: teacher.school.id });
+    } else if (user.account.role === 'ADMIN') {
+      set({ status: 'authenticated', currentUser: user, currentProfile: null, schoolId: null });
     }
   },
 
@@ -99,19 +105,23 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   bootstrap: async () => {
     set({ status: 'loading' });
-
+    console.log('ousilt');
     const token = await jwtTokenManager.getAccessToken();
 
     if (!token) {
       set({ status: 'unauthenticated' });
       return;
     }
+    console.log('ousilt2');
 
     const user = await fetchCurrentUser();
+    console.log('user : ', user);
     if (!user) {
       set({ status: 'unauthenticated' });
       return;
     }
+    console.log('ousilt3');
+
     get().assignCurrentProfile(user);
   },
 
