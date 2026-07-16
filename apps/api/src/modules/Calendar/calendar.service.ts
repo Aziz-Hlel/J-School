@@ -103,6 +103,34 @@ export class CalendarService {
               lte: query.endDate,
             },
           },
+          {
+            AND: [
+              {
+                startDate: {
+                  lte: query.startDate,
+                },
+              },
+              {
+                endDate: {
+                  gte: query.startDate,
+                },
+              },
+            ],
+          },
+          {
+            AND: [
+              {
+                startDate: {
+                  lte: query.endDate,
+                },
+              },
+              {
+                endDate: {
+                  gte: query.startDate,
+                },
+              },
+            ],
+          },
         ],
       },
       orderBy: [

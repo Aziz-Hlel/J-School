@@ -17,13 +17,13 @@ export interface FileUploadItem extends FileWithPreview {
   status: 'uploading' | 'completed' | 'error';
   error?: string;
   serverId?: string;
+  preview: string;
 }
 
 interface ProgressUploadProps {
   maxFiles?: number;
   maxSize?: number;
   accept?: string;
-  multiple?: boolean;
   className?: string;
   uploadFiles: FileUploadItem[];
   setUploadFiles: React.Dispatch<React.SetStateAction<FileUploadItem[]>>;
@@ -34,7 +34,6 @@ export function MultiFileUpload2({
   maxFiles = 5,
   maxSize = 10 * 1024 * 1024, // 10MB
   accept = '*',
-  multiple = true,
   className,
   uploadFiles,
   setUploadFiles,
@@ -76,7 +75,7 @@ export function MultiFileUpload2({
     maxFiles,
     maxSize,
     accept,
-    multiple,
+    multiple: true,
     initialFiles: initMedia,
     onFilesChange: async (newFiles) => {
       // Convert to upload items when files change, preserving existing status
@@ -132,7 +131,7 @@ export function MultiFileUpload2({
 
   useEffect(() => {
     handleUpdateFormValue(uploadFiles);
-  }, [uploadFiles]);
+  }, [handleUpdateFormValue, uploadFiles]);
 
   // const retryUpload = (fileId: string) => {
   //   setUploadFiles((prev) =>

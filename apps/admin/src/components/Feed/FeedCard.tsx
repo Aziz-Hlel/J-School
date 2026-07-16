@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { FeedResponse } from '@repo/contracts/schemas/Feed/response';
 import dayjs from 'dayjs';
-import { Heart, MoreVertical, SquarePen, ThumbsUp, Trash2 } from 'lucide-react';
+import { MoreVertical, SquarePen, Trash2 } from 'lucide-react';
 import { useSelectedRow } from './context/selected-row-provider';
 
 const FeedCard = (params: FeedResponse) => {
@@ -107,14 +107,14 @@ const FeedCard = (params: FeedResponse) => {
           </div>
         )}
 
-        <div className='text-muted-foreground flex items-center justify-end px-4 py-2 text-xs'>
+        <div className='text-muted-foreground flex items-center justify-end px-4 py-2 text-sm'>
           <span>{reactions.likesCount} Aime</span>
           <span className='mx-2'>·</span>
           <span>{reactions.heartsCount} Adore</span>
         </div>
       </CardContent>
 
-      <CardFooter className='flex items-center justify-center gap-1 border-t p-2'>
+      {/* <CardFooter className='flex items-center justify-center gap-1 border-t p-2'>
         <Button variant='ghost' className='text-muted-foreground h-10 flex-1'>
           <ThumbsUp className='mr-2 h-4 w-4' />
           J'aime
@@ -123,7 +123,7 @@ const FeedCard = (params: FeedResponse) => {
           <Heart className='mr-2 h-4 w-4' />
           J'adore
         </Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 };
