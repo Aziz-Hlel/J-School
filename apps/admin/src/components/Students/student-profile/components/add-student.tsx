@@ -25,11 +25,14 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 const AddStudent = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useTranslation(['studentProfile']);
   const schoolId = useCurrentSchoolId();
   const [open, setOpen] = useState(false);
+
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['students', 'create'],
     mutationFn: (payload: CreateStudentReq) => studentService.create(schoolId, payload),
@@ -54,6 +57,7 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
     },
     avatarId: null,
   };
+
   const form = useForm<CreateStudentReq>({
     resolver: zodResolver(createStudentRequestSchema),
     defaultValues: defaultValues,
@@ -62,9 +66,9 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
   const handleCreateStudent = async (data: CreateStudentReq) => {
     try {
       await mutateAsync(data);
-      toast.success('Student updated successfully');
+      toast.success(t('studentProfile:addForm.notifications.success'));
     } catch {
-      toast.error('Failed to update student');
+      toast.error(t('studentProfile:addForm.notifications.error'));
     }
   };
 
@@ -88,9 +92,9 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
         <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden rounded-2xl sm:max-w-120'>
           <DialogHeader>
             <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>
-              Add Student Information
+              {t('studentProfile:addForm.title')}
             </DialogTitle>
-            <DialogDescription>Add new student.</DialogDescription>
+            <DialogDescription>{t('studentProfile:addForm.description')}</DialogDescription>
           </DialogHeader>
           <form onSubmit={form.handleSubmit(handleCreateStudent)} className='flex min-h-0 flex-1 flex-col'>
             <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
@@ -101,6 +105,7 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                   clearMediaErrors={clearMediaErrors}
                   handleMediaUpload={handleThumbnailUpload}
                 />
+
                 {/* First & Last Name */}
                 <div className='grid grid-cols-2 gap-4'>
                   {/* First Name EN */}
@@ -109,13 +114,13 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor='firstNameEn'>First Name (EN)</FieldLabel>
+                        <FieldLabel htmlFor='firstNameEn'>{t('studentProfile:addForm.fields.firstNameEn')}</FieldLabel>
                         <Input
                           {...field}
                           value={field.value ?? undefined}
                           id='firstNameEn'
                           aria-invalid={fieldState.invalid}
-                          placeholder='First Name'
+                          placeholder={t('studentProfile:addForm.placeholders.firstNameEn')}
                         />
                         {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                       </Field>
@@ -127,13 +132,13 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor='firstNameAr'>First Name (AR)</FieldLabel>
+                        <FieldLabel htmlFor='firstNameAr'>{t('studentProfile:addForm.fields.firstNameAr')}</FieldLabel>
                         <Input
                           {...field}
                           value={field.value ?? undefined}
                           id='firstNameAr'
                           aria-invalid={fieldState.invalid}
-                          placeholder='First Name (AR)'
+                          placeholder={t('studentProfile:addForm.placeholders.firstNameAr')}
                         />
                         {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                       </Field>
@@ -145,13 +150,13 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor='lastNameEn'>Last Name (EN)</FieldLabel>
+                        <FieldLabel htmlFor='lastNameEn'>{t('studentProfile:addForm.fields.lastNameEn')}</FieldLabel>
                         <Input
                           {...field}
                           value={field.value ?? undefined}
                           id='lastNameEn'
                           aria-invalid={fieldState.invalid}
-                          placeholder='Last Name'
+                          placeholder={t('studentProfile:addForm.placeholders.lastNameEn')}
                         />
                         {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                       </Field>
@@ -163,13 +168,13 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor='lastNameAr'>Last Name (AR)</FieldLabel>
+                        <FieldLabel htmlFor='lastNameAr'>{t('studentProfile:addForm.fields.lastNameAr')}</FieldLabel>
                         <Input
                           {...field}
                           value={field.value ?? undefined}
                           id='lastNameAr'
                           aria-invalid={fieldState.invalid}
-                          placeholder='Last Name (AR)'
+                          placeholder={t('studentProfile:addForm.placeholders.lastNameAr')}
                         />
                         {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                       </Field>
@@ -177,13 +182,13 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                   />
                 </div>
 
-                {/* UID (read‑only) */}
+                {/* UID */}
                 <Controller
                   name='uid'
                   control={form.control}
                   render={({ field }) => (
                     <Field data-invalid={false}>
-                      <FieldLabel htmlFor='uid'>UID</FieldLabel>
+                      <FieldLabel htmlFor='uid'>{t('studentProfile:uid')}</FieldLabel>
                       <Input {...field} value={field.value ?? undefined} id='uid' className='bg-muted/30' />
                     </Field>
                   )}
@@ -195,7 +200,7 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='dateOfBirth'>Date of Birth</FieldLabel>
+                      <FieldLabel htmlFor='dateOfBirth'>{t('studentProfile:addForm.fields.dateOfBirth')}</FieldLabel>
                       <Input
                         type='date'
                         {...field}
@@ -216,8 +221,13 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid} className='flex'>
-                      <FieldLabel htmlFor={`gender-input`}>Gender</FieldLabel>
-                      <SelectForm field={field} options={Gender} placeholder='Select gender' label='Gender' />
+                      <FieldLabel htmlFor='gender-input'>{t('studentProfile:addForm.fields.gender')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={Gender}
+                        placeholder={t('studentProfile:addForm.placeholders.gender')}
+                        label={t('studentProfile:addForm.fields.gender')}
+                      />
                     </Field>
                   )}
                 />
@@ -228,13 +238,19 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid} className='flex'>
-                      <FieldLabel htmlFor={`status-input`}>Status</FieldLabel>
-                      <SelectForm field={field} options={StudentStatus} placeholder='Select status' label='Status' />
+                      <FieldLabel htmlFor='status-input'>{t('studentProfile:addForm.fields.status')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={StudentStatus}
+                        placeholder={t('studentProfile:addForm.placeholders.status')}
+                        label={t('studentProfile:addForm.fields.status')}
+                      />
                     </Field>
                   )}
                 />
               </FieldGroup>
             </div>
+
             <DialogFooter className='gap-2 sm:gap-0'>
               <Button
                 type='button'
@@ -242,16 +258,16 @@ const AddStudent = ({ children }: { children: React.ReactNode }) => {
                 className='rounded-xl border-slate-200 dark:border-zinc-800'
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t('studentProfile:addForm.actions.cancel')}
               </Button>
               <Button type='submit' className='bg-primary text-primary-foreground hover:bg-primary/95 rounded-xl'>
                 {isPending ? (
                   <>
                     <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                    creating...
+                    {t('studentProfile:addForm.actions.creating')}
                   </>
                 ) : (
-                  'Create Student Record'
+                  t('studentProfile:addForm.actions.submit')
                 )}
               </Button>
             </DialogFooter>

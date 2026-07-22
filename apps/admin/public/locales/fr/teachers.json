@@ -1,0 +1,73 @@
+{
+  "main": {
+    "title": "Gestion des Enseignants",
+    "description": "Gérez la liste des enseignants, leurs informations de contact et leurs accès.",
+    "addButton": "Ajouter un enseignant"
+  },
+  "dialog": {
+    "title": "Créer un nouvel enseignant",
+    "description": "Ajouter un nouvel enseignant au système.",
+    "cancel": "Annuler",
+    "submit": "Créer",
+    "successToast": "Enseignant créé avec succès",
+    "errorToast": "Échec de la création de l'enseignant"
+  },
+  "fields": {
+    "firstName": "Prénom",
+    "firstNamePlaceholder": "Prénom",
+    "lastName": "Nom",
+    "lastNamePlaceholder": "Nom de famille",
+    "email": "Email",
+    "emailPlaceholder": "Adresse email",
+    "gender": "Genre",
+    "genderPlaceholder": "Sélectionner le genre",
+    "phone": "Téléphone",
+    "phonePlaceholder": "Numéro de téléphone",
+    "dateOfBirth": "Date de naissance",
+    "cin": "CIN",
+    "cinPlaceholder": "Numéro de CIN",
+    "address": "Adresse",
+    "addressPlaceholder": "Adresse résidentielle",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Mot de passe"
+  },
+  "errors": {
+    "emailConflict": "Cette adresse email existe déjà"
+  },
+  "editDialog": {
+    "title": "Modifier l'enseignant",
+    "description": "Mettre à jour les détails du profil de l'enseignant.",
+    "cancel": "Annuler",
+    "submit": "Enregistrer",
+    "successToast": "Enseignant mis à jour avec succès",
+    "errorToast": "Échec de la mise à jour de l'enseignant"
+  },
+  "changePassword": {
+    "title": "Changer le mot de passe de l'utilisateur",
+    "description": "Définir un nouveau mot de passe pour ce compte personnel.",
+    "unknownUser": "Utilisateur inconnu",
+    "noEmail": "Aucun email disponible",
+    "targetAccount": "Compte ciblé",
+    "confirmActionBadge": "Confirmer l'action",
+    "warningTitle": "Cela remplacera immédiatement le mot de passe actuel.",
+    "warningDescription": "Assurez-vous que le nouveau mot de passe est partagé de manière sécurisée. L'utilisateur en aura besoin lors de sa prochaine connexion.",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "Entrez un mot de passe sécurisé",
+    "passwordHint": "Utilisez au moins 8 caractères.",
+    "confirmPasswordLabel": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Saisissez à nouveau le mot de passe",
+    "confirmPasswordHint": "Saisissez à nouveau le même mot de passe pour le confirmer.",
+    "cancel": "Annuler",
+    "submit": "Modifier le mot de passe",
+    "successToast": "Mot de passe mis à jour avec succès",
+    "errorToast": "Échec de la mise à jour du mot de passe"
+  },
+  "table": {
+    "email": "Email",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "phone": "Téléphone",
+    "role": "Rôle",
+    "createdAt": "Créé le"
+  }
+}

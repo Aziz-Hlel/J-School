@@ -15,19 +15,21 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CalendarDays, DoorClosed, Plus } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 const DAYS = [
-  { label: 'Mon', value: 'MONDAY' },
-  { label: 'Tue', value: 'TUESDAY' },
-  { label: 'Wed', value: 'WEDNESDAY' },
-  { label: 'Thu', value: 'THURSDAY' },
-  { label: 'Fri', value: 'FRIDAY' },
-  { label: 'Sat', value: 'SATURDAY' },
-  { label: 'Sun', value: 'SUNDAY' },
+  { labelKey: 'timetable:days.monday', value: 'MONDAY' },
+  { labelKey: 'timetable:days.tuesday', value: 'TUESDAY' },
+  { labelKey: 'timetable:days.wednesday', value: 'WEDNESDAY' },
+  { labelKey: 'timetable:days.thursday', value: 'THURSDAY' },
+  { labelKey: 'timetable:days.friday', value: 'FRIDAY' },
+  { labelKey: 'timetable:days.saturday', value: 'SATURDAY' },
+  { labelKey: 'timetable:days.sunday', value: 'SUNDAY' },
 ] as const;
 
 const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOpen: (value: boolean) => void }) => {
+  const { t, i18n } = useTranslation(['timetable']);
   const schoolId = useCurrentSchoolId();
 
   const { data: assignmentsData } = useQuery({
@@ -65,9 +67,9 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
   const onSubmit = async (data: CreateClassroomTimetableReq) => {
     try {
       await mutateAsync({ schoolId, classroomId, data });
-      toast.success('Timetable slot added');
+      toast.success(t('timetable:messages.success'));
     } catch {
-      toast.error('Failed to add slot');
+      toast.error(t('timetable:messages.error'));
     }
   };
 
@@ -75,27 +77,29 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
     <Dialog open onOpenChange={setIsOpen}>
       <DialogContent className='rounded-2xl sm:max-w-106.25'>
         <DialogHeader>
-          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>Add calendar</DialogTitle>
-          <DialogDescription>Add a new calendar for this school.</DialogDescription>
+          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>
+            {t('timetable:addModal.title')}
+          </DialogTitle>
+          <DialogDescription>{t('timetable:addModal.description')}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-5'>
           {/* Subject */}
           <Field>
-            <FieldLabel className='text-xs font-semibold tracking-wide text-slate-500 uppercase'>Subject</FieldLabel>
+            <FieldLabel className='text-xs font-semibold tracking-wide text-slate-500 uppercase'>
+              {t('timetable:fields.subject.label')}
+            </FieldLabel>
             <Controller
               control={control}
               name='subjectId'
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className='h-10 rounded-xl border-slate-200 bg-slate-50'>
-                    <SelectValue placeholder='Select a subject…' />
+                    <SelectValue placeholder={t('timetable:fields.subject.placeholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     {subjects.map((s) => (
                       <SelectItem key={s.id} value={s.id}>
-                        {s.name.en}
-                        {s.name.ar}
-                        {s.name.fr}
+                        {s.name[i18n.language as keyof typeof s.name] || s.name.en}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -109,14 +113,14 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
           <Field>
             <FieldLabel className='flex items-center gap-1.5 text-xs font-semibold tracking-wide text-slate-500 uppercase'>
               <CalendarDays className='h-3.5 w-3.5' />
-              Day
+              {t('timetable:fields.day.label')}
             </FieldLabel>
             <Controller
               control={control}
               name='day'
               render={({ field }) => (
                 <div className='grid grid-cols-7 gap-1.5'>
-                  {DAYS.map(({ label, value }) => (
+                  {DAYS.map(({ labelKey, value }) => (
                     <button
                       key={value}
                       type='button'
@@ -128,7 +132,7 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
                           : 'border-slate-200 bg-slate-50 text-slate-500 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600',
                       )}
                     >
-                      {label}
+                      {t(labelKey)}
                     </button>
                   ))}
                 </div>
@@ -140,7 +144,9 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
           {/* Time range */}
           <div className='grid grid-cols-[1fr_auto_1fr] items-end gap-2'>
             <Field>
-              <FieldLabel className='text-xs font-semibold tracking-wide text-slate-500 uppercase'>Start</FieldLabel>
+              <FieldLabel className='text-xs font-semibold tracking-wide text-slate-500 uppercase'>
+                {t('timetable:fields.startTime.label')}
+              </FieldLabel>
               <Input
                 type='time'
                 {...register('startTime')}
@@ -152,7 +158,9 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
             <span className='pb-2.5 text-sm font-medium text-slate-400 select-none'>→</span>
 
             <Field>
-              <FieldLabel className='text-xs font-semibold tracking-wide text-slate-500 uppercase'>End</FieldLabel>
+              <FieldLabel className='text-xs font-semibold tracking-wide text-slate-500 uppercase'>
+                {t('timetable:fields.endTime.label')}
+              </FieldLabel>
               <Input
                 type='time'
                 {...register('endTime')}
@@ -165,14 +173,16 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
           {/* Room (optional) */}
           <Field>
             <FieldLabel className='text-xs font-semibold tracking-wide text-slate-500 uppercase'>
-              Room{' '}
-              <span className='ml-1 text-[11px] font-normal tracking-normal text-slate-400 normal-case'>optional</span>
+              {t('timetable:fields.room.label')}{' '}
+              <span className='ml-1 text-[11px] font-normal tracking-normal text-slate-400 normal-case'>
+                {t('timetable:fields.room.optional')}
+              </span>
             </FieldLabel>
             <div className='relative'>
               <DoorClosed className='pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-slate-400' />
               <Input
                 {...register('room')}
-                placeholder='e.g. Room 204, Lab B…'
+                placeholder={t('timetable:fields.room.placeholder')}
                 className='h-10 rounded-xl border-slate-200 bg-slate-50 pl-9 text-sm'
               />
             </div>
@@ -186,7 +196,7 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
               onClick={() => setIsOpen(false)}
               className='rounded-xl text-slate-600'
             >
-              Cancel
+              {t('timetable:actions.cancel')}
             </Button>
             <Button
               type='submit'
@@ -194,7 +204,7 @@ const AddTimetable = ({ classroomId, setIsOpen }: { classroomId: string; setIsOp
               className='gap-1.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700'
             >
               <Plus className='h-4 w-4' />
-              {isPending ? 'Adding…' : 'Add Slot'}
+              {isPending ? t('timetable:actions.adding') : t('timetable:actions.addSlot')}
             </Button>
           </div>
         </form>

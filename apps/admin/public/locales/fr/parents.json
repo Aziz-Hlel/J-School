@@ -1,0 +1,62 @@
+{
+  "list": {
+    "title": "Parents",
+    "description": "Gérez les parents d'élèves de votre établissement, consultez leurs informations et modifiez leurs profils.",
+    "addButton": "Ajouter un parent"
+  },
+  "editDialog": {
+    "title": "Modifier le parent",
+    "description": "Mettre à jour les détails du profil du parent.",
+    "cancel": "Annuler",
+    "submit": "Enregistrer",
+    "successToast": "Parent mis à jour avec succès",
+    "errorToast": "Échec de la mise à jour du parent"
+  },
+  "changePassword": {
+    "title": "Changer le mot de passe du parent",
+    "description": "Définir un nouveau mot de passe pour ce compte parent.",
+    "unknownUser": "Utilisateur inconnu",
+    "noEmail": "Aucun email disponible",
+    "targetAccount": "Compte ciblé",
+    "confirmActionBadge": "Confirmer l'action",
+    "warningTitle": "Cela remplacera immédiatement le mot de passe actuel.",
+    "warningDescription": "Assurez-vous que le nouveau mot de passe est partagé de manière sécurisée. Le parent en aura besoin lors de sa prochaine connexion.",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "Entrez un mot de passe sécurisé",
+    "passwordHint": "Utilisez au moins 8 caractères.",
+    "confirmPasswordLabel": "Confirmer le mot de passe",
+    "confirmPasswordPlaceholder": "Saisissez à nouveau le mot de passe",
+    "confirmPasswordHint": "Saisissez à nouveau le même mot de passe pour le confirmer.",
+    "cancel": "Annuler",
+    "submit": "Modifier le mot de passe",
+    "successToast": "Mot de passe mis à jour avec succès",
+    "errorToast": "Échec de la mise à jour du mot de passe"
+  },
+  "createDialog": {
+    "title": "Créer un nouveau parent",
+    "description": "Ajouter un nouveau parent à votre établissement",
+    "cancel": "Annuler",
+    "submit": "Créer",
+    "successToast": "Parent créé avec succès",
+    "errorToast": "Échec de la création du parent"
+  },
+  "fields": {
+    "firstName": "Prénom",
+    "firstNamePlaceholder": "Prénom",
+    "lastName": "Nom",
+    "lastNamePlaceholder": "Nom",
+    "gender": "Genre",
+    "genderPlaceholder": "Sélectionnez le genre",
+    "email": "Email",
+    "emailPlaceholder": "Adresse email",
+    "phone": "Téléphone",
+    "phonePlaceholder": "Numéro de téléphone",
+    "dateOfBirth": "Date de naissance",
+    "cin": "CIN",
+    "cinPlaceholder": "Numéro de CIN",
+    "address": "Adresse",
+    "addressPlaceholder": "Adresse résidentielle",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Mot de passe"
+  }
+}

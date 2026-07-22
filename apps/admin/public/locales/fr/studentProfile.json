@@ -1,0 +1,61 @@
+{
+  "uid": "Identifiant (UID)",
+  "addForm": {
+    "title": "Ajouter les informations de l'élève",
+    "description": "Créer un nouveau dossier d'élève.",
+    "fields": {
+      "firstNameEn": "Prénom (EN)",
+      "firstNameAr": "Prénom (AR)",
+      "lastNameEn": "Nom (EN)",
+      "lastNameAr": "Nom (AR)",
+      "dateOfBirth": "Date de naissance",
+      "gender": "Genre",
+      "status": "Statut"
+    },
+    "placeholders": {
+      "firstNameEn": "Prénom",
+      "firstNameAr": "الاسم الأول",
+      "lastNameEn": "Nom de famille",
+      "lastNameAr": "اللقب / اسم العائلة",
+      "gender": "Sélectionner le genre",
+      "status": "Sélectionner le statut"
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "submit": "Créer le dossier de l'élève",
+      "creating": "Création..."
+    },
+    "notifications": {
+      "success": "Dossier de l'élève créé avec succès",
+      "error": "Échec de la création du dossier"
+    }
+  },
+  "changeClassroom": {
+    "title": "Changer de classe académique",
+    "description": "Sélectionnez une division de niveau académique pour l'affectation de l'élève.",
+    "label": "Classes",
+    "placeholder": "Sélectionner une classe",
+    "unassign": "Aucune (Désaffecter la classe)",
+    "actions": {
+      "cancel": "Annuler",
+      "submit": "Mettre à jour la classe"
+    }
+  },
+  "list": {
+    "title": "Gestion des élèves",
+    "description": "Consultez, ajoutez et gérez la liste complète des élèves enregistrés dans l'établissement.",
+    "actions": {
+      "add": "Ajouter un élève"
+    }
+  },
+  "table": {
+    "uid": "UID",
+    "englishName": "Nom (EN)",
+    "arabicName": "Nom (AR)",
+    "class": "Classe",
+    "status": "Statut",
+    "gender": "Genre",
+    "createdAt": "Date d'inscription",
+    "notAvailable": "N/A"
+  }
+}

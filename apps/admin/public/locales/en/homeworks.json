@@ -1,0 +1,35 @@
+{
+  "mainCard": {
+    "title": "Homeworks",
+    "description": "View and manage homework assignments for students",
+    "addButton": "Add new homework"
+  },
+  "view": {
+    "title": "Homework Details",
+    "description": "Homework shared with the students in this classroom.",
+    "untitled": "Untitled homework",
+    "notProvided": "Not provided",
+    "noTeacher": "No teacher assigned",
+    "teacherRole": "Teacher",
+    "sections": {
+      "assignment": "Assignment",
+      "assignmentDescription": "What the teacher asked the class to complete.",
+      "noContent": "No written instructions were provided.",
+      "due": "Due {{date}}",
+      "teacher": "Teacher",
+      "teacherDescription": "The teacher who shared this homework.",
+      "attachments": "Attachments",
+      "attachedCount": "{{count}} file attached",
+      "attachedCount_plural": "{{count}} files attached",
+      "noAttachments": "No files attached",
+      "image": "Image {{index}}",
+      "openDocument": "Open document {{index}}",
+      "students": "Students",
+      "studentsDescription": "Students enrolled in {{classroom}}.",
+      "viewRoster": "View class roster",
+      "loadingRoster": "Loading class roster...",
+      "noStudents": "No students are enrolled in this classroom."
+    },
+    "close": "Close"
+  }
+}

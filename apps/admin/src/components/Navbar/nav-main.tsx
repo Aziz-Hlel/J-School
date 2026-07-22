@@ -14,6 +14,7 @@ import navRoutes, { type NavRoute } from '@/data/sidebar/sidebarRoutes';
 import { useAuthStore } from '@/store/useAuthStore';
 import type { Prettify } from '@repo/contracts/utils/Prettify';
 import { ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 
@@ -51,6 +52,7 @@ type INestedRoute = Prettify<
 >;
 const NestedRoute = ({ route }: { route: INestedRoute }) => {
   const { isMobile, state } = useSidebar();
+  const { t } = useTranslation(['sidebar', 'common']);
 
   if (state === 'expanded')
     return (
@@ -87,7 +89,7 @@ const NestedRoute = ({ route }: { route: INestedRoute }) => {
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton tooltip={route.title}>
             <route.icon />
-            <span>{route.title}</span>
+            <span>{t(`sidebar:routes.${route.title}`)}</span>
           </SidebarMenuButton>
         </DropdownMenuTrigger>
 
@@ -110,12 +112,18 @@ const NestedRoute = ({ route }: { route: INestedRoute }) => {
 type ISimpleRoute = Omit<NavRoute, 'items'>;
 
 const SimpleRoute = ({ route }: { route: ISimpleRoute }) => {
+  const { t } = useTranslation(['sidebar', 'common']);
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton aria-disabled={!route.isActive} asChild className='cursor-pointer' tooltip={route.title}>
+      <SidebarMenuButton
+        aria-disabled={!route.isActive}
+        asChild
+        className='cursor-pointer'
+        tooltip={t(`sidebar:routes.${route.title}`)}
+      >
         <Link to={route.url} className='flex items-center gap-2'>
           <route.icon />
-          <span>{route.title}</span>
+          <span>{t(`sidebar:routes.${route.title}`)}</span>
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>

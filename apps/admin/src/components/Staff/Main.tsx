@@ -1,24 +1,27 @@
 import BreadcrumbHeader from '@/pages/Header';
+import { useTranslation } from 'react-i18next'; // 1. Import du hook
 import { Button } from '../ui/button';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import MainTable from './Table';
 import { useSelectedRow } from './context/selected-row-provider';
-import { TableData } from './core/core';
 import DialogContainer from './dialogs/DialogContainer';
 
 const Main = () => {
+  const { t } = useTranslation(['staff']); // 2. Initialisation
   const { handleDialogStateChange } = useSelectedRow();
+
   return (
     <div>
-      <BreadcrumbHeader breadcrumbs={[{ title: TableData.MainCard.title, href: TableData.href }]} />
+      {/* 3. Utilisation des clés pour le fil d'Ariane et le contenu du tableau */}
+      <BreadcrumbHeader breadcrumbs={[{ title: t('staff:main_card.title'), href: '/staff' }]} />
       <div className='mx-auto w-full'>
         <Card>
           <CardHeader>
-            <CardTitle>{TableData.MainCard.title}</CardTitle>
-            <CardDescription>{TableData.MainCard.description}</CardDescription>
+            <CardTitle>{t('staff:main_card.title')}</CardTitle>
+            <CardDescription>{t('staff:main_card.description')}</CardDescription>
             <CardAction>
               <Button onClick={() => handleDialogStateChange({ openDialog: 'add' })}>
-                {TableData.MainCard.addButton.label}
+                {t('staff:main_card.add_button')}
               </Button>
             </CardAction>
           </CardHeader>

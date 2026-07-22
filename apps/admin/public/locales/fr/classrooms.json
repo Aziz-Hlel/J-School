@@ -1,0 +1,31 @@
+{
+  "list": {
+    "title": "Gestion des classes",
+    "description": "Consultez, planifiez et gérez les divisions de niveau académique et les salles de classe de l'établissement.",
+    "actions": {
+      "add": "Créer une classe"
+    }
+  },
+  "addDialog": {
+    "title": "Créer une nouvelle classe",
+    "description": "Remplissez les détails ci-dessous pour configurer une nouvelle salle de classe ou division académique.",
+    "buttons": {
+      "cancel": "Annuler",
+      "submit": "Créer"
+    },
+    "notifications": {
+      "success": "La classe a été créée avec succès",
+      "error": "Échec de la création de la classe"
+    }
+  },
+  "updateDialog": {
+    "title": "Modifier les informations de la classe",
+    "description": "Ajustez les détails nécessaires ci-dessous. Les modifications seront appliquées instantanément après validation."
+  },
+  "table": {
+    "name": "Nom de la classe",
+    "grade": "Niveau académique",
+    "description": "Description",
+    "createdAt": "Date de création"
+  }
+}

@@ -1,0 +1,27 @@
+{
+"empty_state": {
+      "title": "No data to display",
+      "subtitle": "Select a classroom, session and week on the left to load attendance records."
+    } ,
+    "error_state": {
+      "title": "Failed to load attendance",
+      "subtitle": "Something went wrong. Please try again."
+    },
+    "no_data_state": {
+      "title": "No attendance records",
+      "subtitle": "No records found for this session and week."
+    },
+    "filters": {
+      "title": "Filters",
+      "subtitle": "Select a classroom, session and week to load attendance."
+    },
+    "edit_dialog": {
+      "title": "Edit Attendances",
+      "description": "Update the attendance status and add notes for week {{week}}."
+    },
+    "dialog": {
+      "save": "Save Attendances",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    }
+ } 

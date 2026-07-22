@@ -37,6 +37,7 @@ import {
 import { DayOfWeek, SessionType } from '@repo/contracts/types/enums/enums';
 import { toast } from 'sonner';
 import { TableData } from '../../core/core';
+import { useTranslation } from 'react-i18next';
 
 const UpdateDialog = () => {
   const { handleCancel, dialogState } = useSelectedRow();
@@ -140,14 +141,14 @@ const UpdateDialog = () => {
   };
 
   const sessionType = form.watch('type');
-
+  const { t } = useTranslation(['extracurriculars']);
   return (
     <Dialog onOpenChange={onOpenChange} open={isEdit}>
       <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-120'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle>Edit extracurricular</DialogTitle>
-            <DialogDescription>Update the details of the extracurricular session</DialogDescription>
+            <DialogTitle>{t('extracurriculars:dialog.title')}</DialogTitle>
+            <DialogDescription>{t('extracurriculars:dialog.description')}</DialogDescription>
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
@@ -341,11 +342,11 @@ const UpdateDialog = () => {
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='outline' onClick={handleCancel}>
-                Cancel
+                {t('extracurriculars:dialog.cancel')}
               </Button>
             </DialogClose>
             <Button type='submit' className='w-28' disabled={isPending}>
-              {isPending ? <Spinner /> : <span>Save changes</span>}
+              {isPending ? <Spinner /> : <span>{t('extracurriculars:dialog.saveChanges')}</span>}
             </Button>
           </DialogFooter>
         </form>

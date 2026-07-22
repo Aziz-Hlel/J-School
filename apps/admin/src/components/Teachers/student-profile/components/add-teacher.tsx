@@ -25,9 +25,11 @@ import { Gender } from '@repo/contracts/types/enums/enums';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 const AddTeacher = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useTranslation(['teachers']);
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -49,13 +51,13 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
   const onSubmit: SubmitHandler<CreateTeacherRequest> = async (data) => {
     try {
       await mutateAsync({ data, schoolId });
-      toast.success(`Teacher created successfully`);
+      toast.success(t('teachers:dialog.successToast'));
     } catch (error) {
       if (error instanceof ApiError && error.status === 409) {
-        form.setError('email', { message: 'Email already exists' });
+        form.setError('email', { message: t('teachers:errors.emailConflict') });
         return;
       }
-      toast.error(`Failed to create teacher`);
+      toast.error(t('teachers:dialog.errorToast'));
     }
   };
 
@@ -65,8 +67,8 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
       <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-120'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle>Create new teacher</DialogTitle>
-            <DialogDescription>Add a new teacher</DialogDescription>
+            <DialogTitle>{t('teachers:dialog.title')}</DialogTitle>
+            <DialogDescription>{t('teachers:dialog.description')}</DialogDescription>
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
@@ -77,13 +79,13 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
+                      <FieldLabel htmlFor='firstName'>{t('teachers:fields.firstName')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? undefined}
                         id='firstName'
                         aria-invalid={fieldState.invalid}
-                        placeholder='First Name'
+                        placeholder={t('teachers:fields.firstNamePlaceholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -94,13 +96,13 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
+                      <FieldLabel htmlFor='lastName'>{t('teachers:fields.lastName')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? undefined}
                         id='lastName'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Last Name'
+                        placeholder={t('teachers:fields.lastNamePlaceholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -114,14 +116,14 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='email'>Email</FieldLabel>
+                      <FieldLabel htmlFor='email'>{t('teachers:fields.email')}</FieldLabel>
                       <Input
                         {...field}
                         type='email'
                         value={field.value ?? undefined}
                         id='email'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Email Address'
+                        placeholder={t('teachers:fields.emailPlaceholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -134,8 +136,13 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='gender'>Gender</FieldLabel>
-                      <SelectForm field={field} options={Gender} placeholder='Select gender' label='Gender' />
+                      <FieldLabel htmlFor='gender'>{t('teachers:fields.gender')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={Gender}
+                        placeholder={t('teachers:fields.genderPlaceholder')}
+                        label={t('teachers:fields.gender')}
+                      />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}
@@ -146,14 +153,14 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='phone'>Phone</FieldLabel>
+                      <FieldLabel htmlFor='phone'>{t('teachers:fields.phone')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(e.target.value || null)}
                         id='phone'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Phone Number'
+                        placeholder={t('teachers:fields.phonePlaceholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -168,7 +175,7 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='dateOfBirth'>Date of Birth</FieldLabel>
+                      <FieldLabel htmlFor='dateOfBirth'>{t('teachers:fields.dateOfBirth')}</FieldLabel>
                       <Input
                         type='date'
                         {...field}
@@ -187,14 +194,14 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='cin'>CIN</FieldLabel>
+                      <FieldLabel htmlFor='cin'>{t('teachers:fields.cin')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(e.target.value || null)}
                         id='cin'
                         aria-invalid={fieldState.invalid}
-                        placeholder='CIN'
+                        placeholder={t('teachers:fields.cinPlaceholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -208,14 +215,14 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='address'>Address</FieldLabel>
+                    <FieldLabel htmlFor='address'>{t('teachers:fields.address')}</FieldLabel>
                     <Input
                       {...field}
                       value={field.value ?? ''}
                       onChange={(e) => field.onChange(e.target.value || null)}
                       id='address'
                       aria-invalid={fieldState.invalid}
-                      placeholder='Address'
+                      placeholder={t('teachers:fields.addressPlaceholder')}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
@@ -228,7 +235,7 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='password'>Password</FieldLabel>
+                    <FieldLabel htmlFor='password'>{t('teachers:fields.password')}</FieldLabel>
                     <Input
                       {...field}
                       type='password'
@@ -236,7 +243,7 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
                       onChange={(e) => field.onChange(e.target.value || null)}
                       id='password'
                       aria-invalid={fieldState.invalid}
-                      placeholder='Password'
+                      placeholder={t('teachers:fields.passwordPlaceholder')}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
@@ -247,11 +254,11 @@ const AddTeacher = ({ children }: { children: React.ReactNode }) => {
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='outline' onClick={() => setDialogIsOpen(false)}>
-                Cancel
+                {t('teachers:dialog.cancel')}
               </Button>
             </DialogClose>
             <Button type='submit' className='w-28' disabled={isPending}>
-              {isPending ? <Spinner /> : <span>Create teacher</span>}
+              {isPending ? <Spinner /> : <span>{t('teachers:dialog.submit')}</span>}
             </Button>
           </DialogFooter>
         </form>

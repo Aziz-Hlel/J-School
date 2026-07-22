@@ -20,6 +20,7 @@ import type { ClassroomAttendancesResponse } from '@repo/contracts/schemas/class
 import { AttendanceStatus } from '@repo/contracts/types/enums/enums';
 import { useMutation } from '@tanstack/react-query';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 const EditAttendances = ({
@@ -71,13 +72,16 @@ const EditAttendances = ({
       toast.error('Failed to update attendances');
     }
   };
+  const { t } = useTranslation(['attendance']);
 
   return (
     <Dialog open={true} onOpenChange={setIsEditOpen}>
       <DialogContent className='flex max-h-[85vh] flex-col overflow-hidden rounded-2xl sm:max-w-xl'>
         <DialogHeader>
-          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>Edit Attendances</DialogTitle>
-          <DialogDescription>Update the attendance status and add notes for week {week}.</DialogDescription>
+          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>
+            {t('attendance:edit_dialog.title')}
+          </DialogTitle>
+          <DialogDescription>{t('attendance:edit_dialog.description', { week })}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(handleUpdate)} className='flex flex-1 flex-col gap-4 overflow-hidden py-2'>
@@ -173,10 +177,10 @@ const EditAttendances = ({
 
           <DialogFooter className='gap-2 border-t pt-4 sm:gap-0'>
             <Button type='button' variant='outline' onClick={() => setIsEditOpen(false)}>
-              Cancel
+              {t('attendance:dialog.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
-              {isPending ? 'Saving...' : 'Save Attendances'}
+              {isPending ? t('attendance:dialog.saving') : t('attendance:dialog.save')}
             </Button>
           </DialogFooter>
         </form>

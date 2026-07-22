@@ -1,0 +1,42 @@
+{
+  "header": {
+    "title": "Calendrier scolaire",
+    "description": "Gérer les événements, les vacances et les sorties",
+    "addEvent": "Ajouter un événement"
+  },
+  "panel": {
+    "errorLoading": "Échec du chargement des événements.",
+    "noEvents": "Aucun événement",
+    "noEventsForDay": "Rien de prévu pour ce jour-là.",
+    "noEventsForMonth": "Aucun événement ce mois-ci. Ajoutez-en un pour commencer.",
+    "eventsOnDay": "Événements le {{date}}",
+    "allEventsForMonth": "Tous les événements – {{month}}"
+  },
+  "addModal": {
+    "title": "Ajouter un événement",
+    "description": "Ajouter un nouvel événement au calendrier de cet établissement.",
+    "fields": {
+      "title": "Titre",
+      "titlePlaceholder": "Titre de l'événement",
+      "description": "Description",
+      "descriptionPlaceholder": "Description",
+      "type": "Type",
+      "typePlaceholder": "Sélectionner le type d'événement",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "startTime": "Heure de début",
+      "endTime": "Heure de fin",
+      "sendNotification": "Envoyer une notification",
+      "sendNotificationHint": "Informer les parents et le personnel au sujet de cet événement."
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "submit": "Ajouter l'événement",
+      "submitting": "Enregistrement..."
+    },
+    "toast": {
+      "success": "Événement ajouté avec succès",
+      "error": "Échec de l'ajout de l'événement"
+    }
+  }
+}

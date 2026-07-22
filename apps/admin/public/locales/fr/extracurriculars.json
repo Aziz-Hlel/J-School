@@ -1,0 +1,59 @@
+{
+  
+    "main": {
+      "title": "Activités parascolaires",
+      "description": "Gérez et suivez les activités parascolaires pour les élèves et les séances.",
+      "add_button": "Ajouter une activité"
+    },
+    "empty_state": {
+      "title": "Aucune donnée à afficher",
+      "subtitle": "Sélectionnez une classe, une séance et une semaine sur la gauche pour charger les activités parascolaires."
+    },
+    "no_data_state": {
+      "title": "Aucune activité parascolaire",
+      "subtitle": "Aucun enregistrement trouvé pour cette séance et cette semaine."
+    },
+    "error_state": {
+      "title": "Échec du chargement des activités parascolaires",
+      "subtitle": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "filters": {
+      "title": "Filtres",
+      "subtitle": "Sélectionnez une classe, une séance et une semaine pour charger les activités parascolaires."
+    },
+    "edit_dialog": {
+      "title": "Modifier les activités parascolaires",
+      "description": "Mettez à jour le statut et ajoutez des notes pour la semaine {{week}}.",
+      "save": "Enregistrer les activités",
+      "saving": "Enregistrement..."
+    },
+    "create_dialog": {
+      "title": "Créer une activité parascolaire",
+      "description": "Ajoutez une nouvelle séance d'activité parascolaire à votre établissement",
+      "title_en": "Titre (EN)",
+      "title_en_placeholder": "Titre en anglais",
+      "title_fr": "Titre (FR)",
+      "title_fr_placeholder": "Titre en français",
+      "title_ar": "Titre (AR)",
+      "title_ar_placeholder": "Titre en arabe",
+      "session_type": "Type de séance",
+      "session_type_placeholder": "Sélectionner le type",
+      "teacher": "Enseignant",
+      "teacher_placeholder": "Sélectionner un enseignant",
+      "no_teacher": "Aucun enseignant",
+      "start_time": "Heure de début",
+      "end_time": "Heure de fin",
+      "day_of_week": "Jour de la semaine",
+      "day_of_week_placeholder": "Sélectionner le jour",
+      "date": "Date",
+      "submit": "Créer",
+      "toast_success": "Activité parascolaire créée avec succès",
+      "toast_error": "Échec de la création de l'activité parascolaire"
+    },
+    "dialog": {
+    "title": "Modifier l'activité parascolaire",
+    "description": "Mettre à jour les détails de la séance d'activité parascolaire",
+    "cancel" : "Annuler",
+    "saveChanges": "Enregistrer les modifications"
+  }
+  }

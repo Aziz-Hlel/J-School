@@ -20,6 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { updatePasswordRequestSchema, type UpdatePasswordRequest } from '@repo/contracts/schemas/user/updatePassword';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useSelectedRow } from '../../context/selected-row-provider';
@@ -36,6 +37,7 @@ const changePasswordSchema = updatePasswordRequestSchema
 type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 
 const ChangePassword = () => {
+  const { t } = useTranslation(['teachers']);
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
@@ -62,8 +64,8 @@ const ChangePassword = () => {
   const selectedRow = dialogIsOpen ? dialogState.selectedRow : null;
 
   const fullName = selectedRow ? [selectedRow.firstName, selectedRow.lastName].filter(Boolean).join(' ') : '';
-  const displayName = fullName || 'Unknown user';
-  const displayEmail = selectedRow?.email || 'No email available';
+  const displayName = fullName || t('teachers:changePassword.unknownUser');
+  const displayEmail = selectedRow?.email || t('teachers:changePassword.noEmail');
   const initials = [selectedRow?.firstName?.[0], selectedRow?.lastName?.[0]].filter(Boolean).join('') || '?';
 
   const onOpenChange = (open: boolean) => {
@@ -85,9 +87,9 @@ const ChangePassword = () => {
         schoolId,
         input,
       });
-      toast.success('Password updated successfully');
+      toast.success(t('teachers:changePassword.successToast'));
     } catch {
-      toast.error('Failed to update password');
+      toast.error(t('teachers:changePassword.errorToast'));
     }
   };
 
@@ -96,8 +98,8 @@ const ChangePassword = () => {
       <DialogContent className='flex max-h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-xl'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col gap-6'>
           <DialogHeader>
-            <DialogTitle>Change user password</DialogTitle>
-            <DialogDescription>Set a new password for this staff account.</DialogDescription>
+            <DialogTitle>{t('teachers:changePassword.title')}</DialogTitle>
+            <DialogDescription>{t('teachers:changePassword.description')}</DialogDescription>
           </DialogHeader>
 
           <div className='min-h-0 flex-1 overflow-y-auto pr-2'>
@@ -110,7 +112,7 @@ const ChangePassword = () => {
                   <div className='min-w-0 flex-1'>
                     <div className='flex flex-wrap items-center gap-2'>
                       <p className='text-foreground truncate font-semibold'>{displayName}</p>
-                      <Badge variant='secondary'>Target account</Badge>
+                      <Badge variant='secondary'>{t('teachers:changePassword.targetAccount')}</Badge>
                     </div>
                     <p className='text-muted-foreground truncate text-sm'>{displayEmail}</p>
                   </div>
@@ -120,44 +122,42 @@ const ChangePassword = () => {
               <Card className='border-destructive/20 bg-destructive/5 shadow-none'>
                 <CardContent className='flex flex-col gap-2 p-4'>
                   <div className='flex items-center gap-2'>
-                    <Badge variant='destructive'>Confirm action</Badge>
+                    <Badge variant='destructive'>{t('teachers:changePassword.confirmActionBadge')}</Badge>
                     <span className='text-foreground text-sm font-medium'>
-                      This will immediately replace the current password.
+                      {t('teachers:changePassword.warningTitle')}
                     </span>
                   </div>
-                  <p className='text-muted-foreground text-sm'>
-                    Make sure the new password is shared securely. The user will need it the next time they sign in.
-                  </p>
+                  <p className='text-muted-foreground text-sm'>{t('teachers:changePassword.warningDescription')}</p>
                 </CardContent>
               </Card>
 
               <Separator />
 
               <Field data-invalid={!!form.formState.errors.password}>
-                <FieldLabel htmlFor='password'>New password</FieldLabel>
+                <FieldLabel htmlFor='password'>{t('teachers:changePassword.newPasswordLabel')}</FieldLabel>
                 <Input
                   id='password'
                   type='password'
                   autoComplete='new-password'
-                  placeholder='Enter a secure password'
+                  placeholder={t('teachers:changePassword.newPasswordPlaceholder')}
                   aria-invalid={!!form.formState.errors.password}
                   {...form.register('password')}
                 />
-                <p className='text-muted-foreground text-sm'>Use at least 8 characters.</p>
+                <p className='text-muted-foreground text-sm'>{t('teachers:changePassword.passwordHint')}</p>
                 {form.formState.errors.password && <FieldError errors={[form.formState.errors.password]} />}
               </Field>
 
               <Field data-invalid={!!form.formState.errors.confirmPassword}>
-                <FieldLabel htmlFor='confirmPassword'>Retype password</FieldLabel>
+                <FieldLabel htmlFor='confirmPassword'>{t('teachers:changePassword.confirmPasswordLabel')}</FieldLabel>
                 <Input
                   id='confirmPassword'
                   type='password'
                   autoComplete='new-password'
-                  placeholder='Retype the new password'
+                  placeholder={t('teachers:changePassword.confirmPasswordPlaceholder')}
                   aria-invalid={!!form.formState.errors.confirmPassword}
                   {...form.register('confirmPassword')}
                 />
-                <p className='text-muted-foreground text-sm'>Type the same password again to confirm it.</p>
+                <p className='text-muted-foreground text-sm'>{t('teachers:changePassword.confirmPasswordHint')}</p>
                 {form.formState.errors.confirmPassword && (
                   <FieldError errors={[form.formState.errors.confirmPassword]} />
                 )}
@@ -167,10 +167,10 @@ const ChangePassword = () => {
 
           <DialogFooter>
             <Button type='button' variant='outline' onClick={handleCancel} disabled={isPending}>
-              Cancel
+              {t('teachers:changePassword.cancel')}
             </Button>
             <Button type='submit' disabled={isPending} className='min-w-36'>
-              {isPending ? <Spinner /> : <span>Update password</span>}
+              {isPending ? <Spinner /> : <span>{t('teachers:changePassword.submit')}</span>}
             </Button>
           </DialogFooter>
         </form>

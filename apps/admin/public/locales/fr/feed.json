@@ -1,0 +1,25 @@
+{
+  "mainCard": {
+    "title": "Fil d'actualité",
+    "addButton": "Ajouter une publication"
+  },
+  "createModal": {
+    "trigger": "Créer une publication",
+    "title": "Créer une nouvelle publication",
+    "fields": {
+      "title": "Titre",
+      "titlePlaceholder": "Titre",
+      "description": "Description",
+      "descriptionPlaceholder": "Description"
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "submit": "Créer",
+      "submitting": "Création..."
+    },
+    "toast": {
+      "success": "Publication créée avec succès",
+      "error": "Échec de la création de la publication"
+    }
+  }
+}

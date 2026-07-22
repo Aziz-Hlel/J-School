@@ -1,0 +1,42 @@
+{
+  "header": {
+    "title": "School Calendar",
+    "description": "Manage events, holidays and trips",
+    "addEvent": "Add Event"
+  },
+  "panel": {
+    "errorLoading": "Failed to load events.",
+    "noEvents": "No event",
+    "noEventsForDay": "Nothing scheduled for this day.",
+    "noEventsForMonth": "No events this month. Add one to get started.",
+    "eventsOnDay": "Events on {{date}}",
+    "allEventsForMonth": "All events – {{month}}"
+  },
+  "addModal": {
+    "title": "Add calendar",
+    "description": "Add a new calendar for this school.",
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "Calendar event title",
+      "description": "Description",
+      "descriptionPlaceholder": "Description",
+      "type": "Type",
+      "typePlaceholder": "Select event type",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "sendNotification": "Send Notification",
+      "sendNotificationHint": "Notify parents and staff about this event."
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "submit": "Add Calendar",
+      "submitting": "Saving..."
+    },
+    "toast": {
+      "success": "Calendar added successfully",
+      "error": "Failed to add calendar"
+    }
+  }
+}

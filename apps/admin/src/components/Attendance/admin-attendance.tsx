@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { BookOpen, CalendarDays, ChevronLeft, ChevronRight, Clock, Pencil, Users } from 'lucide-react';
 import { useState } from 'react';
 import EditAttendances from './components/edit-attendances';
+import { useTranslation } from 'react-i18next';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -102,19 +103,20 @@ const StatPill = ({
   );
 };
 
-const EmptyState = () => (
-  <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
-    <div className='flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800'>
-      <Users className='h-6 w-6 text-slate-400' />
+const EmptyState = () => {
+  const { t } = useTranslation(['attendance']);
+  return (
+    <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
+      <div className='flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800'>
+        <Users className='h-6 w-6 text-slate-400' />
+      </div>
+      <div>
+        <p className='text-sm font-medium text-slate-600 dark:text-slate-300'>{t('attendance:empty_state.title')}</p>
+        <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>{t('attendance:empty_state.subtitle')}</p>
+      </div>
     </div>
-    <div>
-      <p className='text-sm font-medium text-slate-600 dark:text-slate-300'>No data to display</p>
-      <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>
-        Select a classroom, session and week on the left to load attendance records.
-      </p>
-    </div>
-  </div>
-);
+  );
+};
 
 const LoadingSkeleton = () => (
   <div className='grid gap-2'>
@@ -134,29 +136,35 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-const ErrorState = () => (
-  <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
-    <div className='flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/50'>
-      <span className='text-2xl'>⚠️</span>
+const ErrorState = () => {
+  const { t } = useTranslation(['attendance']);
+  return (
+    <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
+      <div className='flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/50'>
+        <span className='text-2xl'>⚠️</span>
+      </div>
+      <div>
+        <p className='text-sm font-medium text-slate-700 dark:text-slate-200'>{t('attendance:error_state.title')}</p>
+        <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>{t('attendance:error_state.subtitle')}</p>
+      </div>
     </div>
-    <div>
-      <p className='text-sm font-medium text-slate-700 dark:text-slate-200'>Failed to load attendance</p>
-      <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>Something went wrong. Please try again.</p>
-    </div>
-  </div>
-);
+  );
+};
 
-const NoDataState = () => (
-  <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
-    <div className='flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800'>
-      <CalendarDays className='h-6 w-6 text-slate-400' />
+const NoDataState = () => {
+  const { t } = useTranslation(['attendance']);
+  return (
+    <div className='flex h-full min-h-75 flex-col items-center justify-center gap-3 text-center'>
+      <div className='flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800'>
+        <CalendarDays className='h-6 w-6 text-slate-400' />
+      </div>
+      <div>
+        <p className='text-sm font-medium text-slate-600 dark:text-slate-300'>{t('attendance:no_data_state.title')}</p>
+        <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>{t('attendance:no_data_state.subtitle')}</p>
+      </div>
     </div>
-    <div>
-      <p className='text-sm font-medium text-slate-600 dark:text-slate-300'>No attendance records</p>
-      <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>No records found for this session and week.</p>
-    </div>
-  </div>
-);
+  );
+};
 
 // ─── main component ──────────────────────────────────────────────────────────
 
@@ -241,7 +249,7 @@ const AdminAttendanceOverview = () => {
   const lateCount = attendances.filter((a) => a.attendance?.status === AttendanceStatus.LATE).length;
 
   const isReady = !!classroomId && !!timetableId;
-
+  const { t } = useTranslation(['attendance']);
   // ────────────────────────────────────────────────────────────────────────────
   return (
     <div className='h-screen p-8'>
@@ -249,10 +257,10 @@ const AdminAttendanceOverview = () => {
         {/* ── LEFT PANEL ──────────────────────────────────────────────────────── */}
         <aside className='flex w-72 shrink-0 flex-col gap-6 border-r border-slate-200 bg-slate-50/60 p-6 dark:border-slate-800 dark:bg-slate-900/40'>
           <div>
-            <h2 className='text-base font-semibold text-slate-800 dark:text-slate-100'>Filters</h2>
-            <p className='mt-0.5 text-xs text-slate-500 dark:text-slate-400'>
-              Select a classroom, session and week to load attendance.
-            </p>
+            <h2 className='text-base font-semibold text-slate-800 dark:text-slate-100'>
+              {t('attendance:filters.title')}
+            </h2>
+            <p className='mt-0.5 text-xs text-slate-500 dark:text-slate-400'>{t('attendance:filters.subtitle')}</p>
           </div>
 
           {/* 1 · Classroom */}

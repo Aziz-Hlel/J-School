@@ -22,9 +22,11 @@ import { Spinner } from '@/components/ui/spinner';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { updateStaffRequestSchema, type UpdateStaffRequest } from '@repo/contracts/schemas/staff/updateStaffRequest';
 import { Gender } from '@repo/contracts/types/enums/enums';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 const UpdateStaff = () => {
+  const { t } = useTranslation(['staff']); // 2. Initialisation d'i18n
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
@@ -64,9 +66,9 @@ const UpdateStaff = () => {
       if (isEdit && selectedRow) {
         await mutateAsync({ data, schoolId, id: selectedRow.id });
       }
-      toast.success(`Staff updated successfully`);
+      toast.success(t('staff:Edit.success_toast'));
     } catch {
-      toast.error(`Failed to update staff`);
+      toast.error(t('staff:Edit.failed_toast'));
     }
   };
 
@@ -84,8 +86,8 @@ const UpdateStaff = () => {
       <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-120'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle>Edit staff</DialogTitle>
-            <DialogDescription>Update the details of the staff member</DialogDescription>
+            <DialogTitle>{t('staff:Edit.edit_title')}</DialogTitle>
+            <DialogDescription>{t('staff:Edit.edit_description')}</DialogDescription>
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
@@ -102,13 +104,13 @@ const UpdateStaff = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
+                      <FieldLabel htmlFor='firstName'>{t('staff:Edit.fields.first_name')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? undefined}
                         id='firstName'
                         aria-invalid={fieldState.invalid}
-                        placeholder='First Name'
+                        placeholder={t('staff:Edit.fields.first_name')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -119,13 +121,13 @@ const UpdateStaff = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
+                      <FieldLabel htmlFor='lastName'>{t('staff:Edit.fields.last_name')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? undefined}
                         id='lastName'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Last Name'
+                        placeholder={t('staff:Edit.fields.last_name')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -140,8 +142,13 @@ const UpdateStaff = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='gender'>Gender</FieldLabel>
-                      <SelectForm field={field} options={Gender} placeholder='Select gender' label='Gender' />
+                      <FieldLabel htmlFor='gender'>{t('staff:Edit.fields.gender')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={Gender}
+                        placeholder={t('staff:Edit.fields.gender_placeholder')}
+                        label={t('staff:Edit.fields.gender')}
+                      />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}
@@ -151,14 +158,14 @@ const UpdateStaff = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='phone'>Phone</FieldLabel>
+                      <FieldLabel htmlFor='phone'>{t('staff:Edit.fields.phone')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(e.target.value || null)}
                         id='phone'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Phone Number'
+                        placeholder={t('staff:Edit.fields.phone_placeholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -173,7 +180,7 @@ const UpdateStaff = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='dateOfBirth'>Date of Birth</FieldLabel>
+                      <FieldLabel htmlFor='dateOfBirth'>{t('staff:Edit.fields.date_of_birth')}</FieldLabel>
                       <Input
                         type='date'
                         {...field}
@@ -192,14 +199,14 @@ const UpdateStaff = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='cin'>CIN</FieldLabel>
+                      <FieldLabel htmlFor='cin'>{t('staff:Edit.fields.cin')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(e.target.value || null)}
                         id='cin'
                         aria-invalid={fieldState.invalid}
-                        placeholder='CIN'
+                        placeholder={t('staff:Edit.fields.cin')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -213,14 +220,14 @@ const UpdateStaff = () => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='address'>Address</FieldLabel>
+                    <FieldLabel htmlFor='address'>{t('staff:Edit.fields.address')}</FieldLabel>
                     <Input
                       {...field}
                       value={field.value ?? ''}
                       onChange={(e) => field.onChange(e.target.value || null)}
                       id='address'
                       aria-invalid={fieldState.invalid}
-                      placeholder='Address'
+                      placeholder={t('staff:Edit.fields.address')}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
@@ -231,11 +238,11 @@ const UpdateStaff = () => {
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='outline' onClick={handleCancel}>
-                Cancel
+                {t('staff:Edit.actions.cancel')}
               </Button>
             </DialogClose>
             <Button type='submit' className='w-28' disabled={isPending}>
-              {isPending ? <Spinner /> : <span>Save changes</span>}
+              {isPending ? <Spinner /> : <span>{t('staff:Edit.actions.save')}</span>}
             </Button>
           </DialogFooter>
         </form>

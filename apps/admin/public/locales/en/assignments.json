@@ -1,0 +1,36 @@
+{
+ 
+    "pageTitle": "Assignments",
+    "hoursPerWeekShort": "{{count}}h/wk",
+    "selector": {
+      "label": "Classroom",
+      "description": "Choose a classroom to view subject assignments",
+      "placeholder": "Select a classroom..."
+    },
+    "stats": {
+      "subjects": "Subjects",
+      "assigned": "Assigned",
+      "unassigned": "Unassigned"
+    },
+    "emptyStates": {
+      "noClassroom": {
+        "title": "No classroom selected",
+        "description": "Pick a classroom above to see its subject assignments"
+      },
+      "noSubjects": {
+        "title": "No subjects yet",
+        "description": "This classroom has no subjects configured"
+      },
+      "noTeacherAssigned": "No teacher assigned"
+    },
+    "status": {
+      "refreshing": "Refreshing..."
+    },
+    "accessibility": {
+      "changeTeacher": "Change teacher for"
+    },
+    "genders": {
+      "male": "Male",
+      "female": "Female"
+    }
+  }

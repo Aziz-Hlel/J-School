@@ -12,9 +12,10 @@ import type { SubjectDomain } from '@repo/contracts/types/enums/enums';
 import { useQuery } from '@tanstack/react-query';
 import { BookOpen, ChevronRight, Clock, GraduationCap, Layers } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import EditAssignment from './edit-assignment';
 
-// Domain → subtle accent color (CSS custom properties kept for theming compatibility)
+// Domain → subtle accent color
 const DOMAIN_COLORS: Record<SubjectDomain, string> = {
   ARABIC_LANGUAGE: '#3b82f6',
   ART_EDUCATION: '#8b5cf6',
@@ -30,6 +31,7 @@ function domainColor(domain: string) {
 }
 
 const Assignments = () => {
+  const { t, i18n } = useTranslation(['assignments']);
   const schoolId = useCurrentSchoolId();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -61,7 +63,7 @@ const Assignments = () => {
 
   return (
     <div>
-      <BreadcrumbHeader breadcrumbs={[{ title: 'Assignments', href: '/assignments' }]} />
+      <BreadcrumbHeader breadcrumbs={[{ title: t('assignments:pageTitle'), href: '/assignments' }]} />
 
       <div className='mx-auto w-full space-y-6 p-4'>
         {/* Classroom selector */}
@@ -69,8 +71,8 @@ const Assignments = () => {
           <div className='bg-muted/40 border-b px-5 py-4'>
             <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
               <div>
-                <p className='text-sm font-semibold'>Classroom</p>
-                <p className='text-muted-foreground mt-0.5 text-xs'>Choose a classroom to view subject assignments</p>
+                <p className='text-sm font-semibold'>{t('assignments:selector.label')}</p>
+                <p className='text-muted-foreground mt-0.5 text-xs'>{t('assignments:selector.description')}</p>
               </div>
               <div className='w-full sm:w-72'>
                 <Select
@@ -82,7 +84,7 @@ const Assignments = () => {
                   }}
                 >
                   <SelectTrigger className='bg-background'>
-                    <SelectValue placeholder='Select a classroom…' />
+                    <SelectValue placeholder={t('assignments:selector.placeholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     {classrooms.map((c) => (
@@ -102,15 +104,15 @@ const Assignments = () => {
             <div className='flex divide-x text-center'>
               <div className='flex-1 py-3'>
                 <p className='text-lg font-semibold tabular-nums'>{assignments.length}</p>
-                <p className='text-muted-foreground text-xs'>Subjects</p>
+                <p className='text-muted-foreground text-xs'>{t('assignments:stats.subjects')}</p>
               </div>
               <div className='flex-1 py-3'>
                 <p className='text-lg font-semibold tabular-nums'>{assignments.filter((s) => s.teacher).length}</p>
-                <p className='text-muted-foreground text-xs'>Assigned</p>
+                <p className='text-muted-foreground text-xs'>{t('assignments:stats.assigned')}</p>
               </div>
               <div className='flex-1 py-3'>
                 <p className='text-lg font-semibold tabular-nums'>{assignments.filter((s) => !s.teacher).length}</p>
-                <p className='text-muted-foreground text-xs'>Unassigned</p>
+                <p className='text-muted-foreground text-xs'>{t('assignments:stats.unassigned')}</p>
               </div>
             </div>
           )}
@@ -123,9 +125,9 @@ const Assignments = () => {
               <Layers className='text-muted-foreground h-5 w-5' />
             </div>
             <div>
-              <p className='text-sm font-medium'>No classroom selected</p>
+              <p className='text-sm font-medium'>{t('assignments:emptyStates.noClassroom.title')}</p>
               <p className='text-muted-foreground mt-0.5 text-xs'>
-                Pick a classroom above to see its subject assignments
+                {t('assignments:emptyStates.noClassroom.description')}
               </p>
             </div>
           </div>
@@ -155,17 +157,24 @@ const Assignments = () => {
               <BookOpen className='text-muted-foreground h-5 w-5' />
             </div>
             <div>
-              <p className='text-sm font-medium'>No subjects yet</p>
-              <p className='text-muted-foreground mt-0.5 text-xs'>This classroom has no subjects configured</p>
+              <p className='text-sm font-medium'>{t('assignments:emptyStates.noSubjects.title')}</p>
+              <p className='text-muted-foreground mt-0.5 text-xs'>
+                {t('assignments:emptyStates.noSubjects.description')}
+              </p>
             </div>
           </div>
         ) : (
           <>
-            {isAssignmentsFetching && <p className='text-muted-foreground text-xs'>Refreshing…</p>}
+            {isAssignmentsFetching && (
+              <p className='text-muted-foreground text-xs'>{t('assignments:status.refreshing')}</p>
+            )}
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
               {assignments.map((subject) => {
                 const teacher = subject.teacher;
-                const teacherName = teacher ? `${teacher.firstName} ${teacher.lastName}` : 'Unassigned';
+                const subjectName = subject.name[i18n.language as keyof typeof subject.name] || subject.name.en;
+                const teacherName = teacher
+                  ? `${teacher.firstName} ${teacher.lastName}`
+                  : t('assignments:fields.teacher.none');
                 const accent = domainColor(subject.domain);
 
                 return (
@@ -180,7 +189,7 @@ const Assignments = () => {
                       {/* Header */}
                       <div className='flex items-start justify-between gap-2'>
                         <div className='min-w-0'>
-                          <p className='truncate text-sm leading-snug font-semibold'>{subject.name.en}</p>
+                          <p className='truncate text-sm leading-snug font-semibold'>{subjectName}</p>
                           <div className='mt-1.5 flex flex-wrap gap-1.5'>
                             <span
                               className='inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium'
@@ -197,7 +206,7 @@ const Assignments = () => {
                             </Badge>
                             <Badge variant='outline' className='gap-1 text-xs'>
                               <Clock className='h-3 w-3' />
-                              {subject.hoursPerWeek}h/wk
+                              {t('assignments:hoursPerWeekShort', { count: subject.hoursPerWeek })}
                             </Badge>
                           </div>
                         </div>
@@ -212,7 +221,7 @@ const Assignments = () => {
                         role='button'
                         tabIndex={0}
                         onKeyDown={(e) => e.key === 'Enter' && openEdit(subject)}
-                        aria-label={`Change teacher for ${subject.name.en}`}
+                        aria-label={`${t('assignments:accessibility.changeTeacher')} ${subjectName}`}
                       >
                         <div className='flex min-w-0 items-center gap-2.5'>
                           <Avatar className='h-8 w-8 shrink-0'>
@@ -224,7 +233,11 @@ const Assignments = () => {
                           <div className='min-w-0'>
                             <p className='truncate text-xs font-medium'>{teacherName}</p>
                             <p className='text-muted-foreground truncate text-xs'>
-                              {teacher ? teacher.gender : 'No teacher assigned'}
+                              {teacher
+                                ? t(`assignments:genders.${teacher.gender.toLowerCase()}`, {
+                                    defaultValue: teacher.gender,
+                                  })
+                                : t('assignments:emptyStates.noTeacherAssigned')}
                             </p>
                           </div>
                         </div>

@@ -14,6 +14,7 @@ import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../../context/selected-row-provider';
 import { TableData } from '../../core/core';
@@ -21,6 +22,7 @@ import { operations, type schemasType } from '../../core/services';
 import FormUI from '../shared/FormUI';
 
 const CreateDialog = () => {
+  const { t } = useTranslation(['classrooms']);
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
@@ -52,9 +54,9 @@ const CreateDialog = () => {
   const onSubmit: SubmitHandler<schemasType['create']> = async (data) => {
     try {
       await mutateAsync({ schoolId, data });
-      toast.success(`${TableData.ModuleName} created successfully`);
+      toast.success(t('classrooms:addDialog.notifications.success'));
     } catch {
-      toast.error(`Failed to create ${TableData.ModuleName}`);
+      toast.error(t('classrooms:addDialog.notifications.error'));
     }
   };
 
@@ -65,8 +67,8 @@ const CreateDialog = () => {
       <DialogContent className='flex h-fit flex-col overflow-hidden sm:max-w-106.25'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle className='bg-__tw_debug'>{TableData.AddDialog.title}</DialogTitle>
-            <DialogDescription>{TableData.AddDialog.description}</DialogDescription>
+            <DialogTitle className='bg-__tw_debug'>{t('classrooms:addDialog.title')}</DialogTitle>
+            <DialogDescription>{t('classrooms:addDialog.description')}</DialogDescription>
           </DialogHeader>
           <div className='scrollbar-thumb-border hover:scrollbar-thumb-border/50 scrollbar-thin scrollbar-track-transparent pr-2'>
             <FieldGroup>
@@ -76,11 +78,11 @@ const CreateDialog = () => {
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='outline' onClick={handleCancel}>
-                {TableData.AddDialog.buttons.cancel}
+                {t('classrooms:addDialog.buttons.cancel')}
               </Button>
             </DialogClose>
             <Button type='submit' className='w-28' disabled={isPending}>
-              {isPending ? <Spinner /> : <span>{TableData.AddDialog.buttons.submit}</span>}
+              {isPending ? <Spinner /> : <span>{t('classrooms:addDialog.buttons.submit')}</span>}
             </Button>
           </DialogFooter>
         </form>

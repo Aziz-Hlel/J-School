@@ -1,0 +1,68 @@
+{
+  "add": {
+    "title": "Planifier un examen",
+    "description": "Assigner un examen à un jour et un créneau horaire spécifiques.",
+    "date_section_title": "Date & Horaires",
+    "toast_success": "Examen planifié avec succès",
+    "toast_error": "Échec de la planification de l'examen",
+    "fields": {
+      "exam_label": "Examen",
+      "exam_placeholder": "Sélectionner un examen",
+      "no_exams": "Aucun examen disponible",
+      "day_label": "Jour",
+      "start_time_label": "Heure de début",
+      "end_time_label": "Heure de fin"
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "submit": "Planifier l'examen",
+      "saving": "Enregistrement..."
+    }
+  },
+  "header": {
+    "title": "Calendrier des examens",
+    "subtitle": "Consulter et gérer tous les examens planifiés par classe",
+    "add_exam": "Ajouter un examen"
+  },
+  "classroom_selector": {
+    "title": "Sélectionner une classe",
+    "subtitle": "Consulter le calendrier des examens d'une classe",
+    "exams_count_one": "examen",
+    "exams_count_other": "examens"
+  },
+  "no_classroom_selected": {
+    "title": "Aucune classe sélectionnée",
+    "subtitle": "Choisissez une classe ci-dessus pour consulter son calendrier d'examens."
+  },
+  "headeer": {
+    "add_exam": "Ajouter un examen"
+  },
+  "empty_state": {
+    "title": "Aucun examen planifié",
+    "subtitle": "Cette classe n'a aucun examen pour le moment. Ajoutez-en un pour commencer."
+  },
+  "edit": {
+    "title": "Modifier l'examen",
+    "description": "Mettez à jour la date et l'heure de cet examen."
+  },
+ 
+    "unassigned": "Non assigné",
+    "sections": {
+      "exam_details": "Détails de l'examen",
+      "date_time": "Date et heure"
+    },
+    "fields": {
+      "name": "Nom",
+      "subject": "Matière",
+      "teacher": "Enseignant",
+      "day": "Jour",
+      "start_time": "Heure de début",
+      "end_time": "Heure de fin"
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement..."
+    },
+"title": "Calendrier des examens"  
+}

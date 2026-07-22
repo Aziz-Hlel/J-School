@@ -1,12 +1,31 @@
 {
-  "classroom": "classroom",
-  "grade": {
-    "KG": "KG",
-    "ONE": "One",
-    "TWO": "Two",
-    "THREE": "Three",
-    "FOUR": "Four",
-    "FIVE": "Five",
-    "SIX": "Six"
+  "list": {
+    "title": "Classrooms Management",
+    "description": "View, organize, and manage academic grade divisions and school classrooms.",
+    "actions": {
+      "add": "Create Classroom"
+    }
+  },
+  "addDialog": {
+    "title": "Create New Classroom",
+    "description": "Fill out the details below to configure a new academic grade division or classroom.",
+    "buttons": {
+      "cancel": "Cancel",
+      "submit": "Create"
+    },
+    "notifications": {
+      "success": "Classroom created successfully",
+      "error": "Failed to create classroom"
+    }
+  },
+  "updateDialog": {
+    "title": "Edit Classroom Information",
+    "description": "Adjust the necessary details below. Changes will be applied instantly after saving."
+  },
+  "table": {
+    "name": "Classroom Name",
+    "grade": "Academic Grade",
+    "description": "Description",
+    "createdAt": "Created At"
   }
 }

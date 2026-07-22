@@ -1,0 +1,73 @@
+{
+  "main": {
+    "title": "Teachers Management",
+    "description": "Manage the list of teachers, their contact information, and their access.",
+    "addButton": "Add Teacher"
+  },
+  "dialog": {
+    "title": "Create new teacher",
+    "description": "Add a new teacher to the system.",
+    "cancel": "Cancel",
+    "submit": "Create",
+    "successToast": "Teacher created successfully",
+    "errorToast": "Failed to create teacher"
+  },
+  "fields": {
+    "firstName": "First Name",
+    "firstNamePlaceholder": "First Name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Last Name",
+    "email": "Email",
+    "emailPlaceholder": "Email Address",
+    "gender": "Gender",
+    "genderPlaceholder": "Select gender",
+    "phone": "Phone",
+    "phonePlaceholder": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "cin": "CIN",
+    "cinPlaceholder": "CIN Number",
+    "address": "Address",
+    "addressPlaceholder": "Residential Address",
+    "password": "Password",
+    "passwordPlaceholder": "Password"
+  },
+  "errors": {
+    "emailConflict": "Email already exists"
+  },
+  "editDialog": {
+    "title": "Edit Teacher",
+    "description": "Update the teacher's profile details.",
+    "cancel": "Cancel",
+    "submit": "Save",
+    "successToast": "Teacher updated successfully",
+    "errorToast": "Failed to update teacher"
+  },
+  "changePassword": {
+    "title": "Change user password",
+    "description": "Set a new password for this staff account.",
+    "unknownUser": "Unknown user",
+    "noEmail": "No email available",
+    "targetAccount": "Target account",
+    "confirmActionBadge": "Confirm action",
+    "warningTitle": "This will immediately replace the current password.",
+    "warningDescription": "Make sure the new password is shared securely. The user will need it the next time they sign in.",
+    "newPasswordLabel": "New password",
+    "newPasswordPlaceholder": "Enter a secure password",
+    "passwordHint": "Use at least 8 characters.",
+    "confirmPasswordLabel": "Retype password",
+    "confirmPasswordPlaceholder": "Retype the new password",
+    "confirmPasswordHint": "Type the same password again to confirm it.",
+    "cancel": "Cancel",
+    "submit": "Update password",
+    "successToast": "Password updated successfully",
+    "errorToast": "Failed to update password"
+  },
+    "table": {
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone Number",
+    "role": "Role",
+    "createdAt": "Created At"
+  }
+}

@@ -25,6 +25,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { BookOpen, CalendarDays, Clock, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const EditExamSchedule = ({
   classroomId,
@@ -47,6 +48,7 @@ const EditExamSchedule = ({
       },
     },
   });
+  const { t } = useTranslation(['exam']);
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['classrooms', classroomId, 'exams', 'update'],
@@ -76,8 +78,10 @@ const EditExamSchedule = ({
     <Dialog open={true} onOpenChange={setIsEditOpen}>
       <DialogContent className='rounded-2xl sm:max-w-lg'>
         <DialogHeader>
-          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>Edit Exam Schedule</DialogTitle>
-          <DialogDescription>Update the date and time for this exam.</DialogDescription>
+          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>
+            {t('exam:edit.title')}
+          </DialogTitle>
+          <DialogDescription>{t('exam:edit.description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-6 py-2'>
@@ -127,7 +131,7 @@ const EditExamSchedule = ({
                 ) : (
                   <div className='flex items-center gap-1.5 text-slate-400 dark:text-slate-500'>
                     <User className='size-4' />
-                    <span className='text-sm'>Unassigned</span>
+                    <span className='text-sm'>{t('exam:unassigned')}</span>
                   </div>
                 )}
               </div>
@@ -166,7 +170,7 @@ const EditExamSchedule = ({
                         <FieldLabel htmlFor='startTime-input'>
                           <span className='flex items-center gap-1'>
                             <Clock className='size-3.5 text-slate-400' />
-                            Start Time
+                            {t('exam:fields.start_time')}
                           </span>
                         </FieldLabel>
                         <Input
@@ -189,7 +193,7 @@ const EditExamSchedule = ({
                         <FieldLabel htmlFor='endTime-input'>
                           <span className='flex items-center gap-1'>
                             <Clock className='size-3.5 text-slate-400' />
-                            End Time
+                            {t('exam:fields.end_time')}
                           </span>
                         </FieldLabel>
                         <Input
@@ -210,10 +214,10 @@ const EditExamSchedule = ({
 
           <DialogFooter className='gap-2 pt-2 sm:gap-0'>
             <Button type='button' variant='outline' onClick={() => setIsEditOpen(false)}>
-              Cancel
+              {t('exam:actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
-              {isPending ? 'Saving...' : 'Save Changes'}
+              {isPending ? t('exam:actions.saving') : t('exam:actions.save')}
             </Button>
           </DialogFooter>
         </form>

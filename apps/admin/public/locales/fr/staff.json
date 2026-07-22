@@ -1,0 +1,131 @@
+{
+  "create": {
+    "create_title": "Créer un nouveau membre",
+    "create_description": "Ajouter un nouveau membre du personnel à votre établissement",
+    "success_toast": "Personnel créé avec succès",
+    "failed_toast": "Échec de la création du personnel",
+    "fields": {
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "gender": "Genre",
+      "gender_placeholder": "Sélectionner le genre",
+      "role": "Rôle",
+      "role_placeholder": "Sélectionner un rôle",
+      "email": "E-mail",
+      "email_placeholder": "Adresse e-mail",
+      "phone": "Téléphone",
+      "phone_placeholder": "Numéro de téléphone",
+      "dob": "Date de naissance",
+      "cin": "CIN",
+      "address": "Adresse",
+      "password": "Mot de passe"
+    },
+    "errors": {
+      "email_exists": "Cet e-mail existe déjà"
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "submit": "Créer le membre"
+    }
+  },
+  "main_card": {
+  "title": "Gestion du Personnel",
+  "description": "Gérez les membres du personnel de votre établissement, leurs rôles et leurs permissions.",
+  "add_button": "Ajouter un membre"
+},
+"password": {
+    "title": "Modifier le mot de passe de l'utilisateur",
+    "description": "Définir un nouveau mot de passe pour ce compte de membre du personnel.",
+    "unknown_user": "Utilisateur inconnu",
+    "no_email": "Aucun e-mail disponible",
+    "target_badge": "Compte ciblé",
+    "confirm_badge": "Confirmer l'action",
+    "warning_title": "Cela remplacera immédiatement le mot de passe actuel.",
+    "warning_description": "Assurez-vous de transmettre le nouveau mot de passe de manière sécurisée. L'utilisateur en aura besoin lors de sa prochaine connexion.",
+    "success_toast": "Mot de passe mis à jour avec succès",
+    "failed_toast": "Échec de la mise à jour du mot de passe",
+    "fields": {
+      "new_password": "Nouveau mot de passe",
+      "new_password_placeholder": "Saisir un mot de passe sécurisé",
+      "new_password_hint": "Utilisez au moins 8 caractères.",
+      "confirm_password": "Ressaisir le mot de passe",
+      "confirm_password_placeholder": "Ressaisir le nouveau mot de passe",
+      "confirm_password_hint": "Saisissez à nouveau le même mot de passe pour le confirmer."
+    },
+    "errors": {
+      "min_length": "Le mot de passe de confirmation doit contenir au moins 8 caractères",
+      "mismatch": "Les mots de passe ne correspondent pas"
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "submit": "Mettre à jour le mot de passe"
+    }
+  },
+  "Edit": {
+    "edit_title": "Modifier le membre du personnel",
+    "edit_description": "Mettre à jour les détails du membre du personnel",
+    "success_toast": "Membre du personnel mis à jour avec succès",
+    "failed_toast": "Échec de la mise à jour du membre du personnel",
+    "fields": {
+      "first_name": "Prénom",
+      "last_name": "Nom",
+      "gender": "Genre",
+      "gender_placeholder": "Sélectionner le genre",
+      "phone": "Téléphone",
+      "phone_placeholder": "Numéro de téléphone",
+      "date_of_birth": "Date de naissance",
+      "cin": "CIN / Carte d'identité",
+      "address": "Adresse"
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications"
+    }
+  },
+  "roles": {
+    "director": {
+      "label": "Directeur",
+      "description": "Accès complet à la direction de l'école."
+    },
+    "manager": {
+      "label": "Gestionnaire",
+      "description": "Gère les opérations et les flux administratifs."
+    },
+    "teacher": {
+      "label": "Enseignant",
+      "description": "Gestion des classes, des cours et du suivi des élèves."
+    },
+    "parent": {
+      "label": "Parent",
+      "description": "Accès pour les tuteurs et outils orientés famille."
+    }
+  },
+  "dialog": {
+    "title": "Sélectionner les rôles",
+    "description": "Choisissez les rôles que cet utilisateur doit avoir.",
+    "loading": "Chargement des rôles"
+  },
+  "delete_confirm": {
+    "title": "Supprimer le compte ?",
+    "description": "Cette action supprimera définitivement le compte utilisateur et pas seulement ses rôles. Cette action est irréversible."
+  },
+  "actions": {
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "delete_account": "Supprimer le compte"
+  },
+  "messages": {
+    "user_deleted": "Utilisateur supprimé",
+    "delete_failed": "Échec de la suppression de l'utilisateur",
+    "update_success": "Rôles mis à jour avec succès",
+    "update_failed": "Échec de la mise à jour des rôles"
+  },
+    "table": {
+  "email": "Email",
+  "firstName": "Prénom",
+  "lastName": "Nom",
+  "phone": "Téléphone",
+  "role": "Rôle",
+  "createdAt": "Créé le"
+}
+}

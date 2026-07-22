@@ -1,0 +1,62 @@
+{
+  "list": {
+    "title": "Parents",
+    "description": "Manage your school's parents, view their details, and update their profiles.",
+    "addButton": "Add Parent"
+  },
+  "editDialog": {
+    "title": "Edit Parent",
+    "description": "Update the parent's profile details.",
+    "cancel": "Cancel",
+    "submit": "Save",
+    "successToast": "Parent updated successfully",
+    "errorToast": "Failed to update parent"
+  },
+  "changePassword": {
+    "title": "Change parent password",
+    "description": "Set a new password for this parent account.",
+    "unknownUser": "Unknown user",
+    "noEmail": "No email available",
+    "targetAccount": "Target account",
+    "confirmActionBadge": "Confirm action",
+    "warningTitle": "This will immediately replace the current password.",
+    "warningDescription": "Make sure the new password is shared securely. The parent will need it the next time they sign in.",
+    "newPasswordLabel": "New password",
+    "newPasswordPlaceholder": "Enter a secure password",
+    "passwordHint": "Use at least 8 characters.",
+    "confirmPasswordLabel": "Retype password",
+    "confirmPasswordPlaceholder": "Retype the new password",
+    "confirmPasswordHint": "Type the same password again to confirm it.",
+    "cancel": "Cancel",
+    "submit": "Update password",
+    "successToast": "Password updated successfully",
+    "errorToast": "Failed to update password"
+  },
+"createDialog": {
+    "title": "Create new parent",
+    "description": "Add a new parent to your school",
+    "cancel": "Cancel",
+    "submit": "Create Parent",
+    "successToast": "Parent created successfully",
+    "errorToast": "Failed to create parent"
+  },
+  "fields": {
+    "firstName": "First Name",
+    "firstNamePlaceholder": "First Name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Last Name",
+    "gender": "Gender",
+    "genderPlaceholder": "Select gender",
+    "email": "Email",
+    "emailPlaceholder": "Email Address",
+    "phone": "Phone",
+    "phonePlaceholder": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "cin": "CIN",
+    "cinPlaceholder": "CIN",
+    "address": "Address",
+    "addressPlaceholder": "Address",
+    "password": "Password",
+    "passwordPlaceholder": "Password"
+  }
+}

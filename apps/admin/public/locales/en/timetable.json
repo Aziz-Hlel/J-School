@@ -1,0 +1,74 @@
+{
+   
+    "addModal": {
+      "title": "Add Timetable Slot",
+      "description": "Add a new schedule slot for this classroom."
+    },
+    "fields": {
+      "subject": {
+        "label": "Subject",
+        "placeholder": "Select a subject..."
+      },
+      "day": {
+        "label": "Day"
+      },
+      "startTime": {
+        "label": "Start Time"
+      },
+      "endTime": {
+        "label": "End Time"
+      },
+      "room": {
+        "label": "Room",
+        "optional": "optional",
+        "placeholder": "e.g. Room 204, Lab B..."
+      }
+    },
+    "days": {
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat",
+      "sunday": "Sun"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "addSlot": "Add Slot",
+      "adding": "Adding..."
+    },
+    "messages": {
+      "success": "Timetable slot added",
+      "error": "Failed to add slot"
+    },
+  
+    "session": {
+      "delete_title": "Delete session",
+      "no_teacher": "No teacher"
+    },
+    "empty_day": "No sessions",
+    "breadcrumb": "Timetable",
+    "header": {
+      "title": "Weekly Timetable",
+      "subtitle": "Manage class sessions for each day of the week",
+      "add_session": "Add Session"
+    },
+    "classroom_selector": {
+      "title": "Select Classroom",
+      "subtitle": "View the weekly schedule for a classroom",
+      "placeholder": "Select a classroom…",
+      "sessions_count_one": "{{count}} session",
+      "sessions_count_other": "{{count}} sessions"
+    },
+    "no_classroom_selected": {
+      "title": "No classroom selected",
+      "subtitle": "Select a classroom above to view and manage its timetable."
+    },
+    "day_strip": {
+      "sessions_count_one": "{{count}} session",
+      "sessions_count_other": "{{count}} sessions",
+      "free": "free"
+    }
+  
+}

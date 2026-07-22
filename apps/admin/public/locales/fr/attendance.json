@@ -1,0 +1,27 @@
+{
+  "empty_state": {
+      "title": "Aucune donnée à afficher",
+      "subtitle": "Sélectionnez une classe, une séance et une semaine sur la gauche pour charger les registres de présence."
+    },
+    "error_state": {
+      "title": "Échec du chargement des présences",
+      "subtitle": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "no_data_state": {
+      "title": "Aucun registre de présence",
+      "subtitle": "Aucun enregistrement trouvé pour cette séance et cette semaine."
+    },
+    "filters": {
+      "title": "Filtres",
+      "subtitle": "Sélectionnez une classe, une séance et une semaine pour charger les présences."
+    },
+    "edit_dialog": {
+      "title": "Modifier les présences",
+      "description": "Mettez à jour le statut de présence et ajoutez des notes pour la semaine {{week}}."
+    },
+    "dialog": {
+      "save": "Enregistrer les présences",
+      "saving": "Enregistrement...",
+      "cancel": "Annuler"
+    }
+}

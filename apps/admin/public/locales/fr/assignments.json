@@ -1,0 +1,36 @@
+{
+
+    "pageTitle": "Affectations",
+    "hoursPerWeekShort": "{{count}}h/sem",
+    "selector": {
+      "label": "Classe",
+      "description": "Choisissez une classe pour voir l'affectation des matières",
+      "placeholder": "Sélectionner une classe..."
+    },
+    "stats": {
+      "subjects": "Matières",
+      "assigned": "Assignées",
+      "unassigned": "Non assignées"
+    },
+    "emptyStates": {
+      "noClassroom": {
+        "title": "Aucune classe sélectionnée",
+        "description": "Sélectionnez une classe ci-dessus pour afficher ses affectations"
+      },
+      "noSubjects": {
+        "title": "Aucune matière pour le moment",
+        "description": "Cette classe n'a pas encore de matières configurées"
+      },
+      "noTeacherAssigned": "Aucun enseignant assigné"
+    },
+    "status": {
+      "refreshing": "Actualisation..."
+    },
+    "accessibility": {
+      "changeTeacher": "Modifier l'enseignant pour"
+    },
+    "genders": {
+      "male": "Homme",
+      "female": "Femme"
+    }
+  }

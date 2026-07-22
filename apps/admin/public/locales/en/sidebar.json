@@ -1,0 +1,23 @@
+{
+  "routes": {
+    "dashboard": "Dashboard",
+    "overview": "Overview",
+    "stats": "Stats",
+    "staff": "Staff",
+    "teachers": "Teachers",
+    "parents": "Parents",
+    "students": "Students",
+    "classrooms": "Classrooms",
+    "assignments": "Assignments",
+    "timetable": "Timetable",
+    "exams": "Exams",
+    "attendance": "Attendance",
+    "extracurriculars": "Extracurriculars",
+    "teacher_comments": "Teacher Comments",
+    "homeworks": "Homeworks",
+    "calendar": "Calendar",
+    "feed": "Feed",
+    "settings": "Settings",
+    "profile": "Profile"
+  }
+}

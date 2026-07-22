@@ -1,0 +1,35 @@
+{
+  "mainCard": {
+    "title": "Devoirs à domicile",
+    "description": "Consulter et gérer les devoirs assignés aux élèves",
+    "addButton": "Ajouter un nouveau devoir"
+  },
+  "view": {
+    "title": "Détails du devoir",
+    "description": "Devoir partagé avec les élèves de cette classe.",
+    "untitled": "Devoir sans titre",
+    "notProvided": "Non renseigné",
+    "noTeacher": "Aucun enseignant assigné",
+    "teacherRole": "Enseignant",
+    "sections": {
+      "assignment": "Devoir",
+      "assignmentDescription": "Ce que l'enseignant a demandé à la classe de réaliser.",
+      "noContent": "Aucune instruction écrite n'a été fournie.",
+      "due": "A rendre pour le {{date}}",
+      "teacher": "Enseignant",
+      "teacherDescription": "L'enseignant qui a partagé ce devoir.",
+      "attachments": "Pièces jointes",
+      "attachedCount": "{{count}} fichier attaché",
+      "attachedCount_plural": "{{count}} fichiers attachés",
+      "noAttachments": "Aucune pièce jointe",
+      "image": "Image {{index}}",
+      "openDocument": "Ouvrir le document {{index}}",
+      "students": "Élèves",
+      "studentsDescription": "Élèves inscrits dans {{classroom}}.",
+      "viewRoster": "Voir la liste de la classe",
+      "loadingRoster": "Chargement de la liste de la classe...",
+      "noStudents": "Aucun élève n'est inscrit dans cette classe."
+    },
+    "close": "Fermer"
+  }
+}

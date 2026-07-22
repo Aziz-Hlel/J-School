@@ -12,10 +12,12 @@ import { createFeedReq, type CreateFeedReq } from '@repo/contracts/schemas/Feed/
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useSelectedRow } from '../context/selected-row-provider';
 
 const CreateFeed = () => {
+  const { t } = useTranslation(['feed']);
   const { handleCancel, dialogState } = useSelectedRow();
   const schoolId = useCurrentSchoolId();
 
@@ -47,22 +49,6 @@ const CreateFeed = () => {
 
   const dialogIsOpen = dialogState.openDialog === 'add';
 
-  // const defaultMedias = form.getValues('media').map(
-  //   (media): FileUploadItem => ({
-  //     id: media.id,
-  //     status: 'completed' as const,
-  //     serverId: media.id,
-  //     file: {
-  //       id: media.id,
-  //       name: '',
-  //       size: 0,
-  //       type: '',
-  //       url:media.
-  //     },
-  //     preview: '',
-  //   }),
-  // );
-
   const [uploadFiles, setUploadFiles] = useState<FileUploadItem[]>([]);
 
   const setMedia = () => {
@@ -75,19 +61,20 @@ const CreateFeed = () => {
   const onSubmit = async (data: CreateFeedReq) => {
     try {
       await mutateAsync({ schoolId, data });
-      toast.success(`Feed created successfully`);
+      toast.success(t('createModal.toast.success'));
     } catch {
-      toast.error(`Failed to create feed`);
+      toast.error(t('createModal.toast.error'));
     }
   };
+
   return (
     <Dialog open={dialogIsOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button>Create Feed</Button>
+        <Button>{t('createModal.trigger')}</Button>
       </DialogTrigger>
       <DialogContent className='scrollbar flex max-h-[calc(100dvh-4rem)] scrollbar-thumb-zinc-700 scrollbar-track-zinc-200 flex-col overflow-y-auto sm:max-w-106.25'>
         <DialogHeader>
-          <DialogTitle>Create a New Feed</DialogTitle>
+          <DialogTitle>{t('createModal.title')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
           <Controller
@@ -95,8 +82,13 @@ const CreateFeed = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={`title-input`}>Title</FieldLabel>
-                <Input {...field} id={`title-input`} aria-invalid={fieldState.invalid} placeholder='Title' />
+                <FieldLabel htmlFor='title-input'>{t('createModal.fields.title')}</FieldLabel>
+                <Input
+                  {...field}
+                  id='title-input'
+                  aria-invalid={fieldState.invalid}
+                  placeholder={t('createModal.fields.titlePlaceholder')}
+                />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -107,12 +99,12 @@ const CreateFeed = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={`description-input`}>Description</FieldLabel>
+                <FieldLabel htmlFor='description-input'>{t('createModal.fields.description')}</FieldLabel>
                 <Textarea
                   {...field}
-                  id={`description-input`}
+                  id='description-input'
                   aria-invalid={fieldState.invalid}
-                  placeholder='Description'
+                  placeholder={t('createModal.fields.descriptionPlaceholder')}
                 />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
@@ -123,10 +115,10 @@ const CreateFeed = () => {
 
           <DialogFooter className='pt-4'>
             <Button type='button' variant='outline' onClick={handleCancel}>
-              Cancel
+              {t('createModal.actions.cancel')}
             </Button>
             <Button type='submit' onClickCapture={setMedia} disabled={isPending}>
-              {isPending ? 'Creating...' : 'Create'}
+              {isPending ? t('createModal.actions.submitting') : t('createModal.actions.submit')}
             </Button>
           </DialogFooter>
         </form>

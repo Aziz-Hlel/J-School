@@ -1,0 +1,25 @@
+{
+  "mainCard": {
+    "title": "Feed",
+    "addButton": "Add Post"
+  },
+  "createModal": {
+    "trigger": "Create Feed",
+    "title": "Create a New Feed",
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "Title",
+      "description": "Description",
+      "descriptionPlaceholder": "Description"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "submit": "Create",
+      "submitting": "Creating..."
+    },
+    "toast": {
+      "success": "Feed created successfully",
+      "error": "Failed to create feed"
+    }
+  }
+}

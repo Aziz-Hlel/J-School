@@ -1,6 +1,5 @@
 import dayjs from '@/utils/dayjsConfig';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUp, ChevronsUpDown } from 'lucide-react';
 import type { TableRowType } from '../../core/types';
 import ActionsColumn from '../columns/ActionsColumn';
 import HeaderContainer from '../ContainerComp/HeaderContainer';
@@ -17,12 +16,11 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     }),
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Email </span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
+        <HeaderContainer
+          name='table.email'
+          column={column}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        />
       );
     },
     cell: ({ getValue }) => {
@@ -41,12 +39,11 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     accessorKey: 'firstName',
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>First Name</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
+        <HeaderContainer
+          name='table.firstName'
+          column={column}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        />
       );
     },
     cell: ({ getValue }) => {
@@ -62,12 +59,11 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     accessorKey: 'lastName',
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Last Name</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
+        <HeaderContainer
+          name='table.lastName'
+          column={column}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        />
       );
     },
     cell: ({ getValue }) => {
@@ -83,12 +79,11 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     accessorKey: 'phone',
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Phone</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
+        <HeaderContainer
+          name='table.phone'
+          column={column}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        />
       );
     },
     cell: ({ getValue }) => {
@@ -99,18 +94,16 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     enableSorting: true,
     enableHiding: true,
   },
-
   // {
   //   id: 'status',
   //   accessorKey: 'status',
   //   header: ({ column }) => {
   //     return (
-  //       <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-  //         <span>Status</span>
-  //         {column.getIsSorted() === 'asc' && <ArrowUp />}
-  //         {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-  //         {column.getIsSorted() === false && <ChevronsUpDown />}
-  //       </HeaderContainer>
+  //       <HeaderContainer
+  //         name='table.status'
+  //         column={column}
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+  //       />
   //     );
   //   },
   //   cell: ({ getValue }) => {
@@ -121,7 +114,6 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
   //       </RowContainer>
   //     );
   //   },
-
   //   enableSorting: true,
   //   enableHiding: true,
   // },
@@ -130,19 +122,17 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
   //   accessorKey: 'price',
   //   header: ({ column }) => {
   //     return (
-  //       <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-  //         <span>Price</span>
-  //         {column.getIsSorted() === 'asc' && <ArrowUp />}
-  //         {column.getIsSorted() === 'desc' && <ArrowUp className="rotate-180" />}
-  //         {column.getIsSorted() === false && <ChevronsUpDown />}
-  //       </HeaderContainer>
+  //       <HeaderContainer
+  //         name='table.price'
+  //         column={column}
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+  //       />
   //     );
   //   },
   //   cell: ({ getValue }) => {
   //     const price = getValue<string>();
   //     return <RowContainer className=" w-96 truncate whitespace-nowrap ">{price}</RowContainer>;
   //   },
-
   //   enableSorting: true,
   //   enableHiding: true,
   // },
@@ -150,12 +140,11 @@ const columnsRowsDefinition: ColumnDefCustom<TableRowType>[] = [
     accessorKey: 'createdAt',
     header: ({ column }) => {
       return (
-        <HeaderContainer onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          <span>Created At</span>
-          {column.getIsSorted() === 'asc' && <ArrowUp />}
-          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
-          {column.getIsSorted() === false && <ChevronsUpDown />}
-        </HeaderContainer>
+        <HeaderContainer
+          name='table.createdAt'
+          column={column}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        />
       );
     },
     cell: ({ getValue }) => {

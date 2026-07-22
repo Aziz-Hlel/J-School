@@ -1,4 +1,5 @@
 import { calendarService } from '@/api/service/calendarService';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,6 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import queryClient from '@/config/react-qeury';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,17 +20,13 @@ import { createCalendarReqSchema, type CreateCalendarReq } from '@repo/contracts
 import { useMutation } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-
-import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 
 const CALENDAR_SESSION_TYPES = ['PUBLIC_HOLIDAY', 'SCHOOL_HOLIDAY', 'TRIP', 'EVENT', 'OTHER'] as const;
 
 const AddCalendar = ({ children }: { children: ReactNode }) => {
+  const { t } = useTranslation(['calendrier']);
   const schoolId = useCurrentSchoolId();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,9 +60,9 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
   const onSubmit = async (data: CreateCalendarReq) => {
     try {
       await mutateAsync(data);
-      toast.success('Calendar added successfully');
+      toast.success(t('addModal.toast.success'));
     } catch {
-      toast.error('Failed to add calendar');
+      toast.error(t('addModal.toast.error'));
     }
   };
 
@@ -70,8 +71,10 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='rounded-2xl sm:max-w-106.25'>
         <DialogHeader>
-          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>Add calendar</DialogTitle>
-          <DialogDescription>Add a new calendar for this school.</DialogDescription>
+          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>
+            {t('addModal.title')}
+          </DialogTitle>
+          <DialogDescription>{t('addModal.description')}</DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-6 py-4'>
           <FieldGroup>
@@ -81,8 +84,8 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor='title-input'>Title</FieldLabel>
-                  <Input {...field} id='title-input' placeholder='Calendar event title' />
+                  <FieldLabel htmlFor='title-input'>{t('addModal.fields.title')}</FieldLabel>
+                  <Input {...field} id='title-input' placeholder={t('addModal.fields.titlePlaceholder')} />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -94,8 +97,13 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor='description-input'>Description</FieldLabel>
-                  <Textarea {...field} value={field.value ?? ''} id='description-input' placeholder='Description' />
+                  <FieldLabel htmlFor='description-input'>{t('addModal.fields.description')}</FieldLabel>
+                  <Textarea
+                    {...field}
+                    value={field.value ?? ''}
+                    id='description-input'
+                    placeholder={t('addModal.fields.descriptionPlaceholder')}
+                  />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -107,10 +115,10 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor='type-input'>Type</FieldLabel>
+                  <FieldLabel htmlFor='type-input'>{t('addModal.fields.type')}</FieldLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger id='type-input'>
-                      <SelectValue placeholder='Select event type' />
+                      <SelectValue placeholder={t('addModal.fields.typePlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
                       {CALENDAR_SESSION_TYPES.map((type) => (
@@ -132,7 +140,7 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='startDate-input'>Start Date</FieldLabel>
+                    <FieldLabel htmlFor='startDate-input'>{t('addModal.fields.startDate')}</FieldLabel>
                     <Input {...field} type='date' id='startDate-input' />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
@@ -144,7 +152,7 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='endDate-input'>End Date</FieldLabel>
+                    <FieldLabel htmlFor='endDate-input'>{t('addModal.fields.endDate')}</FieldLabel>
                     <Input {...field} type='date' id='endDate-input' />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
@@ -159,7 +167,7 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='startTime-input'>Start Time</FieldLabel>
+                    <FieldLabel htmlFor='startTime-input'>{t('addModal.fields.startTime')}</FieldLabel>
                     <Input
                       {...field}
                       value={field.value ?? ''}
@@ -177,7 +185,7 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='endTime-input'>End Time</FieldLabel>
+                    <FieldLabel htmlFor='endTime-input'>{t('addModal.fields.endTime')}</FieldLabel>
                     <Input
                       {...field}
                       value={field.value ?? ''}
@@ -202,10 +210,10 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
                 >
                   <div className='space-y-0.5'>
                     <FieldLabel htmlFor='sendNotification-input' className='text-sm font-medium'>
-                      Send Notification
+                      {t('addModal.fields.sendNotification')}
                     </FieldLabel>
                     <p className='text-xs text-slate-500 dark:text-slate-400'>
-                      Notify parents and staff about this event.
+                      {t('addModal.fields.sendNotificationHint')}
                     </p>
                   </div>
                   <input
@@ -222,10 +230,10 @@ const AddCalendar = ({ children }: { children: ReactNode }) => {
 
           <DialogFooter className='gap-2 pt-4 sm:gap-0'>
             <Button type='button' variant='outline' onClick={() => setIsOpen(false)}>
-              Cancel
+              {t('addModal.actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
-              {isPending ? 'Saving...' : 'Add Calendar'}
+              {isPending ? t('addModal.actions.submitting') : t('addModal.actions.submit')}
             </Button>
           </DialogFooter>
         </form>

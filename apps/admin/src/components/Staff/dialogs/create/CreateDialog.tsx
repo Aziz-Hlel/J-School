@@ -10,6 +10,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next'; // 1. Import du hook i18n
 import { useSelectedRow } from '../../context/selected-row-provider';
 
 import { ApiError } from '@/api/ApiError';
@@ -26,6 +27,7 @@ import { staffRoles } from '@repo/contracts/types/enums/meta/userRoleMeta';
 import { toast } from 'sonner';
 
 const CreateDialog = () => {
+  const { t } = useTranslation(['staff', 'enums']); // 2. Initialisation
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
@@ -54,13 +56,13 @@ const CreateDialog = () => {
   const onSubmit: SubmitHandler<CreateStaffRequest> = async (data) => {
     try {
       await mutateAsync({ data, schoolId });
-      toast.success(`Staff created successfully`);
+      toast.success(t('staff:create.success_toast'));
     } catch (error) {
       if (error instanceof ApiError && error.status === 409) {
-        form.setError('email', { message: 'Email already exists' });
+        form.setError('email', { message: t('staff:create.errors.email_exists') });
         return;
       }
-      toast.error(`Failed to create staff`);
+      toast.error(t('staff:create.failed_toast'));
     }
   };
 
@@ -71,8 +73,8 @@ const CreateDialog = () => {
       <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-120'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle>Create new staff</DialogTitle>
-            <DialogDescription>Add a new staff member to your school</DialogDescription>
+            <DialogTitle>{t('staff:create.create_title')}</DialogTitle>
+            <DialogDescription>{t('staff:create.create_description')}</DialogDescription>
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
@@ -83,13 +85,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
+                      <FieldLabel htmlFor='firstName'>{t('staff:create.fields.first_name')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? undefined}
                         id='firstName'
                         aria-invalid={fieldState.invalid}
-                        placeholder='First Name'
+                        placeholder={t('staff:create.fields.first_name')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -100,13 +102,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
+                      <FieldLabel htmlFor='lastName'>{t('staff:create.fields.last_name')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? undefined}
                         id='lastName'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Last Name'
+                        placeholder={t('staff:create.fields.last_name')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -121,8 +123,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='gender'>Gender</FieldLabel>
-                      <SelectForm field={field} options={Gender} placeholder='Select gender' label='Gender' />
+                      <FieldLabel htmlFor='gender'>{t('staff:create.fields.gender')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={Gender}
+                        placeholder={t('staff:create.fields.gender_placeholder')}
+                        label={t('staff:create.fields.gender')}
+                      />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}
@@ -132,8 +139,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='role'>Role</FieldLabel>
-                      <SelectForm field={field} options={staffRoles} placeholder='Select role' label='Role' />
+                      <FieldLabel htmlFor='role'>{t('staff:create.fields.role')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={staffRoles}
+                        placeholder={t('staff:create.fields.role_placeholder')}
+                        label={t('staff:create.fields.role')}
+                      />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}
@@ -147,14 +159,14 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='email'>Email</FieldLabel>
+                      <FieldLabel htmlFor='email'>{t('staff:create.fields.email')}</FieldLabel>
                       <Input
                         {...field}
                         type='email'
                         value={field.value ?? undefined}
                         id='email'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Email Address'
+                        placeholder={t('staff:create.fields.email_placeholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -165,14 +177,14 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='phone'>Phone</FieldLabel>
+                      <FieldLabel htmlFor='phone'>{t('staff:create.fields.phone')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(e.target.value || null)}
                         id='phone'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Phone Number'
+                        placeholder={t('staff:create.fields.phone_placeholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -187,7 +199,7 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='dateOfBirth'>Date of Birth</FieldLabel>
+                      <FieldLabel htmlFor='dateOfBirth'>{t('staff:create.fields.dob')}</FieldLabel>
                       <Input
                         type='date'
                         {...field}
@@ -206,14 +218,14 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='cin'>CIN</FieldLabel>
+                      <FieldLabel htmlFor='cin'>{t('staff:create.fields.cin')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         onChange={(e) => field.onChange(e.target.value || null)}
                         id='cin'
                         aria-invalid={fieldState.invalid}
-                        placeholder='CIN'
+                        placeholder={t('staff:create.fields.cin')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -227,14 +239,14 @@ const CreateDialog = () => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='address'>Address</FieldLabel>
+                    <FieldLabel htmlFor='address'>{t('staff:create.fields.address')}</FieldLabel>
                     <Input
                       {...field}
                       value={field.value ?? ''}
                       onChange={(e) => field.onChange(e.target.value || null)}
                       id='address'
                       aria-invalid={fieldState.invalid}
-                      placeholder='Address'
+                      placeholder={t('staff:create.fields.address')}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
@@ -247,7 +259,7 @@ const CreateDialog = () => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='password'>Password</FieldLabel>
+                    <FieldLabel htmlFor='password'>{t('staff:create.fields.password')}</FieldLabel>
                     <Input
                       {...field}
                       type='password'
@@ -255,7 +267,7 @@ const CreateDialog = () => {
                       onChange={(e) => field.onChange(e.target.value || null)}
                       id='password'
                       aria-invalid={fieldState.invalid}
-                      placeholder='Password'
+                      placeholder={t('staff:create.fields.password')}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
@@ -266,11 +278,11 @@ const CreateDialog = () => {
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='outline' onClick={handleCancel}>
-                Cancel
+                {t('staff:create.actions.cancel')}
               </Button>
             </DialogClose>
             <Button type='submit' className='w-28' disabled={isPending}>
-              {isPending ? <Spinner /> : <span>Create Staff</span>}
+              {isPending ? <Spinner /> : <span>{t('staff:create.actions.submit')}</span>}
             </Button>
           </DialogFooter>
         </form>

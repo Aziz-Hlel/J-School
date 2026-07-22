@@ -10,6 +10,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useSelectedRow } from '../../context/selected-row-provider';
 
 import { extraCurricularService } from '@/api/service/extracurricularsService';
@@ -30,9 +31,11 @@ import { toast } from 'sonner';
 import { TableData } from '../../core/core';
 
 const CreateDialog = () => {
+  const { t } = useTranslation(['extracurriculars']);
   const { handleCancel, dialogState } = useSelectedRow();
   const queryClient = useQueryClient();
   const schoolId = useCurrentSchoolId();
+
   const { data: teachersData } = useQuery({
     queryKey: ['teachers', 'select', schoolId],
     queryFn: () => schoolService.selectTeachers({ schoolId }),
@@ -76,9 +79,9 @@ const CreateDialog = () => {
   const onSubmit: SubmitHandler<CreateExtraCurricularReq> = async (data) => {
     try {
       await mutateAsync({ data, schoolId });
-      toast.success('Extracurricular created successfully');
+      toast.success(t('extracurriculars:create_dialog.toast_success'));
     } catch {
-      toast.error('Failed to create extracurricular');
+      toast.error(t('extracurriculars:create_dialog.toast_error'));
     }
   };
 
@@ -90,8 +93,8 @@ const CreateDialog = () => {
       <DialogContent className='flex h-[calc(100dvh-4rem)] flex-col overflow-hidden sm:max-w-120'>
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex h-full flex-col space-y-6'>
           <DialogHeader>
-            <DialogTitle>Create new extracurricular</DialogTitle>
-            <DialogDescription>Add a new extracurricular session to your school</DialogDescription>
+            <DialogTitle>{t('extracurriculars:create_dialog.title')}</DialogTitle>
+            <DialogDescription>{t('extracurriculars:create_dialog.description')}</DialogDescription>
           </DialogHeader>
           <div className='min-h-0 flex-1 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent overflow-y-auto overscroll-contain pr-2 pb-6 hover:scrollbar-thumb-neutral-400'>
             <FieldGroup>
@@ -102,13 +105,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='title-en'>Title (EN)</FieldLabel>
+                      <FieldLabel htmlFor='title-en'>{t('extracurriculars:create_dialog.title_en')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         id='title-en'
                         aria-invalid={fieldState.invalid}
-                        placeholder='English title'
+                        placeholder={t('extracurriculars:create_dialog.title_en_placeholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -119,13 +122,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='title-fr'>Title (FR)</FieldLabel>
+                      <FieldLabel htmlFor='title-fr'>{t('extracurriculars:create_dialog.title_fr')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         id='title-fr'
                         aria-invalid={fieldState.invalid}
-                        placeholder='French title'
+                        placeholder={t('extracurriculars:create_dialog.title_fr_placeholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -136,13 +139,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='title-ar'>Title (AR)</FieldLabel>
+                      <FieldLabel htmlFor='title-ar'>{t('extracurriculars:create_dialog.title_ar')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
                         id='title-ar'
                         aria-invalid={fieldState.invalid}
-                        placeholder='Arabic title'
+                        placeholder={t('extracurriculars:create_dialog.title_ar_placeholder')}
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -157,8 +160,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='type'>Session type</FieldLabel>
-                      <SelectForm field={field} options={SessionType} placeholder='Select type' label='Session type' />
+                      <FieldLabel htmlFor='type'>{t('extracurriculars:create_dialog.session_type')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={SessionType}
+                        placeholder={t('extracurriculars:create_dialog.session_type_placeholder')}
+                        label={t('extracurriculars:create_dialog.session_type')}
+                      />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}
@@ -168,16 +176,16 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='teacherId'>Teacher</FieldLabel>
+                      <FieldLabel htmlFor='teacherId'>{t('extracurriculars:create_dialog.teacher')}</FieldLabel>
                       <Select
                         value={field.value ?? 'none'}
                         onValueChange={(value) => field.onChange(value === 'none' ? null : value)}
                       >
                         <SelectTrigger id='teacherId'>
-                          <SelectValue placeholder='Select teacher' />
+                          <SelectValue placeholder={t('extracurriculars:create_dialog.teacher_placeholder')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value='none'>No teacher</SelectItem>
+                          <SelectItem value='none'>{t('extracurriculars:create_dialog.no_teacher')}</SelectItem>
                           {teachers.map((teacher) => (
                             <SelectItem key={teacher.id} value={teacher.id}>
                               {teacher.firstName} {teacher.lastName}
@@ -198,7 +206,7 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='startTime'>Start time</FieldLabel>
+                      <FieldLabel htmlFor='startTime'>{t('extracurriculars:create_dialog.start_time')}</FieldLabel>
                       <Input
                         {...field}
                         type='time'
@@ -215,7 +223,7 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='endTime'>End time</FieldLabel>
+                      <FieldLabel htmlFor='endTime'>{t('extracurriculars:create_dialog.end_time')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
@@ -236,8 +244,13 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='dayOfWeek'>Day of week</FieldLabel>
-                      <SelectForm field={field} options={DayOfWeek} placeholder='Select day' label='Day of week' />
+                      <FieldLabel htmlFor='dayOfWeek'>{t('extracurriculars:create_dialog.day_of_week')}</FieldLabel>
+                      <SelectForm
+                        field={field}
+                        options={DayOfWeek}
+                        placeholder={t('extracurriculars:create_dialog.day_of_week_placeholder')}
+                        label={t('extracurriculars:create_dialog.day_of_week')}
+                      />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}
@@ -248,7 +261,7 @@ const CreateDialog = () => {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='date'>Date</FieldLabel>
+                      <FieldLabel htmlFor='date'>{t('extracurriculars:create_dialog.date')}</FieldLabel>
                       <Input
                         {...field}
                         value={field.value ?? ''}
@@ -268,11 +281,11 @@ const CreateDialog = () => {
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='outline' onClick={handleCancel}>
-                Cancel
+                {t('extracurriculars:create_dialog.cancel')}
               </Button>
             </DialogClose>
             <Button type='submit' className='w-28' disabled={isPending}>
-              {isPending ? <Spinner /> : <span>Create</span>}
+              {isPending ? <Spinner /> : <span>{t('extracurriculars:create_dialog.submit')}</span>}
             </Button>
           </DialogFooter>
         </form>

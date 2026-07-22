@@ -1,6 +1,17 @@
 import { cn } from '@/lib/utils';
+import type { Column } from '@tanstack/react-table';
+import type { ParseKeys } from 'i18next';
+import { ArrowUp, ChevronsUpDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import type { TableRowType } from '../../core/types';
 
-const HeaderContainer: React.FC<React.ComponentProps<'div'>> = ({ children, ...props }) => {
+type HeaderContainerProps<TValue> = React.ComponentProps<'div'> & {
+  column: Column<TableRowType, TValue>;
+  name: ParseKeys<'staff'>;
+};
+
+const HeaderContainer = <TValue,>({ name, column, ...props }: HeaderContainerProps<TValue>) => {
+  const { t } = useTranslation(['staff']);
   return (
     <div
       className={cn(
@@ -9,7 +20,14 @@ const HeaderContainer: React.FC<React.ComponentProps<'div'>> = ({ children, ...p
       )}
       {...props}
     >
-      {children}
+      <span>{t(name)}</span>
+      {column.getCanSort() && (
+        <>
+          {column.getIsSorted() === 'asc' && <ArrowUp />}
+          {column.getIsSorted() === 'desc' && <ArrowUp className='rotate-180' />}
+          {column.getIsSorted() === false && <ChevronsUpDown />}
+        </>
+      )}
     </div>
   );
 };

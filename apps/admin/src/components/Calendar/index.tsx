@@ -30,6 +30,7 @@ import {
   getNextMonthRange,
   getPreviousMonthRange,
 } from './helpers/getMonthIntervall';
+import { useTranslation } from 'react-i18next';
 
 // ─── Type colour config ───────────────────────────────────────────────────────
 type CalendarSessionType = 'EVENT' | 'OTHER' | 'PUBLIC_HOLIDAY' | 'SCHOOL_HOLIDAY' | 'TRIP';
@@ -309,7 +310,10 @@ const CalendarIndex = () => {
 
   // ── Displayed events panel (selected day or full month) ──
   const panelEvents = selectedDay ? selectedDayEvents : sortedEvents;
-  const panelTitle = selectedDay ? `Events on ${selectedDay.format('D MMMM')}` : `All events – ${monthLabel}`;
+  const { t } = useTranslation(['calendrier']);
+  const panelTitle = selectedDay
+    ? t('panel.eventsOnDay', { date: selectedDay.format('D MMMM') })
+    : t('panel.allEventsForMonth', { month: monthLabel });
 
   return (
     <TooltipProvider>
@@ -321,8 +325,8 @@ const CalendarIndex = () => {
               <CalendarDays className='h-5 w-5' />
             </div>
             <div>
-              <h1 className='text-foreground text-xl font-bold'>School Calendar</h1>
-              <p className='text-muted-foreground text-sm'>Manage events, holidays and trips</p>
+              <h1 className='text-foreground text-xl font-bold'>{t('header.title')}</h1>
+              <p className='text-muted-foreground text-sm'>{t('header.description')}</p>
             </div>
           </div>
 
@@ -330,7 +334,7 @@ const CalendarIndex = () => {
             <AddCalendar>
               <Button id='add-calendar-btn' className='gap-2 shadow-sm'>
                 <Plus className='h-4 w-4' />
-                Add Event
+                {t('header.addEvent')}
               </Button>
             </AddCalendar>
           )}
@@ -457,20 +461,20 @@ const CalendarIndex = () => {
             ) : isError ? (
               <div className='flex flex-col items-center gap-2 py-10 text-center'>
                 <CalendarDays className='text-muted-foreground/40 h-8 w-8' />
-                <p className='text-muted-foreground text-sm'>Failed to load events.</p>
+                <p className='text-muted-foreground text-sm'>{t('panel.errorLoading')}</p>
               </div>
             ) : panelEvents.length === 0 ? (
               <div className='flex flex-col items-center gap-2 py-10 text-center'>
                 <CalendarDays className='text-muted-foreground/40 h-8 w-8' />
-                <p className='text-muted-foreground text-sm font-medium'>No events</p>
+                <p className='text-muted-foreground text-sm font-medium'>{t('panel.noEvents')}</p>
                 <p className='text-muted-foreground/70 text-xs'>
-                  {selectedDay ? 'Nothing scheduled for this day.' : 'No events this month. Add one to get started.'}
+                  {selectedDay ? t('panel.noEventsForDay') : t('panel.noEventsForMonth')}{' '}
                 </p>
                 {isAdmin && (
                   <AddCalendar>
                     <Button variant='outline' size='sm' className='mt-1 gap-1.5'>
                       <Plus className='h-3.5 w-3.5' />
-                      Add Event
+                      {t('header.addEvent')}
                     </Button>
                   </AddCalendar>
                 )}

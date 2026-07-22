@@ -1,0 +1,23 @@
+{
+  "routes": {
+    "dashboard": "Tableau de bord",
+    "overview": "Aperçu",
+    "stats": "Statistiques",
+    "staff": "Personnel",
+    "teachers": "Enseignants",
+    "parents": "Parents",
+    "students": "Élèves",
+    "classrooms": "Salles de classe",
+    "assignments": "Devoirs & Affectations",
+    "timetable": "Emploi du temps",
+    "exams": "Examens",
+    "attendance": "Présences",
+    "extracurriculars": "Activités extra-scolaires",
+    "teacher_comments": "Remarques-enseignants",
+    "homeworks": "Cahier de texte",
+    "calendar": "Calendrier",
+    "feed": "Fil d'actualité",
+    "settings": "Paramètres",
+    "profile": "Profil"
+  }
+}

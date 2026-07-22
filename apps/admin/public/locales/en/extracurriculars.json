@@ -1,0 +1,60 @@
+{
+  "main": {
+    "title": "Extracurricular Activities",
+    "description": "Manage and track extracurricular activities for students and sessions.",
+    "add_button": "Add Extracurricular"
+  },
+  "empty_state": {
+    "title": "No data to display",
+    "subtitle": "Select a classroom, session and week on the left to load extracurricular records."
+  },
+  "no_data_state": {
+    "title": "No extracurricular records",
+    "subtitle": "No records found for this session and week."
+  },
+  "error_state": {
+    "title": "Failed to load extracurriculars",
+    "subtitle": "Something went wrong. Please try again."
+  },
+  "filters": {
+    "title": "Filters",
+    "subtitle": "Select a classroom, session and week to load extracurriculars."
+  },
+  "edit_dialog": {
+    "title": "Edit Extracurriculars",
+    "description": "Update the extracurricular status and add notes for week {{week}}.",
+    "save": "Save Extracurriculars",
+    "saving": "Saving..."
+  },
+
+  "create_dialog": {
+    "title": "Create new extracurricular",
+    "description": "Add a new extracurricular session to your school",
+    "title_en": "Title (EN)",
+    "title_en_placeholder": "English title",
+    "title_fr": "Title (FR)",
+    "title_fr_placeholder": "French title",
+    "title_ar": "Title (AR)",
+    "title_ar_placeholder": "Arabic title",
+    "session_type": "Session type",
+    "session_type_placeholder": "Select type",
+    "teacher": "Teacher",
+    "teacher_placeholder": "Select teacher",
+    "no_teacher": "No teacher",
+    "start_time": "Start time",
+    "end_time": "End time",
+    "day_of_week": "Day of week",
+    "day_of_week_placeholder": "Select day",
+    "date": "Date",
+    "submit": "Create",
+    "toast_success": "Extracurricular created successfully",
+    "toast_error": "Failed to create extracurricular",
+    "cancel": "Cancel"
+  },
+  "dialog": {
+    "title": "Edit extracurricular",
+    "description": "Update the details of the extracurricular session",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes"
+  }
+}

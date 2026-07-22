@@ -1,0 +1,69 @@
+{
+    "add": {
+      "title": "Schedule Exam",
+      "description": "Assign an exam to a specific day and time slot.",
+      "date_section_title": "Date & Time",
+      "toast_success": "Exam schedule added",
+      "toast_error": "Failed to add exam schedule",
+      "fields": {
+        "exam_label": "Exam",
+        "exam_placeholder": "Select an exam",
+        "no_exams": "No exams available",
+        "day_label": "Day",
+        "start_time_label": "Start Time",
+        "end_time_label": "End Time"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "submit": "Schedule Exam",
+        "saving": "Saving..."
+      }
+    },
+    "header": {
+      "title": "Exam Schedule",
+      "subtitle": "View and manage all scheduled exams per classroom",
+      "add_exam": "Add Exam"
+    },
+    "classroom_selector": {
+      "title": "Select Classroom",
+      "subtitle": "View the exam schedule for a classroom",
+      "exams_count_one": "exam",
+      "exams_count_other": "exams"
+    },
+    "no_classroom_selected": {
+      "title": "No classroom selected",
+      "subtitle": "Choose a classroom above to view its exam schedule."
+    },
+    "headeer": {
+      "add_exam": "Add Exam"
+    },
+    "empty_state": {
+      "title": "No exams scheduled",
+      "subtitle": "This classroom has no exams yet. Add one to get started."
+    },
+    "edit": {
+    "title": "Edit Exam Schedule",
+    "description": "Update the date and time for this exam."
+  },
+  
+    "unassigned": "Unassigned",
+    "sections": {
+      "exam_details": "Exam Details",
+      "date_time": "Date & Time"
+    },
+    "fields": {
+      "name": "Name",
+      "subject": "Subject",
+      "teacher": "Teacher",
+      "day": "Day",
+      "start_time": "Start Time",
+      "end_time": "End Time"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "saving": "Saving..."
+    },
+    "title": "Exam Schedule"
+  }
+  

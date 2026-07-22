@@ -1,0 +1,73 @@
+{
+  "addModal": {
+    "title": "Ajouter un créneau",
+    "description": "Ajoutez un nouveau créneau à l'emploi du temps de la classe."
+  },
+  "fields": {
+    "subject": {
+      "label": "Matière",
+      "placeholder": "Sélectionner une matière..."
+    },
+    "day": {
+      "label": "Jour"
+    },
+    "startTime": {
+      "label": "Heure de début"
+    },
+    "endTime": {
+      "label": "Heure de fin"
+    },
+    "room": {
+      "label": "Salle",
+      "optional": "optionnel",
+      "placeholder": "ex: Salle 204, Labo B..."
+    }
+  },
+  "days": {
+    "monday": "Lun",
+    "tuesday": "Mar",
+    "wednesday": "Mer",
+    "thursday": "Jeu",
+    "friday": "Ven",
+    "saturday": "Sam",
+    "sunday": "Dim"
+  },
+  "actions": {
+    "cancel": "Annuler",
+    "addSlot": "Ajouter le créneau",
+    "adding": "Ajout..."
+  },
+  "messages": {
+    "success": "Créneau ajouté à l'emploi du temps",
+    "error": "Échec de l'ajout du créneau"
+  },
+
+  "session": {
+    "delete_title": "Supprimer la séance",
+    "no_teacher": "Aucun enseignant"
+  },
+  "empty_day": "Aucune séance",
+  "breadcrumb": "Emploi du temps",
+  "header": {
+    "title": "Emploi du temps hebdomadaire",
+    "subtitle": "Gérer les séances de cours pour chaque jour de la semaine",
+    "add_session": "Ajouter une séance"
+  },
+  "classroom_selector": {
+    "title": "Sélectionner une classe",
+    "subtitle": "Consulter l'emploi du temps hebdomadaire d'une classe",
+    "placeholder": "Sélectionner une classe…",
+    "sessions_count_one": "{{count}} séance",
+    "sessions_count_other": "{{count}} séances"
+  },
+  "no_classroom_selected": {
+    "title": "Aucune classe sélectionnée",
+    "subtitle": "Sélectionnez une classe ci-dessus pour consulter et gérer son emploi du temps."
+  },
+  "day_strip": {
+    "sessions_count_one": "{{count}} séance",
+    "sessions_count_other": "{{count}} séances",
+    "free": "libre"
+  }
+
+}

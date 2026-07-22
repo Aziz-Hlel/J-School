@@ -12,6 +12,7 @@ import type { ClassroomExamScheduleResponse } from '@repo/contracts/schemas/clas
 import { useQuery } from '@tanstack/react-query';
 import { BookOpen, CalendarDays, Clock, Pencil, Plus, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import AddScheduleExam from './add-scheduleExam';
 import DeleteScheduleExam from './delete-scheduleExam';
 import EditExamSchedule from './edit-scheduleExam';
@@ -191,6 +192,7 @@ const ExamCard = ({ exam, onEdit, onDelete }: ExamCardProps) => {
 };
 
 const AdminExamScheduleOverview = () => {
+  const { t } = useTranslation(['exam']);
   const schoolId = useCurrentSchoolId();
 
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -236,14 +238,13 @@ const AdminExamScheduleOverview = () => {
 
   return (
     <div className='bg-background min-h-screen'>
-      <BreadcrumbHeader breadcrumbs={[{ title: 'Exam Schedule', href: '/exam-schedule' }]} />
-
+      <BreadcrumbHeader breadcrumbs={[{ title: t('exam:title'), href: '/exam-schedule' }]} />
       <div className='mx-auto w-full max-w-7xl space-y-6 p-4 md:p-6'>
         {/* ── Top bar ── */}
         <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <h1 className='text-foreground text-xl font-bold tracking-tight'>Exam Schedule</h1>
-            <p className='text-muted-foreground mt-0.5 text-sm'>View and manage all scheduled exams per classroom</p>
+            <h1 className='text-foreground text-xl font-bold tracking-tight'>{t('exam:header.title')}</h1>
+            <p className='text-muted-foreground mt-0.5 text-sm'>{t('exam:header.subtitle')}</p>
           </div>
 
           {classroomId && (
@@ -252,7 +253,7 @@ const AdminExamScheduleOverview = () => {
               className='gap-2 rounded-xl bg-indigo-600 text-white shadow-sm hover:bg-indigo-700'
             >
               <Plus className='h-4 w-4' />
-              Add Exam
+              {t('exam:header.add_exam')}
             </Button>
           )}
         </div>
@@ -266,15 +267,18 @@ const AdminExamScheduleOverview = () => {
                   <CalendarDays className='h-4 w-4 text-indigo-600 dark:text-indigo-400' />
                 </div>
                 <div>
-                  <p className='text-sm font-semibold'>Select Classroom</p>
-                  <p className='text-muted-foreground text-xs'>View the exam schedule for a classroom</p>
+                  <p className='text-sm font-semibold'>{t('exam:classroom_selector.title')}</p>
+                  <p className='text-muted-foreground text-xs'>{t('exam:classroom_selector.subtitle')}</p>
                 </div>
               </div>
 
               <div className='flex items-center gap-3'>
                 {examsSchedules && (
                   <Badge variant='secondary' className='shrink-0 gap-1 rounded-full text-xs'>
-                    <span className='font-bold'>{examsSchedules.length}</span> exams
+                    <span className='font-bold'>{examsSchedules.length}</span>{' '}
+                    {examsSchedules.length === 1
+                      ? t('exam:classroom_selector.exams_count_one')
+                      : t('exam:classroom_selector.exams_count_other')}
                   </Badge>
                 )}
                 <div className='w-full sm:w-72'>
@@ -310,8 +314,8 @@ const AdminExamScheduleOverview = () => {
             <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/40'>
               <CalendarDays className='h-8 w-8 text-indigo-400' />
             </div>
-            <p className='text-foreground text-base font-semibold'>No classroom selected</p>
-            <p className='text-muted-foreground mt-1 text-sm'>Choose a classroom above to view its exam schedule.</p>
+            <p className='text-foreground text-base font-semibold'>{t('exam:no_classroom_selected.title')}</p>
+            <p className='text-muted-foreground mt-1 text-sm'>{t('exam:no_classroom_selected.subtitle')}</p>
           </div>
         ) : isExamsScheduleLoading ? (
           <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
@@ -336,16 +340,14 @@ const AdminExamScheduleOverview = () => {
             <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/40'>
               <CalendarDays className='h-8 w-8 text-amber-400' />
             </div>
-            <p className='text-foreground text-base font-semibold'>No exams scheduled</p>
-            <p className='text-muted-foreground mt-1 text-sm'>
-              This classroom has no exams yet. Add one to get started.
-            </p>
+            <p className='text-foreground text-base font-semibold'>{t('exam:empty_state.title')}</p>
+            <p className='text-muted-foreground mt-1 text-sm'>{t('exam:empty_state.subtitle')}</p>
             <Button
               onClick={() => setIsAddOpen(true)}
               className='mt-5 gap-2 rounded-xl bg-indigo-600 text-white shadow-sm hover:bg-indigo-700'
             >
               <Plus className='h-4 w-4' />
-              Add Exam
+              {t('exam:headeer.add_exam')}
             </Button>
           </div>
         ) : (

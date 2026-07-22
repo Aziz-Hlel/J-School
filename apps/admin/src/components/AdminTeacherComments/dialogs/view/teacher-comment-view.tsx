@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { TeacherCommentsResponse } from '@repo/contracts/schemas/TeacherComments/response';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const TeacherCommentView = ({
   teacherComment,
@@ -23,14 +24,15 @@ const TeacherCommentView = ({
   children: React.ReactNode;
 }) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation(['comments']);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='rounded-2xl sm:max-w-106.25'>
         <DialogHeader>
-          <DialogTitle>Teacher Comment Details</DialogTitle>
-          <DialogDescription>View the details of the teacher's comment.</DialogDescription>
+          <DialogTitle>{t('comments:viewTitle')}</DialogTitle>
+          <DialogDescription>{t('comments:viewDescription')}</DialogDescription>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <Card>

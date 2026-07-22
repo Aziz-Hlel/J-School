@@ -1,0 +1,61 @@
+{
+  "uid": "UID",
+  "addForm": {
+    "title": "Add Student Information",
+    "description": "Add new student record.",
+    "fields": {
+      "firstNameEn": "First Name (EN)",
+      "firstNameAr": "First Name (AR)",
+      "lastNameEn": "Last Name (EN)",
+      "lastNameAr": "Last Name (AR)",
+      "dateOfBirth": "Date of Birth",
+      "gender": "Gender",
+      "status": "Status"
+    },
+    "placeholders": {
+      "firstNameEn": "First Name",
+      "firstNameAr": "First Name (AR)",
+      "lastNameEn": "Last Name",
+      "lastNameAr": "Last Name (AR)",
+      "gender": "Select gender",
+      "status": "Select status"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "submit": "Create Student Record",
+      "creating": "Creating..."
+    },
+    "notifications": {
+      "success": "Student record created successfully",
+      "error": "Failed to create student record"
+    }
+  },
+  "changeClassroom": {
+    "title": "Switch Academic Classroom",
+    "description": "Select an academic grade division classroom for student allocation.",
+    "label": "Classrooms",
+    "placeholder": "Select a classroom",
+    "unassign": "None (Unassign Classroom)",
+    "actions": {
+      "cancel": "Cancel",
+      "submit": "Update Classroom"
+    }
+  },
+  "list": {
+    "title": "Students Management",
+    "description": "View, add, and manage the complete list of students registered in the institution.",
+    "actions": {
+      "add": "Add Student"
+    }
+  },
+"table": {
+    "uid": "UID",
+    "englishName": "Name (EN)",
+    "arabicName": "Name (AR)",
+    "class": "Classroom",
+    "status": "Status",
+    "gender": "Gender",
+    "createdAt": "Registration Date",
+    "notAvailable": "N/A"
+  }
+}

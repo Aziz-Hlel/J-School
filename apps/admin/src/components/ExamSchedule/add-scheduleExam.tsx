@@ -10,6 +10,7 @@ import {
 } from '@repo/contracts/schemas/examSchedule/createExamScheduleRequest';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,9 @@ const AddScheduleExam = ({
   setIsOpen: (open: boolean) => void;
   examsSchedules: ClassroomExamScheduleResponse[];
 }) => {
+  const { t, i18n } = useTranslation(['exam']);
+  const currentLang = (i18n.language || 'en') as 'en' | 'fr' | 'ar';
+
   const schoolId = useCurrentSchoolId();
 
   const { data: allExamsData } = useQuery({
@@ -69,19 +73,20 @@ const AddScheduleExam = ({
   const onSubmit = async (data: CreateExamScheduleRequest) => {
     try {
       await mutateAsync({ schoolId, data });
-      toast.success('Exam schedule added');
+      toast.success(t('exam:add.toast_success'));
     } catch {
-      toast.error('Failed to add exam schedule');
+      toast.error(t('exam:add.toast_error'));
     }
   };
-  console.log(form.formState.errors);
 
   return (
     <Dialog open={true} onOpenChange={setIsOpen}>
       <DialogContent className='rounded-2xl sm:max-w-lg'>
         <DialogHeader>
-          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>Schedule Exam</DialogTitle>
-          <DialogDescription>Assign an exam to a specific day and time slot.</DialogDescription>
+          <DialogTitle className='text-xl font-bold text-slate-800 dark:text-slate-100'>
+            {t('exam:add.title')}
+          </DialogTitle>
+          <DialogDescription>{t('exam:add.description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-6 py-2'>
@@ -92,7 +97,7 @@ const AddScheduleExam = ({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor='examId-input'>Exam</FieldLabel>
+                  <FieldLabel htmlFor='examId-input'>{t('exam:add.fields.exam_label')}</FieldLabel>
                   <Select
                     onValueChange={(value) => {
                       field.onChange(value);
@@ -104,17 +109,17 @@ const AddScheduleExam = ({
                     value={field.value}
                   >
                     <SelectTrigger id='examId-input'>
-                      <SelectValue placeholder='Select an exam' />
+                      <SelectValue placeholder={t('exam:add.fields.exam_placeholder')} />
                     </SelectTrigger>
                     <SelectContent>
                       {availableExams.length === 0 ? (
                         <SelectItem value='__none__' disabled>
-                          No exams available
+                          {t('exam:add.fields.no_exams')}
                         </SelectItem>
                       ) : (
                         availableExams.map((exam) => (
                           <SelectItem key={exam.id} value={exam.id}>
-                            {exam.name.en}/{exam.name.ar}
+                            {exam.name[currentLang] || exam.name.en}
                           </SelectItem>
                         ))
                       )}
@@ -129,7 +134,9 @@ const AddScheduleExam = ({
             <div className='rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50'>
               <div className='mb-3 flex items-center gap-2'>
                 <CalendarDays data-icon='inline-start' className='size-4 text-slate-500 dark:text-slate-400' />
-                <span className='text-sm font-medium text-slate-700 dark:text-slate-300'>Date &amp; Time</span>
+                <span className='text-sm font-medium text-slate-700 dark:text-slate-300'>
+                  {t('exam:add.date_section_title')}
+                </span>
               </div>
 
               <div className='flex flex-col gap-4'>
@@ -139,7 +146,7 @@ const AddScheduleExam = ({
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='day-input'>Day</FieldLabel>
+                      <FieldLabel htmlFor='day-input'>{t('exam:add.fields.day_label')}</FieldLabel>
                       <Input {...field} type='date' id='day-input' value={field.value ?? ''} />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -156,7 +163,7 @@ const AddScheduleExam = ({
                         <FieldLabel htmlFor='startTime-input'>
                           <span className='flex items-center gap-1'>
                             <Clock data-icon='inline-start' className='size-3.5 text-slate-400' />
-                            Start Time
+                            {t('exam:add.fields.start_time_label')}
                           </span>
                         </FieldLabel>
                         <Input
@@ -179,7 +186,7 @@ const AddScheduleExam = ({
                         <FieldLabel htmlFor='endTime-input'>
                           <span className='flex items-center gap-1'>
                             <Clock data-icon='inline-start' className='size-3.5 text-slate-400' />
-                            End Time
+                            {t('exam:add.fields.end_time_label')}
                           </span>
                         </FieldLabel>
                         <Input
@@ -200,10 +207,10 @@ const AddScheduleExam = ({
 
           <DialogFooter className='gap-2 pt-2 sm:gap-0'>
             <Button type='button' variant='outline' onClick={() => setIsOpen(false)}>
-              Cancel
+              {t('exam:add.buttons.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
-              {isPending ? 'Saving...' : 'Schedule Exam'}
+              {isPending ? t('exam:add.buttons.saving') : t('exam:add.buttons.submit')}
             </Button>
           </DialogFooter>
         </form>

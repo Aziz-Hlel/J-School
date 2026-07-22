@@ -38,44 +38,51 @@ import type { UpdateUserRolesReq } from '@repo/contracts/schemas/user/updateUser
 import { UserRole } from '@repo/contracts/types/enums/enums';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Check, GraduationCap, Loader2, ShieldUser, Trash2, UserStar, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useSelectRolesStore, useSetUserIdStore } from './select-roles-store';
 
 type RoleCard = {
   role: UserRole;
-  label: string;
-  description: string;
+  labelKey: 'roles.director.label' | 'roles.manager.label' | 'roles.teacher.label' | 'roles.parent.label';
+  descriptionKey:
+    | 'roles.director.description'
+    | 'roles.manager.description'
+    | 'roles.teacher.description'
+    | 'roles.parent.description';
   icon: ComponentType<{ className?: string }>;
 };
 
 const ROLE_CARDS = [
   {
     role: UserRole.DIRECTOR,
-    label: 'Director',
-    description: 'Full leadership access across the school.',
+    labelKey: 'roles.director.label',
+    descriptionKey: 'roles.director.description',
     icon: ShieldUser,
   },
   {
     role: UserRole.MANAGER,
-    label: 'Manager',
-    description: 'Handles operations and administrative workflows.',
+    labelKey: 'roles.manager.label',
+    descriptionKey: 'roles.manager.description',
     icon: UserStar,
   },
   {
     role: UserRole.TEACHER,
-    label: 'Teacher',
-    description: 'Supports classrooms, lessons, and student progress.',
+    labelKey: 'roles.teacher.label',
+    descriptionKey: 'roles.teacher.description',
     icon: GraduationCap,
   },
   {
     role: UserRole.PARENT,
-    label: 'Parent',
-    description: 'Access for guardians and family-facing tools.',
+    labelKey: 'roles.parent.label',
+    descriptionKey: 'roles.parent.description',
     icon: Users,
   },
 ] satisfies RoleCard[];
 
-type RoleOptionCardProps = RoleCard & {
+type RoleOptionCardProps = Omit<RoleCard, 'labelKey' | 'descriptionKey'> & {
+  label: string;
+  description: string;
   isSelected: boolean;
   onToggle: (role: UserRole) => void;
 };
@@ -141,6 +148,7 @@ const RoleOptionCard = memo(({ role, label, description, icon: Icon, isSelected,
 RoleOptionCard.displayName = 'RoleOptionCard';
 
 const SelectRoles = () => {
+  const { t } = useTranslation(['common', 'staff']);
   const userId = useSelectRolesStore((state) => state.userId);
   const setUserId = useSetUserIdStore();
   const schoolId = useCurrentSchoolId();
@@ -217,12 +225,12 @@ const SelectRoles = () => {
 
       try {
         await deleteUser();
-        toast.success('User deleted');
+        toast.success(t('staff:messages.user_deleted'));
       } catch {
-        toast.error('Failed to delete user');
+        toast.error(t('staff:messages.delete_failed'));
       }
     },
-    [deleteUser],
+    [deleteUser, t],
   );
 
   const submitRoles = useCallback(
@@ -234,12 +242,12 @@ const SelectRoles = () => {
           roles: Array.from(selectedRoles),
         });
 
-        toast.success('User roles updated successfully');
+        toast.success(t('staff:messages.update_success'));
       } catch {
-        toast.error('Failed to update user roles');
+        toast.error(t('staff:messages.update_failed'));
       }
     },
-    [selectedRoles, updateRoles],
+    [selectedRoles, updateRoles, t],
   );
 
   const toggleRole = useCallback((role: UserRole) => {
@@ -261,12 +269,15 @@ const SelectRoles = () => {
       ROLE_CARDS.map((roleCard) => (
         <RoleOptionCard
           key={roleCard.role}
-          {...roleCard}
+          role={roleCard.role}
+          icon={roleCard.icon}
+          label={t(`staff:${roleCard.labelKey}`)}
+          description={t(`staff:${roleCard.descriptionKey}`)}
           isSelected={selectedRoles.has(roleCard.role)}
           onToggle={toggleRole}
         />
       )),
-    [selectedRoles, toggleRole],
+    [selectedRoles, toggleRole, t],
   );
 
   return (
@@ -275,8 +286,8 @@ const SelectRoles = () => {
         <form onSubmit={submitRoles}>
           <div className='bg-background'>
             <DialogHeader className='border-border border-b px-6 py-5'>
-              <DialogTitle>Select Roles</DialogTitle>
-              <DialogDescription>Choose which roles this user should have.</DialogDescription>
+              <DialogTitle>{t('staff:dialog.title')}</DialogTitle>
+              <DialogDescription>{t('staff:dialog.description')}</DialogDescription>
             </DialogHeader>
 
             <div className='flex flex-col gap-4 px-6 py-6'>
@@ -284,7 +295,7 @@ const SelectRoles = () => {
                 <div className='border-border bg-muted/30 flex min-h-44 items-center justify-center rounded-lg border border-dashed'>
                   <div className='text-muted-foreground flex items-center gap-2 text-sm'>
                     <Loader2 className='animate-spin' />
-                    Loading roles
+                    {t('staff:dialog.loading')}
                   </div>
                 </div>
               ) : (
@@ -297,21 +308,18 @@ const SelectRoles = () => {
                 <AlertDialogTrigger asChild>
                   <Button type='button' variant='destructive' disabled={deleteUserPending}>
                     <Trash2 data-icon='inline-start' />
-                    Delete Account
+                    {t('staff:actions.delete_account')}
                   </Button>
                 </AlertDialogTrigger>
 
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete account?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will permanently delete the user account, not just remove a role. This action cannot be
-                      undone.
-                    </AlertDialogDescription>
+                    <AlertDialogTitle>{t('staff:delete_confirm.title')}</AlertDialogTitle>
+                    <AlertDialogDescription>{t('staff:delete_confirm.description')}</AlertDialogDescription>
                   </AlertDialogHeader>
 
                   <AlertDialogFooter>
-                    <AlertDialogCancel disabled={deleteUserPending}>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel disabled={deleteUserPending}>{t('staff:actions.cancel')}</AlertDialogCancel>
 
                     <AlertDialogAction
                       type='button'
@@ -320,7 +328,7 @@ const SelectRoles = () => {
                       disabled={deleteUserPending}
                     >
                       {deleteUserPending && <Loader2 data-icon='inline-start' className='animate-spin' />}
-                      Delete Account
+                      {t('staff:actions.delete_account')}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -329,12 +337,12 @@ const SelectRoles = () => {
 
             <DialogFooter className='border-border border-t px-6 py-4'>
               <Button type='button' variant='outline' onClick={handleCancel} disabled={isPending || deleteUserPending}>
-                Cancel
+                {t('staff:actions.cancel')}
               </Button>
 
               <Button type='submit' disabled={isPending || deleteUserPending}>
                 {isPending && <Loader2 data-icon='inline-start' className='animate-spin' />}
-                Confirm
+                {t('staff:actions.confirm')}
               </Button>
             </DialogFooter>
           </div>

@@ -1,0 +1,133 @@
+{
+  "create": {
+    "create_title": "Create new staff",
+    "create_description": "Add a new staff member to your school",
+    "success_toast": "Staff created successfully",
+    "failed_toast": "Failed to create staff",
+    "fields": {
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "gender": "Gender",
+      "gender_placeholder": "Select gender",
+      "role": "Role",
+      "role_placeholder": "Select role",
+      "email": "Email",
+      "email_placeholder": "Email Address",
+      "phone": "Phone",
+      "phone_placeholder": "Phone Number",
+      "dob": "Date of Birth",
+      "cin": "CIN",
+      "address": "Address",
+      "password": "Password"
+    },
+    "errors": {
+      "email_exists": "Email already exists"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "submit": "Create Staff"
+    }
+  },
+  "main_card": {
+    "title": "Staff Management",
+    "description": "Manage your school's staff members, roles, and permissions.",
+    "add_button": "Add New Member"
+  },
+
+  "password": {
+    "title": "Change user password",
+    "description": "Set a new password for this staff account.",
+    "unknown_user": "Unknown user",
+    "no_email": "No email available",
+    "target_badge": "Target account",
+    "confirm_badge": "Confirm action",
+    "warning_title": "This will immediately replace the current password.",
+    "warning_description": "Make sure the new password is shared securely. The user will need it the next time they sign in.",
+    "success_toast": "Password updated successfully",
+    "failed_toast": "Failed to update password",
+    "fields": {
+      "new_password": "New password",
+      "new_password_placeholder": "Enter a secure password",
+      "new_password_hint": "Use at least 8 characters.",
+      "confirm_password": "Retype password",
+      "confirm_password_placeholder": "Retype the new password",
+      "confirm_password_hint": "Type the same password again to confirm it."
+    },
+    "errors": {
+      "min_length": "Confirm password must be at least 8 characters",
+      "mismatch": "Passwords do not match"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "submit": "Update password"
+    }
+  },
+
+  "Edit": {
+    "edit_title": "Edit staff",
+    "edit_description": "Update the details of the staff member",
+    "success_toast": "Staff updated successfully",
+    "failed_toast": "Failed to update staff",
+    "fields": {
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "gender": "Gender",
+      "gender_placeholder": "Select gender",
+      "phone": "Phone",
+      "phone_placeholder": "Phone Number",
+      "date_of_birth": "Date of Birth",
+      "cin": "CIN",
+      "address": "Address"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save changes"
+    }
+  },
+  "roles": {
+    "director": {
+      "label": "Director",
+      "description": "Full leadership access across the school."
+    },
+    "manager": {
+      "label": "Manager",
+      "description": "Handles operations and administrative workflows."
+    },
+    "teacher": {
+      "label": "Teacher",
+      "description": "Supports classrooms, lessons, and student progress."
+    },
+    "parent": {
+      "label": "Parent",
+      "description": "Access for guardians and family-facing tools."
+    }
+  },
+  "dialog": {
+    "title": "Select Roles",
+    "description": "Choose which roles this user should have.",
+    "loading": "Loading roles"
+  },
+  "delete_confirm": {
+    "title": "Delete account?",
+    "description": "This will permanently delete the user account, not just remove a role. This action cannot be undone."
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete_account": "Delete Account"
+  },
+  "messages": {
+    "user_deleted": "User deleted",
+    "delete_failed": "Failed to delete user",
+    "update_success": "User roles updated successfully",
+    "update_failed": "Failed to update user roles"
+  },
+  "table": {
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone Number",
+    "role": "Role",
+    "createdAt": "Created At"
+  }
+}

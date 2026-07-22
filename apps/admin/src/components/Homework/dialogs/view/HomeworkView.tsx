@@ -1,3 +1,4 @@
+import { classroomsService } from '@/api/service/classroomsService';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -13,25 +14,28 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { classroomsService } from '@/api/service/classroomsService';
 import { useCurrentSchoolId } from '@/context/SchoolContext';
 import { useQuery } from '@tanstack/react-query';
 import { BookOpenIcon, CalendarDaysIcon, FileTextIcon, ImagesIcon, PaperclipIcon, UsersIcon } from 'lucide-react';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { TableRowType } from '../../core/types';
 
 const getInitials = (firstName: string | null | undefined, lastName: string | null | undefined, fallback: string) =>
   `${firstName?.charAt(0) ?? ''}${lastName?.charAt(0) ?? ''}`.toUpperCase() || fallback;
 
-const getFullName = (firstName: string | null, lastName: string | null) =>
-  [firstName, lastName].filter(Boolean).join(' ') || 'Not provided';
+const getFullName = (firstName: string | null, lastName: string | null, fallback: string) =>
+  [firstName, lastName].filter(Boolean).join(' ') || fallback;
 
 const HomeworkView = ({ homework, children }: { homework: TableRowType; children: React.ReactNode }) => {
+  const { t } = useTranslation('homeworks');
   const [open, setOpen] = useState(false);
   const schoolId = useCurrentSchoolId();
+
   const teacherName = homework.teacher
     ? `${homework.teacher.firstName} ${homework.teacher.lastName}`
-    : 'No teacher assigned';
+    : t('view.noTeacher');
+
   const teacherInitials = homework.teacher
     ? getInitials(homework.teacher.firstName, homework.teacher.lastName, 'T')
     : 'T';
@@ -53,8 +57,8 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
             <Badge variant='outline'>{homework.classroom.name}</Badge>
             <Badge variant='outline'>{homework.subject.name.fr}</Badge>
           </div>
-          <DialogTitle className='text-xl'>{homework.title || 'Untitled homework'}</DialogTitle>
-          <DialogDescription>Homework shared with the students in this classroom.</DialogDescription>
+          <DialogTitle className='text-xl'>{homework.title || t('view.untitled')}</DialogTitle>
+          <DialogDescription>{t('view.description')}</DialogDescription>
         </DialogHeader>
 
         <div className='max-h-[calc(100vh-14rem)] overflow-y-auto px-6 py-5'>
@@ -63,20 +67,20 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
               <CardHeader className='gap-1'>
                 <div className='flex items-center gap-2'>
                   <BookOpenIcon className='text-muted-foreground size-4' />
-                  <CardTitle>Assignment</CardTitle>
+                  <CardTitle>{t('view.sections.assignment')}</CardTitle>
                 </div>
-                <CardDescription>What the teacher asked the class to complete.</CardDescription>
+                <CardDescription>{t('view.sections.assignmentDescription')}</CardDescription>
               </CardHeader>
               <CardContent className='flex flex-col gap-4'>
                 <div className='bg-muted/50 rounded-lg p-4'>
                   <p className='text-sm leading-6 whitespace-pre-wrap'>
-                    {homework.content || 'No written instructions were provided.'}
+                    {homework.content || t('view.sections.noContent')}
                   </p>
                 </div>
                 <div className='flex flex-wrap items-center gap-2 text-sm'>
                   <Badge variant='outline'>
                     <CalendarDaysIcon data-icon='inline-start' />
-                    Due {homework.due}
+                    {t('view.sections.due', { date: homework.due })}
                   </Badge>
                   <Badge variant='outline'>{homework.type}</Badge>
                 </div>
@@ -85,8 +89,8 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
 
             <Card>
               <CardHeader className='gap-1'>
-                <CardTitle>Teacher</CardTitle>
-                <CardDescription>The teacher who shared this homework.</CardDescription>
+                <CardTitle>{t('view.sections.teacher')}</CardTitle>
+                <CardDescription>{t('view.sections.teacherDescription')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className='flex items-center gap-3'>
@@ -97,7 +101,7 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
                   <div className='flex flex-col gap-0.5'>
                     <p className='font-medium'>{teacherName}</p>
                     <div className='flex flex-wrap items-center gap-2'>
-                      <p className='text-muted-foreground text-sm'>Teacher</p>
+                      <p className='text-muted-foreground text-sm'>{t('view.teacherRole')}</p>
                       {homework.teacher ? <Badge variant='outline'>{homework.teacher.gender}</Badge> : null}
                     </div>
                   </div>
@@ -107,11 +111,11 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
 
             <Card>
               <CardHeader className='gap-1'>
-                <CardTitle>Attachments</CardTitle>
+                <CardTitle>{t('view.sections.attachments')}</CardTitle>
                 <CardDescription>
                   {homework.files.length
-                    ? `${homework.files.length} file${homework.files.length === 1 ? '' : 's'} attached`
-                    : 'No files attached'}
+                    ? t('view.sections.attachedCount', { count: homework.files.length })
+                    : t('view.sections.noAttachments')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -133,7 +137,7 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
                           />
                           <span className='flex items-center gap-2 p-3 text-sm font-medium'>
                             <ImagesIcon className='text-muted-foreground size-4' />
-                            Image {index + 1}
+                            {t('view.sections.image', { index: index + 1 })}
                           </span>
                         </a>
                       ) : (
@@ -147,7 +151,7 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
                           <FileTextIcon className='text-muted-foreground size-8' />
                           <span className='flex items-center gap-2 text-sm font-medium'>
                             <PaperclipIcon className='text-muted-foreground size-4' />
-                            Open document {index + 1}
+                            {t('view.sections.openDocument', { index: index + 1 })}
                           </span>
                         </a>
                       ),
@@ -160,10 +164,12 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
             <Card>
               <CardHeader className='gap-1'>
                 <div className='flex items-center justify-between gap-3'>
-                  <CardTitle>Students</CardTitle>
+                  <CardTitle>{t('view.sections.students')}</CardTitle>
                   <Badge variant='secondary'>{students.length}</Badge>
                 </div>
-                <CardDescription>Students enrolled in {homework.classroom.name}.</CardDescription>
+                <CardDescription>
+                  {t('view.sections.studentsDescription', { classroom: homework.classroom.name })}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Accordion type='single' collapsible className='rounded-lg border px-3'>
@@ -171,14 +177,22 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
                     <AccordionTrigger>
                       <span className='flex items-center gap-2'>
                         <UsersIcon className='text-muted-foreground size-4' />
-                        View class roster
+                        {t('view.sections.viewRoster')}
                       </span>
                     </AccordionTrigger>
                     <AccordionContent className='pt-2'>
                       <div className='flex flex-col gap-3'>
                         {students.map((student, index) => {
-                          const englishName = getFullName(student.firstName.en, student.lastName.en);
-                          const arabicName = getFullName(student.firstName.ar, student.lastName.ar);
+                          const englishName = getFullName(
+                            student.firstName.en,
+                            student.lastName.en,
+                            t('view.notProvided'),
+                          );
+                          const arabicName = getFullName(
+                            student.firstName.ar,
+                            student.lastName.ar,
+                            t('view.notProvided'),
+                          );
 
                           return (
                             <React.Fragment key={student.id}>
@@ -205,11 +219,13 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
                           );
                         })}
                         {areStudentsLoading ? (
-                          <p className='text-muted-foreground py-3 text-center text-sm'>Loading class roster…</p>
+                          <p className='text-muted-foreground py-3 text-center text-sm'>
+                            {t('view.sections.loadingRoster')}
+                          </p>
                         ) : null}
                         {!areStudentsLoading && students.length === 0 ? (
                           <p className='text-muted-foreground py-3 text-center text-sm'>
-                            No students are enrolled in this classroom.
+                            {t('view.sections.noStudents')}
                           </p>
                         ) : null}
                       </div>
@@ -223,7 +239,7 @@ const HomeworkView = ({ homework, children }: { homework: TableRowType; children
 
         <DialogFooter>
           <Button type='button' variant='secondary' onClick={() => setOpen(false)}>
-            Close
+            {t('view.close')}
           </Button>
         </DialogFooter>
       </DialogContent>
