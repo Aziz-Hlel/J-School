@@ -44,7 +44,7 @@ import Timetable from './pages/Timetable';
 const App = () => {
   return (
     <>
-      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+      <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
         <QueryClientProvider client={queryClient}>
           <Toaster />
           <NetworkStatusGuard>
