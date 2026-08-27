@@ -27,7 +27,7 @@ ARG VITE_FIREBASE_APP_ID
 ARG VITE_FIREBASE_MEASUREMENT_ID
 
 WORKDIR /app/packages/db
-RUN pnpm dlx prisma generate
+RUN pnpm dlx prisma@7.7 generate
 
 WORKDIR /app/apps/admin
 RUN pnpm build

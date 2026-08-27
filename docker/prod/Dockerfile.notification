@@ -17,7 +17,7 @@ COPY packages packages
 
 
 WORKDIR /app/packages/db
-RUN pnpm dlx prisma generate
+RUN pnpm dlx prisma@7.7 generate
 WORKDIR /app/apps/notification
 RUN pnpm build
 
