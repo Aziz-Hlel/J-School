@@ -60,7 +60,7 @@ services:
       AWS_BEDROCK_SECRET_ACCESS_KEY: ${AWS_BEDROCK_SECRET_ACCESS_KEY:?AWS_BEDROCK_SECRET_ACCESS_KEY is required}
       AWS_BEDROCK_MODEL_ID: ${AWS_BEDROCK_MODEL_ID:?AWS_BEDROCK_MODEL_ID is required}
 
-    command: sh -c "pnpm dlx prisma migrate deploy && pnpm start"
+    command: sh -c "pnpm dlx prisma@7.7 migrate deploy && pnpm start"
     # command: sleep infinity
 
     depends_on:
