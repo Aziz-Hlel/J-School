@@ -12,8 +12,8 @@ i18n
     supportedLngs: ['en', 'fr'],
     fallbackLng: 'en',
 
-    defaultNS: 'common',
-    fallbackNS: 'common',
+    defaultNS: 'classrooms',
+    fallbackNS: 'classrooms',
 
     debug: ENV.VITE_NODE_ENV === 'dev', // Only debug in development
     interpolation: {
@@ -22,7 +22,7 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    ns: ['common', 'students', 'classrooms', 'enums'] as const,
+    ns: ['classrooms', 'enums'] as const,
 
     // detection: {
     //   order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
